@@ -336,3 +336,7 @@ In look-only mode, you can open the page from the **Library** tab and read all o
 - [Choose load settings](help:choose-load-settings)
 - [Clear what an earlier load left behind](help:clear-what-an-earlier-load-left-behind)
 - [Fix a load that failed](help:fix-a-load-that-failed)
+
+## Last-known copies
+
+A Library copy marked **last known** is not a current source for loading or copying. Reconnect its node and press **Find models** in [Library](help:models-library#scan-results). The Load page still performs its own fresh prerequisite checks before starting a model.

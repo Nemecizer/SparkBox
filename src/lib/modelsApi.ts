@@ -347,10 +347,18 @@ export interface LibraryEntry extends BaseLibraryEntry {
   inUse: string | null;
 }
 
+export interface LibraryNodeStatus {
+  node: string;
+  state: "ready" | "offline" | "error" | "unknown";
+  checkedAtMs: number | null;
+  error: string | null;
+}
+export interface LibraryReport { entries: LibraryEntry[]; nodes: LibraryNodeStatus[] }
+
 /** `node`'s copy, when it's finished: one left partway, or still being written, doesn't count. */
 export function finishedCopy(e: Pick<LibraryEntry, "copies">, node: string): LibraryEntry["copies"][string] | undefined {
   const c = e.copies[node];
-  return c && !c.partial ? c : undefined;
+  return c && !c.partial && !c.stale ? c : undefined;
 }
 
 /** The nodes that hold a finished copy. */
@@ -528,6 +536,7 @@ export const modelsApi = {
   hfSize: (repo: string) => invoke<HfSizing>("hf_size", { repo }),
   modelsAnalyze: (repo: string, revision?: string) => invoke<AnalysisResult>("models_analyze", { repo, revision }),
   libraryList: () => invoke<LibraryEntry[]>("library_list"),
+  libraryReport: () => invoke<LibraryReport>("library_report"),
   /** A folder's config summary for the Library's detail pane (reads config.json once). */
   libraryDetail: (key: string) => invoke<LibraryDetail>("library_detail", { key }),
   providersList: () => invoke<ProviderView[]>("providers_list"),

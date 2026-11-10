@@ -80,3 +80,7 @@ A folder under `~/models` holds the real files, so deleting it frees all of its 
 - [Check disk space on a node](help:check-disk-space)
 - [Find a model that fits](help:find-a-model-that-fits), to choose what to run next
 - [Models: Library tab](help:models-library)
+
+## If a node could not be scanned
+
+In Library, **last known** and **unknown** are not current copies. Reconnect the node and press **Find models** before selecting it. A failed scan leaves other nodes' results visible and preserves the last-known observation in this app session. SparkBox reads the folders again before Copy or Delete; an unavailable or changed copy blocks the action. See [Library scan results](help:models-library#scan-results).

@@ -85,3 +85,7 @@ For more messages, see [Model messages](help:errors-models).
 - [Load a model on two, three or four nodes](help:load-a-model-on-several-nodes)
 - [Load a model on one node](help:load-a-model-on-one-node)
 - [Models: Library tab](help:models-library)
+
+## If a node could not be scanned
+
+In Library, **last known** and **unknown** are not current copies. Reconnect the node and press **Find models** before selecting it. A failed scan leaves other nodes' results visible and preserves the last-known observation in this app session. SparkBox reads the folders again before Copy or Delete; an unavailable or changed copy blocks the action. See [Library scan results](help:models-library#scan-results).

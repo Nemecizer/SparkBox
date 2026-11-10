@@ -236,6 +236,25 @@ impl DemoModels {
         self.library.clone()
     }
 
+    /// Display active/unfinished copies without changing the strict action fixture.
+    pub fn library_observations(&mut self) -> Vec<LibraryEntry> {
+        self.tick();
+        let mut entries = self.library.clone();
+        for j in &self.jobs {
+            let Some((key,node)) = &j.adds_copy else { continue };
+            let Some(entry) = entries.iter_mut().find(|e| e.key == *key) else { continue };
+            if entry.copies.contains_key(node) || j.job.state == "done" { continue; }
+            let active=j.job.state == "running";
+            let partial=if active { if j.job.kind=="pull" { "copying" } else { "downloading" } } else { "stopped" };
+            entry.copies.insert(node.clone(), Copy { path:key.clone(), size_bytes:j.job.bytes_done, verified:false,
+                partial:Some(partial.into()), progress:active.then(|| super::LibraryProgress {
+                    step:if matches!(j.job.step.as_str(), "verifying"|"waiting") {j.job.step.clone()} else {partial.into()},
+                    bytes_done:j.job.bytes_done, bytes_total:j.job.bytes_total,
+                }), ..Default::default() });
+        }
+        entries
+    }
+
     pub fn jobs(&mut self) -> Vec<Job> {
         self.tick();
         let mut jobs: Vec<Job> = self.jobs.iter().map(|j| j.job.clone()).collect();
@@ -604,6 +623,19 @@ pub fn model_info(path: &str) -> Value {
 mod tests {
     use super::*;
     use crate::model::{ClusterSnapshot, DiskStats, NodeSnapshot};
+
+    #[test]
+    fn library_observations_show_transfer_progress_without_authorizing_an_unfinished_copy() {
+        let mut demo=DemoModels::new();
+        let entry=demo.library[0].clone();
+        let node="fixture-target";
+        demo.share(&entry.key,"cell1",&[node.into()]);
+        let observed=demo.library_observations().into_iter().find(|e| e.key==entry.key).unwrap();
+        let copy=&observed.copies[node];
+        assert!(!copy.verified); assert_eq!(copy.partial.as_deref(),Some("copying"));
+        assert!(copy.progress.is_some());
+        assert!(!demo.library().into_iter().find(|e| e.key==entry.key).unwrap().copies.contains_key(node));
+    }
 
     #[test]
     fn prepare_reports_the_simulated_root_disk() {

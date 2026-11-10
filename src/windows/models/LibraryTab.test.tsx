@@ -1,3 +1,4 @@
+import type { ComponentProps } from "react";
 // The Library's copies, in the words of C-P: what each cell says, which nodes Copy to nodes… offers
 // and which it leaves alone, and what Delete says about a folder of Hugging Face cache links.
 import { act, fireEvent, render, screen, within } from "@testing-library/react";
@@ -28,7 +29,7 @@ const entry = (copies: Copies, key = KEY, repo = "Qwen/Qwen3.8-27B-FP8"): Librar
   key, inUse: null, repo, revision: "abc", format: "safetensors", sizeBytes: SIZE, root: "/home/sparkuser/models", copies,
 });
 
-async function show(library: LibraryEntry[], onRefresh = () => {}, extra: Record<string, () => unknown> = {}) {
+async function show(library: LibraryEntry[], onRefresh = () => {}, extra: Record<string, () => unknown> = {}, options: Partial<ComponentProps<typeof LibraryTab>> = {}) {
   resetStore();
   mockTauri(Object.assign({}, defaultHandlers(), ...MOCKS, {
     get_snapshot: () => ({ ...(structuredClone(baseSnapshot) as ClusterSnapshot), tsMs: Date.now(), demo: false }),
@@ -40,13 +41,14 @@ async function show(library: LibraryEntry[], onRefresh = () => {}, extra: Record
   }, extra));
   _resetAdminForTests(UNLOCKED);
   await startClusterStore();
-  await act(async () => {
-    render(
-      <WindowManagerProvider sizeOf={() => [1200, 900]} isKnown={() => true}>
-        <LibraryTab library={library} error={null} scanning={false} nodes={nodes} onRefresh={onRefresh} onLoad={() => {}} onJobs={() => {}} onShowLoaded={() => {}} />
-      </WindowManagerProvider>,
-    );
-  });
+  const draw = (over: Partial<ComponentProps<typeof LibraryTab>> = {}) => (
+    <WindowManagerProvider sizeOf={() => [1200, 900]} isKnown={() => true}>
+      <LibraryTab library={library} error={null} scanning={false} nodes={nodes} onRefresh={onRefresh} onLoad={() => {}} onJobs={() => {}} onShowLoaded={() => {}} {...options} {...over} />
+    </WindowManagerProvider>
+  );
+  let view!: ReturnType<typeof render>;
+  await act(async () => { view = render(draw()); });
+  return { rerender: (over: Partial<ComponentProps<typeof LibraryTab>>) => view.rerender(draw(over)) };
 }
 
 const select = async (name: string) => {
@@ -192,5 +194,70 @@ describe("Delete", () => {
     await press("Delete…");
     expect(screen.getByRole("checkbox", { name: /^cell1/ })).toHaveProperty("disabled", true);
     expect(screen.getByRole("checkbox", { name: /^cell2/ })).toHaveProperty("disabled", false);
+  });
+});
+
+
+describe("per-node scan reliability", () => {
+  it("shows last-known and unknown copies without claiming they are ready or absent", async () => {
+    const onLoad = vi.fn();
+    await show([entry({ cell1: copy({ verified: true, stale: true }) })], undefined, {}, {
+      onLoad, statuses: nodes.map((n) => ({ node: n.id, state: "offline", checkedAtMs: n.id === "cell1" ? 1000 : null, error: null })),
+    });
+    expect(screen.getByText("◷ last known")).toBeVisible();
+    expect(screen.getAllByText("unknown")).toHaveLength(3);
+    expect(screen.queryByText("✓ verified")).toBeNull();
+    await select("Qwen/Qwen3.8-27B-FP8");
+    expect(screen.getByRole("button", { name: "Load…" })).toBeDisabled();
+    await act(async () => { fireEvent.doubleClick(screen.getAllByText("Qwen/Qwen3.8-27B-FP8")[0]); });
+    expect(onLoad).not.toHaveBeenCalled();
+    await press("Copy to nodes…");
+    expect(screen.getByRole("button", { name: "Copy over the fabric" })).toBeDisabled();
+    expect(screen.getAllByRole("checkbox").every((box) => (box as HTMLInputElement).disabled)).toBe(true);
+  });
+  it("does not select failed or offline targets and requires fresh scans after connectivity changes", async () => {
+    const lib = [entry({ cell1: copy({ verified: true }), cell2: copy({ verified: true, stale: true }) })];
+    const statuses = nodes.map((n) => ({ node: n.id, state: n.id === "cell2" ? "error" as const : "ready" as const, checkedAtMs: 1000, error: n.id === "cell2" ? "fixture denied" : null }));
+    const view = await show(lib, undefined, {}, { statuses });
+    await select("Qwen/Qwen3.8-27B-FP8"); await press("Copy to nodes…");
+    expect(screen.getByRole("checkbox", { name: /^cell2/ })).toBeDisabled();
+    expect(screen.getByRole("checkbox", { name: /^cell3/ })).toBeChecked();
+    await act(async () => view.rerender({ nodes: nodes.map((n) => ({ ...n, online: n.id !== "cell3" })) }));
+    expect(screen.getByRole("button", { name: "Copy over the fabric" })).toBeDisabled();
+    // The choice is never silently dropped; the owner can explicitly remove it.
+    expect(screen.getByRole("checkbox", { name: /^cell3/ })).toBeChecked();
+    fireEvent.click(screen.getByRole("checkbox", { name: /^cell3/ }));
+    expect(screen.getByRole("button", { name: "Copy over the fabric" })).toBeEnabled();
+  });
+  it("shows percentages and verification separately, with no finished copy at 100 percent", async () => {
+    await show([entry({
+      cell1: copy({ partial: "downloading", progress: { step: "downloading", bytesDone: 37, bytesTotal: 100 } }),
+      cell2: copy({ partial: "copying", progress: { step: "verifying", bytesDone: 100, bytesTotal: 100 } }),
+      cell3: copy({ partial: "copying", progress: { step: "waiting", bytesDone: 0, bytesTotal: 100 } }),
+    })]);
+    expect(screen.getByText("◐ downloading 37%")).toBeVisible();
+    expect(screen.getByText("◐ verifying")).toBeVisible(); expect(screen.getByText("◐ waiting")).toBeVisible();
+    await select("Qwen/Qwen3.8-27B-FP8"); expect(screen.getByRole("button", { name: "Load…" })).toBeDisabled();
+  });
+  it.each(["copy", "revision"])("invalidates deletion consent after %s changes even if a fresh scan restores identical values", async (field) => {
+    let accept!: (value: boolean) => void;
+    vi.spyOn(session, "confirmAction").mockImplementation(() => new Promise((resolve) => { accept = resolve; }));
+    const toast = vi.spyOn(toasts, "toast");
+    const view = await show([entry({ cell1: copy({ verified: true }) })]);
+    await select("Qwen/Qwen3.8-27B-FP8"); await press("Delete…");
+    fireEvent.click(screen.getByRole("checkbox", { name: /^cell1/ }));
+    await act(async () => { fireEvent.click(screen.getAllByRole("button", { name: "Delete…" })[1]); });
+    const changed = entry({ cell1: copy({ verified: true, stale: field === "copy" ? true : undefined }) });
+    if (field === "revision") changed.revision = "newer-revision";
+    await act(async () => view.rerender({ library: [changed] }));
+    await act(async () => view.rerender({ library: [entry({ cell1: copy({ verified: true }) })] }));
+    await act(async () => { accept(true); });
+    expect(mockCalls.some((c) => c.cmd === "model_delete")).toBe(false);
+    expect(toast).toHaveBeenCalledWith(expect.objectContaining({ body: expect.stringContaining("Library changed during review") }));
+  });
+  it("uses an honest empty state when a node has never been scanned", async () => {
+    await show([], undefined, {}, { statuses: [{ node: "cell1", state: "offline", checkedAtMs: null, error: null }] });
+    expect(screen.getByText(/No confirmed models to show/)).toBeVisible();
+    expect(screen.queryByText(/^No models found/)).toBeNull();
   });
 });

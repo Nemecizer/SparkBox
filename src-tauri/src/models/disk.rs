@@ -212,7 +212,7 @@ mod tests {
         for index in 0..3 {
             let script: Script = Arc::new(move |cmd,_| {
                 if cmd.contains("sparkjob.py scan") {
-                    return Some((if index == 0 { json!([{"path":key,"repo":"org/model","sizeBytes":12,"verified":true,"format":"safetensors"}]) } else { json!([]) }.to_string(),0));
+                    return Some((if index == 0 { json!([{"path":key,"root":"/models","repo":"org/model","sizeBytes":12,"verified":true,"format":"safetensors"}]) } else { json!([]) }.to_string(),0));
                 }
                 if cmd.contains("sparkjob.py manifest") { return Some((json!({"files":[{"path":"model.safetensors","size":12}]}).to_string(),0)); }
                 if cmd.contains("sparkjob.py disk-preflight") {

@@ -365,7 +365,7 @@ export function HubTab({ library, onLoad, onDownloading }: {
                   <DownloadCapacity key={`${details.model.id}:${details.model.revision}`} selection={{ repo: details.model.id, revision: details.model.revision, files: details.model.files }}
                     nodes={nodes.map((node) => {
                       const state = hubPresence(libraryMatch(library, details.model.id, node.id), node.id);
-                      return { ...node, unavailable: state.kind === "finished" ? "copy already finished" : state.kind === "running" ? "transfer running" : undefined };
+                      return { ...node, unavailable: state.kind === "finished" ? "copy already finished" : state.kind === "running" ? "transfer running" : state.kind === "unknown" ? "last-known copy; find models again" : undefined };
                     })} target={targetId} onSelect={setTargetId}
                     disabled={busy !== null || !!details.model.configError || details.model.weightsFormat === "none" || !details.model.files.length || revisionInput.trim() !== inspectedRevision} />
                   {!target?.online && <span className="muted">Choose a connected download node. The target is never changed automatically.</span>}
@@ -383,6 +383,8 @@ export function HubTab({ library, onLoad, onDownloading }: {
                   )}
                   {presence.kind === "running" ? (
                     <span className="ai-hub-have">{presence.partial === "copying" ? "Copying" : "Downloading"} on {target?.name ?? presence.node}</span>
+                  ) : presence.kind === "unknown" ? (
+                    <span className="ai-hub-have">Last-known copy on {target?.name}. Press Find models in Library before using it.</span>
                   ) : presence.kind !== "finished" && (
                     <>
                       {presence.kind === "incomplete" && <span className="ai-hub-have">Incomplete on {target?.name ?? presence.node}</span>}
@@ -543,7 +545,7 @@ export function copiesText(e: LibraryEntry, nodeCount: number): string {
 }
 
 export type HubPresence =
-  | { kind: "none" | "finished" }
+  | { kind: "none" | "finished" | "unknown" }
   | { kind: "incomplete"; node: string }
   | { kind: "running"; node: string; partial: "downloading" | "copying" };
 
@@ -553,6 +555,7 @@ export type HubPresence =
  */
 export function hubPresence(e: LibraryEntry | undefined, target: string | undefined): HubPresence {
   if (!e || !target) return { kind: "none" };
+  if (e.copies[target]?.stale) return { kind: "unknown" };
   if (finishedCopy(e, target)) return { kind: "finished" };
   const partial = e.copies[target]?.partial;
   if (partial === "stopped") return { kind: "incomplete", node: target };

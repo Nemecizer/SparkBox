@@ -45,12 +45,21 @@ export function cancelDemoChain(node: string, id: string): ChainCancel[] {
   return group.jobs.map((j) => { if (j.state === "running") { j.state = "cancelled"; j.message = "Canceled; files and records retained"; } return { node: j.node, id: j.id, error: null }; });
 }
 
-export function demoChainLibrary(): LibraryEntry[] {
+export function demoChainLibrary(observations = false): LibraryEntry[] {
   demoChainJobs();
   return groups.map((g) => ({ key: g.review.nodes[0].dest, repo: g.review.selection.repo, revision: g.review.selection.revision,
     format: "safetensors", sizeBytes: g.jobs[0].bytesTotal, root: "/home/demo/models", inUse: null,
-    copies: Object.fromEntries(g.jobs.filter((j, i) => j.state === "done" || (i === 0 && g.sourceVerified)).map((j) => [j.node, {
-      path: g.review.nodes.find((n) => n.node === j.node)!.dest, sizeBytes: j.bytesTotal, verified: true, check: j.kind === "pull" ? "source-sha256" : "sha256",
-    }])),
+    copies: Object.fromEntries(g.jobs.filter((j, i) => observations || j.state === "done" || (i === 0 && g.sourceVerified)).map((j) => {
+      const verified = j.state === "done" || (j.kind === "download" && g.sourceVerified);
+      const partial = j.state === "running" ? j.kind === "pull" ? "copying" as const : "downloading" as const : "stopped" as const;
+      return [j.node, {
+        path: g.review.nodes.find((n) => n.node === j.node)!.dest, sizeBytes: verified ? j.bytesTotal : j.bytesDone, verified,
+        check: verified ? j.kind === "pull" ? "source-sha256" : "sha256" : "",
+        ...(verified ? {} : { partial, progress: j.state === "running" ? {
+          step: j.step === "verifying" || j.step === "waiting" ? j.step : j.kind === "pull" ? "copying" as const : "downloading" as const,
+          bytesDone: j.bytesDone, bytesTotal: j.bytesTotal,
+        } : null }),
+      }];
+    })),
   }));
 }

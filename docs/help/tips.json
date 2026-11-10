@@ -1476,7 +1476,7 @@
   },
   "models.library.find-models": {
     "title": "Find models",
-    "body": "Looks on every online node for model folders, in your model folder and in the Hugging Face cache. The list also refreshes when a download or copy ends.",
+    "body": "Scans online nodes in the model folder and Hugging Face cache. Each node reports success, failure or offline status; other successful results remain visible. Reconnect and scan again to replace last-known copies.",
     "article": "models-library#toolbar",
     "howto": [
       "download-a-model"
@@ -1493,7 +1493,7 @@
   },
   "models.library.verified-found": {
     "title": "What each mark means",
-    "body": "\u2713 verified means a completed hash check. Its tip distinguishes a download checked against Hugging Face from a copy checked against its source. Older copies may show \u2713 sizes match. \u25d0 incomplete cannot load yet. \u25cf found has no SparkBox record. \u2014 means no copy.",
+    "body": "Verified means a completed hash check; sizes match means only sizes were compared, and found has no SparkBox verification record. Transfers and verification remain unfinished. Last known and unknown require another successful scan; a dash means that node answered and no copy was found.",
     "article": "models-library#the-model-table",
     "howto": [
       "download-a-model",

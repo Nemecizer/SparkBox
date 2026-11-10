@@ -158,14 +158,20 @@ def valid_id(job_id):
     return 0 < len(job_id) <= 64 and all(c.isalnum() or c == "-" for c in job_id)
 
 
-def folder_size(path):
+def scan_error(error):
+    """An unreadable subtree is not an empty Library."""
+    raise error
+
+
+def folder_size(path, strict=False):
     total = 0
-    for dirpath, _, names in os.walk(path):
+    for dirpath, _, names in os.walk(path, onerror=scan_error if strict else None):
         for n in names:
             try:
                 total += os.stat(os.path.join(dirpath, n)).st_size
             except OSError:
-                pass
+                if strict:
+                    raise
     return total
 
 
@@ -1843,18 +1849,22 @@ def is_model_dir(path, names):
     return "config.json" in names and any(n.endswith(WEIGHT_EXT) for n in names)
 
 
-def has_incomplete(path):
+def has_incomplete(path, strict=False):
     """hf's unfinished files are in the folder: <dest>/.cache/huggingface/download/*.incomplete."""
     try:
         return any(n.endswith(".incomplete") for n in os.listdir(os.path.join(path, ".cache", "huggingface", "download")))
+    except FileNotFoundError:
+        return False
     except OSError:
+        if strict:
+            raise
         return False
 
 
 def holds_models(path):
     """A folder below path is a model or one left partway, so hf's unfinished files in path (a
     hand-run `hf download --local-dir` cut short) don't make path a folder of its own."""
-    for dirpath, dirnames, names in os.walk(path):
+    for dirpath, dirnames, names in os.walk(path, onerror=scan_error):
         dirnames[:] = [d for d in dirnames if d != ".cache"]
         if dirpath != path and ("config.json" in names or PARTIAL in names):
             return True
@@ -1874,6 +1884,22 @@ def partial_state(path, names, manifest):
     return "stopped" if not manifest and has_incomplete(path) else None
 
 
+def scan_progress(path, partial):
+    """Only a live marker-bound job supplies progress. Never infer completion from bytes."""
+    if partial not in ("downloading", "copying"):
+        return None
+    job = marker_job(read_marker(path))
+    status = read_status(job) if job else {}
+    if not job_running(status):
+        return None
+    step = status.get("step", "")
+    phase = "verifying" if "verif" in step else "waiting" if "wait" in step else partial
+    done, total = status.get("bytesDone", 0), status.get("bytesTotal", 0)
+    if type(done) is not int or type(total) is not int or min(done, total) < 0:
+        return None
+    return {"step": phase, "bytesDone": done, "bytesTotal": total}
+
+
 def repo_from_path(path, root):
     """Best guess at the Hugging Face repo for a folder: HF cache layout or <root>/<org>/<name>."""
     parts = path.split(os.sep)
@@ -1887,18 +1913,26 @@ def repo_from_path(path, root):
 def scan(roots, max_depth=5):
     found, seen = [], set()
     for root in roots:
-        root = os.path.expanduser(root)
-        if not os.path.isdir(root):
+        if not root:
+            raise ValueError("Model search root is empty. Set the model folder in Settings.")
+        root = os.path.abspath(os.path.expanduser(root))
+        try:
+            mode = os.stat(root).st_mode
+        except FileNotFoundError:
+            if os.path.lexists(root):
+                raise  # a broken root link is not a successfully scanned empty folder
             continue
+        if not stat.S_ISDIR(mode):
+            raise NotADirectoryError("Model search root is not a folder: " + root)
         base_depth = root.rstrip("/").count("/")
-        for dirpath, dirnames, names in os.walk(root, followlinks=False):
+        for dirpath, dirnames, names in os.walk(root, followlinks=False, onerror=scan_error):
             if dirpath.count("/") - base_depth >= max_depth:
                 dirnames[:] = []
             if os.path.basename(dirpath) in ("blobs", ".git", "__pycache__"):
                 dirnames[:] = []
                 continue
             # A folder partway has a marker, or only hf's unfinished files, before it has weights.
-            if is_model_dir(dirpath, names) or PARTIAL in names or (has_incomplete(dirpath) and not holds_models(dirpath)):
+            if is_model_dir(dirpath, names) or PARTIAL in names or (has_incomplete(dirpath, strict=True) and not holds_models(dirpath)):
                 real = os.path.realpath(dirpath)
                 if real in seen:
                     continue
@@ -1911,9 +1945,10 @@ def scan(roots, max_depth=5):
                     "root": root,
                     "repo": manifest.get("repo") or repo_from_path(dirpath, root),
                     "revision": manifest.get("revision", ""),
-                    "sizeBytes": folder_size(dirpath),
+                    "sizeBytes": folder_size(dirpath, strict=True),
                     "verified": verified,
                     "partial": partial,
+                    "progress": scan_progress(dirpath, partial),
                     "checked": (manifest.get("checked") or "sha256") if verified else "",
                     "format": "gguf" if any(n.endswith(".gguf") for n in names) else "safetensors",
                 })

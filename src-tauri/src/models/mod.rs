@@ -23,6 +23,8 @@ pub mod chain;
 pub use disk::{DiskCheck, DiskRequest};
 pub use capacity::DownloadCapacity;
 pub use download_tools::{DownloadTool, DownloadToolReview, DownloadTools};
+mod library;
+pub use library::{LibraryReport, LibraryProgress};
 mod history;
 pub mod history_view;
 pub mod endpoints;
@@ -162,6 +164,8 @@ pub struct Copy {
     /// What a verified copy was compared by: Hugging Face "sha256", "source-sha256", or legacy "sizes".
     #[serde(default)]
     pub check: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub progress: Option<LibraryProgress>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -473,6 +477,7 @@ pub struct Models {
     eps: Mutex<EndpointState>,
     /// config.json of library models, by folder, for the memory plan.
     configs: Mutex<HashMap<String, Value>>,
+    library_observations: Mutex<library::Cache>,
     /// The app's task list, for restarts (set when the endpoint round starts).
     tasks: Mutex<Option<Arc<crate::tasks::Tasks>>>,
     /// The health engine, which a verified restart tells to close its alerts.
@@ -1104,6 +1109,7 @@ impl Models {
             cluster,
             eps: Mutex::new(EndpointState::default()),
             configs: Mutex::new(HashMap::new()),
+            library_observations: Mutex::new(library::Cache::default()),
             tasks: Mutex::new(None),
             health: Mutex::new(None),
             gate: Mutex::new(None),
@@ -1358,52 +1364,6 @@ impl Models {
         let mut job: Job = serde_json::from_value(v).map_err(|e| e.to_string())?;
         job.node = node.into();
         Ok(job)
-    }
-
-    // ---- Library
-
-    pub async fn library(&self, ctx: &Ctx) -> Result<Vec<LibraryEntry>, String> {
-        let mut list = self.library_scan(ctx).await?;
-        let serving = endpoints::in_use(&self.endpoints());
-        for e in &mut list {
-            e.in_use = serving.get(&e.key).or_else(|| serving.get(&e.repo)).cloned();
-        }
-        Ok(list)
-    }
-
-    async fn library_scan(&self, ctx: &Ctx) -> Result<Vec<LibraryEntry>, String> {
-        if !ctx.live {
-            return Ok(self.demo.lock().unwrap().library());
-        }
-        let roots = format!("{} {}", q(&ctx.settings.model_root), q("~/.cache/huggingface/hub"));
-        let nodes = ctx.online();
-        let cmd = format!("scan {roots}");
-        let scans = join_all(nodes.iter().map(|n| self.sparkjob(n, &cmd, None, Duration::from_secs(120)))).await;
-        let mut entries: BTreeMap<String, LibraryEntry> = BTreeMap::new();
-        for (node, scan) in nodes.iter().zip(scans) {
-            for item in scan?.as_array().cloned().unwrap_or_default() {
-                let path = item["path"].as_str().unwrap_or_default().to_string();
-                let size = item["sizeBytes"].as_u64().unwrap_or(0);
-                let e = entries.entry(path.clone()).or_insert_with(|| LibraryEntry {
-                    key: path.clone(),
-                    in_use: None,
-                    repo: item["repo"].as_str().unwrap_or_default().into(),
-                    revision: item["revision"].as_str().unwrap_or_default().into(),
-                    format: item["format"].as_str().unwrap_or("safetensors").into(),
-                    size_bytes: 0,
-                    root: item["root"].as_str().unwrap_or_default().into(),
-                    copies: BTreeMap::new(),
-                });
-                e.size_bytes = e.size_bytes.max(size);
-                if e.revision.is_empty() {
-                    e.revision = item["revision"].as_str().unwrap_or_default().into();
-                }
-                let partial = item["partial"].as_str().map(String::from);
-                let check = item["checked"].as_str().unwrap_or_default().to_string();
-                e.copies.insert(node.clone(), Copy { path, size_bytes: size, verified: item["verified"].as_bool().unwrap_or(false), partial, check });
-            }
-        }
-        Ok(entries.into_values().collect())
     }
 
     // ---- Jobs
@@ -1796,6 +1756,10 @@ impl Models {
     }
 
     pub async fn delete(&self, ctx: &Ctx, key: &str, nodes: &[String]) -> Result<(), String> {
+        if nodes.is_empty() || nodes.iter().collect::<std::collections::HashSet<_>>().len() != nodes.len()
+            || nodes.iter().any(|n| !ctx.node_ids().contains(n) || ctx.live && !ctx.online().contains(n)) {
+            return Err("Pick distinct connected nodes from this inventory, then Find models again.".into());
+        }
         if !ctx.live {
             if self.deployments(ctx).iter().any(|d| (d.state.active() || d.recovery.is_some()) && d.state != DeploymentState::Stopped && d.spec.model_path == key) {
                 return Err("That model is loaded; unload it first.".into());
@@ -1810,6 +1774,9 @@ impl Models {
             return Err("That model is loaded; unload it first.".into());
         }
         let entry = self.library(ctx).await?.into_iter().find(|e| e.key == key).ok_or("That model isn't in the library any more.")?;
+        if nodes.iter().any(|n| !entry.copies.contains_key(n)) {
+            return Err("A selected copy was not found in the fresh scan. Find models and review deletion again.".into());
+        }
         // A job is still writing there. Before any node is touched: sparkjob refuses too, but only its own.
         let running: Vec<&str> = nodes
             .iter()

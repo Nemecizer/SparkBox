@@ -2,6 +2,14 @@
 
 This local development candidate starts from published v0.1.0, commit `3121d96`. The changes below are not published or notarized. Use only the exact reviewed artifact for any separately authorized testing. See [developer handoff](HANDOFF.md) and [quick start](START_HERE.md).
 
+## Library reliability (bounded P3.4 round)
+
+Library now reports each node's scan independently. A failed or offline node no longer discards successful results. Folders from its last successful scan stay visible as **last known**, with the time and any error; nodes without a successful scan show **unknown**. A successful empty scan clears old copies. Observations are memory-only and bound to the model root and node connection configuration; they do not add saved inventory or credentials.
+
+Live transfer markers supply percentages and separate waiting/verification phases. Transferred bytes alone never mark a model finished. Stale observations cannot enable Load, Copy or Delete. Copy and Delete retain fresh strict backend scans; Load retains fresh prerequisite checks. Scan errors and malformed replies fail closed, and delayed refreshes cannot replace newer results.
+
+Offline fixtures cover partial failures, unavailable nodes, recovery, changed configuration, race ordering, progress and action refusal. Real cluster acceptance remains pending. HF cache revision grouping, destination free-space columns and reuse of scans within 60 seconds remain separate P3.4 follow-ups.
+
 ## Reviewed download → verify → copy chains (P3.2)
 
 **Then copy to** adds explicit targets to a new download. The final review shows exact destinations, fabric addresses, disks, source tool and immutable files. Targets are armed first; the source downloads, verifies and shares only the reviewed file set. Copies verify fresh source hashes and retain individual records. No model is loaded.

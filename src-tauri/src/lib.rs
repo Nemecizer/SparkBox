@@ -742,6 +742,12 @@ async fn library_list(state: State<'_, AppState>) -> Result<Vec<LibraryEntry>, S
 }
 
 #[tauri::command]
+async fn library_report(state: State<'_, AppState>) -> Result<models::LibraryReport, String> {
+    let ctx = models_ctx(&state);
+    Ok(state.models.library_report(&ctx).await)
+}
+
+#[tauri::command]
 async fn jobs_list(state: State<'_, AppState>) -> Result<Vec<Job>, String> {
     let ctx = models_ctx(&state);
     state.models.jobs(&ctx).await
@@ -1790,6 +1796,7 @@ pub fn run() {
             hf_refs,
             models_analyze,
             library_list,
+            library_report,
             jobs_list,
             job_cancel,
             job_resume_download,

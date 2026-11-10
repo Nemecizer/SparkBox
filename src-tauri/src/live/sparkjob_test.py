@@ -157,6 +157,73 @@ class Inspection(unittest.TestCase):
         self.assertEqual([f["path"] for f in sj.listing(self.root)], [".sparkbox.json", "config.json", "w.safetensors"])
 
 
+class LibraryReliability(unittest.TestCase):
+    def setUp(self):
+        self.root = tempfile.mkdtemp(dir=TMP_HOME)
+        self.model = os.path.join(self.root, "org", "tiny")
+        make_model(self.model, {"config.json": b"{}", "w.safetensors": b"12345"})
+
+    def tearDown(self):
+        shutil.rmtree(self.root, ignore_errors=True)
+
+    def test_relative_roots_are_absolute_in_results_and_empty_roots_do_not_scan_home(self):
+        with mock.patch.object(sj.os, "getcwd", return_value=os.path.dirname(self.root)):
+            row = sj.scan([os.path.basename(self.root)])[0]
+        self.assertEqual(row["path"], self.model)
+        self.assertEqual(row["root"], self.root)
+        with mock.patch.object(sj.os, "walk") as walk, self.assertRaises(ValueError):
+            sj.scan([""])
+        walk.assert_not_called()
+
+    def test_missing_root_is_empty_but_nonfolder_or_unreadable_root_fails(self):
+        self.assertEqual(sj.scan([self.root + "-missing"]), [])
+        broken = os.path.join(self.root, "broken-root")
+        os.symlink(self.root + "-missing", broken)
+        with self.assertRaises(FileNotFoundError):
+            sj.scan([broken])
+        with self.assertRaises(NotADirectoryError):
+            sj.scan([os.path.join(self.model, "config.json")])
+        stat = os.stat
+        def denied(path, *args, **kwargs):
+            if path == self.root:
+                raise PermissionError("fixture root denied")
+            return stat(path, *args, **kwargs)
+        with mock.patch.object(sj.os, "stat", side_effect=denied), self.assertRaises(PermissionError):
+            sj.scan([self.root])
+
+    def test_unreadable_subtree_does_not_return_a_partly_successful_scan(self):
+        walk = os.walk
+        def denied(path, **kwargs):
+            yield from walk(path, **kwargs)
+            if path == self.root:
+                kwargs["onerror"](PermissionError("fixture subtree denied"))
+        with mock.patch.object(sj.os, "walk", side_effect=denied), self.assertRaises(PermissionError):
+            sj.scan([self.root])
+
+    def test_unreadable_weight_is_an_error_instead_of_a_smaller_model(self):
+        os.unlink(os.path.join(self.model, "w.safetensors"))
+        os.symlink(os.path.join(self.root, "missing"), os.path.join(self.model, "w.safetensors"))
+        with self.assertRaises(FileNotFoundError):
+            sj.scan([self.root])
+
+    def test_progress_is_live_marker_bound_and_never_marks_verification_finished(self):
+        sj.mark_partial(self.model, "library-progress", "download")
+        status = {"state": "running", "step": "verifying", "bytesDone": 100, "bytesTotal": 100, "startedAt": sj.now()}
+        with mock.patch.object(sj, "read_status", return_value=status):
+            row = sj.scan([self.root])[0]
+            self.assertEqual(row["progress"], {"step": "verifying", "bytesDone": 100, "bytesTotal": 100})
+            self.assertFalse(row["verified"])
+            self.assertEqual(row["partial"], "downloading")
+            status["step"] = "downloading"; status["bytesDone"] = 37
+            self.assertEqual(sj.scan([self.root])[0]["progress"]["bytesDone"], 37)
+            status["bytesDone"] = "unknown"
+            self.assertIsNone(sj.scan([self.root])[0]["progress"])
+            status["state"] = "failed"
+            stopped = sj.scan([self.root])[0]
+            self.assertEqual(stopped["partial"], "stopped")
+            self.assertIsNone(stopped["progress"])
+
+
 class DetachedJobs(unittest.TestCase):
     def test_a_pull_job_runs_detached_reports_progress_and_verifies(self):
         if not shutil.which("rsync"):

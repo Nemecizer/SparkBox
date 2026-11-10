@@ -499,7 +499,7 @@ function LoadPageFor({ draft, library, nodes, deployments, settings, onClose, on
   // A folder with no finished copy can't load: it's listed only when it's the one asked for, to say why.
   const folders = library.filter((e) => finishedNodes(e).length > 0 || e.key === draft.key);
   const unfinished = entry && Object.keys(entry.copies).length > 0 && !finishedNodes(entry).length
-    ? `${entry.repo} isn't complete on ${namesOf(Object.keys(entry.copies))}. Finish it first.`
+    ? Object.values(entry.copies).some((c) => c.stale) ? `${entry.repo} has no current finished copy. Reconnect and press Find models in Library.` : `${entry.repo} isn't complete on ${namesOf(Object.keys(entry.copies))}. Finish it first.`
     : null;
 
   const [picked, setPicked] = useState<string[]>(first.nodes);
@@ -1045,22 +1045,24 @@ function LoadPageFor({ draft, library, nodes, deployments, settings, onClose, on
             {nodes.map((n) => {
               const has = !!(entry && finishedCopy(entry, n.id));
               const partial = entry?.copies[n.id]?.partial;
+              const stale = entry?.copies[n.id]?.stale;
               const taken = busyNodes.has(n.id);
               const serving = servingOn(n.id);
               const fault = faultOf(n.id);
               return (
-                <label key={n.id} className={`check node-pick${ai("split")}${fault ? " disabled" : ""}`} title={fault ?? (taken ? "Already serving a SparkBox load" : serving.length ? `Serving ${serving.join(", ")}` : has ? "Has a copy" : "No copy yet")}>
+                <label key={n.id} className={`check node-pick${ai("split")}${fault ? " disabled" : ""}`} title={fault ?? (taken ? "Already serving a SparkBox load" : serving.length ? `Serving ${serving.join(", ")}` : has ? "Has a copy" : stale ? "Last-known copy; find models again" : "No copy yet")}>
                   <input type="checkbox" checked={picked.includes(n.id) && !fault} disabled={!!fault} onChange={(e) => toggle(n.id, e.target.checked)} />
                   <StatusDot status={n.online ? "online" : "offline"} />
                   {n.name}
-                  <span className="muted small">{fault ?? [entry ? (has ? "has copy" : partial === "stopped" ? "incomplete" : partial ?? "no copy") : null, serving.length ? `serving ${serving[0]}` : null].filter(Boolean).join(" · ")}</span>
+                  <span className="muted small">{fault ?? [entry ? (has ? "has copy" : stale ? "last known" : partial === "stopped" ? "incomplete" : partial ?? "no copy") : null, serving.length ? `serving ${serving[0]}` : null].filter(Boolean).join(" · ")}</span>
                 </label>
               );
             })}
           </div>
           {missing.length > 0 && !unfinished && (
-            <Notice tone="warn" action={admin ? { label: "Copy it there", onClick: shareMissing } : undefined}>
-              {namesOf(missing)} {missing.length === 1 ? "doesn't" : "don't"} have this model yet. Copy it over the fabric, then come back.
+            <Notice tone="warn" action={admin && !missing.some((n) => entry?.copies[n]?.stale) ? { label: "Copy it there", onClick: shareMissing } : undefined}>
+              {missing.some((n) => entry?.copies[n]?.stale) ? "Some selected copies are last known. Reconnect and press Find models in Library before loading or copying."
+                : `${namesOf(missing)} ${missing.length === 1 ? "doesn't" : "don't"} have this model yet. Copy it over the fabric, then come back.`}
             </Notice>
           )}
           {busy.length > 0 && <Notice tone="warn">{namesOf(busy)} already {busy.length === 1 ? "serves" : "serve"} a SparkBox load. Unload it first (Loaded tab).</Notice>}

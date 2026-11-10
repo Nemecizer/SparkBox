@@ -1,13 +1,16 @@
 // Models: the library on the nodes, Hugging Face, what's serving, jobs, node
 // readiness, and loading with vLLM. The tabs live in ./models.
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Settings2 } from "lucide-react";
 import { Icon } from "../components/Icon";
 import { Tabs } from "../components/ui";
 import { api } from "../lib/api";
+import { libraryView, useLibraryReport } from "../lib/library";
+import { useCluster } from "../lib/store";
+import { usePrefs } from "./settings/GeneralSection";
 import { useEndpoints } from "../lib/endpoints";
-import { modelsApi, type Deployment, type LibraryEntry } from "../lib/modelsApi";
-import type { Job, ModelSettings } from "../lib/types";
+import { modelsApi, type Deployment } from "../lib/modelsApi";
+import type { Job } from "../lib/types";
 import { useWM, useWindowEvent, type Params } from "../wm/WindowManager";
 import { BenchTab } from "./models/BenchTab";
 import { HubTab, type Draft } from "./models/HubTab";
@@ -17,7 +20,7 @@ import { HistoryTab } from "./models/HistoryTab";
 import { LoadedTab } from "./models/LoadedTab";
 import { LoadPage } from "./models/LoadPage";
 import { PrepareTab } from "./models/PrepareTab";
-import { errText, useNodes } from "./models/shared";
+import { useNodes } from "./models/shared";
 
 type Tab = "library" | "hf" | "loaded" | "history" | "bench" | "jobs" | "prepare";
 const TAB_IDS: Tab[] = ["library", "hf", "loaded", "history", "bench", "jobs", "prepare"];
@@ -40,12 +43,15 @@ export function ModelsWindow({ params }: { params: Params }) {
   const endpoints = useEndpoints();
   const asked = tabFrom(params.tab);
   const [tab, setTab] = useState<Tab>(asked && asked !== "load" ? asked : "library");
-  const [library, setLibrary] = useState<LibraryEntry[] | null>(null);
-  const [libraryError, setLibraryError] = useState<string | null>(null);
-  const [scanning, setScanning] = useState(false);
+  const cluster = useCluster();
+  const { prefs } = usePrefs();
+  const context = JSON.stringify([cluster?.demo, prefs?.models.modelRoot, cluster?.nodes.map((n) => [n.id, n.host])]);
+  const availability = nodes.map((n) => `${n.id}:${n.online}`).join(",");
+  const { report, error: libraryError, scanning, refresh: refreshLibrary } = useLibraryReport(context, availability);
+  const { entries: library, statuses: libraryNodes } = useMemo(() => libraryView(report, nodes, libraryError), [report, availability, libraryError]);
   const [jobs, setJobs] = useState<Job[]>([]);
   const [deployments, setDeployments] = useState<Deployment[]>([]);
-  const [settings, setSettings] = useState<ModelSettings | null>(null);
+  const settings = prefs?.models ?? null;
   const [draft, setDraft] = useState<Draft | null>(asked === "load" ? { key: "", engine: params.engine === "sglang" ? "sglang" : undefined } : null);
   const running = useRef<Set<string>>(new Set());
 
@@ -64,18 +70,6 @@ export function ModelsWindow({ params }: { params: Params }) {
       if (d) setDraft({ key: d.spec.modelPath, spec: d.spec, replaces: d.spec.id });
     }, () => {});
   }, [params.edit, params.nav]);
-
-  const refreshLibrary = useCallback(async () => {
-    setScanning(true);
-    try {
-      setLibrary(await modelsApi.libraryList());
-      setLibraryError(null);
-    } catch (e) {
-      setLibraryError(errText(e));
-    } finally {
-      setScanning(false);
-    }
-  }, []);
 
   const refreshJobs = useCallback(async () => {
     try {
@@ -96,10 +90,8 @@ export function ModelsWindow({ params }: { params: Params }) {
   }, []);
 
   useEffect(() => {
-    refreshLibrary();
     refreshJobs();
     refreshDeployments();
-    api.prefsGet().then((p) => setSettings(p.models), () => {});
   }, [refreshLibrary, refreshJobs, refreshDeployments]);
 
   // Loads change every few seconds while starting; jobs while running.
@@ -110,6 +102,13 @@ export function ModelsWindow({ params }: { params: Params }) {
     }, 2500);
     return () => window.clearInterval(t);
   }, [tab, refreshDeployments, refreshJobs]);
+
+  // Keep observed transfer phases current while the Library is visible.
+  useEffect(() => {
+    if (tab !== "library" || scanning) return;
+    const t = window.setInterval(() => { if (running.current.size) void refreshLibrary(); }, 10_000);
+    return () => window.clearInterval(t);
+  }, [tab, scanning, refreshLibrary]);
 
   // The "in use" badges follow what's serving.
   const serving = endpoints.filter((e) => e.health !== "down").map((e) => e.id).join(",");
@@ -178,6 +177,7 @@ export function ModelsWindow({ params }: { params: Params }) {
           <LibraryTab
             library={library}
             error={libraryError}
+            statuses={libraryNodes}
             scanning={scanning}
             nodes={nodes}
             onRefresh={refreshLibrary}

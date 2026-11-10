@@ -156,3 +156,7 @@ SparkBox sends the advisor the model's facts, the fit table, your nodes' names a
 - [Find a model that fits](help:find-a-model-that-fits)
 - [Download a model](help:download-a-model)
 - [Get a Hugging Face token](help:get-a-hugging-face-token)
+
+## Last-known Library copies
+
+If the selected node's Library scan failed or it went offline, the Hub shows **Last-known copy** instead of treating the folder as finished or offering to overwrite it. Reconnect and press **Find models** in [Library](help:models-library#scan-results). A successful fresh scan restores the appropriate Load or Download choice.

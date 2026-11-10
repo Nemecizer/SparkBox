@@ -2,7 +2,7 @@
 // being served right now, and copying or deleting them. Selecting one shows what it is
 // (its config, where each copy lives, whether it's in memory and what last ran it); the
 // Ollama tags on each node are listed too, read-only.
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Play, RefreshCw, Share2, Trash2 } from "lucide-react";
 import { Table, type Column } from "../../components/Table";
 import { Badge, HelpTip, MiddleEllipsis, Notice, Spacer, Toolbar, ToolButton } from "../../components/ui";
@@ -12,17 +12,25 @@ import { fmtBytes } from "../../lib/format";
 import { listNames } from "../../lib/nodeStatus";
 import { useDeployments, type Deployment } from "../../lib/deployments";
 import { endpointLabel, useEndpoints } from "../../lib/endpoints";
-import { finishedCopy, modelsApi, type LibraryDetail, type LibraryEntry } from "../../lib/modelsApi";
+import { finishedCopy, finishedNodes, modelsApi, type LibraryDetail, type LibraryEntry, type LibraryNodeStatus } from "../../lib/modelsApi";
 import { confirmAction } from "../../lib/session";
 import { toast } from "../../lib/toasts";
-import { errText, locked, type NodeRef } from "./shared";
+import { Ago, errText, locked, type NodeRef } from "./shared";
 import { checkTransferDisk, DiskPreflight } from "./DiskPreflight";
 
 /** One node's copy of a folder, as its Library cell reads. */
-function CopyCell({ copy }: { copy: LibraryEntry["copies"][string] | undefined }) {
+function CopyCell({ copy, status }: { copy: LibraryEntry["copies"][string] | undefined; status?: LibraryNodeStatus }) {
+  if (copy?.stale) return <span className="muted" title="Last-known copy. Reconnect and press Find models before using it.">◷ last known</span>;
+  if (status && status.state !== "ready") return <span className="muted" title="This node has no successful current scan. Its copies are unknown.">unknown</span>;
   if (!copy) return <span className="muted" title="No copy">—</span>;
   if (copy.partial === "stopped") return <span className="copy-found" title="A download or copy stopped partway. Copy to nodes… picks up where it stopped, and a new download should too.">◐ incomplete</span>;
-  if (copy.partial) return <span className="copy-found" title="Still running. Follow it in Jobs.">◐ {copy.partial}</span>;
+  if (copy.partial) {
+    const p = copy.progress;
+    const phase = p?.step ?? copy.partial;
+    const percent = p && p.bytesTotal > 0 && (phase === "downloading" || phase === "copying")
+      ? ` ${Math.min(100, Math.floor(p.bytesDone / p.bytesTotal * 100))}%` : "";
+    return <span className="copy-found" title="Still running. Follow it in Jobs.">◐ {phase}{percent}</span>;
+  }
   if (!copy.verified) return <span className="copy-found" title="Found on disk; SparkBox didn't download it, so it hasn't checked it">● found</span>;
   return copy.check === "sizes"
     ? <span className="copy-ok" title="Copied over the fabric: every file's size matches the source. Checksums weren't compared.">✓ sizes match</span>
@@ -61,11 +69,12 @@ export function deleteWords(entry: LibraryEntry, nodes: string[]) {
   };
 }
 
-export function LibraryTab({ library, error, scanning, nodes, onRefresh, onLoad, onJobs, onShowLoaded }: {
+export function LibraryTab({ library, error, scanning, nodes, statuses, onRefresh, onLoad, onJobs, onShowLoaded }: {
   library: LibraryEntry[] | null;
   error: string | null;
   scanning: boolean;
   nodes: NodeRef[];
+  statuses?: LibraryNodeStatus[];
   onRefresh: () => void;
   onLoad: (key: string) => void;
   onJobs: () => void;
@@ -77,6 +86,20 @@ export function LibraryTab({ library, error, scanning, nodes, onRefresh, onLoad,
   const [picked, setPicked] = useState<string[]>([]);
   const [checkingDisk, setCheckingDisk] = useState(false);
   const entry = library?.find((e) => e.key === selected) ?? null;
+
+  const current = (n: NodeRef) => n.online && (!statuses || statuses.find((s) => s.node === n.id)?.state === "ready");
+  const eligible = (n: NodeRef, m: "share" | "delete") => !!entry && current(n) && !entry.copies[n.id]?.stale
+    && !stillRunning(entry.copies[n.id]) && (m === "share" ? !finishedCopy(entry, n.id) : !!entry.copies[n.id]);
+  const hasSource = !!entry && nodes.some((n) => current(n) && finishedCopy(entry, n.id));
+  const canAct = !!mode && picked.length > 0 && picked.every((id) => nodes.some((n) => n.id === id && eligible(n, mode)))
+    && (mode !== "share" || hasSource) && (mode !== "delete" || !entry?.inUse);
+  // A scan/connectivity change during a disk check or consent dialog requires a new review.
+  const actionStamp = JSON.stringify([entry, picked, mode, canAct]);
+  const latestAction = useRef({ stamp: actionStamp, version: 0 });
+  if (latestAction.current.stamp !== actionStamp) {
+    latestAction.current = { stamp: actionStamp, version: latestAction.current.version + 1 };
+  }
+  const actionVersion = latestAction.current.version;
 
   const columns: Column<LibraryEntry>[] = [
     {
@@ -100,7 +123,7 @@ export function LibraryTab({ library, error, scanning, nodes, onRefresh, onLoad,
       help: i === 0 ? "models.library.verified-found" : undefined,
       align: "center",
       priority: 2,
-      render: (e) => <CopyCell copy={e.copies[n.id]} />,
+      render: (e) => <CopyCell copy={e.copies[n.id]} status={statuses?.find((s) => s.node === n.id)} />,
     })),
     { key: "path", label: "Folder", priority: 3, fit: "flex", minWidth: 140, title: (e) => e.key, render: (e) => <MiddleEllipsis className="mono" text={e.key.replace(/^\/home\/[^/]+\//, "~/")} title={e.key} /> },
   ];
@@ -108,11 +131,11 @@ export function LibraryTab({ library, error, scanning, nodes, onRefresh, onLoad,
   const startMode = (m: "share" | "delete") => {
     if (!entry) return;
     setMode(m);
-    setPicked(m === "share" ? nodes.filter((n) => !finishedCopy(entry, n.id) && !stillRunning(entry.copies[n.id])).map((n) => n.id) : []);
+    setPicked(m === "share" ? nodes.filter((n) => eligible(n, "share")).map((n) => n.id) : []);
   };
 
   const share = async () => {
-    if (!entry || checkingDisk) return;
+    if (!entry || checkingDisk || !canAct) return;
     setCheckingDisk(true);
     try {
       const checks = await checkTransferDisk({ kind: "copy", key: entry.key, targets: picked });
@@ -120,6 +143,7 @@ export function LibraryTab({ library, error, scanning, nodes, onRefresh, onLoad,
       if (!await confirmAction({ title: `Copy ${entry.repo} to ${picked.join(", ")}?`,
         body: <div className="col gap-md"><DiskPreflight checks={checks} /><p>Copy the files over the fabric and verify them on each selected node. The source and existing job records are kept.</p></div>,
         confirmLabel: "Copy over the fabric", danger: checks.some((c) => !!c.warning) })) return;
+      if (latestAction.current.version !== actionVersion) throw new Error("Library changed during review. Find models and review the copy again.");
       const jobs = await api.modelShare(entry.key, picked);
       setMode(null);
       toast({ kind: "info", title: `Copying ${entry.repo}`, body: `To ${jobs.map((j) => j.node).join(", ")} over the fabric.`, actions: [{ label: "Show jobs", run: onJobs }] });
@@ -132,7 +156,7 @@ export function LibraryTab({ library, error, scanning, nodes, onRefresh, onLoad,
   };
 
   const remove = async () => {
-    if (!entry) return;
+    if (!entry || !canAct) return;
     const words = deleteWords(entry, picked);
     const ok = await confirmAction({
       title: words.title,
@@ -143,6 +167,7 @@ export function LibraryTab({ library, error, scanning, nodes, onRefresh, onLoad,
     });
     if (!ok) return;
     try {
+      if (latestAction.current.version !== actionVersion) throw new Error("Library changed during review. Find models and review deletion again.");
       await api.modelDelete(entry.key, picked);
       setMode(null);
       toast({ kind: "success", title: words.doneTitle, body: words.doneBody });
@@ -159,12 +184,21 @@ export function LibraryTab({ library, error, scanning, nodes, onRefresh, onLoad,
           title="Look for model folders on every node: the model folder from Settings and the Hugging Face cache" />
         <HelpTip topic="models.library.find-models" />
         <span className="toolbar-sep" />
-        <ToolButton icon={Play} label="Load…" disabled={!entry} onClick={() => entry && onLoad(entry.key)} />
+        <ToolButton icon={Play} label="Load…" disabled={!hasSource} onClick={() => entry && onLoad(entry.key)} />
         <ToolButton icon={Share2} label="Copy to nodes…" locked={!admin} disabled={!entry || checkingDisk} title={locked(admin) ?? "Copy this model to other nodes over the 200G fabric"} onClick={() => startMode("share")} />
         <ToolButton icon={Trash2} label="Delete…" locked={!admin} disabled={!entry || !!entry?.inUse || checkingDisk} title={entry?.inUse ? "It's being served; unload it first" : locked(admin)} onClick={() => startMode("delete")} priority={2} />
         <Spacer />
         <HelpTip topic="models-library" />
       </Toolbar>
+      {statuses && <div className="ai-library-scans" aria-label="Library scan results">
+        {statuses.map((s) => <div key={s.node}>
+          <strong>{nodes.find((n) => n.id === s.node)?.name ?? s.node}</strong>{": "}
+          {s.state === "ready" ? "Scanned" : s.state === "offline" ? "Offline" : s.state === "error" ? "Scan failed" : "Not scanned"}
+          {s.checkedAtMs ? <> · {s.state === "ready" ? "checked" : "last successful scan"} <Ago ts={s.checkedAtMs / 1000} /></> : " · copies unknown"}
+          {s.state !== "ready" && s.checkedAtMs && " · showing last-known copies"}
+          {s.error && <span className="muted"> · {s.error}</span>}
+        </div>)}
+      </div>}
       {error && <Notice tone="error" onRetry={onRefresh}>{error}</Notice>}
       {mode && entry && (
         <div className="inline-panel">
@@ -173,21 +207,22 @@ export function LibraryTab({ library, error, scanning, nodes, onRefresh, onLoad,
             const copy = entry.copies[n.id];
             const running = stillRunning(copy);
             const has = !!finishedCopy(entry, n.id);
-            const usable = !running && (mode === "share" ? !has : !!copy);
-            const tag = copy?.partial === "stopped" ? "incomplete" : running ? copy?.partial : has ? "has it" : null;
+            const usable = eligible(n, mode);
+            const tag = !current(n) || copy?.stale ? "scan needed" : copy?.partial === "stopped" ? "incomplete" : running ? copy?.partial : has ? "has it" : null;
             return (
               <label key={n.id} className="check" title={running ? "Still running. Follow it in Jobs." : mode === "share" && has ? "Already has it" : undefined}>
-                <input type="checkbox" disabled={!usable || checkingDisk} checked={picked.includes(n.id)}
+                <input type="checkbox" disabled={(!usable && !picked.includes(n.id)) || checkingDisk} checked={picked.includes(n.id)}
                   onChange={(e) => setPicked(e.target.checked ? [...picked, n.id] : picked.filter((p) => p !== n.id))} />
                 {n.name}
-                {(mode === "share" || running) && tag && <span className="muted"> · {tag}</span>}
+                {(mode === "share" || running || !current(n) || copy?.stale) && tag && <span className="muted"> · {tag}</span>}
               </label>
             );
           })}
+          {!canAct && picked.length > 0 && <span className="muted">Find models again or remove unavailable targets. A current finished source is required to copy.</span>}
           <Spacer />
           {mode === "share"
-            ? <button className="btn primary" disabled={!picked.length || checkingDisk} onClick={share}>{checkingDisk ? "Checking disk…" : "Copy over the fabric"}</button>
-            : <button className="btn danger" disabled={!picked.length} onClick={remove}>Delete…</button>}
+            ? <button className="btn primary" disabled={!canAct || checkingDisk} onClick={share}>{checkingDisk ? "Checking disk…" : "Copy over the fabric"}</button>
+            : <button className="btn danger" disabled={!canAct} onClick={remove}>Delete…</button>}
           <button className="btn" disabled={checkingDisk} onClick={() => setMode(null)}>Cancel</button>
         </div>
       )}
@@ -199,12 +234,12 @@ export function LibraryTab({ library, error, scanning, nodes, onRefresh, onLoad,
         rowKey={(e) => e.key}
         selected={selected}
         onSelect={setSelected}
-        onActivate={(e) => onLoad(e.key)}
+        onActivate={(e) => { if (finishedNodes(e).length) onLoad(e.key); }}
         tableId="models.library"
         footer={<HelpTip topic="models.library.copies" label="About copies" />}
         itemNoun={["model", "models"]}
         ariaLabel="Models on the cluster"
-        empty={library === null && !error ? "Looking for models on each node…" : "No models found. Download one from the Hugging Face tab, or set the model folder in Settings › Models and press Find models."}
+        empty={library === null && !error ? "Looking for models on each node…" : error || statuses?.some((s) => s.state !== "ready") ? "No confirmed models to show. Some nodes could not be scanned; their copies are unknown. Reconnect and press Find models." : "No models found. Download one from the Hugging Face tab, or set the model folder in Settings › Models and press Find models."}
       />
       <OllamaGroup />
       </div>
@@ -268,7 +303,7 @@ function LibraryDetailPane({ entry, nodes, onShowLoaded }: { entry: LibraryEntry
         <dd>
           {copyGroups(entry.copies).map(({ path, nodes: on }) => (
             <div key={path} className="ai-lib-copy">
-              <span>{listNames(on.map((n) => (entry.copies[n].partial ? `${name(n)} (${entry.copies[n].partial === "stopped" ? "incomplete" : entry.copies[n].partial})` : name(n))))}</span>
+              <span>{listNames(on.map((n) => (entry.copies[n].stale ? `${name(n)} (last known)` : entry.copies[n].partial ? `${name(n)} (${entry.copies[n].partial === "stopped" ? "incomplete" : entry.copies[n].progress?.step ?? entry.copies[n].partial})` : name(n))))}</span>
               <MiddleEllipsis className="mono muted" text={path.replace(/^\/home\/[^/]+\//, "~/")} title={path} />
             </div>
           ))}

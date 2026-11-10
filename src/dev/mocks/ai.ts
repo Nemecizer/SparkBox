@@ -1,3 +1,4 @@
+import { demoLibraryReport } from "./library";
 import { reviewDemoChain, startDemoChain, cancelDemoChain, demoChainJobs, demoChainLibrary } from "./chains";
 // AI backend for the browser preview: the Demo world's endpoints (Llama 3.3 70B
 // pipeline-parallel over cell1–cell3, Ollama on gx10-0000) with metrics that
@@ -523,6 +524,7 @@ export const handlers: MockHandlers = {
   endpoint_restart: () => "task-demo-restart",
   endpoint_forget: () => null,
   library_list: () => structuredClone([...library, ...demoChainLibrary()]),
+  library_report: () => demoLibraryReport([...library, ...demoChainLibrary(true).map((e) => ({ ...e, inUse: null }))]),
   jobs_list: () => [
     ...preparedImageJobs, ...downloadRecoveryJobs(), ...demoChainJobs(),
     { id: "share-a1-gx10-0000", node: "gx10-0000", kind: "pull", state: "done", step: "done", message: "", label: "Copy Qwen/Qwen3.8-27B-FP8 to gx10-0000", bytesDone: 30_923_764_531, bytesTotal: 30_923_764_531, rateBps: 2.4e9, startedAt: nowS() - 1900, updatedAt: nowS() - 1887 },

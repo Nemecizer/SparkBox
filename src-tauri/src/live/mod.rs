@@ -988,6 +988,12 @@ impl Live {
         })
     }
 
+    /// Binds in-memory Library observations to this configured connection generation.
+    pub(crate) fn library_generation(&self, config: &NodeConfig) -> Option<u64> {
+        if self.configs.lock().unwrap().get(&config.id) != Some(config) { return None; }
+        self.nodes.lock().unwrap().get(&config.id).map(|s| s.generation)
+    }
+
     /// Connects to the nodes in the list, keeping what's already right: a node whose config
     /// didn't change keeps its loop, its connections, terminals and transfers; a changed node
     /// is connected again, a removed one is stopped and an added one started.

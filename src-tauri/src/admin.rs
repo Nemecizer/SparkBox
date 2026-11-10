@@ -363,6 +363,7 @@ pub const READ_ONLY: &[(&str, &str)] = &[
     ("hf_refs", "reads branch and tag names and commits from Hugging Face; no node or repository writes"),
     ("models_analyze", "asks the advisor model about a Hugging Face model; changes nothing"),
     ("library_list", "lists the model folders on the nodes"),
+    ("library_report", "reads model folders with per-node scan results and in-memory last-known observations; starts no jobs"),
     ("model_download_tools", "reads executable fingerprints, managed-tool receipts and local image IDs; executes no hf command and installs nothing"),
     ("model_chain_review", "reads the inspected manifest, empty destinations, rsync availability, disk capacity and fabric addresses; starts no jobs or listener"),
     ("model_download_capacity", "compares reviewed file sizes with destination filesystem capacity on chosen inventory nodes; creates no model folder, installs no tool and starts no job"),

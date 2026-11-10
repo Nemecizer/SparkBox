@@ -4423,3 +4423,62 @@ async fn version_preflight_reads_the_selected_image_and_drops_declarations_after
     assert!(next.nodes.iter().all(|n| !n.versions.contains_key("nccl")));
     c.live.stop();
 }
+
+
+#[tokio::test]
+async fn library_report_keeps_successes_and_last_known_copies_but_actions_scan_fresh() {
+    let response = Arc::new(Mutex::new(json!([scan_line(SHARE_KEY, true, None)]).to_string()));
+    let make_script = |reply: Arc<Mutex<String>>| -> Script {
+        Arc::new(move |cmd, input| {
+            if cmd.contains("sparkjob.py scan ") { return Some((reply.lock().unwrap().clone(), 0)); }
+            real_shell()(cmd, input)
+        })
+    };
+    let (_a, pa) = fake_node(&temp("library-report-a"), make_script(Arc::new(Mutex::new(json!([scan_line(SHARE_KEY, true, None)]).to_string())))).await;
+    let (b, pb) = fake_node(&temp("library-report-b"), make_script(response.clone())).await;
+    let c = cluster("library-report", &[("cell1",pa),("cell2",pb)]).await;
+    let ctx = c.ctx();
+    let good = c.models.library_report(&ctx).await;
+    assert_eq!(good.entries[0].copies.len(),2);
+    assert!(good.nodes.iter().all(|n| n.state == "ready"));
+    let first_time = good.nodes[1].checked_at_ms;
+    let gate = crate::admin::AdminGate::new(Box::new(crate::admin::SystemClock), Box::new(Yes), None);
+    gate.set_look_only(true).unwrap(); c.live.set_write_policy(gate);
+    *response.lock().unwrap() = "{}".into();
+    let failed = c.models.library_report(&ctx).await;
+    assert_eq!(failed.entries[0].copies.len(),2,"successful node and last-known copy survive");
+    assert_eq!(failed.nodes[0].state,"ready"); assert_eq!(failed.nodes[1].state,"error");
+    assert_eq!(failed.nodes[1].checked_at_ms, first_time); assert!(failed.nodes[1].error.is_some());
+    assert!(c.models.library(&ctx).await.is_err(),"strict actions do not consume display cache");
+    assert!(c.models.share(&ctx,SHARE_KEY,&["cell2".into()]).await.is_err());
+    assert!(c.models.delete(&ctx,SHARE_KEY,&["cell2".into()]).await.is_err());
+    assert!(b.ran("sparkjob.py start").is_empty() && b.ran("sparkjob.py delete").is_empty());
+    let mut offline = ctx.clone();
+    offline.snapshot.as_mut().unwrap().nodes.iter_mut().find(|n| n.id=="cell2").unwrap().status=LinkStatus::Offline;
+    let before = b.ran("sparkjob.py scan").len();
+    let report = c.models.library_report(&offline).await;
+    assert_eq!(report.nodes[1].state,"offline"); assert_eq!(report.entries[0].copies.len(),2);
+    assert_eq!(b.ran("sparkjob.py scan").len(),before,"no probe dispatched to offline nodes");
+    assert!(c.models.delete(&offline,SHARE_KEY,&["cell1".into(),"cell2".into()]).await.is_err());
+    *response.lock().unwrap()="[]".into();
+    let empty = c.models.library_report(&ctx).await;
+    assert_eq!(empty.nodes[1].state,"ready"); assert!(!empty.entries[0].copies.contains_key("cell2"));
+    *response.lock().unwrap() = "{}".into();
+    let mut root_changed = ctx.clone(); root_changed.settings.model_root="~/other-models".into();
+    let fresh = c.models.library_report(&root_changed).await;
+    assert!(fresh.nodes[1].checked_at_ms.is_none(),"a different model root forgets the old observation");
+    let mut removed=ctx.clone(); removed.inventory.nodes.retain(|n| n.id=="cell1");
+    let report=c.models.library_report(&removed).await;
+    assert_eq!(report.nodes.len(),1); assert_eq!(report.entries[0].copies.len(),1);
+    c.live.stop();
+}
+
+#[tokio::test]
+async fn library_report_without_a_successful_scan_never_claims_an_offline_node_is_empty() {
+    let c=cluster("library-report-offline", &[]).await;
+    let mut ctx=c.ctx(); ctx.inventory=Inventory::example(); ctx.snapshot=None;
+    let report=c.models.library_report(&ctx).await;
+    assert!(report.entries.is_empty()); assert_eq!(report.nodes.len(),4);
+    assert!(report.nodes.iter().all(|n| n.state=="offline" && n.checked_at_ms.is_none()));
+    c.live.stop();
+}

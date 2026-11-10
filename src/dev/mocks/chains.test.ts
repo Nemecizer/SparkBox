@@ -8,6 +8,10 @@ it.each(["", "source-fail", "copy-fail"])("Demo chain %s exposes only verified l
   const review = api.reviewDemoChain(selection, "cell1", ["cell2", "cell3"]);
   api.startDemoChain(review, { node: "cell1", tool: demoDownloadTools("cell1").options[0], installConsent: false });
   expect(Object.keys(api.demoChainLibrary()[0].copies)).toEqual([]);
+  const observed = api.demoChainLibrary(true)[0].copies;
+  expect(Object.keys(observed)).toHaveLength(3);
+  expect(observed.cell1.partial).toBe("downloading"); expect(observed.cell2.progress?.step).toBe("waiting");
+  expect(Object.values(observed).every((c) => !c.verified)).toBe(true);
   await vi.advanceTimersByTimeAsync(9000);
   expect(Object.keys(api.demoChainLibrary()[0].copies)).toEqual(fault === "source-fail" ? [] : ["cell1"]);
   await vi.advanceTimersByTimeAsync(12000);

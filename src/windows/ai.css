@@ -610,3 +610,6 @@ input.ai-filled::after, select.ai-filled::after { content: none; }
 .ai-capacity-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
 .ai-capacity-check { display: inline-flex; align-items: center; gap: 6px; }
 .ai-capacity-path { overflow-wrap: anywhere; }
+
+/* Per-node Library observations remain readable without widening the model table. */
+.ai-library-scans { padding: 6px 12px; border-bottom: 1px solid var(--border); overflow-wrap: anywhere; max-height: 160px; overflow: auto; flex-shrink: 0; }
