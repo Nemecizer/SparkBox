@@ -1,0 +1,21 @@
+lo               UNKNOWN        00:00:00:00:00:00 <LOOPBACK,UP,LOWER_UP> 
+enP7s7           UP             30:c5:99:79:4d:07 <BROADCAST,MULTICAST,UP,LOWER_UP> 
+enp1s0f0np0      DOWN           30:c5:99:7a:0e:4a <NO-CARRIER,BROADCAST,MULTICAST,UP> 
+enp1s0f1np1      UP             30:c5:99:ad:8d:87 <BROADCAST,MULTICAST,UP,LOWER_UP> 
+enP2p1s0f0np0    DOWN           30:c5:99:0d:7a:72 <NO-CARRIER,BROADCAST,MULTICAST,UP> 
+enP2p1s0f1np1    UP             30:c5:99:f7:54:60 <BROADCAST,MULTICAST,UP,LOWER_UP> 
+wlP9s9           DOWN           50:bb:b5:13:89:c6 <NO-CARRIER,BROADCAST,MULTICAST,UP> 
+docker0          DOWN           b2:0d:71:b3:9b:33 <NO-CARRIER,BROADCAST,MULTICAST,UP> 
+lo               UNKNOWN        127.0.0.1/8 
+enP7s7           UP             192.168.50.181/24 
+enp1s0f1np1      UP             192.168.100.4/24 
+enP2p1s0f1np1    UP             192.168.101.4/24 
+docker0          DOWN           172.17.0.1/16 
+docker0 state=down speed=-1 driver= wireless=no
+enp1s0f0np0 state=down speed=-1 driver=mlx5_core wireless=no
+enp1s0f1np1 state=up speed=200000 driver=mlx5_core wireless=no
+enP2p1s0f0np0 state=down speed=-1 driver=mlx5_core wireless=no
+enP2p1s0f1np1 state=up speed=200000 driver=mlx5_core wireless=no
+enP7s7 state=up speed=1000 driver=r8127 wireless=no
+lo state=unknown speed= driver= wireless=no
+wlP9s9 state=down speed= driver=mt7925e wireless=yes

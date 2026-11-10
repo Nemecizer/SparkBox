@@ -1,0 +1,36 @@
+{
+ "metadata": {
+  "total_size": 124168777344,
+  "total_parameters": 116829154368
+ },
+ "weight_map": {
+  "model.embed_tokens.biases": "model-00001-of-00027.safetensors",
+  "model.layers.1.input_layernorm.weight": "model-00002-of-00027.safetensors",
+  "model.layers.2.input_layernorm.weight": "model-00003-of-00027.safetensors",
+  "model.layers.4.input_layernorm.weight": "model-00004-of-00027.safetensors",
+  "model.layers.5.input_layernorm.weight": "model-00005-of-00027.safetensors",
+  "model.layers.6.input_layernorm.weight": "model-00006-of-00027.safetensors",
+  "model.layers.8.input_layernorm.weight": "model-00007-of-00027.safetensors",
+  "model.layers.10.mlp.experts.gate_proj.bias": "model-00008-of-00027.safetensors",
+  "model.layers.10.input_layernorm.weight": "model-00009-of-00027.safetensors",
+  "model.layers.12.input_layernorm.weight": "model-00010-of-00027.safetensors",
+  "model.layers.13.input_layernorm.weight": "model-00011-of-00027.safetensors",
+  "model.layers.14.input_layernorm.weight": "model-00012-of-00027.safetensors",
+  "model.layers.16.input_layernorm.weight": "model-00013-of-00027.safetensors",
+  "model.layers.17.input_layernorm.weight": "model-00014-of-00027.safetensors",
+  "model.layers.18.input_layernorm.weight": "model-00015-of-00027.safetensors",
+  "model.layers.20.input_layernorm.weight": "model-00016-of-00027.safetensors",
+  "model.layers.21.input_layernorm.weight": "model-00017-of-00027.safetensors",
+  "model.layers.22.input_layernorm.weight": "model-00018-of-00027.safetensors",
+  "model.layers.24.input_layernorm.weight": "model-00019-of-00027.safetensors",
+  "model.layers.25.input_layernorm.weight": "model-00020-of-00027.safetensors",
+  "model.layers.26.input_layernorm.weight": "model-00021-of-00027.safetensors",
+  "model.layers.28.input_layernorm.weight": "model-00022-of-00027.safetensors",
+  "model.layers.29.input_layernorm.weight": "model-00023-of-00027.safetensors",
+  "model.layers.30.input_layernorm.weight": "model-00024-of-00027.safetensors",
+  "model.layers.32.input_layernorm.weight": "model-00025-of-00027.safetensors",
+  "model.layers.33.input_layernorm.weight": "model-00026-of-00027.safetensors",
+  "lm_head.biases": "model-00027-of-00027.safetensors"
+ },
+ "_note": "Trimmed by SparkBox: one tensor per shard (served_files reads only the shard names)."
+}

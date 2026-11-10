@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>SparkBox</title>
+    <script>
+      // Apply the saved appearance before the first paint (src/lib/theme.ts owns it after load).
+      try {
+        var a = JSON.parse(localStorage.getItem("sparkbox.appearance") || "{}");
+        var r = document.documentElement;
+        if (a.theme === "light" || a.theme === "dark" || a.theme === "black") r.setAttribute("data-theme", a.theme);
+        if (a.contrast === "more") r.setAttribute("data-contrast", "more");
+        if (a.motion === "reduce") r.setAttribute("data-motion", "reduce");
+        if (a.textScale === 0.92 || a.textScale === 1.12 || a.textScale === 1.25) r.style.setProperty("--text-scale", String(a.textScale));
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

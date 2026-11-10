@@ -1,0 +1,17 @@
+# Written for SparkBox's tests with the trtllm_ metric names SparkBox looks for (trtllm-serve's Prometheus endpoint).
+# TYPE trtllm_request_success_total counter
+trtllm_request_success_total{model_name="nvidia/Llama-3.3-70B-Instruct-FP4",finished_reason="stop"} 120.0
+trtllm_request_success_total{model_name="nvidia/Llama-3.3-70B-Instruct-FP4",finished_reason="length"} 8.0
+# TYPE trtllm_generation_tokens_total counter
+trtllm_generation_tokens_total{model_name="nvidia/Llama-3.3-70B-Instruct-FP4"} 40211.0
+# TYPE trtllm_prompt_tokens_total counter
+trtllm_prompt_tokens_total{model_name="nvidia/Llama-3.3-70B-Instruct-FP4"} 190440.0
+# TYPE trtllm_kv_cache_utilization gauge
+trtllm_kv_cache_utilization{model_name="nvidia/Llama-3.3-70B-Instruct-FP4"} 0.12
+# TYPE trtllm_time_to_first_token_seconds histogram
+trtllm_time_to_first_token_seconds_bucket{le="0.25",model_name="nvidia/Llama-3.3-70B-Instruct-FP4"} 30.0
+trtllm_time_to_first_token_seconds_bucket{le="0.5",model_name="nvidia/Llama-3.3-70B-Instruct-FP4"} 110.0
+trtllm_time_to_first_token_seconds_bucket{le="1.0",model_name="nvidia/Llama-3.3-70B-Instruct-FP4"} 126.0
+trtllm_time_to_first_token_seconds_bucket{le="+Inf",model_name="nvidia/Llama-3.3-70B-Instruct-FP4"} 128.0
+trtllm_time_to_first_token_seconds_sum{model_name="nvidia/Llama-3.3-70B-Instruct-FP4"} 44.1
+trtllm_time_to_first_token_seconds_count{model_name="nvidia/Llama-3.3-70B-Instruct-FP4"} 128.0

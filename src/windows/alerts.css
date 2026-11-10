@@ -1,0 +1,197 @@
+/* ---- r2-monitor: Alerts (Events, Deliveries), Settings › Notifications and Settings › Alerts ---- */
+
+/* Alerts › History: the event word and its "While away" badge on one line. */
+.al-event { display: inline-flex; align-items: center; gap: var(--sp-3, 6px); min-width: 0; }
+.al-result { display: inline-flex; align-items: center; min-width: 0; }
+
+/* Alerts › Events: the table with the selected event's meaning and next step beside it. */
+.al-split { display: flex; flex: 1; min-height: 0; min-width: 0; }
+.al-split > :first-child { flex: 1 1 auto; min-width: 0; }
+.al-detail {
+  flex: 0 0 300px;
+  min-width: 0;
+  overflow: auto;
+  padding: var(--sp-4, 8px) var(--sp-5, 12px);
+  border-left: 1px solid var(--hairline);
+  background: var(--surface);
+  font-size: var(--fs-base, 12.5px);
+  color: var(--text);
+}
+.al-detail p { margin: 0 0 var(--sp-3, 6px); line-height: 1.45; }
+.al-detail-title { margin: 0 0 var(--sp-1, 2px); font-size: var(--fs-md, 13px); font-weight: var(--fw-semibold, 600); }
+.al-detail-meta { color: var(--muted); font-size: var(--fs-sm, 11.5px); }
+.al-detail-crit { box-shadow: inset 3px 0 0 var(--state-crit-edge, var(--critical)); }
+.al-detail-warn { box-shadow: inset 2px 0 0 var(--state-warn-edge, var(--warning)); }
+.al-detail-raw {
+  margin: var(--sp-3, 6px) 0 0;
+  padding: var(--sp-3, 6px);
+  border-radius: var(--r-sm, 4px);
+  background: var(--surface-2, var(--hover));
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: var(--fs-xs, 10.5px);
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: var(--text-2);
+}
+
+/* Settings › Notifications: one row per channel and per node agent. */
+.nt-list { display: flex; flex-direction: column; }
+.nt-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--sp-3, 6px) var(--sp-5, 12px);
+  padding: var(--sp-4, 8px) var(--sp-5, 12px);
+  border-top: 1px solid var(--hairline);
+  min-width: 0;
+}
+.nt-row:first-child { border-top: 0; }
+.nt-main { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.nt-name { display: flex; align-items: center; gap: var(--sp-3, 6px); min-width: 0; font-weight: var(--fw-semibold, 600); color: var(--text); }
+.nt-name > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nt-kind { flex: none; font-weight: normal; color: var(--muted); font-size: var(--fs-sm, 11.5px); }
+.nt-sub { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text-2); font-size: var(--fs-sm, 11.5px); }
+.nt-sub.failed { color: var(--crit-text, var(--critical)); white-space: normal; }
+.nt-actions { display: flex; align-items: center; gap: var(--sp-3, 6px); flex-wrap: wrap; justify-content: flex-end; }
+.nt-edit {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(110px, max-content) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--sp-3, 6px) var(--sp-4, 8px);
+  padding: var(--sp-4, 8px) 0 var(--sp-2, 4px);
+}
+.nt-edit label { color: var(--text-2); font-size: var(--fs-base, 12.5px); }
+.nt-edit .field { min-width: 0; width: 100%; }
+.nt-edit-actions { grid-column: 1 / -1; display: flex; justify-content: flex-end; gap: var(--sp-3, 6px); }
+.nt-add { display: flex; gap: var(--sp-3, 6px); flex-wrap: wrap; padding: var(--sp-4, 8px) var(--sp-5, 12px); border-top: 1px solid var(--hairline); }
+.nt-agent-state { white-space: nowrap; }
+.nt-agent-row.crit { box-shadow: inset 2px 0 0 var(--state-crit-edge, var(--critical)); }
+.nt-agent-row.warn { box-shadow: inset 2px 0 0 var(--state-warn-edge, var(--warning)); }
+.nt-inline { display: flex; align-items: center; gap: var(--sp-3, 6px); }
+.nt-inline .field { width: 120px; }
+
+/* Settings › Alerts: rules grouped by area, editable in place. */
+.ar-toolbar { display: flex; align-items: center; gap: var(--sp-3, 6px); flex-wrap: wrap; margin-bottom: var(--sp-4, 8px); }
+.ar-toolbar .spacer { flex: 1; }
+.ar-table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: var(--fs-base, 12.5px); }
+.ar-table th {
+  text-align: left;
+  font-weight: var(--fw-semibold, 600);
+  color: var(--muted);
+  font-size: var(--fs-sm, 11.5px);
+  padding: var(--sp-2, 4px) var(--sp-3, 6px);
+  border-bottom: 1px solid var(--hairline);
+  white-space: nowrap;
+}
+.ar-table td { padding: var(--sp-2, 4px) var(--sp-3, 6px); border-bottom: 1px solid var(--hairline); vertical-align: middle; min-width: 0; }
+.ar-table tr:last-child td { border-bottom: 0; }
+.ar-table tr.off td:not(:first-child) { opacity: 0.55; }
+/* Black: a rule that is off keeps muted ink (6:1) instead of fading toward #000 (2.6:1). */
+:root[data-theme="black"] .ar-table tr.off td:not(:first-child) { opacity: 1; color: var(--muted); }
+.ar-table tr.changed td:first-child { box-shadow: inset 2px 0 0 var(--hairline-strong, var(--muted)); }
+/* Rule names wrap to a second line rather than being cut. */
+.ar-title { display: flex; align-items: center; gap: var(--sp-2, 4px); min-width: 0; }
+.ar-title > span { min-width: 0; overflow-wrap: anywhere; line-height: 1.3; }
+.ar-num { display: inline-flex; align-items: center; gap: var(--sp-1, 2px); white-space: nowrap; }
+.ar-num input { width: 56px; text-align: right; }
+.ar-num .unit { color: var(--muted); font-size: var(--fs-sm, 11.5px); }
+.ar-dur input { width: 70px; }
+.ar-dash { color: var(--muted); }
+.ar-fire { display: flex; flex-direction: column; gap: 1px; min-width: 0; font-size: var(--fs-sm, 11.5px); }
+.ar-fire > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ar-fire .quiet { color: var(--muted); }
+.ar-overrides { display: grid; grid-template-columns: max-content auto auto auto; gap: var(--sp-2, 4px) var(--sp-3, 6px); align-items: center; font-size: var(--fs-base, 12.5px); }
+.ar-overrides input[type="number"] { width: 64px; }
+.ar-overrides .head { color: var(--muted); font-size: var(--fs-sm, 11.5px); }
+.ar-pop {
+  position: fixed;
+  z-index: 60;
+  padding: var(--sp-4, 8px) var(--sp-5, 12px);
+  border: 1px solid var(--hairline-strong, var(--hairline));
+  border-radius: var(--r-lg, 8px);
+  background: var(--surface);
+  box-shadow: var(--shadow-pop, 0 8px 24px rgb(0 0 0 / 0.18));
+  max-width: 420px;
+}
+.ar-pop h4 { margin: 0 0 var(--sp-3, 6px); font-size: var(--fs-md, 13px); }
+.ar-pop-actions { display: flex; justify-content: flex-end; gap: var(--sp-3, 6px); margin-top: var(--sp-4, 8px); }
+
+/* ---- r3-incidents: Alerts › Active as incidents, the Silence sheet, Settings › Alerts ---- */
+
+/* Incidents in groups (Firing, Recovering, Planned, Acknowledged), each its own table. */
+.al-groups { flex: 1; min-height: 0; overflow: auto; display: flex; flex-direction: column; gap: var(--sp-4, 8px); padding-bottom: var(--sp-4, 8px); }
+.al-group { display: flex; flex-direction: column; min-height: 0; }
+.al-group .table-wrap { flex: none; }
+.al-group-title {
+  display: flex; align-items: center; gap: var(--sp-2, 4px);
+  margin: var(--sp-4, 8px) var(--sp-5, 12px) var(--sp-2, 4px);
+  font-size: var(--fs-sm, 11.5px); font-weight: var(--fw-semibold, 600); color: var(--text-2);
+}
+.al-group-n { color: var(--muted); font-weight: normal; font-variant-numeric: tabular-nums; }
+.al-state { display: inline-flex; align-items: center; gap: var(--sp-2, 4px); }
+.al-state.child { padding-left: 14px; }
+.al-disclose {
+  display: inline-grid; place-items: center; width: 16px; height: 16px; padding: 0;
+  border: 0; border-radius: var(--r-sm, 4px); background: transparent; color: var(--muted); cursor: default;
+}
+.al-disclose:hover { background: var(--hover); color: var(--text); }
+.al-disclose:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 0; }
+.al-disclose-space { display: inline-block; width: 16px; }
+.al-affects { font-weight: var(--fw-semibold, 600); }
+.al-child-affects { color: var(--text-2); padding-left: var(--sp-3, 6px); }
+.al-what { display: inline-flex; align-items: center; gap: var(--sp-3, 6px); min-width: 0; max-width: 100%; }
+.al-what-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.al-count {
+  flex: none; min-width: 16px; padding: 0 5px; border-radius: 8px;
+  background: var(--surface-2, var(--hover)); color: var(--text-2);
+  font-size: var(--fs-2xs, 10px); line-height: 16px; text-align: center; font-variant-numeric: tabular-nums;
+}
+.al-firing { font-variant-numeric: tabular-nums; }
+.al-firing.quiet { color: var(--muted); }
+.al-row-child td { color: var(--text-2); }
+.al-evidence { padding-left: 76px; color: var(--muted); font-size: var(--fs-sm, 11.5px); font-variant-numeric: tabular-nums; }
+.al-known { white-space: nowrap; }
+.al-tool-menu { display: contents; }
+
+/* The Silence sheet: the duration as a segmented control, then the reason. */
+/* Two classes beat .sb-dialog.sheet's 440 px: the five durations fit on one line. */
+.sb-dialog.sheet.al-sheet { width: min(580px, calc(100% - 24px)); }
+.al-sheet .seg { flex-wrap: wrap; align-self: flex-start; }
+
+/* Settings › Alerts: the rule with its hold and "Would fire now" on a second line. */
+.ar-title > span { display: inline; }
+.ar-title .infotip { vertical-align: -2px; margin-left: var(--sp-2, 4px); }
+.ar-sub { display: flex; align-items: center; flex-wrap: wrap; gap: var(--sp-2, 4px) var(--sp-4, 8px); margin-top: var(--sp-1, 2px); min-width: 0; }
+.ar-for { display: inline-flex; align-items: center; gap: var(--sp-2, 4px); font-size: var(--fs-sm, 11.5px); }
+.ar-sub .ar-fire { flex-direction: row; flex-wrap: wrap; align-items: center; gap: var(--sp-1, 2px) var(--sp-3, 6px); }
+.ar-sub > .quiet { color: var(--muted); font-size: var(--fs-sm, 11.5px); }
+.ar-pernode { white-space: nowrap; display: inline-flex; align-items: center; gap: var(--sp-1, 2px); }
+.ar-counters-toggle { display: inline-flex; align-items: center; gap: var(--sp-1, 2px); }
+.ar-counter td { background: var(--surface-2, transparent); }
+.ar-counter-name { padding-left: var(--sp-5, 12px); color: var(--text-2); }
+.ar-table td .quiet { color: var(--muted); }
+
+/* ---- r4-alerts: the incident view, Events groups, Deliveries ---- */
+
+/* Every state glyph sits centred in the same 16 px box, so rows of different states line up. */
+.al-glyph-box { display: inline-grid; place-items: center; width: 16px; height: 16px; flex: none; }
+.al-keys { display: contents; }
+.al-since { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.al-affects .mid-ellipsis-head, .al-affects .mid-ellipsis-tail { font-weight: var(--fw-semibold, 600); }
+.al-row-child .al-child-affects { padding-left: var(--sp-3, 6px); }
+.al-evidence { display: block; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* Alerts › Events: information rows and the events inside a recabling group. */
+.al-ev-info { display: inline-flex; align-items: center; gap: var(--sp-2, 4px); color: var(--muted); }
+.al-ev-info .sglyph { color: var(--muted); }
+.al-ev-child { padding-left: var(--sp-6, 16px); }
+/* Alerts › Deliveries: one table per day; the Result cell ends in an ellipsis, and the list keeps
+   its scrollbar's room so a scrollbar appearing never cuts a column. */
+.al-deliveries { scrollbar-gutter: stable; }
+.al-result { max-width: 100%; }
+.al-result-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* A middle-cut place keeps its spaces ("… on CRS804 DDQ"): flex items would drop them. */
+.al-place .mid-ellipsis-head, .al-place .mid-ellipsis-tail { white-space: pre; }
+/* Settings › Alerts per node: a node whose data lacks the reading says so under its name. */
+.ar-overrides .ar-node { display: flex; flex-direction: column; }
+.ar-overrides .ar-node .quiet { font-size: var(--fs-xs, 10.5px); }

@@ -1,0 +1,296 @@
+{
+ "id": "lmstudio-community/gpt-oss-120b-MLX-8bit",
+ "sha": "1c030828424848835da935164c9e46a17241c577",
+ "library_name": "transformers",
+ "pipeline_tag": "text-generation",
+ "tags": [
+  "transformers",
+  "safetensors",
+  "gpt_oss",
+  "text-generation",
+  "vllm",
+  "mlx",
+  "conversational",
+  "base_model:openai/gpt-oss-120b",
+  "base_model:quantized:openai/gpt-oss-120b",
+  "license:apache-2.0",
+  "endpoints_compatible",
+  "8-bit",
+  "region:us"
+ ],
+ "gated": false,
+ "safetensors": {
+  "parameters": {
+   "U32": 116788838400,
+   "BF16": 40318272
+  },
+  "total": 116829154368
+ },
+ "siblings": [
+  {
+   "rfilename": ".gitattributes",
+   "size": 1570
+  },
+  {
+   "rfilename": "README.md",
+   "size": 2206
+  },
+  {
+   "rfilename": "chat_template.jinja",
+   "size": 15934
+  },
+  {
+   "rfilename": "config.json",
+   "size": 2269
+  },
+  {
+   "rfilename": "generation_config.json",
+   "size": 165
+  },
+  {
+   "rfilename": "model-00001-of-00027.safetensors",
+   "size": 5187282243,
+   "lfs": {
+    "sha256": "4a0311af6ee6ecc31e28e00ff67b749fe2ee5f82ddec01472dfb403a78dff009",
+    "size": 5187282243
+   }
+  },
+  {
+   "rfilename": "model-00002-of-00027.safetensors",
+   "size": 4543727813,
+   "lfs": {
+    "sha256": "d67c45b493d84c1326ec89d4fb825d4249d127a58662d25e465ee07ce33f5a3c",
+    "size": 4543727813
+   }
+  },
+  {
+   "rfilename": "model-00003-of-00027.safetensors",
+   "size": 4572350918,
+   "lfs": {
+    "sha256": "e887d095aae5847beed04ee54b02b803d121e2eb79e2e1bbf0908c7bd84bee94",
+    "size": 4572350918
+   }
+  },
+  {
+   "rfilename": "model-00004-of-00027.safetensors",
+   "size": 4543727813,
+   "lfs": {
+    "sha256": "2de950d3a9f4f912544368722821bd5c92fa07706804e9a196bee6883184ea06",
+    "size": 4543727813
+   }
+  },
+  {
+   "rfilename": "model-00005-of-00027.safetensors",
+   "size": 4543727805,
+   "lfs": {
+    "sha256": "66fd50e731e524760d4109ca683e58639029cb49a025089ef35a87931870c86e",
+    "size": 4543727805
+   }
+  },
+  {
+   "rfilename": "model-00006-of-00027.safetensors",
+   "size": 4572350922,
+   "lfs": {
+    "sha256": "d1b660d20778c46bc15beb55d0bc094f2435df7d8c4e3731776ff2251ee1716a",
+    "size": 4572350922
+   }
+  },
+  {
+   "rfilename": "model-00007-of-00027.safetensors",
+   "size": 4543727821,
+   "lfs": {
+    "sha256": "5b2a5315c99703452f18763dff70973869414fbaee020f575a391eb329b745cd",
+    "size": 4543727821
+   }
+  },
+  {
+   "rfilename": "model-00008-of-00027.safetensors",
+   "size": 4543727830,
+   "lfs": {
+    "sha256": "6b78cb77703421339a67478fbf81dbedef1f357cd5f43fbeca87dfe3023865b8",
+    "size": 4543727830
+   }
+  },
+  {
+   "rfilename": "model-00009-of-00027.safetensors",
+   "size": 4572350936,
+   "lfs": {
+    "sha256": "ef67d266796a16db9bfb2f32836c731424a45284657878d3463cd64e9c8e9f22",
+    "size": 4572350936
+   }
+  },
+  {
+   "rfilename": "model-00010-of-00027.safetensors",
+   "size": 4543727856,
+   "lfs": {
+    "sha256": "d1af9b31fe615521350b5379e0efb70ed9f789c38d40e7d7ff84213b4393b535",
+    "size": 4543727856
+   }
+  },
+  {
+   "rfilename": "model-00011-of-00027.safetensors",
+   "size": 4543727848,
+   "lfs": {
+    "sha256": "b6250fa95f8a5e5f417b8a29ad14c3bbdd4eac87201b9126789265c0f7208a39",
+    "size": 4543727848
+   }
+  },
+  {
+   "rfilename": "model-00012-of-00027.safetensors",
+   "size": 4572350870,
+   "lfs": {
+    "sha256": "480ae00dc69eecc7c4aeab33e3960d536517bebdb02634eb9728d2c82e7b4fb4",
+    "size": 4572350870
+   }
+  },
+  {
+   "rfilename": "model-00013-of-00027.safetensors",
+   "size": 4543727806,
+   "lfs": {
+    "sha256": "870f76a938c8e55c5bb59c0250a438e44dac8f53b9fdf1c008a0c1103d96de75",
+    "size": 4543727806
+   }
+  },
+  {
+   "rfilename": "model-00014-of-00027.safetensors",
+   "size": 4543727848,
+   "lfs": {
+    "sha256": "6452a2dedf31b4eeeab228e4479ae3d85d41a97db9abec38787622647e2f6648",
+    "size": 4543727848
+   }
+  },
+  {
+   "rfilename": "model-00015-of-00027.safetensors",
+   "size": 4572350936,
+   "lfs": {
+    "sha256": "e596ff85904f77fb228175c0626eb28b10166a574409721d4f5848d8a6b3abac",
+    "size": 4572350936
+   }
+  },
+  {
+   "rfilename": "model-00016-of-00027.safetensors",
+   "size": 4543727852,
+   "lfs": {
+    "sha256": "6175182ca9c38cb082398b37a47b8b5e4181466a20d13a8216965f5ab9a318c8",
+    "size": 4543727852
+   }
+  },
+  {
+   "rfilename": "model-00017-of-00027.safetensors",
+   "size": 4543727848,
+   "lfs": {
+    "sha256": "73eed8f1a9dd9cbe52ef55307ac1af5e2a93b4e08988ef931f1aa42e6b6f985f",
+    "size": 4543727848
+   }
+  },
+  {
+   "rfilename": "model-00018-of-00027.safetensors",
+   "size": 4572350946,
+   "lfs": {
+    "sha256": "26d1a28315b6ff7ac6f352be39ad209ff5d5fac745acc6f1202b219d6f607772",
+    "size": 4572350946
+   }
+  },
+  {
+   "rfilename": "model-00019-of-00027.safetensors",
+   "size": 4543727852,
+   "lfs": {
+    "sha256": "902b55d5e952fdac7a642d9e563c7c6f8e4b34071f931374dae05447fb712a0d",
+    "size": 4543727852
+   }
+  },
+  {
+   "rfilename": "model-00020-of-00027.safetensors",
+   "size": 4543727844,
+   "lfs": {
+    "sha256": "1a9ab3e44d987bb3fe273f4e0f3c4ee5d542c05986222868c143a2b536d68ea6",
+    "size": 4543727844
+   }
+  },
+  {
+   "rfilename": "model-00021-of-00027.safetensors",
+   "size": 4572350970,
+   "lfs": {
+    "sha256": "efea1a4506ebfa7df772b9ff623ff220620dd0e2cce76c3dae592897c7a4d127",
+    "size": 4572350970
+   }
+  },
+  {
+   "rfilename": "model-00022-of-00027.safetensors",
+   "size": 4543727824,
+   "lfs": {
+    "sha256": "6c5747e64f27e29d4beabd4802407cd9fd9580da7144df9b77f2f6b62619a954",
+    "size": 4543727824
+   }
+  },
+  {
+   "rfilename": "model-00023-of-00027.safetensors",
+   "size": 4543727840,
+   "lfs": {
+    "sha256": "fd0fac3ed08d72f5b27c49e024e6702d8d8068ae5e2fdd3b0ca628fba51b4f96",
+    "size": 4543727840
+   }
+  },
+  {
+   "rfilename": "model-00024-of-00027.safetensors",
+   "size": 4572350964,
+   "lfs": {
+    "sha256": "61509918bc1f82db23f9b72cf328a43f3f26c47b019175e11fd33e18c51232b4",
+    "size": 4572350964
+   }
+  },
+  {
+   "rfilename": "model-00025-of-00027.safetensors",
+   "size": 4543727848,
+   "lfs": {
+    "sha256": "929ae162a662be2cb5721ffb3593f5d4c9b5e6a847b567a2a32d4581dac85e48",
+    "size": 4543727848
+   }
+  },
+  {
+   "rfilename": "model-00026-of-00027.safetensors",
+   "size": 4543727848,
+   "lfs": {
+    "sha256": "fd7ee76d700310784bf2d68e35103b4d6a3e2cdf4df65b5e425602214b0b278f",
+    "size": 4543727848
+   }
+  },
+  {
+   "rfilename": "model-00027-of-00027.safetensors",
+   "size": 5159461523,
+   "lfs": {
+    "sha256": "6831ebb5f585a6c74393ce35e1e4134657689373046174be810dbcf4d4620472",
+    "size": 5159461523
+   }
+  },
+  {
+   "rfilename": "model.safetensors.index.json",
+   "size": 110266
+  },
+  {
+   "rfilename": "special_tokens_map.json",
+   "size": 440
+  },
+  {
+   "rfilename": "tokenizer.json",
+   "size": 27868174,
+   "lfs": {
+    "sha256": "0614fe83cadab421296e664e1f48f4261fa8fef6e03e63bb75c20f38e37d07d3",
+    "size": 27868174
+   }
+  },
+  {
+   "rfilename": "tokenizer_config.json",
+   "size": 4200
+  }
+ ],
+ "config": {
+  "architectures": [
+   "GptOssForCausalLM"
+  ],
+  "model_type": "gpt_oss",
+  "quantization_config": {
+   "bits": 8
+  }
+ }
+}

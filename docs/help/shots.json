@@ -1,0 +1,244 @@
+{
+  "about": "Public Help pictures use synthetic browser Demo data. Run scripts/capture-public-help.mjs against a local Demo server to regenerate the public-* pictures in both themes. Older diagram recipes describe the retained SVG illustrations; no private app or cluster is used.",
+  "shots": [
+    {
+      "id": "diagram-tensor-pipeline",
+      "source": "diagram",
+      "caption": "Tensor parallel gives every node a slice of every layer. Pipeline parallel gives each node its own run of layers"
+    },
+    {
+      "id": "diagram-app-to-head-node",
+      "source": "diagram",
+      "caption": "Two ways from an app to a model: straight to the port on the head node, or through the Server on this Mac"
+    },
+    {
+      "id": "diagram-lan-and-fabric",
+      "source": "diagram",
+      "caption": "Two networks: the LAN joins this Mac and the nodes, and the fabric joins only the nodes"
+    },
+    {
+      "id": "public-dashboard",
+      "source": "demo",
+      "js": "window.dispatchEvent(new CustomEvent('sparkbox:open-window', {detail: {\"kind\":\"dashboard\",\"params\":{}}}));",
+      "caption": "Dashboard, using synthetic Demo data",
+      "capture": "Disposable headless browser; synthetic public Demo only; scripts/capture-public-help.mjs"
+    },
+    {
+      "id": "public-node-window",
+      "source": "demo",
+      "js": "window.dispatchEvent(new CustomEvent('sparkbox:open-window', {detail: {\"kind\":\"node\",\"params\":{\"id\":\"cell1\"}}}));",
+      "caption": "A node's window, using synthetic Demo data",
+      "capture": "Disposable headless browser; synthetic public Demo only; scripts/capture-public-help.mjs"
+    },
+    {
+      "id": "public-containers",
+      "source": "demo",
+      "js": "window.dispatchEvent(new CustomEvent('sparkbox:open-window', {detail: {\"kind\":\"containers\",\"params\":{}}}));",
+      "caption": "Containers, using synthetic Demo data",
+      "capture": "Disposable headless browser; synthetic public Demo only; scripts/capture-public-help.mjs"
+    },
+    {
+      "id": "public-topology",
+      "source": "demo",
+      "js": "window.dispatchEvent(new CustomEvent('sparkbox:open-window', {detail: {\"kind\":\"topology\",\"params\":{}}}));",
+      "caption": "Topology, using synthetic Demo data",
+      "capture": "Disposable headless browser; synthetic public Demo only; scripts/capture-public-help.mjs"
+    },
+    {
+      "id": "public-switch-window",
+      "source": "demo",
+      "js": "window.dispatchEvent(new CustomEvent('sparkbox:open-window', {detail: {\"kind\":\"switch\",\"params\":{\"id\":\"crs804\"}}}));",
+      "caption": "Switch window: CRS804 DDQ, using synthetic Demo data",
+      "capture": "Disposable headless browser; synthetic public Demo only; scripts/capture-public-help.mjs"
+    },
+    {
+      "id": "public-chat",
+      "source": "demo",
+      "js": "window.dispatchEvent(new CustomEvent('sparkbox:open-window', {detail: {\"kind\":\"chat\",\"params\":{}}}));",
+      "caption": "Chat, using synthetic Demo data",
+      "capture": "Disposable headless browser; synthetic public Demo only; scripts/capture-public-help.mjs"
+    },
+    {
+      "id": "public-server",
+      "source": "demo",
+      "js": "window.dispatchEvent(new CustomEvent('sparkbox:open-window', {detail: {\"kind\":\"server\",\"params\":{}}}));",
+      "caption": "Server, using synthetic Demo data",
+      "capture": "Disposable headless browser; synthetic public Demo only; scripts/capture-public-help.mjs"
+    },
+    {
+      "id": "public-providers",
+      "source": "demo",
+      "js": "window.dispatchEvent(new CustomEvent('sparkbox:open-window', {detail: {\"kind\":\"providers\",\"params\":{}}}));",
+      "caption": "Providers, using synthetic Demo data",
+      "capture": "Disposable headless browser; synthetic public Demo only; scripts/capture-public-help.mjs"
+    },
+    {
+      "id": "public-vpn",
+      "source": "demo",
+      "js": "window.dispatchEvent(new CustomEvent('sparkbox:open-window', {detail: {\"kind\":\"vpn\",\"params\":{}}}));",
+      "caption": "VPN, using synthetic Demo data",
+      "capture": "Disposable headless browser; synthetic public Demo only; scripts/capture-public-help.mjs"
+    },
+    {
+      "id": "public-models-window",
+      "source": "demo",
+      "js": "window.dispatchEvent(new CustomEvent('sparkbox:open-window', {detail: {\"kind\":\"models\",\"params\":{}}}));",
+      "caption": "Models, using synthetic Demo data",
+      "capture": "Disposable headless browser; synthetic public Demo only; scripts/capture-public-help.mjs"
+    },
+    {
+      "id": "public-terminal",
+      "source": "demo",
+      "js": "window.dispatchEvent(new CustomEvent('sparkbox:open-window', {detail: {\"kind\":\"terminal\",\"params\":{\"node\":\"cell1\"}}}));",
+      "caption": "Terminal, using synthetic Demo data",
+      "capture": "Disposable headless browser; synthetic public Demo only; scripts/capture-public-help.mjs"
+    },
+    {
+      "id": "public-files",
+      "source": "demo",
+      "js": "window.dispatchEvent(new CustomEvent('sparkbox:open-window', {detail: {\"kind\":\"files\",\"params\":{}}}));",
+      "caption": "Files, using synthetic Demo data",
+      "capture": "Disposable headless browser; synthetic public Demo only; scripts/capture-public-help.mjs"
+    },
+    {
+      "id": "public-workloads",
+      "source": "demo",
+      "js": "window.dispatchEvent(new CustomEvent('sparkbox:open-window', {detail: {\"kind\":\"workloads\",\"params\":{}}}));",
+      "caption": "Workloads, using synthetic Demo data",
+      "capture": "Disposable headless browser; synthetic public Demo only; scripts/capture-public-help.mjs"
+    },
+    {
+      "id": "public-services",
+      "source": "demo",
+      "js": "window.dispatchEvent(new CustomEvent('sparkbox:open-window', {detail: {\"kind\":\"services\",\"params\":{}}}));",
+      "caption": "Services, using synthetic Demo data",
+      "capture": "Disposable headless browser; synthetic public Demo only; scripts/capture-public-help.mjs"
+    },
+    {
+      "id": "public-fleet-command",
+      "source": "demo",
+      "js": "window.dispatchEvent(new CustomEvent('sparkbox:open-window', {detail: {\"kind\":\"fleet\",\"params\":{}}}));",
+      "caption": "Fleet Command, using synthetic Demo data",
+      "capture": "Disposable headless browser; synthetic public Demo only; scripts/capture-public-help.mjs"
+    },
+    {
+      "id": "public-activity-log",
+      "source": "demo",
+      "js": "window.dispatchEvent(new CustomEvent('sparkbox:open-window', {detail: {\"kind\":\"activity\",\"params\":{}}}));",
+      "caption": "Activity log, using synthetic Demo data",
+      "capture": "Disposable headless browser; synthetic public Demo only; scripts/capture-public-help.mjs"
+    },
+    {
+      "id": "public-inspect-window",
+      "source": "demo",
+      "js": "window.dispatchEvent(new CustomEvent('sparkbox:open-window', {detail: {\"kind\":\"inspect\",\"params\":{\"node\":\"cell1\",\"id\":\"vllm-head\",\"name\":\"vllm-head\"}}}));",
+      "caption": "Inspect, using synthetic Demo data",
+      "capture": "Disposable headless browser; synthetic public Demo only; scripts/capture-public-help.mjs"
+    },
+    {
+      "id": "public-settings-window",
+      "source": "demo",
+      "js": "window.dispatchEvent(new CustomEvent('sparkbox:open-window', {detail: {\"kind\":\"settings\",\"params\":{\"section\":\"general\"}}}));",
+      "caption": "Settings, using synthetic Demo data",
+      "capture": "Disposable headless browser; synthetic public Demo only; scripts/capture-public-help.mjs"
+    },
+    {
+      "id": "public-tasks",
+      "source": "demo",
+      "js": "window.dispatchEvent(new CustomEvent('sparkbox:open-window', {detail: {\"kind\":\"tasks\",\"params\":{}}}));",
+      "caption": "Tasks, using synthetic Demo data",
+      "capture": "Disposable headless browser; synthetic public Demo only; scripts/capture-public-help.mjs"
+    },
+    {
+      "id": "public-updates",
+      "source": "demo",
+      "js": "window.dispatchEvent(new CustomEvent('sparkbox:open-window', {detail: {\"kind\":\"updates\",\"params\":{}}}));",
+      "caption": "Updates, using synthetic Demo data",
+      "capture": "Disposable headless browser; synthetic public Demo only; scripts/capture-public-help.mjs"
+    },
+    {
+      "id": "public-connect-my-sparks",
+      "source": "demo",
+      "js": "window.dispatchEvent(new CustomEvent('sparkbox:open-window', {detail: {\"kind\":\"connect\",\"params\":{}}}));",
+      "caption": "Connect my Sparks, using synthetic Demo data",
+      "capture": "Disposable headless browser; synthetic public Demo only; scripts/capture-public-help.mjs"
+    },
+    {
+      "id": "public-alerts-window",
+      "source": "demo",
+      "js": "window.dispatchEvent(new CustomEvent('sparkbox:open-window', {detail: {\"kind\":\"alerts\",\"params\":{}}}));",
+      "caption": "Alerts, using synthetic Demo data",
+      "capture": "Disposable headless browser; synthetic public Demo only; scripts/capture-public-help.mjs"
+    },
+    {
+      "id": "public-cluster-metrics",
+      "source": "demo",
+      "js": "window.dispatchEvent(new CustomEvent('sparkbox:open-window', {detail: {\"kind\":\"cluster-metrics\",\"params\":{}}}));",
+      "caption": "Cluster metrics, using synthetic Demo data",
+      "capture": "Disposable headless browser; synthetic public Demo only; scripts/capture-public-help.mjs"
+    },
+    {
+      "id": "public-editor",
+      "source": "demo",
+      "js": "window.dispatchEvent(new CustomEvent('sparkbox:open-window', {detail: {\"kind\":\"editor\",\"params\":{\"place\":\"cell1\",\"path\":\"/home/sparkuser/notes.txt\"}}}));",
+      "caption": "Editor, using synthetic Demo data",
+      "capture": "Disposable headless browser; synthetic public Demo only; scripts/capture-public-help.mjs"
+    },
+    {
+      "id": "public-endpoints",
+      "source": "demo",
+      "js": "window.dispatchEvent(new CustomEvent('sparkbox:open-window', {detail: {\"kind\":\"endpoints\",\"params\":{}}}));",
+      "caption": "Endpoints, using synthetic Demo data",
+      "capture": "Disposable headless browser; synthetic public Demo only; scripts/capture-public-help.mjs"
+    },
+    {
+      "id": "public-ollama",
+      "source": "demo",
+      "js": "window.dispatchEvent(new CustomEvent('sparkbox:open-window', {detail: {\"kind\":\"ollama\",\"params\":{}}}));",
+      "caption": "Ollama, using synthetic Demo data",
+      "capture": "Disposable headless browser; synthetic public Demo only; scripts/capture-public-help.mjs"
+    },
+    {
+      "id": "public-fabric",
+      "source": "demo",
+      "js": "window.dispatchEvent(new CustomEvent('sparkbox:open-window', {detail: {\"kind\":\"fabric\",\"params\":{}}}));",
+      "caption": "Fabric, using synthetic Demo data",
+      "capture": "Disposable headless browser; synthetic public Demo only; scripts/capture-public-help.mjs"
+    },
+    {
+      "id": "public-images",
+      "source": "demo",
+      "js": "window.dispatchEvent(new CustomEvent('sparkbox:open-window', {detail: {\"kind\":\"images\",\"params\":{}}}));",
+      "caption": "Images, using synthetic Demo data",
+      "capture": "Disposable headless browser; synthetic public Demo only; scripts/capture-public-help.mjs"
+    },
+    {
+      "id": "public-rdp",
+      "source": "demo",
+      "js": "window.dispatchEvent(new CustomEvent('sparkbox:open-window', {detail: {\"kind\":\"rdp\",\"params\":{}}}));",
+      "caption": "RDP, using synthetic Demo data",
+      "capture": "Disposable headless browser; synthetic public Demo only; scripts/capture-public-help.mjs"
+    },
+    {
+      "id": "public-how-to-library",
+      "source": "demo",
+      "js": "window.dispatchEvent(new CustomEvent('sparkbox:open-window', {detail: {\"kind\":\"howto\",\"params\":{}}}));",
+      "caption": "How To library, using synthetic Demo data",
+      "capture": "Disposable headless browser; synthetic public Demo only; scripts/capture-public-help.mjs"
+    },
+    {
+      "id": "public-settings-fence",
+      "source": "demo",
+      "js": "window.dispatchEvent(new CustomEvent('sparkbox:open-window', {detail: {\"kind\":\"settings\",\"params\":{\"section\":\"fence\"}}}));",
+      "caption": "Settings: Fence, using synthetic Demo data",
+      "capture": "Disposable headless browser; synthetic public Demo only; scripts/capture-public-help.mjs"
+    },
+    {
+      "id": "public-memory-on-a-spark",
+      "source": "demo",
+      "js": "window.dispatchEvent(new CustomEvent('sparkbox:open-window', {detail: {\"kind\":\"node\",\"params\":{\"id\":\"cell1\"}}}));",
+      "caption": "How memory works on a Spark, using synthetic Demo data",
+      "capture": "Disposable headless browser; synthetic public Demo only; scripts/capture-public-help.mjs"
+    }
+  ]
+}

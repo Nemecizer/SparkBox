@@ -1,0 +1,2692 @@
+{
+  "models.history": {
+    "title": "Saved model history",
+    "body": "Read recovery copies and older unload reports on this Mac. Counts describe the selected file, and saved states describe the past. Opening a file does not restore a load or change any record.",
+    "article": "models-window#history",
+    "howto": [
+      "unload-a-model"
+    ]
+  },
+  "ops.rdp.check": {
+    "title": "RDP checks and repair",
+    "body": "Check encrypted remote desktop access and review repairs to an installed xrdp server. Admin mode is needed to inspect protected settings; a desktop login still needs your RDP client.",
+    "article": "rdp",
+    "howto": [
+      "check-and-repair-rdp"
+    ]
+  },
+  "models.load.gpu-share": {
+    "title": "GPU memory share",
+    "body": "The memory budget for each node when vLLM starts: 0.25 means 25%. SparkBox sizes it to the model until you type a value. The measured GPU allocation can differ.",
+    "article": "models-load-page#gpu-memory-share",
+    "howto": [
+      "load-a-model-on-one-node"
+    ]
+  },
+  "mon.dash.capacity": {
+    "title": "Capacity",
+    "body": "Unified memory not in use on each node: room for another model's weights and KV cache. A model that needs more than the largest free figure won't load on one node.",
+    "article": "dashboard#capacity",
+    "howto": [
+      "find-a-model-that-fits",
+      "load-a-model-on-one-node"
+    ]
+  },
+  "mon.dash.gpus-serving": {
+    "title": "GPUs serving",
+    "body": "How many of your nodes' GPUs are running a model that's Ready now, out of all of them. A model counts only if it answered a recent check.",
+    "article": "dashboard#the-four-tiles",
+    "howto": [
+      "tell-if-a-model-is-working"
+    ]
+  },
+  "mon.dash.fabric": {
+    "title": "Fabric \u2193 / \u2191",
+    "body": "All traffic on the fast 200G network between nodes, received and sent, added up across nodes. The percent is the sent traffic's share of the total capacity. Click the tile to open Topology.",
+    "article": "dashboard#the-four-tiles",
+    "howto": [
+      "check-the-fabric"
+    ]
+  },
+  "mon.dash.chart": {
+    "title": "Fabric throughput",
+    "body": "The line is the average of each 5 seconds, and the faint band runs from the slowest to the busiest second in them. Short, tall bursts sit on the top edge with \u25b2, and a chip names the highest. Log shows everything to scale.",
+    "article": "dashboard#the-charts",
+    "howto": [
+      "read-the-charts"
+    ]
+  },
+  "mon.topology.diagram": {
+    "title": "The diagram",
+    "body": "Each fabric cable is two lines, sent and received, and a line gets thicker as its share of the 200G link grows. Gray is normal, amber means dropped packets or changed cabling, and red means losses, physical errors or a link that's down. Click a node, switch or cable to open it.",
+    "article": "topology#the-diagram",
+    "howto": [
+      "check-the-fabric"
+    ]
+  },
+  "mon.topology.color-by": {
+    "title": "Color nodes by",
+    "body": "Chooses what tints each node's box. Health adds no tint, because a problem shows as an amber or red band anyway. GPU load, GPU temp and Memory tint the box and print the reading in its corner.",
+    "article": "topology#color-nodes-by"
+  },
+  "mon.metrics.views": {
+    "title": "Charts and GPU heatmap",
+    "body": "Charts shows eight measures, each with one row per node. GPU heatmap shows GPU use as a grid, with one row per node and one cell per stretch of time. A cell's color says how busy the GPU was; a hatched cell had no readings.",
+    "article": "cluster-metrics#charts",
+    "howto": [
+      "read-the-charts"
+    ]
+  },
+  "mon.metrics.serving": {
+    "title": "Serving charts",
+    "body": "Each model's generation speed, time to first token, requests waiting and KV cache use, from the history SparkBox keeps for every endpoint. Moving the pointer over one chart also marks that moment on the node charts above.",
+    "article": "cluster-metrics#serving",
+    "howto": [
+      "tell-if-a-model-is-working"
+    ]
+  },
+  "mon.node.memory": {
+    "title": "How the pool is split",
+    "body": "A GB10 has one memory pool that the CPU and GPU share; this bar includes the engine's reservation. Alerts account for that reservation and still watch available memory and pressure. A Spark that runs out can freeze.",
+    "article": "node-window#memory",
+    "howto": [
+      "load-a-model-on-one-node",
+      "unload-a-model",
+      "recover-a-frozen-node"
+    ]
+  },
+  "mon.node.watching": {
+    "title": "Watching",
+    "body": "Kernel events counts the GPU, network, memory and hung-task events in this node's kernel log over the last 24 hours. Agent says whether the always-on agent is installed here and still answering.",
+    "article": "node-window#watching",
+    "howto": [
+      "set-up-always-on-monitoring"
+    ]
+  },
+  "mon.alerts.silenced": {
+    "title": "Silences",
+    "body": "SparkBox lists a silenced alert here, but doesn't count it or send it to your phone. When a silence ends and the alert is still firing, it counts again and the log says \"Silence ended\". Demo and Live keep separate silences.",
+    "article": "alerts-window#silenced",
+    "howto": [
+      "respond-to-an-alert"
+    ]
+  },
+  "mon.alerts.events": {
+    "title": "Kernel events",
+    "body": "GPU Xid errors, ConnectX-7 driver faults, out-of-memory kills and hung tasks from each node's kernel log. Cables unplugged and links going down are information and never raise an alert. Those within 15 minutes of each other, on any node, share one row.",
+    "article": "alerts-window#events",
+    "howto": [
+      "find-out-why-a-node-restarted"
+    ]
+  },
+  "mon.alerts.deliveries": {
+    "title": "Deliveries",
+    "body": "Every alert event and what became of it: sent, grouped into an incident's message, held for quiet hours, or not paged. A failure that may pass is tried again after 30 s, 2 min and 10 min. In Demo only a Test button sends for real.",
+    "article": "alerts-window#deliveries",
+    "howto": [
+      "get-alerts-on-your-phone"
+    ]
+  },
+  "mon.alerts.acknowledge": {
+    "title": "Acknowledge",
+    "body": "Says you've seen this alert. It stops counting and stops repeating until it gets worse. It stays in the Active tab, under Acknowledged, until it clears.",
+    "article": "alerts-and-incidents#acknowledge-and-silence",
+    "howto": [
+      "respond-to-an-alert"
+    ]
+  },
+  "ops.node.power": {
+    "title": "Restart, Shut down and Wake",
+    "body": "Restart\u2026 and Shut down\u2026 need the node to answer, and each asks you to confirm first. After a restart, SparkBox reconnects automatically and checks the new boot. Wake starts a node that's off; a frozen node may need someone at the machine.",
+    "article": "node-window#the-toolbar",
+    "howto": [
+      "shut-down-and-wake-a-node",
+      "recover-a-frozen-node",
+      "turn-the-whole-cluster-off-and-on"
+    ]
+  },
+  "mon.alerts.silence": {
+    "title": "Silence",
+    "body": "Hides a known alert for 1 hour, 1 day, 1 week, until it clears, or indefinitely. While silenced it isn't counted or sent to your phone. Anything wider than one alert, or longer than a day, needs a reason.",
+    "article": "alerts-and-incidents#acknowledge-and-silence",
+    "howto": [
+      "respond-to-an-alert"
+    ]
+  },
+  "mon.notify.paging": {
+    "title": "Paging",
+    "body": "To page means to send an alert to your phone. This checklist shows what the top bar's 24/7 badge rests on. It needs a phone channel the agents can use, a test page from every node, current settings on every agent, and a dead-man's switch.",
+    "article": "settings-notifications#paging",
+    "howto": [
+      "set-up-always-on-monitoring",
+      "get-alerts-on-your-phone"
+    ]
+  },
+  "mon.notify.channels": {
+    "title": "Where alerts go",
+    "body": "A channel is one place alerts go: this Mac, ntfy, Pushover, a webhook or email. Critical alerts always go out, even in quiet hours. In Demo nothing leaves this Mac except a Test, and Test is off in look-only mode.",
+    "article": "settings-notifications#where-alerts-go",
+    "howto": [
+      "get-notifications-on-this-mac",
+      "get-alerts-on-your-phone"
+    ]
+  },
+  "mon.notify.ntfy": {
+    "title": "ntfy",
+    "body": "ntfy sends alerts to an app on your phone. Choose a long, hard-to-guess topic, because on the public server anyone who knows a topic can read it. Critical alerts can break through Do Not Disturb.",
+    "article": "get-alerts-on-your-phone#ntfy",
+    "howto": [
+      "get-alerts-on-your-phone"
+    ]
+  },
+  "mon.notify.pushover": {
+    "title": "Pushover",
+    "body": "Pushover sends alerts to its app on your phone. You need an App token from a Pushover application, and your User key. Leave Device empty to reach all your devices.",
+    "article": "get-alerts-on-your-phone#pushover",
+    "howto": [
+      "get-alerts-on-your-phone"
+    ]
+  },
+  "mon.notify.webhook": {
+    "title": "Webhook",
+    "body": "A webhook posts each alert as JSON to a web address you give. Turn on Slack-compatible for Slack, Mattermost or Discord's /slack address. A Signing secret lets the receiver check that a message came from SparkBox.",
+    "article": "get-alerts-on-your-phone#webhook",
+    "howto": [
+      "get-alerts-on-your-phone"
+    ]
+  },
+  "mon.notify.email": {
+    "title": "Email",
+    "body": "Sends alerts through your own mail server, over STARTTLS (usually port 587) or SSL (usually port 465). Use an app password instead of your main one. To can list several addresses, separated by commas.",
+    "article": "get-alerts-on-your-phone#email",
+    "howto": [
+      "get-alerts-on-your-phone"
+    ]
+  },
+  "mon.notify.mac-only": {
+    "title": "Send from this Mac only",
+    "body": "On, the channel's secrets stay in this Mac's Keychain, and it reaches you only while SparkBox runs here. Off, they're copied to every node agent, where the agent service, root and anyone in the docker group can read them.",
+    "article": "get-alerts-on-your-phone#who-can-read-a-channels-secrets",
+    "howto": [
+      "get-alerts-on-your-phone"
+    ]
+  },
+  "mon.notify.deadman": {
+    "title": "Dead-man's switch",
+    "body": "A check at an outside service that pages you when SparkBox's pings stop. The leader node's agent pings it every minute. If the house loses power or internet, the pings stop and that service pages you.",
+    "article": "set-up-always-on-monitoring#add-a-dead-mans-switch",
+    "howto": [
+      "set-up-always-on-monitoring"
+    ]
+  },
+  "mon.notify.critical-only": {
+    "title": "Critical alerts only",
+    "body": "With this on, warnings wait in the Alerts window and no notification goes out for them. Critical alerts still go out.",
+    "article": "settings-notifications#when-to-notify",
+    "howto": [
+      "get-notifications-on-this-mac"
+    ]
+  },
+  "mon.notify.repeat": {
+    "title": "Repeat critical alerts",
+    "body": "How often a critical alert sends \"Still firing\" again until you acknowledge or silence it. The default is 1 h. Never turns the repeats off.",
+    "article": "settings-notifications#when-to-notify",
+    "howto": [
+      "respond-to-an-alert"
+    ]
+  },
+  "mon.notify.quiet": {
+    "title": "Quiet hours",
+    "body": "During these hours only critical alerts, and notices that they've cleared, go out. Warnings wait, and the ones still firing arrive as one summary when the hours end. The hours follow one time zone, taken from this Mac when you save them.",
+    "article": "settings-notifications#when-to-notify",
+    "howto": [
+      "get-notifications-on-this-mac"
+    ]
+  },
+  "mon.notify.metrics": {
+    "title": "Expose metrics for Prometheus",
+    "body": "Prometheus is a monitoring system that collects readings from a web address. With this on, each agent serves /metrics on its LAN address. It's off by default, and anything beyond the node itself needs the Bearer token, so set one.",
+    "article": "settings-notifications#expose-metrics-for-prometheus"
+  },
+  "mon.rules.for": {
+    "title": "For",
+    "body": "How long the condition must hold before the alert fires, so a short blip raises nothing. Type a time such as 60 s, 2 min or 1 h. Zero fires at once.",
+    "article": "settings-alerts#a-rules-row",
+    "howto": [
+      "change-alert-rules"
+    ]
+  },
+  "mon.rules.would-fire": {
+    "title": "Would fire now",
+    "body": "How many alerts these rules raise against the cluster as it is now, at once or after their For time. It judges your edits before you save them.",
+    "article": "settings-alerts#would-fire-now",
+    "howto": [
+      "change-alert-rules"
+    ]
+  },
+  "mon.rules.per-node": {
+    "title": "Per node\u2026",
+    "body": "Gives one node its own warning and critical lines, or turns the rule off on that node. Leave a field empty to use the rule's own line.",
+    "article": "settings-alerts#per-node",
+    "howto": [
+      "change-alert-rules"
+    ]
+  },
+  "mon.fabric.nccl": {
+    "title": "NCCL transport",
+    "body": "NCCL is the library a model uses to share work between GPUs. This shows how much of each several-node model's fabric traffic used RDMA, the fast direct path, while it was generating. NCCL quietly falls back to slower TCP sockets when RDMA can't be used, which costs most of the bandwidth.",
+    "article": "fabric#nccl-transport",
+    "howto": [
+      "check-the-fabric"
+    ]
+  },
+  "mon.fabric.cabling": {
+    "title": "Cabling",
+    "body": "SparkBox learned which switch port each node's fabric cable is in the first time it saw all of them. A node on another port still links, but port comments and per-port history no longer match it.",
+    "article": "fabric#cabling",
+    "howto": [
+      "check-the-fabric"
+    ]
+  },
+  "mon.fabric.expected": {
+    "title": "Expected per half",
+    "body": "The speed you expect from one half of a fabric port. A GB10 half delivers about 92 Gb/s. A pair fails below 85% of this figure, and gets a warning below 85% of its own baseline.",
+    "article": "fabric-doctor#expected-per-half",
+    "howto": [
+      "test-the-fabric"
+    ]
+  },
+  "mon.fabric.baselines": {
+    "title": "Clear baselines",
+    "body": "A baseline is a pair's speed, saved from a run where every pair passed. Clear them after you change hardware on purpose. The next run where every pair passes becomes the new baseline.",
+    "article": "fabric-doctor#baselines",
+    "howto": [
+      "test-the-fabric"
+    ]
+  },
+  "mon.switch.bounce": {
+    "title": "Bounce",
+    "body": "Takes the port down for 3 seconds and brings it back: the usual first step for a link that misbehaves. The switch runs it as one script, so it finishes even if the port carries SparkBox's own connection.",
+    "article": "manage-a-switch-port#bounce-a-port",
+    "howto": [
+      "manage-a-switch-port"
+    ]
+  },
+  "mon.switch.rx-power": {
+    "title": "Receive power",
+    "body": "How much light reaches each lane of an optic, in dBm. For these SR optics, below \u22127 dBm is marginal and below \u221210 dBm is failing. If it's low, clean or reseat the fiber.",
+    "article": "switch-window#optics",
+    "howto": [
+      "check-the-fabric"
+    ]
+  },
+  "mon.switch.bridge-hosts": {
+    "title": "Bridge hosts",
+    "body": "The MAC addresses the switch learned behind each port. A MAC address is a network card's fixed ID. SparkBox matches them to the nodes' ConnectX-7 cards to know which node is on which port.",
+    "article": "switch-window#neighbors",
+    "howto": [
+      "see-what-a-port-connects-to"
+    ]
+  },
+  "mon.switch.neighbors": {
+    "title": "Neighbors",
+    "body": "Devices that announced themselves on a port with LLDP or MNDP, two ways for network devices to say who they are. Each Spark appears by its hostname. A node SparkBox can't match by MAC is matched by this.",
+    "article": "switch-window#neighbors",
+    "howto": [
+      "see-what-a-port-connects-to"
+    ]
+  },
+  "mon.switch.guarded": {
+    "title": "Why this port is guarded",
+    "body": "This port carries SparkBox's connection to the switch. Disabling or bouncing it can cut SparkBox off, so you must type the exact phrase, and the switch always undoes it by itself.",
+    "article": "manage-a-switch-port#a-port-that-carries-sparkboxs-connection",
+    "howto": [
+      "manage-a-switch-port"
+    ]
+  },
+  "mon.switch.both-sides": {
+    "title": "Switch says / node says",
+    "body": "One cable as the switch reports it and as the node reports it, side by side. What the switch receives is what the node sent, so those rows should nearly match.",
+    "article": "switch-window#port-details",
+    "howto": [
+      "see-what-a-port-connects-to"
+    ]
+  },
+  "mon.switch.firewalla-ports": {
+    "title": "Managed in the Firewalla app",
+    "body": "Firewalla doesn't publish a local API for the Gold, so port settings stay in the Firewalla app. SparkBox watches whether it answers.",
+    "article": "firewalla-view#whats-on-the-screen",
+    "howto": [
+      "add-switches-and-gateway"
+    ]
+  },
+  "mon.switch.lan-health": {
+    "title": "LAN health",
+    "body": "Each node's own LAN link, as that node reports it. It's the link to whatever is next to the node, which may not be a Switch X port. Flaps counts how often a link dropped since the node started.",
+    "article": "firewalla-view#lan-health-from-each-nodes-side",
+    "howto": [
+      "check-your-nodes"
+    ]
+  },
+  "mon.switch.x-panel": {
+    "title": "Switch X ports",
+    "body": "The switch's front, with what's known about each port. Click a port for its details. This panel only reads: changes to a port are made in the Firewalla app.",
+    "article": "firewalla-view#the-port-panel",
+    "howto": [
+      "see-whats-plugged-into-the-switch-x"
+    ]
+  },
+  "mon.switch.x-light": {
+    "title": "Port lights",
+    "body": "A lit port has a link, and its color and the word under it show the speed. Gray with a question mark means something's connected but the speed isn't known. SparkBox never colors a port from a guess.",
+    "article": "firewalla-view#the-port-panel",
+    "howto": [
+      "see-whats-plugged-into-the-switch-x",
+      "connect-firewalla-cloud"
+    ]
+  },
+  "mon.switch.x-cloud": {
+    "title": "Where the facts come from",
+    "body": "LLDP is what your nodes hear, your labels are what you say, and Firewalla's cloud is optional and adds real speeds and counters. Each fact in a port's details says which it came from, and how old it is. In look-only mode, the cloud is held.",
+    "article": "firewalla-view#where-the-facts-come-from",
+    "howto": [
+      "connect-firewalla-cloud"
+    ]
+  },
+  "mon.switch.x-heard": {
+    "title": "Heard through this port",
+    "body": "Everything your nodes hear on the LAN behind this port. They share that stretch of the LAN, so this doesn't mean each one is plugged into the port.",
+    "article": "firewalla-view#a-ports-details",
+    "howto": [
+      "see-whats-plugged-into-the-switch-x"
+    ]
+  },
+  "mon.switch.x-label": {
+    "title": "Your label",
+    "body": "Say what's plugged into this port. A node's name brings in that node's own link figures, and its speed if LLDP agrees it's here. The label stays on this Mac, and the switch is never told.",
+    "article": "firewalla-view#a-ports-details",
+    "howto": [
+      "see-whats-plugged-into-the-switch-x"
+    ]
+  },
+  "mon.vpn.connection": {
+    "title": "This connection",
+    "body": "What the tunnel is doing now, in SparkBox's words, and the network this Mac is on.",
+    "article": "vpn#the-status-card",
+    "howto": [
+      "connect-the-vpn"
+    ]
+  },
+  "mon.vpn.reaching": {
+    "title": "Reaching the cluster",
+    "body": "Every node's SSH port and the Firewalla Gold, tested directly and, when the tunnel is up, through it. Auto mode uses these answers to decide whether the tunnel is needed. These are real checks, also in Demo.",
+    "article": "vpn#reaching-the-cluster",
+    "howto": [
+      "connect-the-vpn"
+    ]
+  },
+  "mon.vpn.when": {
+    "title": "When to use the tunnel",
+    "body": "Auto uses the tunnel only when the cluster isn't reachable directly. At home, or with your WireGuard or AmneziaWG app connected, it stays direct. Always uses the tunnel even at home, and Off never starts it.",
+    "article": "vpn#when-to-use-the-tunnel",
+    "howto": [
+      "connect-the-vpn"
+    ]
+  },
+  "mon.vpn.direct-at-home": {
+    "title": "Direct at home",
+    "body": "When no node answers, keep Auto direct on a matching local subnet or while this Mac has no network. Leave this off when away: another network may use the same addresses. Connect still starts the tunnel.",
+    "article": "vpn#when-to-use-the-tunnel",
+    "howto": [
+      "connect-the-vpn"
+    ]
+  },
+  "mon.vpn.expose": {
+    "title": "Expose to this Mac",
+    "body": "Local ports on this Mac that relay to the home network while the tunnel is up. A browser or another app here can then reach those addresses too. They're off at home, where the addresses answer directly.",
+    "article": "vpn#expose-to-this-mac",
+    "howto": [
+      "connect-the-vpn"
+    ]
+  },
+  "mon.vpn.screenshot-safe": {
+    "title": "Screenshot-safe",
+    "body": "Masks public addresses and DNS in this window, so a screenshot doesn't give them away.",
+    "article": "vpn#the-toolbar"
+  },
+  "mon.vpn.profile": {
+    "title": "The VPN profile",
+    "body": "A file you export from the Firewalla app. SparkBox keeps no copy of it: the private key goes into the Keychain, and the rest into SparkBox's settings.",
+    "article": "vpn#profile",
+    "howto": [
+      "connect-the-vpn"
+    ]
+  },
+  "mon.dash.nodes": {
+    "title": "Node table",
+    "body": "One row for each node, with the worst at the top. Click a reading to open it: the Memory bar opens that node's Memory tab. A gray bar with a bell-slash mark means an alert you've acknowledged or silenced.",
+    "article": "dashboard#the-node-table",
+    "howto": [
+      "read-the-dashboard",
+      "respond-to-an-alert"
+    ]
+  },
+  "mon.dash.serving": {
+    "title": "Serving",
+    "body": "Every endpoint on the cluster, with a card for each one that's serving. An endpoint is a running model server you can talk to. A model is Ready only when every node it spans is online, its containers run and it answered a check in the last minute.",
+    "article": "dashboard#serving",
+    "howto": [
+      "tell-if-a-model-is-working",
+      "load-a-model-on-one-node"
+    ]
+  },
+  "mon.node.overview": {
+    "title": "Overview tab",
+    "body": "Six tiles give the node's vital signs: CPU, GPU, unified memory, root disk, fabric traffic and uptime. The charts below show how its load, memory, power, heat, traffic and disk changed over time.",
+    "article": "node-window#overview",
+    "howto": [
+      "read-the-charts"
+    ]
+  },
+  "mon.node.cpu": {
+    "title": "CPU tab",
+    "body": "All cores shows how busy the processor is overall, and Load average shows how much work was waiting. Below the chart, each colored square is one core, with the fast Performance cores listed apart from the Efficiency cores.",
+    "article": "node-window#cpu",
+    "howto": [
+      "read-the-charts"
+    ]
+  },
+  "mon.node.gpu": {
+    "title": "Processes on the GPU",
+    "body": "Each program using the GPU, with the memory it has reserved. A GB10 doesn't report GPU memory the usual way, so SparkBox adds up each process's share. These numbers can differ from what NVIDIA's own tools show.",
+    "article": "node-window#gpu",
+    "howto": [
+      "see-and-stop-processes",
+      "tell-if-a-model-is-working"
+    ]
+  },
+  "mon.node.disks": {
+    "title": "Disks",
+    "body": "One row for each disk. A row turns amber at 85% full and red at 95%. By default SparkBox also warns when a steady fill would reach the end of the root disk within a day.",
+    "article": "node-window#disks",
+    "howto": [
+      "check-disk-space",
+      "delete-a-model",
+      "check-docker-images"
+    ]
+  },
+  "mon.node.fabric-health": {
+    "title": "Fabric health",
+    "body": "A verdict for each half of this node's fabric port, judged on its counters over the last hour, with the switch port it lands on. A half is one of the two paths into the port. The arrow opens that half in Fabric.",
+    "article": "node-window#network",
+    "howto": [
+      "check-the-fabric",
+      "test-the-fabric"
+    ]
+  },
+  "mon.node.port": {
+    "title": "Port",
+    "body": "One of the node's two fast ConnectX-7 network ports. A cabled port has two interfaces, called halves, that share one 200G cable. Rates add ordinary and RDMA traffic together, and MTU (the largest packet size) and Errors turn amber when something's wrong.",
+    "article": "node-window#network",
+    "howto": [
+      "see-what-a-port-connects-to",
+      "check-the-fabric"
+    ]
+  },
+  "mon.node.boots": {
+    "title": "Boots",
+    "body": "A boot is one run of a node. The node's own journal, the log its operating system keeps, is the only record of a restart. A clean shutdown means it stopped normally, and anything else means it lost power, froze or was restarted by a safety timer.",
+    "article": "node-window#boots",
+    "howto": [
+      "find-out-why-a-node-restarted",
+      "recover-a-frozen-node"
+    ]
+  },
+  "mon.node.charts": {
+    "title": "These charts",
+    "body": "Choose a range, move the pointer to read a moment, and drag to zoom. Live follows the newest readings. No data recorded means readings are missing; the gap alone cannot tell you whether this Mac slept or a connection dropped.",
+    "article": "node-window#the-range-bar",
+    "howto": [
+      "read-the-charts"
+    ]
+  },
+  "mon.node.dgx-dashboard": {
+    "title": "DGX Dashboard",
+    "body": "NVIDIA's own web page for this node. SparkBox opens it in your browser through a private SSH tunnel, and it needs Admin mode. Use it to look: an update from that page skips SparkBox's checks and can stop the node from starting.",
+    "article": "node-window#the-toolbar",
+    "howto": [
+      "open-the-dgx-dashboard"
+    ]
+  },
+  "mon.node.maintenance": {
+    "title": "Maintenance",
+    "body": "Tells SparkBox you're working on this node, so its alerts read Planned and don't go to your phone. Nothing runs on the node. Always-on agents aren't told, so they may still send alerts.",
+    "article": "node-window#the-toolbar",
+    "howto": [
+      "use-maintenance-mode"
+    ]
+  },
+  "mon.alerts.firing": {
+    "title": "Firing",
+    "body": "Something's wrong now. These alerts count in every badge, and go out as you set in Settings \u203a Notifications.",
+    "article": "alerts-window#active",
+    "howto": [
+      "respond-to-an-alert",
+      "get-alerts-on-your-phone"
+    ]
+  },
+  "mon.alerts.recovering": {
+    "title": "Recovering",
+    "body": "Nothing is wrong any more. Each alert clears once its clear time has passed, so a problem that comes and goes doesn't alert twice. These aren't counted.",
+    "article": "alerts-window#active",
+    "howto": [
+      "respond-to-an-alert"
+    ]
+  },
+  "mon.alerts.planned": {
+    "title": "Planned",
+    "body": "Work SparkBox started, such as a restart, or a node you put in maintenance. These alerts are counted nowhere and sent to nobody. A restart's alerts clear after the check that follows it.",
+    "article": "alerts-window#active",
+    "howto": [
+      "restart-a-node",
+      "use-maintenance-mode"
+    ]
+  },
+  "mon.alerts.acknowledged": {
+    "title": "Acknowledged",
+    "body": "Known issues you've marked as seen. They don't repeat and aren't counted, until one gets worse.",
+    "article": "alerts-window#active",
+    "howto": [
+      "respond-to-an-alert"
+    ]
+  },
+  "mon.alerts.information": {
+    "title": "Information",
+    "body": "Things worth knowing that aren't problems. They show here only, and are never counted or sent.",
+    "article": "alerts-window#active",
+    "howto": [
+      "respond-to-an-alert"
+    ]
+  },
+  "mon.alerts.history": {
+    "title": "History",
+    "body": "Every alert event, newest first: raised, cleared, acknowledged or silenced. SparkBox keeps the last 1,000 for each data source. While away marks what an always-on agent recorded while SparkBox was closed.",
+    "article": "alerts-window#history",
+    "howto": [
+      "respond-to-an-alert",
+      "set-up-always-on-monitoring"
+    ]
+  },
+  "mon.notify.always-on": {
+    "title": "Always-on monitoring",
+    "body": "A small agent on each node keeps watching while SparkBox is closed. It reads the node every 2 seconds, uses the same alert rules, and can send alerts to your phone by itself. When SparkBox opens, what fired meanwhile shows as While away.",
+    "article": "settings-notifications#always-on-monitoring",
+    "howto": [
+      "set-up-always-on-monitoring",
+      "get-alerts-on-your-phone"
+    ]
+  },
+  "mon.rules.about": {
+    "title": "Alert rules",
+    "body": "Each rule raises an alert when its condition lasts for the time shown, and ends it once the condition has gone. Lines are judged on what the app shows, so a disk reading 85% is at the 85% line. Saving also updates the always-on agents on your nodes.",
+    "article": "settings-alerts",
+    "howto": [
+      "change-alert-rules",
+      "respond-to-an-alert"
+    ]
+  },
+  "mon.rules.nodes": {
+    "title": "Nodes",
+    "body": "Rules about each node itself: whether it answers, its memory, its clock, faults in its kernel log, its always-on agent and its updates. The kernel is the core of the node's operating system.",
+    "article": "alert-rules-reference#nodes",
+    "howto": [
+      "respond-to-an-alert",
+      "change-alert-rules"
+    ]
+  },
+  "mon.rules.disk": {
+    "title": "Disk",
+    "body": "Rules about each node's root disk, which is its main disk: how full it is, and how soon a steady fill would reach its end.",
+    "article": "alert-rules-reference#disk",
+    "howto": [
+      "check-disk-space",
+      "change-alert-rules"
+    ]
+  },
+  "mon.rules.gpu": {
+    "title": "GPU",
+    "body": "Rules about each node's GPU: how hot it runs, whether it's slowing itself down, faults it reports, and whether it still answers.",
+    "article": "alert-rules-reference#gpu",
+    "howto": [
+      "respond-to-an-alert",
+      "change-alert-rules"
+    ]
+  },
+  "mon.rules.fabric": {
+    "title": "Fabric",
+    "body": "Rules about the fast 200G network between your nodes: its links, its packet size, and the CRS804 switch with its ports and optics. They also check that several-node models really use the fast path.",
+    "article": "alert-rules-reference#fabric",
+    "howto": [
+      "check-the-fabric",
+      "test-the-fabric",
+      "change-alert-rules"
+    ]
+  },
+  "mon.rules.containers": {
+    "title": "Containers & services",
+    "body": "Rules about programs on your nodes: a container that keeps restarting or stops with an error, and a background service that fails.",
+    "article": "alert-rules-reference#containers-and-services",
+    "howto": [
+      "manage-containers",
+      "restart-a-service"
+    ]
+  },
+  "mon.rules.serving": {
+    "title": "Serving",
+    "body": "Rules about loaded models: whether each one answers, how long requests wait, how full its KV cache is, and whether it sits idle.",
+    "article": "alert-rules-reference#serving",
+    "howto": [
+      "tell-if-a-model-is-working",
+      "fix-a-load-that-failed"
+    ]
+  },
+  "mon.rules.counters": {
+    "title": "Counters",
+    "body": "The counters this rule watches on each fabric interface. Click the button beside this icon to open them. Each has its own switch and its own lines, in events per second.",
+    "article": "alert-rules-reference#roce",
+    "howto": [
+      "check-the-fabric",
+      "change-alert-rules"
+    ]
+  },
+  "mon.fabric.verdict": {
+    "title": "Fabric verdict",
+    "body": "One line on the fabric's health, with the evidence for it. A healthy fabric loses nothing. A little congestion under heavy traffic is normal.",
+    "article": "fabric#the-toolbar-and-verdict-band",
+    "howto": [
+      "check-the-fabric",
+      "test-the-fabric"
+    ]
+  },
+  "mon.fabric.counter": {
+    "title": "Counters",
+    "body": "Each counter is a running total the node keeps. What matters is whether it's rising now, so read the Now column.",
+    "article": "fabric#a-cells-panel",
+    "howto": [
+      "check-the-fabric",
+      "test-the-fabric"
+    ]
+  },
+  "mon.fabric.history": {
+    "title": "History",
+    "body": "The last hour of one interface's counters, as rates: packets sent again, errors and drops, congestion and pause frames. Choose the interface above the charts. SparkBox keeps this while it runs, so it appears after the first minute.",
+    "article": "fabric#history",
+    "howto": [
+      "check-the-fabric",
+      "read-the-charts"
+    ]
+  },
+  "mon.fabric.doctor": {
+    "title": "Test fabric",
+    "body": "Sends test traffic between pairs of nodes to measure what the fabric really delivers. It needs Admin mode. The bandwidth test fills the link, so run it when nothing important is serving.",
+    "article": "fabric-doctor#the-toolbar",
+    "howto": [
+      "test-the-fabric",
+      "check-the-fabric"
+    ]
+  },
+  "mon.fabric.check-mtu": {
+    "title": "MTU audit",
+    "body": "MTU is the largest packet a link sends. This check confirms that every fabric interface is at 9000, and that its switch port allows at least that.",
+    "article": "fabric-doctor#mtu-audit",
+    "howto": [
+      "test-the-fabric"
+    ]
+  },
+  "mon.fabric.check-ping": {
+    "title": "Jumbo-frame ping",
+    "body": "Sends a 9000-byte packet that may not be split, between every pair of nodes on each half. If it fails while small packets work, the packet size is wrong somewhere on the path.",
+    "article": "fabric-doctor#jumbo-frame-ping",
+    "howto": [
+      "test-the-fabric"
+    ]
+  },
+  "mon.fabric.check-bandwidth": {
+    "title": "Bandwidth (ib_write_bw)",
+    "body": "Writes data over RDMA, the fast direct path, for 5 seconds with 4 parallel streams, one pair of nodes at a time. A GB10 half delivers about 92 Gb/s. This test fills the link while it runs.",
+    "article": "fabric-doctor#bandwidth-ibwritebw",
+    "howto": [
+      "test-the-fabric"
+    ]
+  },
+  "mon.fabric.check-latency": {
+    "title": "Latency (ib_send_lat)",
+    "body": "Latency is how long one message takes to arrive. This check times small messages between each pair of nodes. It's about 2 \u00b5s between Sparks through the switch.",
+    "article": "fabric-doctor#latency-ibsendlat",
+    "howto": [
+      "test-the-fabric"
+    ]
+  },
+  "mon.fabric.check-allreduce": {
+    "title": "All-reduce (nccl-tests)",
+    "body": "Moves data across the chosen nodes the way a real several-node model does, and reports the speed it reached. It's off by default, and it needs nccl-tests built on the nodes.",
+    "article": "fabric-doctor#all-reduce-nccl-tests",
+    "howto": [
+      "test-the-fabric"
+    ]
+  },
+  "mon.fabric.results": {
+    "title": "Results for each half",
+    "body": "Each row sends and each column receives. A cell shows the large-packet ping from the row's node to the column's, then the pair's speed and latency. Speed and latency are measured once for each pair, so the same figures show both ways.",
+    "article": "fabric-doctor#results",
+    "howto": [
+      "test-the-fabric",
+      "check-the-fabric"
+    ]
+  },
+  "mon.fabric.both-halves": {
+    "title": "Both halves",
+    "body": "A node's two fabric halves are separate paths into the same 200G port. Together they carry what a several-node model gets between two Sparks, so this table adds them up for each pair.",
+    "article": "fabric-doctor#both-halves",
+    "howto": [
+      "test-the-fabric",
+      "load-a-model-on-several-nodes"
+    ]
+  },
+  "mon.switch.overview": {
+    "title": "Overview tab",
+    "body": "Tiles for the switch itself: its CPU, temperature, power supplies, fans, uptime and software. They turn amber or red when something's wrong. CPU warns above 80% and temperature above 75 \u00b0C.",
+    "article": "switch-window#overview",
+    "howto": [
+      "check-the-fabric",
+      "add-switches-and-gateway"
+    ]
+  },
+  "mon.switch.ports": {
+    "title": "Ports tab",
+    "body": "One row for each port: what's plugged in, its state, its traffic, its errors and its optic. Click a row to select the port for the toolbar. Double-click it to open the port's panel.",
+    "article": "switch-window#ports",
+    "howto": [
+      "manage-a-switch-port",
+      "see-what-a-port-connects-to"
+    ]
+  },
+  "mon.switch.disable": {
+    "title": "Disable",
+    "body": "Turns the selected port off, so a node on it loses its fabric link. The switch turns the port back on after 60 seconds, unless you click Keep disabled. Enable turns a disabled port back on.",
+    "article": "manage-a-switch-port#disable-a-port",
+    "howto": [
+      "manage-a-switch-port"
+    ]
+  },
+  "mon.switch.tables": {
+    "title": "These tables",
+    "body": "Both tables come from the switch itself, and refresh every 10 seconds. SparkBox finds a port's node from its network card's MAC address first, then LLDP, then the port's comment. Double-click a row to open that port.",
+    "article": "switch-window#neighbors",
+    "howto": [
+      "see-what-a-port-connects-to"
+    ]
+  },
+  "mon.rule.node-offline": {
+    "title": "Node offline",
+    "body": "The node doesn't answer SparkBox, or is in error, for longer than the For time. A quick reconnect isn't an alert. Check the node's power and cable first.",
+    "article": "alert-rules-reference#node-offline",
+    "howto": [
+      "respond-to-an-alert",
+      "check-your-nodes",
+      "recover-a-frozen-node"
+    ]
+  },
+  "mon.rule.node-reboot": {
+    "title": "Not back after a restart",
+    "body": "A restart SparkBox started has run past its expected time by the For time. While a restart runs on time, its alerts are Planned and don't go to your phone. If the node stays away, it may need someone at the machine.",
+    "article": "alert-rules-reference#not-back-after-a-restart",
+    "howto": [
+      "restart-a-node",
+      "recover-a-frozen-node"
+    ]
+  },
+  "mon.rule.node-stale": {
+    "title": "Not updating",
+    "body": "The node is online, but no fresh numbers have arrived for the For time. Wait a little. If it lasts, check the node's connection.",
+    "article": "alert-rules-reference#not-updating",
+    "howto": [
+      "check-your-nodes",
+      "respond-to-an-alert"
+    ]
+  },
+  "mon.rule.mac-reach": {
+    "title": "This Mac can't reach the cluster",
+    "body": "This Mac lost its network, its gateway or VPN has a problem, or no node answers over the LAN. You get this one warning, not a critical alert for each node, because those nodes aren't confirmed down.",
+    "article": "alert-rules-reference#this-mac-cant-reach-the-cluster",
+    "howto": [
+      "connect-the-vpn",
+      "respond-to-an-alert"
+    ]
+  },
+  "mon.rule.node-needs-you": {
+    "title": "Node needs you",
+    "body": "The node answers, but SparkBox can't log in. Its host key isn't trusted yet, or it refused the saved password. It isn't an outage, so it shows in Alerts only.",
+    "article": "alert-rules-reference#node-needs-you",
+    "howto": [
+      "trust-a-host-key",
+      "save-the-cluster-password"
+    ]
+  },
+  "mon.rule.mem-high": {
+    "title": "Unified memory",
+    "body": "Memory used outside a known GPU reservation, as a share of total memory. If Available memory is off or unknown, this checks total usage. Warns at 90% for 60 seconds, turns critical at 95% for 2 seconds, and clears below 88%.",
+    "article": "alert-rules-reference#unified-memory",
+    "howto": [
+      "unload-a-model",
+      "see-and-stop-processes",
+      "recover-a-frozen-node"
+    ]
+  },
+  "mon.rule.mem-available": {
+    "title": "Available memory",
+    "body": "Memory Linux can give to programs. The engine's reserved pool is already in use and is never added back. Warns below 4 GiB and turns critical below 2 GiB after 60 seconds; clears above 5 GiB for 30 seconds.",
+    "article": "alert-rules-reference#available-memory",
+    "howto": [
+      "unload-a-model",
+      "see-and-stop-processes"
+    ]
+  },
+  "mon.rule.mem-swap-in": {
+    "title": "Swap-in activity",
+    "body": "Memory read back from swap on a drive; sustained reads can slow model requests. Warns above 1 MiB/s for 60 seconds and clears below 0.1 MiB/s for 30 seconds. Occupied swap alone does not raise this alert.",
+    "article": "alert-rules-reference#swap-in-activity",
+    "howto": [
+      "unload-a-model",
+      "see-and-stop-processes"
+    ]
+  },
+  "mon.rule.mem-pressure": {
+    "title": "Memory pressure",
+    "body": "How much of the last 10 seconds every running task spent stalled on memory. It rises before the system starts stopping programs, so it's an early warning. It stays raised until it falls below 3%.",
+    "article": "alert-rules-reference#memory-pressure",
+    "howto": [
+      "unload-a-model",
+      "see-and-stop-processes"
+    ]
+  },
+  "mon.rule.ntp-offset": {
+    "title": "Clock offset",
+    "body": "How far the node's clock is from network time. Several-node models and log times go wrong when clocks drift apart. Check the node's time service.",
+    "article": "alert-rules-reference#clock-offset",
+    "howto": [
+      "restart-a-service"
+    ]
+  },
+  "mon.rule.ntp-unsynced": {
+    "title": "Clock not synchronized",
+    "body": "The node says its clock isn't in step with network time. Check the node's network, and its time service in Services.",
+    "article": "alert-rules-reference#clock-not-synchronized",
+    "howto": [
+      "restart-a-service"
+    ]
+  },
+  "mon.rule.kernel-oom": {
+    "title": "Out-of-memory kill",
+    "body": "The system stopped a program to free memory. It's critical when that program was serving a model. To see which program it was, open the Events tab in Alerts.",
+    "article": "alert-rules-reference#out-of-memory-kill",
+    "howto": [
+      "unload-a-model",
+      "choose-load-settings"
+    ]
+  },
+  "mon.rule.kernel-hung": {
+    "title": "Hung task",
+    "body": "A program stayed stuck for more than 2 minutes. Often the cause is a slow or failing disk. The Events tab in Alerts has the details.",
+    "article": "alert-rules-reference#hung-task",
+    "howto": [
+      "respond-to-an-alert",
+      "check-disk-space"
+    ]
+  },
+  "mon.rule.agent-silent": {
+    "title": "Agent stopped reporting",
+    "body": "The node answers SparkBox, but its always-on agent's heartbeat, the signal that says it's alive, is over a minute old. SparkBox still watches the node while it's open. Nothing alerts your phone while it's closed.",
+    "article": "alert-rules-reference#agent-stopped-reporting",
+    "howto": [
+      "set-up-always-on-monitoring"
+    ]
+  },
+  "mon.rule.agent-config-stale": {
+    "title": "Agent settings out of date",
+    "body": "The always-on agent on this node runs other settings than this Mac sent it, so it could send alerts with old rules, channels or silences. Click Push again in Settings \u203a Notifications.",
+    "article": "alert-rules-reference#agent-settings-out-of-date",
+    "howto": [
+      "set-up-always-on-monitoring"
+    ]
+  },
+  "mon.rule.node-rebooted": {
+    "title": "Restarted on its own",
+    "body": "The node started again, and SparkBox hadn't restarted or shut it down. It's a warning for an hour. It turns critical at a second restart within an hour, or when two nodes restart within 5 minutes.",
+    "article": "alert-rules-reference#restarted-on-its-own",
+    "howto": [
+      "find-out-why-a-node-restarted",
+      "respond-to-an-alert"
+    ]
+  },
+  "mon.rule.security-updates-pending": {
+    "title": "Security updates pending",
+    "body": "Security updates are waiting on the node. It's information at first, and a warning once they've waited 7 days.",
+    "article": "alert-rules-reference#security-updates-pending",
+    "howto": [
+      "see-pending-updates",
+      "install-updates"
+    ]
+  },
+  "mon.rule.restart-pending": {
+    "title": "Restart pending",
+    "body": "The node has needed a restart for 3 days to finish installing updates. Restart it when it suits you.",
+    "article": "alert-rules-reference#restart-pending",
+    "howto": [
+      "restart-a-node"
+    ]
+  },
+  "mon.rule.package-lists-stale": {
+    "title": "Package lists stale",
+    "body": "The node's list of available updates is over 48 hours old, so what SparkBox shows may be out of date. Check for updates now. If it comes back, the node's daily update timer may not be running.",
+    "article": "alert-rules-reference#package-lists-stale",
+    "howto": [
+      "check-for-updates"
+    ]
+  },
+  "mon.rule.disk-full": {
+    "title": "Root disk full",
+    "body": "How full the node's root disk is, judged on the whole percent SparkBox shows. A disk reading 85% is at the 85% line. It stays raised until the disk falls below 83%.",
+    "article": "alert-rules-reference#root-disk-full",
+    "howto": [
+      "check-disk-space",
+      "delete-a-model",
+      "check-docker-images"
+    ]
+  },
+  "mon.rule.disk-eta": {
+    "title": "Root disk filling",
+    "body": "How soon a steady fill would reach the end of the root disk. The rate must hold for at least a sixth of the time it predicts, so a 24-hour estimate takes 4 hours, and a download that's over within an hour doesn't count on a disk with room. It clears above 30 hours, or soon after writing stops.",
+    "article": "alert-rules-reference#root-disk-filling",
+    "howto": [
+      "check-disk-space",
+      "follow-a-download"
+    ]
+  },
+  "mon.rule.gpu-hot": {
+    "title": "GPU temperature",
+    "body": "How hot the GPU is. It stays raised until the GPU falls below 82 \u00b0C. Check the node's airflow and what's around it.",
+    "article": "alert-rules-reference#gpu-temperature",
+    "howto": [
+      "respond-to-an-alert"
+    ]
+  },
+  "mon.rule.gpu-throttle": {
+    "title": "GPU throttling",
+    "body": "The GPU is slowing itself down, usually because of heat or power. Hardware reasons always count. Software limits count only while the GPU is busy, and idle clocks never count.",
+    "article": "alert-rules-reference#gpu-throttling",
+    "howto": [
+      "respond-to-an-alert"
+    ]
+  },
+  "mon.rule.kernel-xid": {
+    "title": "GPU Xid error",
+    "body": "The GPU reported a numbered fault in the kernel log. Fatal codes stay until the node restarts, and others clear an hour after the last one. Select the alert in the Events tab to read what its code means.",
+    "article": "alert-rules-reference#gpu-xid-error",
+    "howto": [
+      "respond-to-an-alert",
+      "restart-a-node"
+    ]
+  },
+  "mon.rule.gpu-unreadable": {
+    "title": "GPU not answering",
+    "body": "NVIDIA's tools stopped answering on this node, so its models are Down until the GPU is back. It usually needs a restart.",
+    "article": "alert-rules-reference#gpu-not-answering",
+    "howto": [
+      "restart-a-node"
+    ]
+  },
+  "mon.rule.fabric-down": {
+    "title": "Fabric link down",
+    "body": "A fabric interface with an address has lost its link. A half with no cable has no address, so it stays quiet. Check the cable and optic.",
+    "article": "alert-rules-reference#fabric-link-down",
+    "howto": [
+      "check-the-fabric"
+    ]
+  },
+  "mon.rule.fabric-flap": {
+    "title": "Link flapping",
+    "body": "A link went down and came back in the last 5 minutes. Unplug the cable and plug it back in. If it continues, bounce the port: take it down for 3 seconds and back up.",
+    "article": "alert-rules-reference#link-flapping",
+    "howto": [
+      "manage-a-switch-port",
+      "check-the-fabric"
+    ]
+  },
+  "mon.rule.net-errors": {
+    "title": "Interface errors",
+    "body": "Error counters rose on a network connection in the last 2 minutes. Check the cable and optic.",
+    "article": "alert-rules-reference#interface-errors",
+    "howto": [
+      "check-the-fabric"
+    ]
+  },
+  "mon.rule.fabric-mtu": {
+    "title": "Fabric MTU",
+    "body": "MTU is the largest packet a link sends. This warns when a fabric port's MTU isn't the expected one, or differs from its peers. SparkBox expects 9000.",
+    "article": "alert-rules-reference#fabric-mtu",
+    "howto": [
+      "test-the-fabric"
+    ]
+  },
+  "mon.rule.kernel-mlx5": {
+    "title": "ConnectX-7 driver error",
+    "body": "The driver for the node's fast network card reported a fault: a module unplugged, a command timeout, a health problem or a link down. Select it in the Events tab to read what it means.",
+    "article": "alert-rules-reference#connectx-7-driver-error",
+    "howto": [
+      "check-the-fabric"
+    ]
+  },
+  "mon.rule.switch-unreachable": {
+    "title": "Switch unreachable",
+    "body": "A switch or the gateway doesn't answer. Check the device's power and network cable. If this Mac can't reach anything, it reads as not confirmed down, and doesn't go to your phone.",
+    "article": "alert-rules-reference#switch-unreachable",
+    "howto": [
+      "add-switches-and-gateway",
+      "check-the-fabric"
+    ]
+  },
+  "mon.rule.switch-health": {
+    "title": "Switch power, fans and temperature",
+    "body": "The CRS804's own health sensors. A failed power supply is critical. A fan under 500 RPM or a sensor over 85 \u00b0C is a warning.",
+    "article": "alert-rules-reference#switch-power-fans-and-temperature",
+    "howto": [
+      "check-the-fabric"
+    ]
+  },
+  "mon.rule.port-down": {
+    "title": "Switch port down",
+    "body": "A switch port cabled to a node has lost its link. Check the cable. This joins the node's incident if the node has gone too.",
+    "article": "alert-rules-reference#switch-port-down",
+    "howto": [
+      "check-the-fabric",
+      "see-what-a-port-connects-to"
+    ]
+  },
+  "mon.rule.port-errors": {
+    "title": "Switch port errors",
+    "body": "Receive, transmit and frame-check errors, added together, rose on a port in the last 2 minutes. Clean or reseat the optic, or change the cable.",
+    "article": "alert-rules-reference#switch-port-errors",
+    "howto": [
+      "check-the-fabric"
+    ]
+  },
+  "mon.rule.optic-rx-low": {
+    "title": "Optic receive power",
+    "body": "How much light reaches the weakest lane of an optic, in dBm. A lower number means less light. It stays raised until the reading is back above \u22126.5 dBm, so clean or reseat the fiber.",
+    "article": "alert-rules-reference#optic-receive-power",
+    "howto": [
+      "check-the-fabric"
+    ]
+  },
+  "mon.rule.roce-iface": {
+    "title": "RoCE on a fabric interface",
+    "body": "Watches each fabric interface's counters, and raises one alert for each interface. Packets sent again and dropped packets must average past their line for a minute. Any CRC or symbol error, a sign of damaged data, counts at once.",
+    "article": "alert-rules-reference#roce-on-a-fabric-interface",
+    "howto": [
+      "check-the-fabric",
+      "test-the-fabric"
+    ]
+  },
+  "mon.rule.nccl-tcp": {
+    "title": "NCCL on TCP sockets",
+    "body": "NCCL is the library a model uses to share work between GPUs. This warns when a several-node model moves under half of its fabric data over RDMA, the fast direct path. It also warns when the model's settings turn RDMA off or point it the wrong way.",
+    "article": "alert-rules-reference#nccl-on-tcp-sockets",
+    "howto": [
+      "check-the-fabric",
+      "test-the-fabric"
+    ]
+  },
+  "mon.rule.fabric-cabling": {
+    "title": "Fabric cabling changed",
+    "body": "A node is on a different switch port than SparkBox learned. The link still works, but port comments and per-port history no longer match it. Move the cables back, or accept the current cabling in Fabric.",
+    "article": "alert-rules-reference#fabric-cabling-changed",
+    "howto": [
+      "check-the-fabric",
+      "see-what-a-port-connects-to"
+    ]
+  },
+  "mon.rule.crash-loop": {
+    "title": "Crash loop",
+    "body": "Docker keeps restarting a container. It's a warning at one restart in 10 minutes, and critical at two. Read the container's log in Containers.",
+    "article": "alert-rules-reference#crash-loop",
+    "howto": [
+      "manage-containers"
+    ]
+  },
+  "mon.rule.container-exited": {
+    "title": "Container exited with an error",
+    "body": "A container stopped with an error code. It's critical when the system stopped it for memory. Exits older than 24 hours are history, not alerts.",
+    "article": "alert-rules-reference#container-exited-with-an-error",
+    "howto": [
+      "manage-containers"
+    ]
+  },
+  "mon.rule.unit-failed": {
+    "title": "systemd unit failed",
+    "body": "Something the node runs in the background failed. systemd is the program that runs those things, and a unit is one of them. It's usually a service.",
+    "article": "alert-rules-reference#systemd-unit-failed",
+    "howto": [
+      "restart-a-service"
+    ]
+  },
+  "mon.rule.endpoint-down": {
+    "title": "Model down",
+    "body": "A model should be serving, but a node, a container or its answer to a check is missing. It clears the moment the model answers again.",
+    "article": "alert-rules-reference#model-down",
+    "howto": [
+      "fix-a-load-that-failed",
+      "tell-if-a-model-is-working"
+    ]
+  },
+  "mon.rule.endpoint-ttft": {
+    "title": "Time to first token",
+    "body": "How long requests wait for their first word. The figure is the 95th percentile, so 95% of requests are faster. A high figure means the model is busy.",
+    "article": "alert-rules-reference#time-to-first-token",
+    "howto": [
+      "tell-if-a-model-is-working",
+      "choose-load-settings"
+    ]
+  },
+  "mon.rule.endpoint-waiting": {
+    "title": "Requests waiting",
+    "body": "Requests are queued because the model is full. Send fewer requests at once, or load the model with a higher Requests at once setting.",
+    "article": "alert-rules-reference#requests-waiting",
+    "howto": [
+      "choose-load-settings"
+    ]
+  },
+  "mon.rule.endpoint-kv": {
+    "title": "KV cache",
+    "body": "How full the model's KV cache is: the memory it uses to keep track of the text so far. It stays raised until it falls below 85%. Allow more room, or send fewer long requests at once.",
+    "article": "alert-rules-reference#kv-cache",
+    "howto": [
+      "choose-load-settings"
+    ]
+  },
+  "mon.rule.endpoint-preempt": {
+    "title": "Preemptions",
+    "body": "The model paused running requests to make room, so its KV cache is too small for the work.",
+    "article": "alert-rules-reference#preemptions",
+    "howto": [
+      "choose-load-settings"
+    ]
+  },
+  "mon.rule.endpoint-corrupted": {
+    "title": "Corrupted requests",
+    "body": "Requests that came back with broken numbers, from the engine's own counter. It means the model is writing nonsense. vLLM keeps this counter only with VLLM_COMPUTE_NANS_IN_LOGITS set, and no built-in recipe sets it.",
+    "article": "alert-rules-reference#corrupted-requests",
+    "howto": [
+      "fix-a-load-that-failed",
+      "change-alert-rules"
+    ]
+  },
+  "mon.rule.endpoint-idle": {
+    "title": "Loaded but idle",
+    "body": "A model has held memory for 24 hours with no requests. This is information only, and is never sent. Unload the model if you don't need it.",
+    "article": "alert-rules-reference#loaded-but-idle",
+    "howto": [
+      "unload-a-model"
+    ]
+  },
+  "models.load.engine": {
+    "title": "Engine",
+    "body": "The program that runs the model. vLLM is the main engine and has every check on this page. SGLang serves the same kind of API, but its loads have no API key.",
+    "article": "engines",
+    "howto": [
+      "load-a-model-on-one-node"
+    ]
+  },
+  "models.load.folder": {
+    "title": "Folder",
+    "body": "The model folder to load, from the Library. It must be on every node you pick. The size is the folder's size on disk.",
+    "article": "models-load-page#model",
+    "howto": [
+      "load-a-model-on-one-node"
+    ]
+  },
+  "models.load.api-name": {
+    "title": "Name in the API",
+    "body": "The name apps use to ask for this model, in the \"model\" field of a request. SparkBox suggests the folder's name in lower case. Use only letters, digits and . _ - / :",
+    "article": "models-load-page#model",
+    "howto": [
+      "load-a-model-on-one-node"
+    ]
+  },
+  "models.load.nodes": {
+    "title": "Nodes",
+    "body": "Select the Sparks that will run the model; each needs a copy and no other SparkBox load. The first in your list is the head node, which answers requests. Each model, image and split needs its own checks.",
+    "article": "models-load-page#nodes",
+    "howto": [
+      "load-a-model-on-one-node",
+      "load-a-model-on-several-nodes"
+    ]
+  },
+  "models.load.memory-plan": {
+    "title": "Memory plan",
+    "body": "The engine reserves its whole GPU memory share when it starts: weights, the runtime, and a KV cache in the rest. Each bar adds that share to what the node already uses. A Spark that runs out of unified memory can freeze, so 95% or more is red and 90% to 95% is amber.",
+    "article": "models-load-page#memory-plan",
+    "howto": [
+      "choose-load-settings",
+      "load-a-model-on-one-node"
+    ]
+  },
+  "models.load.override": {
+    "title": "Override memory guardrail",
+    "body": "Lets you load despite a red memory plan, once you type the node's name. A Spark that runs out of unified memory can freeze, and it may need someone at the machine. Lower the share or the context first.",
+    "article": "memory-on-a-spark#why-running-out-is-dangerous",
+    "howto": [
+      "choose-load-settings"
+    ]
+  },
+  "models.load.tensor-pipeline": {
+    "title": "Tensor \u00d7 pipeline parallel",
+    "body": "How the model is split across nodes. The two numbers multiplied must equal the number of nodes. SparkBox picks a split this model can take, and a note says why if you type one it can't.",
+    "article": "splitting-a-model#tensor-parallel",
+    "howto": [
+      "load-a-model-on-several-nodes"
+    ]
+  },
+  "models.load.expert-parallel": {
+    "title": "Expert parallel",
+    "body": "Spreads a mixture-of-experts model's experts across nodes. Use it only for a model marked MoE that runs on several nodes. Leave it off otherwise.",
+    "article": "splitting-a-model#expert-parallel",
+    "howto": [
+      "load-a-model-on-several-nodes"
+    ]
+  },
+  "models.load.max-context": {
+    "title": "Max context",
+    "body": "The longest conversation the model accepts, in tokens, counting the prompt and the reply. For most chats, type 32768. If you leave it empty, the load plans for the model's own maximum, which can take far more memory.",
+    "article": "models-load-page#max-context",
+    "howto": [
+      "load-a-model-on-one-node"
+    ]
+  },
+  "models.load.tool-calling": {
+    "title": "Tool calling",
+    "body": "Lets a model ask an app to run a tool, such as a file search. Turn it on only if an app needs it, and keep the parser marked for this model family.",
+    "article": "models-load-page#tool-calling",
+    "howto": [
+      "load-a-model-on-one-node"
+    ]
+  },
+  "models.load.reasoning": {
+    "title": "Reasoning parser",
+    "body": "Separates thinking from the answer. Use the parser for this model family. Read parsers from the selected image to check every chosen node; missing capability readings stay unknown.",
+    "article": "models-load-page#reasoning-parser",
+    "howto": [
+      "load-a-model-on-one-node"
+    ]
+  },
+  "models.load.prefix-caching": {
+    "title": "Prefix caching",
+    "body": "Reuses the KV cache when requests start the same way, such as a shared system prompt or a chat history. It's on unless you turn it off, and most loads leave it on.",
+    "article": "models-load-page#prefix-caching",
+    "howto": [
+      "load-a-model-on-one-node"
+    ]
+  },
+  "models.load.kv-cache-type": {
+    "title": "KV cache type",
+    "body": "The precision of the model's short-term memory. fp8 uses less space, but it does not prove the image has a working kernel. Sparse MLA with automatic or bfloat16 KV is blocked on GB10; GLM-5.3 still needs its supported checkpoint and image.",
+    "article": "models-load-page#kv-cache-type",
+    "howto": [
+      "load-a-model-on-one-node"
+    ]
+  },
+  "models.load.requests-at-once": {
+    "title": "Requests at once",
+    "body": "How many full-length requests the KV cache must hold together. Leave it empty and the engine decides, while the memory plan counts one and the share leaves room for four. Each one you add takes more memory.",
+    "article": "models-load-page#requests-at-once",
+    "howto": [
+      "load-a-model-on-one-node"
+    ]
+  },
+  "models.load.port": {
+    "title": "Port",
+    "body": "The number apps use, with the node's address, to reach this model. SparkBox starts at 8000 and suggests the first free port on the head node.",
+    "article": "models-load-page#port",
+    "howto": [
+      "load-a-model-on-one-node"
+    ]
+  },
+  "models.load.listen-on": {
+    "title": "Listen on",
+    "body": "Which network can reach this model: LAN for this Mac and your home network, Fabric only for the other Sparks, or All interfaces for every network the node has. Chat and the Server can't use a Fabric only load.",
+    "article": "models-load-page#listen-on",
+    "howto": [
+      "load-a-model-on-one-node",
+      "use-a-model-from-another-computer"
+    ]
+  },
+  "models.load.api-key": {
+    "title": "API key",
+    "body": "A password for this load. SparkBox makes a new key and keeps it in the Keychain, and Chat and the Server use it for you. Without a key, anything on your network can use the model.",
+    "article": "models-load-page#api-key",
+    "howto": [
+      "load-a-model-on-one-node",
+      "use-a-model-from-another-computer",
+      "create-an-api-key"
+    ]
+  },
+  "models.load.keep-running": {
+    "title": "Keep running",
+    "body": "Starts the model again if it stops. On one node, Docker does this, with or without SparkBox open. On several nodes, SparkBox does it, only while SparkBox is open, gives up after 5 restarts in 30 minutes, and doesn't restart a load that has never been Ready.",
+    "article": "models-load-page#keep-running",
+    "howto": [
+      "load-a-model-on-one-node",
+      "load-a-model-on-several-nodes"
+    ]
+  },
+  "models.load.remote-code": {
+    "title": "Allow remote code",
+    "body": "Lets a model run its own Python code inside the container, with access to the GPU and the model folder. On several nodes it runs as root with every device on the node. Turn it on only for repositories you trust.",
+    "article": "models-load-page#allow-remote-code",
+    "howto": [
+      "load-a-model-on-one-node"
+    ]
+  },
+  "models.load.extra-options": {
+    "title": "Expert: raw vLLM args",
+    "body": "vLLM options with no field on this page, one per line, with a space before the value. SparkBox refuses anything that holds a key, loads code or opens files. Most loads leave this empty.",
+    "article": "models-load-page#expert-raw-vllm-args",
+    "howto": [
+      "use-a-recipe-for-a-load",
+      "load-a-model-on-one-node"
+    ]
+  },
+  "models.load.image": {
+    "title": "Image",
+    "body": "The recipe a container starts from: here, the engine that Docker starts. Pick an image every chosen node has. SparkBox starts it by its local id, so all the nodes run the same thing.",
+    "article": "models-load-page#image",
+    "howto": [
+      "load-a-model-on-one-node",
+      "load-a-model-on-several-nodes"
+    ]
+  },
+  "models.load.before-it-starts": {
+    "title": "Before it starts",
+    "body": "What SparkBox reads from every chosen node before a vLLM load, with one verdict for the set: memory, the image, the folder, ports, the fabric and what an earlier load left. It reads again when you press Load. With Demo data, nothing is read.",
+    "article": "models-load-page#before-it-starts",
+    "howto": [
+      "load-a-model-on-one-node",
+      "load-a-model-on-several-nodes",
+      "clear-what-an-earlier-load-left-behind"
+    ]
+  },
+  "models.load.what-vllm-needs": {
+    "title": "What vLLM needs",
+    "body": "The memory that must be free when vLLM starts: its share of the node's memory plus 4 GiB of headroom. vLLM counts the page cache as used, so free memory counts here, not available memory.",
+    "article": "memory-on-a-spark#the-page-cache",
+    "howto": [
+      "load-a-model-on-one-node"
+    ]
+  },
+  "models.load.drop-page-cache": {
+    "title": "Drop the page cache",
+    "body": "The page cache is file data Linux keeps in memory; vLLM counts it as used. Dropping it uses sudo, and Linux refills it. Restart and allow cache drop permits it for one restart attempt, keeps the API key, and does not change future permission.",
+    "article": "memory-on-a-spark#the-page-cache",
+    "howto": [
+      "load-a-model-on-one-node",
+      "restart-or-change-a-model"
+    ]
+  },
+  "models.load.earlyoom": {
+    "title": "earlyoom",
+    "body": "A small service that stops a process when a node runs very low on memory, before the node freezes. SparkBox shows its state and settings. It never blocks a load.",
+    "article": "models-load-page#before-it-starts",
+    "howto": [
+      "load-a-model-on-one-node"
+    ]
+  },
+  "models.load.dev-shm": {
+    "title": "/dev/shm",
+    "body": "Engines use this shared memory, which should be empty or unchanged before a load. New vLLM loads let their cleanup workers finish before stopping. After Unload, SparkBox reports anything new left there; it does not delete unknown files.",
+    "article": "models-load-page#before-it-starts",
+    "howto": [
+      "unload-a-model"
+    ]
+  },
+  "models.load.cache-folders": {
+    "title": "Cache folders",
+    "body": "Folders on the node where vLLM keeps the code it prepares for the GB10, so the next load starts faster. They're mounted into the container. A missing one is made at the start, and they stay after Unload.",
+    "article": "models-load-page#before-it-starts",
+    "howto": [
+      "load-a-model-on-one-node"
+    ]
+  },
+  "models.load.what-will-run": {
+    "title": "What will run",
+    "body": "The launch files and commands SparkBox will use on each node, workers first. Containers carry the load's id, so Unload removes exactly these. The API key reaches the node privately, so it's never in a command or the container's settings.",
+    "article": "models-load-page#what-will-run",
+    "howto": [
+      "load-a-model-on-one-node"
+    ]
+  },
+  "models.library.find-models": {
+    "title": "Find models",
+    "body": "Looks on every online node for model folders, in your model folder and in the Hugging Face cache. The list also refreshes when a download or copy ends.",
+    "article": "models-library#toolbar",
+    "howto": [
+      "download-a-model"
+    ]
+  },
+  "models.library.copies": {
+    "title": "Copies",
+    "body": "Copies go node to node over the ConnectX-7 fabric, from a temporary, password-protected server that stops when the copy is done. A stopped copy reads \u25d0 incomplete, and Copy to nodes\u2026 picks up where it stopped. Double-click a model to load it.",
+    "article": "copy-a-model-to-other-nodes",
+    "howto": [
+      "copy-a-model-to-other-nodes",
+      "load-a-model-on-one-node"
+    ]
+  },
+  "models.library.verified-found": {
+    "title": "What each mark means",
+    "body": "\u2713 verified means a completed hash check. Its tip distinguishes a download checked against Hugging Face from a copy checked against its source. Older copies may show \u2713 sizes match. \u25d0 incomplete cannot load yet. \u25cf found has no SparkBox record. \u2014 means no copy.",
+    "article": "models-library#the-model-table",
+    "howto": [
+      "download-a-model",
+      "copy-a-model-to-other-nodes"
+    ]
+  },
+  "models.hub.weights": {
+    "title": "Weights",
+    "body": "The size of the files the engine serves, read from the repository. \u2248 marks an estimate, used when the file sizes couldn't be read. GGUF means the repository has only files for Ollama or llama.cpp.",
+    "article": "models-hugging-face#search-results",
+    "howto": [
+      "find-a-model-that-fits"
+    ]
+  },
+  "models.hub.fits-on": {
+    "title": "Fits on",
+    "body": "The fewest Sparks that can hold the weights. Context needs more memory, so open the model and read the fit table. \u00b7 fp8 means it runs only with an fp8 KV cache.",
+    "article": "models-hugging-face#search-results",
+    "howto": [
+      "find-a-model-that-fits"
+    ]
+  },
+  "models.hub.recommended": {
+    "title": "Recommended for GB10",
+    "body": "Four starting points chosen for the chip in your Sparks, each with its reason. For a first download, try Qwen/Qwen3.8-27B-FP8, which fits on one Spark. Click one to see its fit table.",
+    "article": "find-a-model-that-fits#if-youre-not-sure-which-to-pick",
+    "howto": [
+      "find-a-model-that-fits"
+    ]
+  },
+  "models.download.disk": {
+    "title": "Destination disk",
+    "body": "The destination needs the full transfer plus 5% and 20 GiB, even for a partial copy. Read any warning above 85% fullness before approving. Space is checked again at start but is not reserved; unknown or insufficient space stops the attempt.",
+    "article": "download-a-model#destination-disk",
+    "howto": [
+      "download-a-model",
+      "follow-a-download",
+      "copy-a-model-to-other-nodes"
+    ]
+  },
+  "models.hub.download-target": {
+    "title": "Download node",
+    "body": "Choose the connected node that will receive the files, then review its destination space. Changing this choice starts nothing; SparkBox keeps it if the node disconnects. Jobs Resume stays on its original node.",
+    "article": "models-hugging-face#download-node",
+    "howto": [
+      "download-a-model"
+    ]
+  },
+  "models.hub.check-with-ai": {
+    "title": "Check with AI",
+    "body": "Asks your Anthropic or OpenAI model whether this model will run well here, and how to split it. It sends the model's facts and your nodes' memory, and your provider may charge for the request. Its advice can fill in the Load page.",
+    "article": "models-hugging-face#ask-the-ai-advisor",
+    "howto": [
+      "find-a-model-that-fits"
+    ]
+  },
+  "models.hub.gated": {
+    "title": "Gated models",
+    "body": "The owner of this model asks you to accept a license first. Accept it on huggingface.co, then add an access token in Settings \u203a Models.",
+    "article": "get-a-hugging-face-token",
+    "howto": [
+      "get-a-hugging-face-token"
+    ]
+  },
+  "models.fit.kv-type": {
+    "title": "KV bf16 and KV fp8",
+    "body": "Shows memory estimates for each KV cache type using the Load page's arithmetic. fp8 uses less memory per token. It does not establish that the model has a working kernel on this image.",
+    "article": "models-hugging-face#fit-table",
+    "howto": [
+      "find-a-model-that-fits"
+    ]
+  },
+  "models.loaded.recovery": {
+    "title": "Recovering a saved load",
+    "body": "After fresh reports, Resume missing ranks can finish an interrupted first startup when existing ranks still match the saved image and ownership. A previously serving load needs Restart in order or Unload. Reopening alone never launches replacements.",
+    "article": "fix-a-load-that-failed#after-sparkbox-quits-or-loses-its-connection",
+    "howto": [
+      "fix-a-load-that-failed"
+    ]
+  },
+  "models.loaded.forget": {
+    "title": "Forget",
+    "body": "Asks before removing a failed or unloaded load's note, keeping a recovery copy on this Mac. If its containers remain, SparkBox unloads them first. Demo leaves saved live history unchanged.",
+    "article": "models-loaded#failed-and-stopped-loads",
+    "howto": [
+      "fix-a-load-that-failed"
+    ]
+  },
+  "models.bench.runs": {
+    "title": "Runs",
+    "body": "Each finished sweep is saved here. Select up to 4 to compare them in the chart, and click one to see its table.",
+    "article": "models-benchmarks#runs",
+    "howto": [
+      "benchmark-a-model"
+    ]
+  },
+  "models.bench.profile": {
+    "title": "Profile",
+    "body": "The length of each test request: tokens in, then tokens out. Chat is 512 \u2192 256, RAG is 4,096 \u2192 256, and Long is 32,768 \u2192 512. Custom lets you set your own.",
+    "article": "models-benchmarks#run-a-sweep",
+    "howto": [
+      "benchmark-a-model"
+    ]
+  },
+  "models.bench.requests": {
+    "title": "Requests at once",
+    "body": "Each box you select is one level of the test, with that many requests running together. More levels take longer. The results show how speed changes under load.",
+    "article": "models-benchmarks#run-a-sweep",
+    "howto": [
+      "benchmark-a-model"
+    ]
+  },
+  "models.jobs.about": {
+    "title": "Jobs",
+    "body": "Jobs run on the nodes themselves and are built to keep going if SparkBox quits or the VPN drops. That hasn't been proven on your cluster, so keep SparkBox open and this Mac awake. Partial files stay: Resume download in Jobs reuses the saved revision and files; older jobs need a newly reviewed download.",
+    "article": "models-jobs",
+    "howto": [
+      "follow-a-download",
+      "keep-this-mac-awake"
+    ]
+  },
+  "models.prepare.image": {
+    "title": "vLLM image",
+    "body": "Whether the node has the vLLM image from Settings \u203a Models. A load needs its image on every chosen node, and it won't fetch one. Downloads ask you to choose their tool separately.",
+    "article": "models-prepare-cluster#the-table",
+    "howto": [
+      "prepare-the-cluster"
+    ]
+  },
+  "models.prepare.fabric": {
+    "title": "Fabric (ConnectX-7)",
+    "body": "Each fast network address on the node, with its speed, its MTU and its RDMA state. Every link should read 200 Gb/s, MTU 9000 and RDMA ACTIVE. Several-node loads and copies use these addresses.",
+    "article": "models-prepare-cluster#the-table",
+    "howto": [
+      "prepare-the-cluster"
+    ]
+  },
+  "models.settings.folder": {
+    "title": "Model folder",
+    "body": "The same folder on every node, where downloads go, in org/name folders. ~ is the cluster login's home. Find models also looks in the Hugging Face cache.",
+    "article": "settings-models#where-models-live",
+    "howto": [
+      "download-a-model"
+    ]
+  },
+  "models.settings.images": {
+    "title": "Engine images",
+    "body": "The vLLM image is one a load can pick on the Load page. Downloads ask you to choose their tool separately. SGLang loads use the SGLang image as it is.",
+    "article": "settings-models#engines",
+    "howto": [
+      "load-a-model-on-one-node"
+    ]
+  },
+  "models.settings.advisor": {
+    "title": "AI feasibility check",
+    "body": "Check with AI sends this model the candidate's facts: size, architecture, the fit table, your nodes' names and memory, what's serving, and the start of its model card. IP addresses and keys aren't sent.",
+    "article": "settings-models#ai-feasibility-check",
+    "howto": [
+      "find-a-model-that-fits"
+    ]
+  },
+  "ops.workloads.ports": {
+    "title": "Listening ports",
+    "body": "A port is a numbered door on a node that a program answers on. This view lists every open port on each node, and the program that owns it.",
+    "article": "workloads#listening-ports",
+    "howto": [
+      "see-and-stop-processes"
+    ]
+  },
+  "ops.workloads.list": {
+    "title": "About this list",
+    "body": "The processes on each node, up to the 200 busiest. Model servers, GPU users and programs on a port always show. The list refreshes every 5 seconds, and it holds still while your pointer is on it.",
+    "article": "workloads#processes",
+    "howto": [
+      "see-and-stop-processes"
+    ]
+  },
+  "ops.workloads.ports-detail": {
+    "title": "About listening ports",
+    "body": "Each row is one open TCP port. \u201cnginx (likely)\u201d is a best guess, because only root can see the real owner, and Reveal with sudo shows it. Double-click a row to open the port in your browser through an SSH tunnel.",
+    "article": "workloads#listening-ports"
+  },
+  "ops.workloads.signals": {
+    "title": "Signals",
+    "body": "A signal is a short message to a running program. TERM asks it to stop cleanly, KILL ends it at once, and STOP pauses it until CONT. Try TERM first.",
+    "article": "workloads#signals",
+    "howto": [
+      "see-and-stop-processes"
+    ]
+  },
+  "ops.workloads.reveal": {
+    "title": "Reveal with sudo",
+    "body": "Asks the node, as root, which program owns each port the cluster user can't see. It changes nothing on the node, and it needs Admin mode.",
+    "article": "workloads#listening-ports"
+  },
+  "ops.workloads.priority": {
+    "title": "Priority (nice)",
+    "body": "Decides who gets the CPU when a node is busy. \u221220 is the highest priority, and 19 is the lowest. Raising it, which means a lower number, needs sudo.",
+    "article": "workloads#priority"
+  },
+  "ops.workloads.runs-in": {
+    "title": "Runs in",
+    "body": "The container or service this process belongs to. An unknown container name appears as its short ID; a dash means neither. To stop it for good, stop its container or service.",
+    "article": "workloads#runs-in",
+    "howto": [
+      "see-and-stop-processes"
+    ]
+  },
+  "ops.containers.views": {
+    "title": "List and Deployments",
+    "body": "List shows one row for each container; Deployments groups related containers. Expected members stay listed when a node is unavailable, with state Unknown. Workers stop before their head; the head starts first.",
+    "article": "containers#list-and-deployments",
+    "howto": [
+      "manage-containers"
+    ]
+  },
+  "ops.containers.exits": {
+    "title": "Exit reason",
+    "body": "How a stopped container ended. An error or out-of-memory exit counts for 24 hours, then it stops counting in the sidebar and on the Dashboard, and stays in this list. To stop counting one sooner, right-click its row and choose Hide this exit.",
+    "article": "containers#exit-reason",
+    "howto": [
+      "manage-containers"
+    ]
+  },
+  "ops.containers.test": {
+    "title": "Run test container",
+    "body": "Starts sparkbox-test-busybox, a small container that sleeps for an hour, on the node chosen under All nodes. It needs Live data and Admin mode. Stop and remove it here when you're done.",
+    "article": "containers#run-test-container"
+  },
+  "ops.images.show": {
+    "title": "All, Unused and Dangling",
+    "body": "All lists every image. Unused lists images no container has run for 30 days, or ever on that node. Dangling lists untagged images left behind by pulls and builds.",
+    "article": "images#show",
+    "howto": [
+      "check-docker-images"
+    ]
+  },
+  "ops.images.about": {
+    "title": "About images",
+    "body": "Each node reports its Docker images, and nothing here changes a node. Used by and Last used come from the node's containers. Layers two images share count in both, so sizes can add up to more than Docker's total.",
+    "article": "images#what-the-numbers-mean",
+    "howto": [
+      "check-docker-images"
+    ]
+  },
+  "ops.services.enable-disable": {
+    "title": "Enable and Disable",
+    "body": "Enable makes a service start when the node boots. Disable stops that. Neither one starts or stops it now: use Start or Stop for that.",
+    "article": "services#enable-and-disable",
+    "howto": [
+      "restart-a-service"
+    ]
+  },
+  "ops.services.more": {
+    "title": "More",
+    "body": "Reload asks a running service to read its settings again, and Reset failed clears a failed mark. Mask blocks a service until you unmask it. Reload unit files makes systemd read its settings files again.",
+    "article": "services#more"
+  },
+  "ops.services.several-nodes": {
+    "title": "Running on several nodes",
+    "body": "Actions run on one node at a time, in the order you added them, and stop at the first node where they fail.",
+    "article": "services#several-nodes"
+  },
+  "ops.services.journal": {
+    "title": "Journal",
+    "body": "The service's own log: up to its last 25 lines on this node. Errors are marked, and the line that says why it failed scrolls into view. Lines since your last action are highlighted.",
+    "article": "services#journal"
+  },
+  "ops.fleet.versions": {
+    "title": "Versions",
+    "body": "Matching means all comparable readings agree; Mismatched means known readings differ; missing or stale readings stay Unknown. Fleet compares running serving images, and Load compares the selected image. Matching does not prove compatibility.",
+    "article": "fleet-command#versions"
+  },
+  "ops.fleet.how": {
+    "title": "How it runs",
+    "body": "Parallel runs on every node at once. One at a time goes node by node, in order. Canary first runs on the first node alone, and on the rest only if that worked.",
+    "article": "fleet-command#how-it-runs",
+    "howto": [
+      "run-a-command-on-every-node"
+    ]
+  },
+  "ops.fleet.stop-on-failure": {
+    "title": "Stop if a node fails",
+    "body": "With One at a time, the run stops at the first node that fails, and the rest are skipped. It's off for Parallel, where every node starts together.",
+    "article": "fleet-command#stop-if-a-node-fails"
+  },
+  "ops.fleet.as-root": {
+    "title": "as root",
+    "body": "Runs the command as root, the account that can do anything on a node, through sudo. SparkBox takes the cluster password from the Keychain, so never type a password into a command. It turns itself off after each run unless you pin it.",
+    "article": "fleet-command#as-root",
+    "howto": [
+      "run-a-command-on-every-node"
+    ]
+  },
+  "ops.fleet.time-limit": {
+    "title": "Time limit",
+    "body": "The longest the command may run, in seconds, from 1 to 3600. The default is 60. The node enforces it, so the command stops there even if this Mac goes away.",
+    "article": "fleet-command#time-limit"
+  },
+  "ops.fleet.snippets": {
+    "title": "Snippets",
+    "body": "Saved commands. Click one to put it in the box, then click Run. Save keeps the command in the box as a snippet on this Mac.",
+    "article": "fleet-command#snippets"
+  },
+  "ops.updates.upgrade": {
+    "title": "Upgrade this node",
+    "body": "Preview and install this node's available routine packages. Held and GPU-stack packages stay unchanged. SparkBox asks you to review the exact versions, then checks for remaining updates after installation.",
+    "article": "updates#the-nodes-table",
+    "howto": [
+      "install-updates"
+    ]
+  },
+  "ops.updates.security": {
+    "title": "Security",
+    "body": "How many pending packages are security fixes, from an archive whose name ends in -security. Fixes that touch the GPU stack wait like any other GPU-stack package.",
+    "article": "updates#the-nodes-table",
+    "howto": [
+      "install-updates"
+    ]
+  },
+  "ops.updates.needs-care": {
+    "title": "Needs care",
+    "body": "Pending packages from the GPU stack: the kernel, NVIDIA and its control libraries, CUDA, Docker, network packages and the DGX OS updater. SparkBox won't move these on one node.",
+    "article": "packages-and-updates#what-the-gpu-stack-is",
+    "howto": [
+      "pin-the-gpu-stack"
+    ]
+  },
+  "ops.updates.restart": {
+    "title": "Restart",
+    "body": "Restart\u2026 opens the checks and confirmation for this node. SparkBox reconnects automatically and checks its new boot; inspect any warning before restarting another node. View progress opens the task; after it finishes, package and restart status are read again.",
+    "article": "updates#the-nodes-table",
+    "howto": [
+      "restart-a-node"
+    ]
+  },
+  "ops.updates.dgx-os": {
+    "title": "DGX OS",
+    "body": "The last DGX OS update applied to this node, and any update waiting. SparkBox doesn't install these. NVIDIA's DGX Dashboard shows more, but only look: don't install from that page, because it skips SparkBox's GPU-stack guard and its restart checks, and a failed update can stop the node starting.",
+    "article": "updates#the-nodes-table",
+    "howto": [
+      "open-the-dgx-dashboard"
+    ]
+  },
+  "ops.updates.firmware": {
+    "title": "Firmware",
+    "body": "How many firmware updates wait, as the fwupd tool reports them. Firmware is the software built into the hardware. It may read needs sudo until you run Check all nodes, and SparkBox doesn't install it.",
+    "article": "updates#the-nodes-table"
+  },
+  "ops.updates.snaps": {
+    "title": "Snaps",
+    "body": "How many snaps have an update waiting. A snap is a self-contained Ubuntu app package, updated apart from apt. SparkBox only counts them.",
+    "article": "updates#the-nodes-table"
+  },
+  "ops.updates.held": {
+    "title": "Held",
+    "body": "Packages apt leaves at their current version. A notice warns you when a node holds different packages from the others.",
+    "article": "updates#hold-and-release",
+    "howto": [
+      "pin-the-gpu-stack"
+    ]
+  },
+  "ops.updates.security-only": {
+    "title": "Upgrade security only",
+    "body": "Runs its own dry run, then installs the pending security fixes that aren't GPU-stack or held. It needs no pin, and it asks before it installs.",
+    "article": "updates#upgrade-security-only",
+    "howto": [
+      "install-updates"
+    ]
+  },
+  "ops.updates.hold": {
+    "title": "Hold and Release",
+    "body": "Hold tells apt to leave the selected packages at their version. Release lets them move again. Neither one installs anything.",
+    "article": "updates#hold-and-release",
+    "howto": [
+      "pin-the-gpu-stack"
+    ]
+  },
+  "ops.updates.needrestart": {
+    "title": "Still using old libraries",
+    "body": "Running services that still use the old version of something an upgrade replaced. They keep working, and they get the fix only after a restart. Restart each one here when it suits you.",
+    "article": "updates#still-using-old-libraries",
+    "howto": [
+      "restart-a-service"
+    ]
+  },
+  "ops.updates.phasing": {
+    "title": "Deferred by phasing",
+    "body": "Ubuntu releases some updates to a share of computers first. These packages are held back this time, so the upgrade doesn't install them and they stay pending.",
+    "article": "packages-and-updates#phased-updates"
+  },
+  "ops.activity.views": {
+    "title": "Changes and Everything",
+    "body": "Changes lists what changed a node or this Mac, Admin sessions and root shells. Everything adds reads, shells, log views and SparkBox's own checks.",
+    "article": "activity-log#changes-and-everything",
+    "howto": [
+      "find-what-sparkbox-did"
+    ]
+  },
+  "ops.activity.about": {
+    "title": "About the activity log",
+    "body": "Every command is written down before it's sent and again when it ends, so one that never reported back shows as didn't finish. SparkBox's own passwords and keys never appear. Anything else that looks like a secret is replaced with \u2039redacted\u203a, but SparkBox can't catch everything.",
+    "article": "activity-log#how-its-kept",
+    "howto": [
+      "find-what-sparkbox-did"
+    ]
+  },
+  "ops.activity.demo": {
+    "title": "Demo entries",
+    "body": "Demo mode: nothing ran on a node. Each row is the command SparkBox would have run.",
+    "article": "activity-log#demo-entries"
+  },
+  "ops.evidence.phase": {
+    "title": "Group",
+    "body": "A short name for one piece of work. Captures in the same group are compared with each other, so use one name for one job, such as november-update.",
+    "article": "settings-diagnostics#evidence",
+    "howto": [
+      "capture-evidence"
+    ]
+  },
+  "ops.evidence.label": {
+    "title": "Label",
+    "body": "What this capture marks, such as before-update or after-reboot. It becomes part of the folder name.",
+    "article": "settings-diagnostics#evidence",
+    "howto": [
+      "capture-evidence"
+    ]
+  },
+  "start.connect.account": {
+    "title": "The account SparkBox logs in with",
+    "body": "The one user and password all your nodes share. SparkBox logs in with your SSH keys first and this password last. It also gives this password to sudo, the tool that runs a command as root.",
+    "article": "connect-my-sparks#step-1-account",
+    "howto": [
+      "connect-your-cluster",
+      "save-the-cluster-password"
+    ]
+  },
+  "start.connect.password": {
+    "title": "Where the password goes",
+    "body": "Into the macOS Keychain, never into a file. When sudo asks for it, SparkBox gives it through sudo's own prompt, never on a command line.",
+    "article": "keychain-and-secrets",
+    "howto": [
+      "save-the-cluster-password"
+    ]
+  },
+  "start.connect.nodes": {
+    "title": "Your Sparks",
+    "body": "A new installation starts with no saved nodes. Give each node its own LAN address: .local names work at home, but not through the VPN. SparkBox saves this list when you click Next.",
+    "article": "connect-my-sparks#step-2-nodes",
+    "howto": [
+      "add-or-change-a-node"
+    ]
+  },
+  "start.connect.discovery": {
+    "title": "Find Sparks",
+    "body": "Survey one local network, verify devices you recognize, then review a proposed node list and neighbors. A Spark needs a GB10 GPU and a readable physical adapter identity; Demo uses recorded examples. Nothing is saved until the wizard saves your draft.",
+    "article": "connect-my-sparks#find-sparks-on-your-network",
+    "howto": [
+      "connect-your-cluster"
+    ]
+  },
+  "start.connect.vpn": {
+    "title": "Reaching the cluster from anywhere",
+    "body": "At home, SparkBox talks to your nodes directly. Away from home, it can use its own private tunnel to your Firewalla Gold. Skip this step if you only use SparkBox at home.",
+    "article": "connect-my-sparks#step-4-vpn",
+    "howto": [
+      "connect-the-vpn"
+    ]
+  },
+  "start.nodes.ip-fallback": {
+    "title": "IP address",
+    "body": "The node's numeric address on your LAN, such as 192.168.50.51. When this field is filled in, SparkBox connects to this address. It uses the hostname only when the field is empty.",
+    "article": "settings-nodes#ip-address",
+    "howto": [
+      "add-or-change-a-node"
+    ]
+  },
+  "start.nodes.hostname": {
+    "title": "Hostname",
+    "body": "The node's name on your network, such as cell1-example.local. SparkBox uses it only when the IP address is empty. Names ending in .local work at home, but not through the VPN.",
+    "article": "settings-nodes#hostname",
+    "howto": [
+      "add-or-change-a-node"
+    ]
+  },
+  "start.nodes.ssh-port": {
+    "title": "SSH port",
+    "body": "The network port where the node listens for SSH, the secure connection SparkBox uses. The normal value is 22. Change it only if you changed it on the node.",
+    "article": "settings-nodes#ssh-port",
+    "howto": [
+      "add-or-change-a-node"
+    ]
+  },
+  "start.nodes.inventory": {
+    "title": "The inventory",
+    "body": "The list of nodes SparkBox manages. The order here is the order everywhere: the sidebar, the Dashboard and the charts. Test checks a node with the settings shown, before you save them.",
+    "article": "settings-nodes#inventory",
+    "howto": [
+      "add-or-change-a-node",
+      "check-your-nodes"
+    ]
+  },
+  "start.nodes.fabric": {
+    "title": "Fabric and load role",
+    "body": "Record the fast network interfaces and a preferred load role for each node. Copy fresh readings, review them, then save. Loads warn about differences but still use fresh node checks.",
+    "article": "settings-nodes#fabric-and-load-role",
+    "howto": [
+      "add-or-change-a-node",
+      "load-a-model-on-several-nodes"
+    ]
+  },
+  "start.nodes.wake": {
+    "title": "MAC and Wake",
+    "body": "The MAC line is the hardware address of the node's LAN port, where Wake sends its packet. The Wake line says whether the node can be woken over the network. Unknown means SparkBox can't read it without sudo, not that it's off.",
+    "article": "settings-nodes#mac-and-wake",
+    "howto": [
+      "shut-down-and-wake-a-node"
+    ]
+  },
+  "start.nodes.test": {
+    "title": "Test",
+    "body": "Connects to the node with the settings shown, without saving them, and checks SSH, the host key, the login, sudo, Python, Docker, the GPU driver, the fabric and Wake-on-LAN. It asks for Touch ID or your Mac password.",
+    "article": "check-your-nodes",
+    "howto": [
+      "check-your-nodes",
+      "get-a-gpu-driver-answering",
+      "trust-a-host-key"
+    ]
+  },
+  "start.switches.address": {
+    "title": "Address",
+    "body": "The IP address or hostname of this device on your LAN. Leave it empty if you don't want SparkBox to watch the device.",
+    "article": "settings-switches#address",
+    "howto": [
+      "add-switches-and-gateway"
+    ]
+  },
+  "start.switches.hardware": {
+    "title": "Automatic AI hardware lookup",
+    "body": "Looks up reported equipment models with the selected AI provider, checks a manufacturer page and saves a labeled profile. Off by default; Live lookups may incur AI charges, and Demo makes no requests. Observed links and device settings stay unchanged.",
+    "article": "settings-switches#equipment-profiles",
+    "howto": [
+      "add-switches-and-gateway"
+    ]
+  },
+  "start.switches.rest-user": {
+    "title": "REST user",
+    "body": "The account SparkBox uses to read the CRS804 DDQ. Create it on the switch, in a group with the read and rest-api policies. The field suggests the name sparkbox.",
+    "article": "settings-switches#rest-user",
+    "howto": [
+      "add-switches-and-gateway"
+    ]
+  },
+  "start.switches.rest-password": {
+    "title": "REST password",
+    "body": "The password of the REST user on the CRS804 DDQ. SparkBox keeps it in the Keychain, never in a file. Saving or removing it asks for Touch ID or your Mac password each time.",
+    "article": "settings-switches#rest-password",
+    "howto": [
+      "add-switches-and-gateway"
+    ]
+  },
+  "start.switches.test": {
+    "title": "Test connection",
+    "body": "Tries the saved settings once now, so save edits first. For the CRS804 DDQ, it checks during the 30-second pause after a login refusal and shows the board and RouterOS version or a reason. Firewalla tests check that the device answers.",
+    "article": "settings-switches#connection",
+    "howto": [
+      "add-switches-and-gateway"
+    ]
+  },
+  "start.switches.msp-domain": {
+    "title": "MSP domain",
+    "body": "The address your Firewalla MSP account opens at, such as dn-abc123.firewalla.net. SparkBox sends the token only to an address that ends in .firewalla.net, over HTTPS.",
+    "article": "settings-switches#firewalla-cloud-msp",
+    "howto": [
+      "connect-firewalla-cloud"
+    ]
+  },
+  "start.switches.msp-token": {
+    "title": "API token",
+    "body": "The key that lets SparkBox read your Firewalla account. It goes straight to the Keychain. The box shows whether one is saved, and never the token.",
+    "article": "settings-switches#firewalla-cloud-msp",
+    "howto": [
+      "connect-firewalla-cloud"
+    ]
+  },
+  "start.switches.msp-test": {
+    "title": "Test Firewalla's cloud",
+    "body": "Asks Firewalla once, with the saved domain and token, and says what came back. It needs Live data, with look-only mode off. It runs once in 5 minutes at most, and waits if Firewalla has asked SparkBox to wait.",
+    "article": "settings-switches#firewalla-cloud-msp",
+    "howto": [
+      "connect-firewalla-cloud"
+    ]
+  },
+  "start.login.password": {
+    "title": "Cluster password",
+    "body": "All your nodes share one account, and its password is kept only in the macOS Keychain. SSH uses it when no key is accepted. sudo always gets it, through its own prompt, never on a command line.",
+    "article": "settings-cluster-login#account-on-every-node",
+    "howto": [
+      "save-the-cluster-password",
+      "set-up-key-login"
+    ]
+  },
+  "start.login.order": {
+    "title": "The login order",
+    "body": "SparkBox tries the keys in your SSH agent first, then the key file below and any key named in ~/.ssh/config, then the cluster password. sudo always uses the cluster password.",
+    "article": "settings-cluster-login#how-sparkbox-logs-in",
+    "howto": [
+      "set-up-key-login"
+    ]
+  },
+  "start.login.ssh-agent": {
+    "title": "SSH agent",
+    "body": "An SSH agent is a program that holds your keys and signs logins for you. Choose System for the agent Terminal uses, 1Password or Secretive if you keep keys there, or Off to skip agents.",
+    "article": "settings-cluster-login#ssh-agent",
+    "howto": [
+      "set-up-key-login"
+    ]
+  },
+  "start.login.key-file": {
+    "title": "Key file",
+    "body": "The path of a private SSH key on this Mac, such as ~/.ssh/id_ed25519. SparkBox tries it after the agent's keys. The file must exist when you click Save.",
+    "article": "settings-cluster-login#key-file",
+    "howto": [
+      "set-up-key-login"
+    ]
+  },
+  "start.login.passphrase": {
+    "title": "Key passphrase",
+    "body": "A password that protects a key file. Most keys don't have one. If yours does, save the key file first, then save the passphrase here, and SparkBox keeps it in the Keychain.",
+    "article": "settings-cluster-login#key-passphrase",
+    "howto": [
+      "set-up-key-login"
+    ]
+  },
+  "start.login.ssh-config": {
+    "title": "~/.ssh/config",
+    "body": "The settings file your Mac's own ssh command reads. When this is on, SparkBox follows its HostName, User, Port, IdentityFile, IdentitiesOnly and ProxyJump lines. A block written for a node wins over that node's row in Settings \u203a Nodes.",
+    "article": "settings-cluster-login#sshconfig",
+    "howto": [
+      "set-up-key-login"
+    ]
+  },
+  "start.login.password-fallback": {
+    "title": "Fall back to the cluster password",
+    "body": "When this is on, SparkBox tries the cluster password after every key has failed. When it's off, a node that accepts no key can't connect. sudo uses the password either way.",
+    "article": "settings-cluster-login#password",
+    "howto": [
+      "set-up-key-login"
+    ]
+  },
+  "start.login.each-node": {
+    "title": "Each node",
+    "body": "How each node logged in, or what SparkBox will try if it hasn't connected yet. The list refreshes every 5 seconds. Logging in with the shared password is a normal choice, not a problem.",
+    "article": "settings-cluster-login#each-node",
+    "howto": [
+      "set-up-key-login"
+    ]
+  },
+  "start.login.password-off": {
+    "title": "Turn password login off",
+    "body": "Once the key works on a node, SparkBox can stop that node accepting SSH passwords. From then on only keys get in over SSH, so keep your key and a backup safe. sudo still uses the password.",
+    "article": "set-up-key-login#turn-password-login-off",
+    "howto": [
+      "set-up-key-login"
+    ]
+  },
+  "start.security.look-only": {
+    "title": "Look-only mode",
+    "body": "SparkBox starts no change on the cluster or this Mac, apart from upkeep of its own files on each node. Work already running by itself on a node keeps going. Turning it on takes effect at once and locks Admin mode, and turning it off asks for Touch ID or your Mac password.",
+    "article": "settings-security#look-only",
+    "howto": [
+      "use-look-only-mode"
+    ]
+  },
+  "start.security.admin": {
+    "title": "Admin mode",
+    "body": "Locked, SparkBox won't make a change you ask for, though work you started can finish. Unlocked, it can change nodes, switches and models. Changes on this Mac also need Touch ID or your Mac password in the last 5 minutes, and a password or key you type asks every time.",
+    "article": "settings-security#admin-mode",
+    "howto": [
+      "unlock-admin-mode"
+    ]
+  },
+  "start.security.lock-after": {
+    "title": "Lock after",
+    "body": "How long Admin mode stays unlocked without a cluster change: 5 or 15 minutes, or 1, 2, 4, 8 or 24 hours. The default is 15 minutes; each change restarts the clock. A shorter choice applies now, a longer one on your next change or unlock.",
+    "article": "settings-security#lock-after",
+    "howto": [
+      "unlock-admin-mode"
+    ]
+  },
+  "start.security.mac-changes": {
+    "title": "Changes on this Mac",
+    "body": "Changes to what's kept on this Mac, such as the node list, the data source and the VPN. Each confirmation with Touch ID or your Mac password allows them for 5 minutes, and nothing extends that. A password or key you type asks every time.",
+    "article": "admin-mode#two-kinds-of-change",
+    "howto": [
+      "unlock-admin-mode"
+    ]
+  },
+  "start.security.asking": {
+    "title": "Asking who you are",
+    "body": "With Live data, every unlock asks for Touch ID or your Mac password. With Demo data, unlocking for the simulated nodes asks nothing, but changes on this Mac still ask.",
+    "article": "admin-mode#two-kinds-of-change",
+    "howto": [
+      "unlock-admin-mode"
+    ]
+  },
+  "start.security.tunnels": {
+    "title": "SSH tunnels",
+    "body": "A page that only listens on a node, such as the DGX Dashboard, opens in your browser through SSH at a private local address. A tunnel closes after 15 minutes without use, when Admin mode locks and when SparkBox quits. Closing the browser tab doesn't close it.",
+    "article": "settings-security#ssh-tunnels",
+    "howto": [
+      "open-the-dgx-dashboard"
+    ]
+  },
+  "start.security.activity-log": {
+    "title": "Activity log",
+    "body": "Every command SparkBox runs on a node is written before it's sent and again when it ends. Changes on this Mac are listed too. Only your user account can read the log, and anything that looks like a secret is replaced with \u2039redacted\u203a.",
+    "article": "settings-security#activity-log",
+    "howto": [
+      "find-what-sparkbox-did"
+    ]
+  },
+  "start.security.retention": {
+    "title": "Keep entries for",
+    "body": "How long the activity log keeps its files: 30 days, 90 days or 1 year. The default is 90 days. Older files are deleted when SparkBox starts and whenever a new file begins.",
+    "article": "settings-security#keep-entries-for",
+    "howto": [
+      "find-what-sparkbox-did"
+    ]
+  },
+  "start.security.diagnostics": {
+    "title": "Export diagnostics",
+    "body": "Saves one text file to Downloads with SparkBox's version, settings, inventory, recent tasks and activity, and its own log. Use it when something isn't working. Passwords and keys are never in it.",
+    "article": "settings-security#diagnostics",
+    "howto": [
+      "collect-diagnostics"
+    ]
+  },
+  "start.fence.about": {
+    "title": "The Fence",
+    "body": "Only the test build uses a fence. Your SparkBox app needs Admin mode and nothing else, whatever you're doing. A fence lets the test build change chosen nodes for a limited time.",
+    "article": "the-fence",
+    "howto": [
+      "open-a-fence",
+      "unlock-admin-mode"
+    ]
+  },
+  "start.fence.state": {
+    "title": "State",
+    "body": "Whether a fence is open now. No fence means the test build can't change anything on the cluster. None of these states affects your own changes in the SparkBox app.",
+    "article": "settings-fence#state"
+  },
+  "start.fence.key": {
+    "title": "Fence keys",
+    "body": "A fence is signed with a key kept in the SparkBox app's Keychain. Key shows that key's short id. Trusted here shows the key this build accepts fences from.",
+    "article": "settings-fence#key-and-trusted-here"
+  },
+  "start.fence.open": {
+    "title": "Open a fence",
+    "body": "Lets the test build make the changes you choose, on the nodes you choose, for up to 8 hours. You don't need this for your own work. Opening one asks for Touch ID or your Mac password and names the fence.",
+    "article": "settings-fence#open-a-fence",
+    "howto": [
+      "open-a-fence"
+    ]
+  },
+  "start.fence.hours": {
+    "title": "Hours",
+    "body": "How long the fence stays open, up to 8 hours. It ends by itself when the time is up, and you can close it sooner.",
+    "article": "settings-fence#hours"
+  },
+  "start.fence.classes": {
+    "title": "Classes of change",
+    "body": "Each class names one kind of change the test build may make, and anything you don't select is refused. With you present lists 15 classes for first runs. Agents alone lists 3 test classes it repeats by itself.",
+    "article": "settings-fence#classes-of-change",
+    "howto": [
+      "open-a-fence"
+    ]
+  },
+  "ai.endpoints.ready": {
+    "title": "Ready",
+    "body": "How many model servers are proven to work, out of all that SparkBox found. Ready means a token came out recently, not only that a port answers. Unknown means a node cannot be checked, and does not prove the model failed.",
+    "article": "endpoints#the-tiles",
+    "howto": [
+      "tell-if-a-model-is-working"
+    ]
+  },
+  "ai.endpoints.generating": {
+    "title": "Generating",
+    "body": "Tokens per second from every Ready endpoint, added up. A token is about three quarters of a word. 0 means nothing is writing right now, which is normal when no one is asking.",
+    "article": "endpoints#the-tiles",
+    "howto": [
+      "tell-if-a-model-is-working"
+    ]
+  },
+  "ai.endpoints.requests": {
+    "title": "Requests",
+    "body": "Requests being answered now across every Ready endpoint, and how many are waiting. A queue that doesn't go down means apps are asking faster than the models can answer.",
+    "article": "endpoints#the-tiles",
+    "howto": [
+      "tell-if-a-model-is-working"
+    ]
+  },
+  "ai.card.generate": {
+    "title": "Generate",
+    "body": "How fast the model writes, in tokens per second, for all requests together. A token is about three quarters of a word. For Ollama it counts only requests SparkBox sent or relayed.",
+    "article": "endpoints#generate",
+    "howto": [
+      "tell-if-a-model-is-working",
+      "benchmark-a-model"
+    ]
+  },
+  "ai.card.prompt": {
+    "title": "Prompt",
+    "body": "How fast the model reads what it's given, in tokens per second. It's above zero only while a request is being read, so 0 between requests is normal.",
+    "article": "endpoints#prompt",
+    "howto": [
+      "tell-if-a-model-is-working"
+    ]
+  },
+  "ai.card.running": {
+    "title": "Running \u00b7 waiting",
+    "body": "Requests being answered now, then requests in the queue. A request waits for a free slot or for room in the KV cache. A queue that doesn't go down means the model is overloaded.",
+    "article": "endpoints#running-waiting",
+    "howto": [
+      "tell-if-a-model-is-working",
+      "benchmark-a-model"
+    ]
+  },
+  "ai.card.kv-cache": {
+    "title": "KV cache",
+    "body": "How much of the reserved cache requests occupy; zero does not mean the GPU reservation was released. Near 100%, new requests wait. Ollama and llama.cpp don't report it, so their cards show a dash.",
+    "article": "endpoints#kv-cache",
+    "howto": [
+      "choose-load-settings"
+    ]
+  },
+  "ai.card.ttft": {
+    "title": "TTFT p50 \u00b7 p95",
+    "body": "Time to first token: how long a request waits before the first word. p50 is the typical wait, and half are faster. p95 is a slow one: 95 of every 100 are faster.",
+    "article": "endpoints#ttft-p50-p95",
+    "howto": [
+      "tell-if-a-model-is-working"
+    ]
+  },
+  "ai.card.itl": {
+    "title": "ITL p50",
+    "body": "Inter-token latency: the time between one token and the next, for the typical request. The line below turns it into the speed one reader sees, in tokens per second.",
+    "article": "endpoints#itl-p50",
+    "howto": [
+      "tell-if-a-model-is-working"
+    ]
+  },
+  "ai.card.history": {
+    "title": "History",
+    "body": "This endpoint's speed, waiting time, queue and KV cache over the last hour to 14 days, with its nodes' GPUs and fabric on the same time line. Use it to see what happened, and when.",
+    "article": "endpoints#history",
+    "howto": [
+      "tell-if-a-model-is-working"
+    ]
+  },
+  "ai.ollama.in-memory": {
+    "title": "In memory",
+    "body": "How much memory the model is using now, and when Ollama will let it go. A dash means it's only on disk. The next request reads it back, so that reply starts slower.",
+    "article": "ollama#model-table",
+    "howto": [
+      "use-ollama"
+    ]
+  },
+  "ai.ollama.pull": {
+    "title": "Pull",
+    "body": "Fetches a model from ollama.com straight to this node, and uses that node's disk. It needs Admin mode. Follow it here or in Tasks, where you can also cancel it.",
+    "article": "ollama#pull",
+    "howto": [
+      "use-ollama",
+      "check-disk-space"
+    ]
+  },
+  "ai.chat.effort": {
+    "title": "Effort",
+    "body": "How hard the model thinks before it answers. Higher effort can give a better answer, but it takes longer and costs more on a cloud model. Default effort uses the provider's own setting.",
+    "article": "chat#effort",
+    "howto": [
+      "chat-with-a-cloud-model"
+    ]
+  },
+  "ai.chat.temperature": {
+    "title": "Temperature",
+    "body": "How much the model varies its wording, from 0 to 2. Low is steady and repeatable, and high is more varied. Leave it empty to use the model's default.",
+    "article": "chat#temperature",
+    "howto": [
+      "chat-with-a-cluster-model"
+    ]
+  },
+  "ai.chat.system-prompt": {
+    "title": "System prompt",
+    "body": "A standing instruction for the model in this conversation, such as how to answer. After the first reply, a change applies from your next message. Earlier replies keep the prompt they had.",
+    "article": "chat#system",
+    "howto": [
+      "chat-with-a-cluster-model",
+      "chat-with-a-cloud-model"
+    ]
+  },
+  "ai.chat.picker": {
+    "title": "Choose a model",
+    "body": "Models are grouped by where they run, with recent ones first. Dimmed models say why they can't be picked; no key means a cloud model needs an API key. After a connection loss, wait for Ready before asking again; the old reply does not resume.",
+    "article": "chat#model-picker",
+    "howto": [
+      "chat-with-a-cluster-model",
+      "chat-with-a-cloud-model",
+      "add-a-cloud-provider"
+    ]
+  },
+  "ai.server.settings": {
+    "title": "Server settings",
+    "body": "The Server listens on this Mac only, at 127.0.0.1, so other computers can't reach it. A request must name 127.0.0.1 or localhost, carry no web origin you haven't allowed, and send JSON. Anything else is refused and logged.",
+    "article": "server#settings",
+    "howto": [
+      "run-sparkbox-as-a-server",
+      "use-a-model-from-another-computer"
+    ]
+  },
+  "ai.server.require-key": {
+    "title": "Require a SparkBox key",
+    "body": "When this is on, every request must carry a SparkBox key. Leave it on. When it's off, any app or script on this Mac can use your cloud API keys and your cluster through the Server.",
+    "article": "server#settings",
+    "howto": [
+      "create-an-api-key"
+    ]
+  },
+  "ai.server.autostart": {
+    "title": "Start with SparkBox",
+    "body": "Starts the Server each time SparkBox opens. Turn it on if your apps depend on it. The Server stays stopped while look-only mode is on.",
+    "article": "server#settings",
+    "howto": [
+      "run-sparkbox-as-a-server"
+    ]
+  },
+  "ai.server.origins": {
+    "title": "Allowed web origins",
+    "body": "Web pages that may call the Server, such as http://localhost:3000. Leave it empty unless a web app you trust needs it. Give the scheme, host and port, one per line.",
+    "article": "server#settings",
+    "howto": [
+      "connect-an-app"
+    ]
+  },
+  "ai.server.test": {
+    "title": "Test the server",
+    "body": "Sends one short question to the Server in three API formats, the way an outside app would. A row can fail because that model doesn't take that API. With a cloud model, the test costs a small amount.",
+    "article": "server#test-the-server",
+    "howto": [
+      "run-sparkbox-as-a-server"
+    ]
+  },
+  "ai.server.aliases": {
+    "title": "Aliases",
+    "body": "Short names apps can use instead of provider/model. If you point an alias at another model, your apps keep working with no change. Saving checks that every alias points at a model a provider offers.",
+    "article": "server#aliases",
+    "howto": [
+      "give-a-model-a-short-name"
+    ]
+  },
+  "ai.server.requests": {
+    "title": "Requests",
+    "body": "The last 300 requests the Server handled: which app, which model, the result, the time and the tokens. It doesn't record what was asked. The list clears when SparkBox quits.",
+    "article": "server#requests",
+    "howto": [
+      "run-sparkbox-as-a-server"
+    ]
+  },
+  "ai.providers.scan": {
+    "title": "Scan cluster",
+    "body": "Looks on each node for an engine on its usual port, from this Mac. You rarely need it, because engines on your cluster show up by themselves. It needs Admin mode, and you must be at home or on the VPN.",
+    "article": "providers#toolbar",
+    "howto": [
+      "load-a-model-on-one-node"
+    ]
+  },
+  "ai.providers.on-cluster": {
+    "title": "On the cluster now",
+    "body": "Engines on your nodes that this Mac can reach. They need no setup. One that stops answering stays listed for 2 minutes, and one you unload goes at once.",
+    "article": "providers#on-the-cluster-now",
+    "howto": [
+      "chat-with-a-cluster-model"
+    ]
+  },
+  "ai.providers.enabled": {
+    "title": "Enabled",
+    "body": "Turn this off to hide a provider's models from Chat and the Server. Its key and settings stay, so you can turn it back on at any time.",
+    "article": "providers#a-providers-card",
+    "howto": [
+      "add-a-cloud-provider"
+    ]
+  },
+  "ai.providers.api-key": {
+    "title": "API key",
+    "body": "The secret that lets SparkBox use your account with this company. SparkBox keeps it in the macOS Keychain, and apps never see it. Using it costs money on your account.",
+    "article": "providers#api-key",
+    "howto": [
+      "add-a-cloud-provider"
+    ]
+  },
+  "ai.providers.default-model": {
+    "title": "Default model",
+    "body": "The model Chat starts with when it picks this provider. A request to the Server must name its own model. You can choose any model that's turned on in the list below.",
+    "article": "providers#a-providers-card",
+    "howto": [
+      "add-a-cloud-provider"
+    ]
+  },
+  "ai.providers.chat-only": {
+    "title": "Chat models only",
+    "body": "Hides models that can't hold a conversation, such as embedding, audio and image models. Turn it off if an app needs one of them through the Server.",
+    "article": "providers#the-model-list",
+    "howto": [
+      "add-a-cloud-provider"
+    ]
+  },
+  "ai.providers.plain-http": {
+    "title": "Allow plain HTTP on my network",
+    "body": "Lets SparkBox use plain http to a private address, such as 192.168.x, on your home network. Your key and prompts travel unencrypted, so turn it on only for a computer you trust.",
+    "article": "providers#add-another-server",
+    "howto": [
+      "add-a-cloud-provider"
+    ]
+  },
+  "desk.terminal.broadcast": {
+    "title": "Broadcast",
+    "body": "Sends what you type to every selected shell tab at once. Log tabs and locked shells never receive it. Check which shells are selected first, because a command can't be recalled once it runs.",
+    "article": "terminal#broadcast",
+    "howto": [
+      "open-a-terminal"
+    ]
+  },
+  "desk.terminal.locked": {
+    "title": "Why this shell is locked",
+    "body": "The session is still open, and anything running keeps running, but the shell isn't taking keystrokes. Click Authenticate\u2026 to type again. What you type while it's locked isn't sent.",
+    "article": "terminal#locked-shells",
+    "howto": [
+      "open-a-terminal",
+      "unlock-admin-mode"
+    ]
+  },
+  "desk.terminal.idle": {
+    "title": "Lock idle shells after",
+    "body": "A shell with nothing typed for this long stops taking keystrokes. With Live data it also locks whenever Admin mode locks, and after 8 hours at most. A locked tab keeps its session: authenticate to type again.",
+    "article": "settings-terminal#shells",
+    "howto": [
+      "open-a-terminal"
+    ]
+  },
+  "desk.terminal.look": {
+    "title": "The terminal's look",
+    "body": "These settings change how the terminal looks. They apply to every open tab right away.",
+    "article": "settings-terminal#look"
+  },
+  "desk.terminal.scrollback": {
+    "title": "Scrollback",
+    "body": "How many past lines each tab keeps, so that you can scroll back and search them with \u2318F. More lines use more of this Mac's memory.",
+    "article": "settings-terminal#cursor-and-scrollback"
+  },
+  "desk.terminal.copy-on-select": {
+    "title": "Copy on select",
+    "body": "Selecting text in a terminal copies it at once, so you don't need \u2318C.",
+    "article": "settings-terminal#cursor-and-scrollback"
+  },
+  "desk.terminal.option": {
+    "title": "Option key as Meta",
+    "body": "Meta sends Esc plus the key, for shell shortcuts such as \u2325B and \u2325F, which move a word back and forward. Keep one Option key Normal if your keyboard types @, |, { } or [ ] with Option.",
+    "article": "settings-terminal#keyboard"
+  },
+  "desk.files.hidden": {
+    "title": "Hidden files",
+    "body": "Shows files and folders whose names start with a dot, such as .bashrc. Most of these are settings, so change them with care.",
+    "article": "files#toolbar"
+  },
+  "desk.files.transfers": {
+    "title": "Transfers",
+    "body": "Shows what's copying, what's waiting and what has finished. A copy keeps going if you close Files. Stop removes what had arrived and changes nothing at the destination.",
+    "article": "files#transfers",
+    "howto": [
+      "copy-files"
+    ]
+  },
+  "desk.files.conflict": {
+    "title": "Names already taken",
+    "body": "Something with this name is already there, so choose what happens to each item. Keep both is the safe choice. Replace, and Merge for files with the same name, remove the old copy once the new one has arrived, and it doesn't go to the Trash.",
+    "article": "copy-files#choose-what-happens-to-a-name-clash",
+    "howto": [
+      "copy-files"
+    ]
+  },
+  "desk.editor.versions": {
+    "title": "Going back",
+    "body": "Revert throws away your unsaved changes and reads the file again. To go further back, use Previous versions: SparkBox keeps the last five versions each time you save here.",
+    "article": "editor#previous-versions",
+    "howto": [
+      "delete-and-restore-files"
+    ]
+  },
+  "desk.editor.read-only": {
+    "title": "Why you can't type here",
+    "body": "While Admin mode is locked you can read this file but not change it. Click Unlock\u2026 to edit it. In look-only mode nothing can be edited.",
+    "article": "editor#read-only",
+    "howto": [
+      "edit-a-file",
+      "unlock-admin-mode"
+    ]
+  },
+  "desk.editor.review": {
+    "title": "Review changes",
+    "body": "Lines marked \u2212 are on disk now, and lines marked + are your version. You see this before a save with sudo, and before saving YAML or JSON that doesn't parse.",
+    "article": "editor#review-changes",
+    "howto": [
+      "edit-a-file"
+    ]
+  },
+  "desk.general.menu-bar": {
+    "title": "Keep running in the menu bar",
+    "body": "On: closing the window keeps SparkBox running in the menu bar, so monitoring, the Server and the VPN keep going. Off: closing the window quits SparkBox.",
+    "article": "settings-general#menu-bar"
+  },
+  "desk.general.login": {
+    "title": "Start at login",
+    "body": "SparkBox starts when you log in to this Mac, with no window, in the menu bar. Changing this asks for Touch ID or your Mac password.",
+    "article": "settings-general#menu-bar"
+  },
+  "desk.general.upcoming": {
+    "title": "Show upcoming features",
+    "body": "Adds a Coming soon group to the sidebar. It lists planned engines that aren't built yet, each with what it will do.",
+    "article": "settings-general#features"
+  },
+  "desk.appearance.theme": {
+    "title": "Theme",
+    "body": "System follows macOS, choosing Light or Dark. Black is true black with brighter chart and metric colors, for an OLED screen or a dark room.",
+    "article": "settings-appearance#theme-and-text"
+  },
+  "desk.appearance.motion": {
+    "title": "Reduce motion",
+    "body": "On stops pulsing, spinning and sliding. System follows macOS: System Settings \u203a Accessibility \u203a Display.",
+    "article": "settings-appearance#accessibility"
+  },
+  "desk.appearance.contrast": {
+    "title": "Increase contrast",
+    "body": "On gives darker lines, a solid selection and a thicker focus ring. System follows macOS: System Settings \u203a Accessibility \u203a Display.",
+    "article": "settings-appearance#accessibility"
+  },
+  "desk.scenarios.about": {
+    "title": "Demo scenarios",
+    "body": "A scenario makes the simulated cluster act out a problem, then recover, so that you can see how SparkBox reports trouble. Only the demo changes, and the VPN stays real. In look-only mode, this page doesn't respond.",
+    "article": "settings-demo-scenarios#scenario",
+    "howto": [
+      "tour-the-demo"
+    ]
+  },
+  "ops.updates.continue1025": {
+    "title": "Continue cell2 to kernel 1025",
+    "body": "Review cell2's saved update after healthy 1024 startup, then choose Update cell2 with proposed updates\u2026 above the package list. Confirm the exact versions with Admin mode and the node's name. The original checkpoint and recovery kernels stay recorded; restart separately and verify every check.",
+    "article": "updates#continue-cell2-to-kernel-1025",
+    "howto": [
+      "install-updates"
+    ]
+  },
+  "ops.updates.system": {
+    "title": "Protected system updates",
+    "body": "Review exact updates for one idle node; startup and recovery settings must pass first. The named Update button requires Admin mode and typing the node name. Restart separately and verify every check before another node; completed update history stays available.",
+    "article": "updates#protected-system-updates",
+    "howto": [
+      "install-updates"
+    ]
+  },
+  "ops.howto.library": {
+    "title": "Playbook library",
+    "body": "Read NVIDIA guides offline, follow plain-language steps and keep your own notes. Other hardware and older guides stay marked as references. Source checks run only when you request them.",
+    "article": "how-to-library",
+    "howto": [
+      "use-and-update-a-playbook"
+    ]
+  },
+  "ops.howto.actions": {
+    "title": "SparkBox actions",
+    "body": "Check selected nodes or prepare a reviewed image through SparkBox\u2019s existing controls. Image preparation downloads software without launching a workload. Text from NVIDIA or AI cannot add commands to these controls.",
+    "article": "how-to-library#sparkbox-actions",
+    "howto": [
+      "use-and-update-a-playbook",
+      "load-a-model-on-one-node"
+    ]
+  },
+  "ops.howto.ai": {
+    "title": "Reviewed AI drafts",
+    "body": "Choose the provider and the exact sections to send. The reply is an editable draft. Compare it with your saved text before saving a new local edition; previous editions stay available.",
+    "article": "how-to-library#my-edition",
+    "howto": [
+      "use-and-update-a-playbook"
+    ]
+  }
+}

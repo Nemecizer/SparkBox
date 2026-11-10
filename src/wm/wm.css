@@ -1,0 +1,175 @@
+/* Window chrome: frames, title bars, controls, resize edges, snapping and the dock row.
+   Overrides the older .win rules in styles.css; everything is scoped under .desktop so it wins. */
+
+.desktop {
+  position: relative; overflow: hidden; background: var(--desk);
+  --wc-idle: color-mix(in srgb, var(--text) 20%, var(--chrome));
+}
+
+/* ---- Frame */
+
+.desktop .win {
+  position: absolute; display: flex; flex-direction: column;
+  min-width: 0; min-height: 0;
+  background: var(--surface);
+  border: 0; border-radius: var(--r-lg, 8px);
+  box-shadow: 0 0 0 1px var(--border), var(--shadow-inactive, 0 3px 12px rgba(0, 0, 0, 0.12));
+  overflow: hidden; outline: none;
+  right: auto; bottom: auto;
+}
+.desktop .win.active {
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 55%, transparent),
+    var(--shadow-active, 0 14px 36px rgba(0, 0, 0, 0.24), 0 2px 6px rgba(0, 0, 0, 0.12));
+}
+.desktop .win.max { border-radius: 0; }
+.desktop .win.snapped { border-radius: var(--r-md, 6px); }
+
+/* ---- Title bar: one header band with the window's toolbar */
+
+.desktop .win-title {
+  flex: none; display: flex; align-items: center; gap: 8px;
+  height: 30px; padding: 0 10px;
+  background: var(--chrome); color: var(--title-text-inactive, var(--muted));
+  border-bottom: 1px solid var(--hairline);
+  font-size: var(--fs-base, 12.5px); font-weight: var(--fw-semibold, 600);
+  cursor: default; user-select: none; -webkit-user-select: none;
+}
+.desktop .win.active .win-title { color: var(--text); }
+.desktop .win-title-label { flex: 1; min-width: 0; display: flex; align-items: center; gap: 6px; }
+.desktop .win-title-icon { flex: none; opacity: 0.75; }
+.desktop .win.active .win-title-icon { opacity: 1; color: var(--text-2); }
+.desktop .win-title-text { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.desktop .controls-winbox .win-title { padding-right: 4px; }
+
+/* A toolbar or tab strip right under the title bar joins it: no line between them. */
+.desktop .win:has(> .win-body > :is(.toolbar, .tabs, .term-tabs):first-child) .win-title,
+.desktop .win:has(> .win-body > :first-child > :is(.toolbar, .tabs, .term-tabs):first-child) .win-title {
+  border-bottom-color: transparent;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .desktop .win-title { box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07); }
+}
+:root[data-theme="dark"] .desktop .win-title, :root[data-theme="black"] .desktop .win-title { box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07); }
+
+/* ---- Controls: macOS circles (default) */
+
+.desktop .win-controls { display: flex; align-items: center; flex: none; }
+.desktop .win-controls.mac { gap: 7px; margin-right: 4px; }
+.desktop .win-controls.mac .wc {
+  display: grid; place-items: center;
+  width: 11px; height: 11px; padding: 0;
+  border: 0; border-radius: 50%;
+  background: var(--wc-idle); color: transparent;
+  box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.14);
+  cursor: default;
+}
+.desktop .win-controls.mac .wc svg { display: block; }
+.desktop .win-controls.mac:is(:hover, :focus-within) .wc-close { background: #ff5f57; color: rgba(80, 0, 0, 0.8); }
+.desktop .win-controls.mac:is(:hover, :focus-within) .wc-min { background: #febc2e; color: rgba(95, 55, 0, 0.8); }
+.desktop .win-controls.mac:is(:hover, :focus-within) .wc-zoom { background: #28c840; color: rgba(0, 72, 0, 0.8); }
+.desktop .win-controls.mac .wc:active { filter: brightness(0.85); }
+.desktop .win-controls.mac .wc:focus-visible { outline: 2px solid var(--focus-ring, var(--accent)); outline-offset: 1px; }
+
+/* ---- Controls: WinBox buttons on the right */
+
+.desktop .win-controls.winbox { gap: 1px; }
+.desktop .win-controls.winbox button {
+  display: grid; place-items: center;
+  width: 28px; height: 22px; padding: 0;
+  border: 0; border-radius: var(--r-sm, 4px);
+  background: transparent; color: var(--text-2); cursor: default;
+}
+.desktop .win-controls.winbox button:hover { background: var(--hover); color: var(--text); }
+.desktop .win-controls.winbox button.close:hover { background: var(--critical); color: #fff; }
+
+/* ---- Body */
+
+.desktop .win-body { position: relative; flex: 1; min-height: 0; overflow: auto; display: flex; flex-direction: column; }
+
+/* ---- Resize edges and corners (inside the frame, which clips) */
+
+.desktop .rz { position: absolute; z-index: 3; }
+.desktop .rz-n { top: 0; left: 10px; right: 10px; height: 4px; cursor: ns-resize; }
+.desktop .rz-s { bottom: 0; left: 10px; right: 10px; height: 5px; cursor: ns-resize; }
+.desktop .rz-e { right: 0; top: 10px; bottom: 10px; width: 5px; cursor: ew-resize; }
+.desktop .rz-w { left: 0; top: 10px; bottom: 10px; width: 5px; cursor: ew-resize; }
+.desktop .rz-nw { top: 0; left: 0; width: 10px; height: 6px; cursor: nwse-resize; }
+.desktop .rz-ne { top: 0; right: 0; width: 10px; height: 6px; cursor: nesw-resize; }
+.desktop .rz-sw { bottom: 0; left: 0; width: 12px; height: 12px; cursor: nesw-resize; }
+.desktop .rz-se { bottom: 0; right: 0; width: 12px; height: 12px; cursor: nwse-resize; }
+
+body.resizing-n *, body.resizing-s * { cursor: ns-resize !important; }
+body.resizing-e *, body.resizing-w * { cursor: ew-resize !important; }
+body.resizing-ne *, body.resizing-sw * { cursor: nesw-resize !important; }
+body.resizing-nw *, body.resizing-se * { cursor: nwse-resize !important; }
+body.dragging .desktop .win-body { pointer-events: none; }
+
+/* ---- Snapping preview */
+
+.desktop .snap-preview {
+  position: absolute; z-index: 5001; pointer-events: none;
+  border-radius: var(--r-xl, 12px);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 55%, transparent);
+  box-shadow: inset 0 0 0 4px color-mix(in srgb, var(--accent) 10%, transparent);
+}
+
+/* ---- Dock row of minimized windows */
+
+.desktop .dock {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 30px;
+  z-index: var(--z-dock, 10000);
+  display: flex; align-items: center; gap: 6px; padding: 0 8px;
+  background: color-mix(in srgb, var(--chrome) 92%, transparent);
+  border-top: 1px solid var(--hairline);
+  overflow-x: auto; overflow-y: hidden;
+}
+.desktop .dock-chip {
+  display: flex; align-items: center; flex: none;
+  height: 22px; max-width: 240px;
+  border: 1px solid var(--hairline); border-radius: var(--r-md, 6px);
+  background: var(--surface);
+}
+.desktop .dock-chip:hover { border-color: var(--border); }
+.desktop .dock-chip-main {
+  display: flex; align-items: center; gap: 6px; min-width: 0; height: 100%;
+  padding: 0 9px; border: 0; border-radius: inherit; background: transparent; cursor: default;
+  font-size: var(--fs-sm, 11px);
+}
+.desktop .dock-chip-main svg { flex: none; color: var(--text-2); }
+.desktop .dock-chip-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.desktop .dock-chip-close {
+  display: none; place-items: center; flex: none;
+  width: 16px; height: 16px; margin-right: 3px; padding: 0;
+  border: 0; border-radius: 50%; background: transparent; color: var(--text-2); cursor: default;
+}
+.desktop .dock-chip:is(:hover, :focus-within) .dock-chip-close { display: grid; }
+.desktop .dock-chip-close:hover { background: var(--hover); color: var(--text); }
+
+/* ---- Motion (never under reduced motion) */
+
+@media (prefers-reduced-motion: no-preference) {
+  :root:not([data-motion="reduce"]) .desktop .win { animation: sb-win-in 140ms var(--ease, cubic-bezier(0.2, 0.8, 0.2, 1)); }
+  :root:not([data-motion="reduce"]) .desktop.arranging .win {
+    transition: left var(--dur-2, 180ms) var(--ease, cubic-bezier(0.2, 0.8, 0.2, 1)),
+      top var(--dur-2, 180ms) var(--ease, cubic-bezier(0.2, 0.8, 0.2, 1)),
+      width var(--dur-2, 180ms) var(--ease, cubic-bezier(0.2, 0.8, 0.2, 1)),
+      height var(--dur-2, 180ms) var(--ease, cubic-bezier(0.2, 0.8, 0.2, 1)),
+      transform var(--dur-3, 260ms) var(--ease, cubic-bezier(0.2, 0.8, 0.2, 1));
+  }
+  :root:not([data-motion="reduce"]) .desktop .win.minimizing {
+    transition: transform 160ms cubic-bezier(0.4, 0, 1, 1), opacity 160ms ease-in;
+    transform: scale(0.12); opacity: 0; pointer-events: none;
+  }
+  :root:not([data-motion="reduce"]) .desktop .snap-preview { animation: sb-fade-in 90ms ease-out; }
+}
+@keyframes sb-win-in { from { opacity: 0; transform: scale(0.98); } }
+@keyframes sb-fade-in { from { opacity: 0; } }
+
+/* ---- View › Toggle Sidebar */
+
+/* The sidebar, 8 px wider than round 1 so names like "gx10-0000  GPU 100%" fit. */
+.app .main { grid-template-columns: 220px minmax(0, 1fr); }
+.app[data-sidebar="hidden"] .sidebar { display: none; }
+.app[data-sidebar="hidden"] .main { grid-template-columns: minmax(0, 1fr); }

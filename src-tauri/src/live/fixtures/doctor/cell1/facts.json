@@ -1,0 +1,93 @@
+{
+ "hostname": "cell1-example",
+ "osrelease": "7.0.0-1019-nvidia",
+ "uptimeS": 311751,
+ "bootId": "bb600f35-a1aa-4286-a65e-6b2f30f33b9c",
+ "bios": "5.36_1.8.0",
+ "cx7Fw": "28.50.1002",
+ "docker": "29.6.2",
+ "nets": {
+  "enP2p1s0f0np0": {
+   "mtu": 1500,
+   "carrier": 2,
+   "rxDrops": 0,
+   "txDrops": 0,
+   "rxErrors": 0,
+   "txErrors": 0
+  },
+  "enP2p1s0f1np1": {
+   "mtu": 9000,
+   "carrier": 9,
+   "rxDrops": 0,
+   "txDrops": 7,
+   "rxErrors": 0,
+   "txErrors": 0
+  },
+  "enP7s7": {
+   "mtu": 1500,
+   "carrier": 2,
+   "rxDrops": 0,
+   "txDrops": 0,
+   "rxErrors": 0,
+   "txErrors": 0
+  },
+  "enp1s0f0np0": {
+   "mtu": 1500,
+   "carrier": 2,
+   "rxDrops": 0,
+   "txDrops": 0,
+   "rxErrors": 0,
+   "txErrors": 0
+  },
+  "enp1s0f1np1": {
+   "mtu": 9000,
+   "carrier": 9,
+   "rxDrops": 0,
+   "txDrops": 6,
+   "rxErrors": 0,
+   "txErrors": 0
+  },
+  "wlP9s9": {
+   "mtu": 1500,
+   "carrier": 0,
+   "rxDrops": 0,
+   "txDrops": 0,
+   "rxErrors": 0,
+   "txErrors": 0
+  }
+ },
+ "containers": [
+  {
+   "name": "glm53",
+   "id": "7da4d848a41a",
+   "image": "vllm/vllm-openai:glm53-flash-arm64-cu130",
+   "state": "exited",
+   "exitCode": 1,
+   "startedAt": 1793053226,
+   "finishedAt": 1793053280,
+   "command": "/bin/bash /glm53/inner.sh 0",
+   "restartPolicy": "no",
+   "labels": {
+    "ai.vllm.build.commit": "385dce36bcee42309924a5ece951a96db3dce7f2",
+    "ai.vllm.build.pipeline": "019d130e-464e-4ff7-b84b-492992c0c06b",
+    "ai.vllm.build.url": "https://buildkite.com/vllm/release-v2/builds/6303",
+    "ai.vllm.image.tag": "vllm/vllm-openai:nightly-385dce36bcee42309924a5ece951a96db3dce7f2",
+    "maintainer": "NVIDIA CORPORATION <cudatools@nvidia.com>",
+    "org.opencontainers.image.ref.name": "ubuntu",
+    "org.opencontainers.image.revision": "385dce36bcee42309924a5ece951a96db3dce7f2",
+    "org.opencontainers.image.source": "https://github.com/vllm-project/vllm",
+    "org.opencontainers.image.url": "https://buildkite.com/vllm/release-v2/builds/6303",
+    "org.opencontainers.image.version": "vllm/vllm-openai:nightly-385dce36bcee42309924a5ece951a96db3dce7f2"
+   },
+   "fullId": "7da4d848a41aefe02d3543e6c8cc46326426cadaa673f0c6cd707e95b0ceb135"
+  }
+ ],
+ "gpu": {
+  "utilPct": 0,
+  "tempC": 45,
+  "powerW": 4.12,
+  "smClockMhz": 208,
+  "clockMaxMhz": 3003,
+  "pstate": "P8"
+ }
+}

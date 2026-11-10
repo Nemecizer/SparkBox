@@ -1,0 +1,2738 @@
+{
+ "comment": [
+  "The notification gate (plan §2.1), shared by notify.rs (Mac) and sparkbox_agent.py (agent).",
+  "Times: t is in seconds (unix seconds when quiet hours are set); feed the gate t*1000 ms.",
+  "Runner: group events by t, in order. For each t: if a 'tick' event is there, tick(t) first;",
+  "then decide() the other events in file order; then flush(t + 10 s) (the group window).",
+  "'outcomes' are the outcomes of that t's alert events in order (ack, tick, silence and",
+  "maintenance events have none); 'messages' are what the flush sent, in order. A message's",
+  "'lines' are checked only where the expectation lists them.",
+  "silence {rule|null, entity, reason}: from t on, events on that entity (and rule, unless null)",
+  "are marked silenced. maintenance {node, until, reason}: events whose node is that node are",
+  "marked planned while t < until. ack {rule, entity}: no more repeats for that key.",
+  "Message titles: a single alert's message is its event title; a repeat is 'Still firing: ' +",
+  "the title it was raised with ('Still flapping: ' once it has flapped); coalesced alerts are listed in their incident's next message",
+  "as 'Also: ' + title; an incident with several sends in one window is one message titled by",
+  "its worst item, the others as lines; more than 2 messages in one flush become one grouped",
+  "message '<n> alerts, <c> critical' (', <r> cleared' when resolutions are in it; '<n> alerts'",
+  "with no critical) whose lines are every critical title, then warnings, then resolutions, at",
+  "most 6, then 'and <k> more'.",
+  "Flap damping (G16): the resolve of anything paged, except a node back online (G16b), waits until it has stayed clear for flapS (10 min): its outcome",
+  "is held, and the first tick at or after that time sends it (its title, its severity; in quiet hours only when",
+  "what was paged was critical). A raise of the same K before then, at a severity no higher than what was paged,",
+  "is flapping: not sent, and the earlier clear is never sent. A raise above what was paged is an escalation and is",
+  "sent. A resolve still waiting when K is raised after flapS is dropped, and that raise is a new page. A tick sends",
+  "Back online (G16b): the resolve of a paged node-offline or peer-unreachable is sent at once, never held (quiet hours",
+  "included, since what was paged was critical). Raised again within flapS of a return that was told, at no more than",
+  "what was paged, it's paged again; the second such raise as '<title> · flapping'. After that, a raise within flapS",
+  "of its last return is flapping (not sent) and its return is not-paged, until it stays away flapS: then the first",
+  "tick at or after that sends 'Still flapping: <title>' (its severity; a warning not in quiet hours or with critical",
+  "only), and its return is sent again. A repeat also counts as telling it's away. A raise more than flapS after its",
+  "last return is a new page; a tick sends nothing for a return.",
+  "due resolves before repeats.",
+  "Quiet-hours digest (G15): a tick notes whether quiet hours are on. At the first tick after they end, the warnings",
+  "held for quiet hours that are still firing (not silenced, not planned) go out as one message 'While quiet: <n>",
+  "warning(s) still firing' (warn), its lines their titles (at most 6, then 'and <k> more'); they count as paged",
+  "from then on. Not with critical only. The digest comes after the flush's other messages.",
+  "paged {incident, severity, title, by} (G17): another sender (a node's agent) paged that incident at t. Here it",
+  "counts as paged: a warning in it within 30 min is coalesced and listed in this sender's next message about it."
+ ],
+ "groupWaitS": 10,
+ "duplicateS": 300,
+ "coalesceS": 1800,
+ "flapS": 600,
+ "cases": [
+  {
+   "name": "G1 operator OOM path",
+   "settings": {
+    "criticalOnly": false,
+    "resolved": true,
+    "repeatMinutes": 60,
+    "quiet": null
+   },
+   "events": [
+    {
+     "t": 0,
+     "kind": "raised",
+     "rule": "mem-high",
+     "entity": "node:cell1",
+     "node": "cell1",
+     "severity": "warn",
+     "incident": "node:cell1",
+     "title": "cell1 memory 91%"
+    },
+    {
+     "t": 60,
+     "kind": "escalated",
+     "rule": "mem-high",
+     "entity": "node:cell1",
+     "node": "cell1",
+     "severity": "crit",
+     "incident": "node:cell1",
+     "title": "cell1 memory 97%"
+    },
+    {
+     "t": 90,
+     "kind": "raised",
+     "rule": "kernel-oom",
+     "entity": "node:cell1",
+     "node": "cell1",
+     "severity": "crit",
+     "incident": "node:cell1",
+     "title": "cell1 killed a process: out of memory"
+    },
+    {
+     "t": 120,
+     "kind": "raised",
+     "rule": "kernel-hung",
+     "entity": "node:cell1",
+     "node": "cell1",
+     "severity": "crit",
+     "incident": "node:cell1",
+     "title": "cell1 has a hung task"
+    }
+   ],
+   "expect": [
+    {
+     "t": 0,
+     "outcomes": [
+      {
+       "rule": "mem-high",
+       "entity": "node:cell1",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "cell1 memory 91%",
+       "severity": "warn"
+      }
+     ]
+    },
+    {
+     "t": 60,
+     "outcomes": [
+      {
+       "rule": "mem-high",
+       "entity": "node:cell1",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "cell1 memory 97%",
+       "severity": "crit"
+      }
+     ]
+    },
+    {
+     "t": 90,
+     "outcomes": [
+      {
+       "rule": "kernel-oom",
+       "entity": "node:cell1",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "cell1 killed a process: out of memory",
+       "severity": "crit"
+      }
+     ]
+    },
+    {
+     "t": 120,
+     "outcomes": [
+      {
+       "rule": "kernel-hung",
+       "entity": "node:cell1",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "cell1 has a hung task",
+       "severity": "crit"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "G2 re-fire after resolve",
+   "settings": {
+    "criticalOnly": false,
+    "resolved": true,
+    "repeatMinutes": 60,
+    "quiet": null
+   },
+   "events": [
+    {
+     "t": 0,
+     "kind": "raised",
+     "rule": "node-offline",
+     "entity": "node:cell3",
+     "node": "cell3",
+     "severity": "crit",
+     "incident": "node:cell3",
+     "title": "cell3 offline"
+    },
+    {
+     "t": 60,
+     "kind": "resolved",
+     "rule": "node-offline",
+     "entity": "node:cell3",
+     "node": "cell3",
+     "severity": "crit",
+     "incident": "node:cell3",
+     "title": "cell3 is back online"
+    },
+    {
+     "t": 660,
+     "kind": "tick"
+    },
+    {
+     "t": 780,
+     "kind": "raised",
+     "rule": "node-offline",
+     "entity": "node:cell3",
+     "node": "cell3",
+     "severity": "crit",
+     "incident": "node:cell3",
+     "title": "cell3 offline"
+    }
+   ],
+   "expect": [
+    {
+     "t": 0,
+     "outcomes": [
+      {
+       "rule": "node-offline",
+       "entity": "node:cell3",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "cell3 offline",
+       "severity": "crit"
+      }
+     ]
+    },
+    {
+     "t": 60,
+     "outcomes": [
+      {
+       "rule": "node-offline",
+       "entity": "node:cell3",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "cell3 is back online",
+       "severity": "crit"
+      }
+     ]
+    },
+    {
+     "t": 660,
+     "outcomes": [],
+     "messages": []
+    },
+    {
+     "t": 780,
+     "outcomes": [
+      {
+       "rule": "node-offline",
+       "entity": "node:cell3",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "cell3 offline",
+       "severity": "crit"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "G3 another rule on the same node",
+   "settings": {
+    "criticalOnly": false,
+    "resolved": true,
+    "repeatMinutes": 60,
+    "quiet": null
+   },
+   "events": [
+    {
+     "t": 0,
+     "kind": "raised",
+     "rule": "mem-high",
+     "entity": "node:cell3",
+     "node": "cell3",
+     "severity": "warn",
+     "incident": "node:cell3",
+     "title": "cell3 memory 91%"
+    },
+    {
+     "t": 120,
+     "kind": "raised",
+     "rule": "node-offline",
+     "entity": "node:cell3",
+     "node": "cell3",
+     "severity": "crit",
+     "incident": "node:cell3",
+     "title": "cell3 offline"
+    },
+    {
+     "t": 200,
+     "kind": "resolved",
+     "rule": "node-offline",
+     "entity": "node:cell3",
+     "node": "cell3",
+     "severity": "crit",
+     "incident": "node:cell3",
+     "title": "cell3 is back online"
+    },
+    {
+     "t": 800,
+     "kind": "tick"
+    }
+   ],
+   "expect": [
+    {
+     "t": 0,
+     "outcomes": [
+      {
+       "rule": "mem-high",
+       "entity": "node:cell3",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "cell3 memory 91%",
+       "severity": "warn"
+      }
+     ]
+    },
+    {
+     "t": 120,
+     "outcomes": [
+      {
+       "rule": "node-offline",
+       "entity": "node:cell3",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "cell3 offline",
+       "severity": "crit"
+      }
+     ]
+    },
+    {
+     "t": 200,
+     "outcomes": [
+      {
+       "rule": "node-offline",
+       "entity": "node:cell3",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "cell3 is back online",
+       "severity": "crit"
+      }
+     ]
+    },
+    {
+     "t": 800,
+     "outcomes": [],
+     "messages": []
+    }
+   ]
+  },
+  {
+   "name": "G4 restart re-raise is a duplicate",
+   "settings": {
+    "criticalOnly": false,
+    "resolved": true,
+    "repeatMinutes": 60,
+    "quiet": null
+   },
+   "events": [
+    {
+     "t": 0,
+     "kind": "raised",
+     "rule": "disk-full",
+     "entity": "disk:gx10-0000:/",
+     "node": "gx10-0000",
+     "severity": "warn",
+     "incident": "disk:gx10-0000:/",
+     "title": "gx10-0000 disk 86%"
+    },
+    {
+     "t": 30,
+     "kind": "raised",
+     "rule": "disk-full",
+     "entity": "disk:gx10-0000:/",
+     "node": "gx10-0000",
+     "severity": "warn",
+     "incident": "disk:gx10-0000:/",
+     "title": "gx10-0000 disk 86%"
+    }
+   ],
+   "expect": [
+    {
+     "t": 0,
+     "outcomes": [
+      {
+       "rule": "disk-full",
+       "entity": "disk:gx10-0000:/",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "gx10-0000 disk 86%",
+       "severity": "warn"
+      }
+     ]
+    },
+    {
+     "t": 30,
+     "outcomes": [
+      {
+       "rule": "disk-full",
+       "entity": "disk:gx10-0000:/",
+       "outcome": "duplicate"
+      }
+     ],
+     "messages": []
+    }
+   ]
+  },
+  {
+   "name": "G5 still firing, then acknowledged",
+   "settings": {
+    "criticalOnly": false,
+    "resolved": true,
+    "repeatMinutes": 60,
+    "quiet": null
+   },
+   "events": [
+    {
+     "t": 0,
+     "kind": "raised",
+     "rule": "node-offline",
+     "entity": "node:cell3",
+     "node": "cell3",
+     "severity": "crit",
+     "incident": "node:cell3",
+     "title": "cell3 offline"
+    },
+    {
+     "t": 3600,
+     "kind": "tick"
+    },
+    {
+     "t": 3700,
+     "kind": "ack",
+     "rule": "node-offline",
+     "entity": "node:cell3",
+     "node": "cell3"
+    },
+    {
+     "t": 7200,
+     "kind": "tick"
+    }
+   ],
+   "expect": [
+    {
+     "t": 0,
+     "outcomes": [
+      {
+       "rule": "node-offline",
+       "entity": "node:cell3",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "cell3 offline",
+       "severity": "crit"
+      }
+     ]
+    },
+    {
+     "t": 3600,
+     "outcomes": [],
+     "messages": [
+      {
+       "title": "Still firing: cell3 offline",
+       "severity": "crit"
+      }
+     ]
+    },
+    {
+     "t": 3700,
+     "outcomes": [],
+     "messages": []
+    },
+    {
+     "t": 7200,
+     "outcomes": [],
+     "messages": []
+    }
+   ]
+  },
+  {
+   "name": "G6 one optic, one incident",
+   "settings": {
+    "criticalOnly": false,
+    "resolved": true,
+    "repeatMinutes": 60,
+    "quiet": null
+   },
+   "events": [
+    {
+     "t": 0,
+     "kind": "raised",
+     "rule": "roce-iface",
+     "entity": "net:cell2/enP2p1s0f1np1",
+     "node": "cell2",
+     "severity": "warn",
+     "incident": "link:cell2/enP2p1s0f1np1",
+     "title": "cell2 half 2: RoCE retransmitting · check the optic"
+    },
+    {
+     "t": 60,
+     "kind": "raised",
+     "rule": "port-errors",
+     "entity": "port:crs804/qsfp28-2-1",
+     "node": "cell2",
+     "severity": "warn",
+     "incident": "link:cell2/enP2p1s0f1np1",
+     "title": "CRS804 qsfp28-2-1 errors rising"
+    },
+    {
+     "t": 70,
+     "kind": "escalated",
+     "rule": "roce-iface",
+     "entity": "net:cell2/enP2p1s0f1np1",
+     "node": "cell2",
+     "severity": "crit",
+     "incident": "link:cell2/enP2p1s0f1np1",
+     "title": "cell2 half 2: RoCE losing packets · check the optic"
+    }
+   ],
+   "expect": [
+    {
+     "t": 0,
+     "outcomes": [
+      {
+       "rule": "roce-iface",
+       "entity": "net:cell2/enP2p1s0f1np1",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "cell2 half 2: RoCE retransmitting · check the optic",
+       "severity": "warn"
+      }
+     ]
+    },
+    {
+     "t": 60,
+     "outcomes": [
+      {
+       "rule": "port-errors",
+       "entity": "port:crs804/qsfp28-2-1",
+       "outcome": "coalesced"
+      }
+     ],
+     "messages": []
+    },
+    {
+     "t": 70,
+     "outcomes": [
+      {
+       "rule": "roce-iface",
+       "entity": "net:cell2/enP2p1s0f1np1",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "cell2 half 2: RoCE losing packets · check the optic",
+       "severity": "crit",
+       "lines": [
+        "Also: CRS804 qsfp28-2-1 errors rising"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "G7 burst becomes one grouped message",
+   "settings": {
+    "criticalOnly": false,
+    "resolved": true,
+    "repeatMinutes": 60,
+    "quiet": null
+   },
+   "events": [
+    {
+     "t": 0,
+     "kind": "raised",
+     "rule": "node-offline",
+     "entity": "node:cell1",
+     "node": "cell1",
+     "severity": "crit",
+     "incident": "node:cell1",
+     "title": "cell1 offline"
+    },
+    {
+     "t": 0,
+     "kind": "raised",
+     "rule": "node-offline",
+     "entity": "node:cell2",
+     "node": "cell2",
+     "severity": "crit",
+     "incident": "node:cell2",
+     "title": "cell2 offline"
+    },
+    {
+     "t": 0,
+     "kind": "raised",
+     "rule": "node-offline",
+     "entity": "node:cell3",
+     "node": "cell3",
+     "severity": "crit",
+     "incident": "node:cell3",
+     "title": "cell3 offline"
+    },
+    {
+     "t": 0,
+     "kind": "raised",
+     "rule": "node-offline",
+     "entity": "node:gx10-0000",
+     "node": "gx10-0000",
+     "severity": "crit",
+     "incident": "node:gx10-0000",
+     "title": "gx10-0000 offline"
+    }
+   ],
+   "expect": [
+    {
+     "t": 0,
+     "outcomes": [
+      {
+       "rule": "node-offline",
+       "entity": "node:cell1",
+       "outcome": "sent"
+      },
+      {
+       "rule": "node-offline",
+       "entity": "node:cell2",
+       "outcome": "sent"
+      },
+      {
+       "rule": "node-offline",
+       "entity": "node:cell3",
+       "outcome": "sent"
+      },
+      {
+       "rule": "node-offline",
+       "entity": "node:gx10-0000",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "4 alerts, 4 critical",
+       "severity": "crit",
+       "lines": [
+        "cell1 offline",
+        "cell2 offline",
+        "cell3 offline",
+        "gx10-0000 offline"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "G8 quiet hours",
+   "settings": {
+    "criticalOnly": false,
+    "resolved": true,
+    "repeatMinutes": 60,
+    "quiet": {
+     "start": "22:00",
+     "end": "07:00",
+     "tz": "America/New_York"
+    }
+   },
+   "events": [
+    {
+     "t": 1768531800,
+     "kind": "raised",
+     "rule": "disk-full",
+     "entity": "disk:cell1:/",
+     "node": "cell1",
+     "severity": "warn",
+     "incident": "disk:cell1:/",
+     "title": "cell1 disk 86%"
+    },
+    {
+     "t": 1768536000,
+     "kind": "raised",
+     "rule": "gpu-hot",
+     "entity": "gpu:cell2:0",
+     "node": "cell2",
+     "severity": "warn",
+     "incident": "gpu:cell2:0",
+     "title": "cell2 GPU 88 °C"
+    },
+    {
+     "t": 1768536300,
+     "kind": "raised",
+     "rule": "node-offline",
+     "entity": "node:cell3",
+     "node": "cell3",
+     "severity": "crit",
+     "incident": "node:cell3",
+     "title": "cell3 offline"
+    },
+    {
+     "t": 1768537200,
+     "kind": "resolved",
+     "rule": "node-offline",
+     "entity": "node:cell3",
+     "node": "cell3",
+     "severity": "crit",
+     "incident": "node:cell3",
+     "title": "cell3 is back online"
+    },
+    {
+     "t": 1768537800,
+     "kind": "tick"
+    },
+    {
+     "t": 1768537800,
+     "kind": "resolved",
+     "rule": "disk-full",
+     "entity": "disk:cell1:/",
+     "node": "cell1",
+     "severity": "warn",
+     "incident": "disk:cell1:/",
+     "title": "Resolved: cell1 disk 86%"
+    },
+    {
+     "t": 1768538400,
+     "kind": "resolved",
+     "rule": "gpu-hot",
+     "entity": "gpu:cell2:0",
+     "node": "cell2",
+     "severity": "warn",
+     "incident": "gpu:cell2:0",
+     "title": "Resolved: cell2 GPU 88 °C"
+    },
+    {
+     "t": 1768565100,
+     "kind": "raised",
+     "rule": "gpu-hot",
+     "entity": "gpu:cell2:0",
+     "node": "cell2",
+     "severity": "warn",
+     "incident": "gpu:cell2:0",
+     "title": "cell2 GPU 88 °C"
+    }
+   ],
+   "expect": [
+    {
+     "t": 1768531800,
+     "outcomes": [
+      {
+       "rule": "disk-full",
+       "entity": "disk:cell1:/",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "cell1 disk 86%",
+       "severity": "warn"
+      }
+     ]
+    },
+    {
+     "t": 1768536000,
+     "outcomes": [
+      {
+       "rule": "gpu-hot",
+       "entity": "gpu:cell2:0",
+       "outcome": "held"
+      }
+     ],
+     "messages": []
+    },
+    {
+     "t": 1768536300,
+     "outcomes": [
+      {
+       "rule": "node-offline",
+       "entity": "node:cell3",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "cell3 offline",
+       "severity": "crit"
+      }
+     ]
+    },
+    {
+     "t": 1768537200,
+     "outcomes": [
+      {
+       "rule": "node-offline",
+       "entity": "node:cell3",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "cell3 is back online",
+       "severity": "crit"
+      }
+     ]
+    },
+    {
+     "t": 1768537800,
+     "outcomes": [
+      {
+       "rule": "disk-full",
+       "entity": "disk:cell1:/",
+       "outcome": "held"
+      }
+     ],
+     "messages": []
+    },
+    {
+     "t": 1768538400,
+     "outcomes": [
+      {
+       "rule": "gpu-hot",
+       "entity": "gpu:cell2:0",
+       "outcome": "not-paged"
+      }
+     ],
+     "messages": []
+    },
+    {
+     "t": 1768565100,
+     "outcomes": [
+      {
+       "rule": "gpu-hot",
+       "entity": "gpu:cell2:0",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "cell2 GPU 88 °C",
+       "severity": "warn"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "G9 silenced",
+   "settings": {
+    "criticalOnly": false,
+    "resolved": true,
+    "repeatMinutes": 60,
+    "quiet": null
+   },
+   "events": [
+    {
+     "t": 0,
+     "kind": "silence",
+     "rule": "node-offline",
+     "entity": "node:gx10-0000",
+     "node": "gx10-0000",
+     "reason": "moving it to the other rack"
+    },
+    {
+     "t": 10,
+     "kind": "raised",
+     "rule": "node-offline",
+     "entity": "node:gx10-0000",
+     "node": "gx10-0000",
+     "severity": "crit",
+     "incident": "node:gx10-0000",
+     "title": "gx10-0000 offline"
+    },
+    {
+     "t": 3700,
+     "kind": "tick"
+    },
+    {
+     "t": 4000,
+     "kind": "resolved",
+     "rule": "node-offline",
+     "entity": "node:gx10-0000",
+     "node": "gx10-0000",
+     "severity": "crit",
+     "incident": "node:gx10-0000",
+     "title": "gx10-0000 is back online"
+    }
+   ],
+   "expect": [
+    {
+     "t": 0,
+     "outcomes": [],
+     "messages": []
+    },
+    {
+     "t": 10,
+     "outcomes": [
+      {
+       "rule": "node-offline",
+       "entity": "node:gx10-0000",
+       "outcome": "silenced"
+      }
+     ],
+     "messages": []
+    },
+    {
+     "t": 3700,
+     "outcomes": [],
+     "messages": []
+    },
+    {
+     "t": 4000,
+     "outcomes": [
+      {
+       "rule": "node-offline",
+       "entity": "node:gx10-0000",
+       "outcome": "not-paged"
+      }
+     ],
+     "messages": []
+    }
+   ]
+  },
+  {
+   "name": "G10a planned restart",
+   "settings": {
+    "criticalOnly": false,
+    "resolved": true,
+    "repeatMinutes": 60,
+    "quiet": null
+   },
+   "events": [
+    {
+     "t": 0,
+     "kind": "maintenance",
+     "node": "cell3",
+     "until": 600,
+     "reason": "Restart (SparkBox, 10:42)"
+    },
+    {
+     "t": 10,
+     "kind": "raised",
+     "rule": "node-offline",
+     "entity": "node:cell3",
+     "node": "cell3",
+     "severity": "crit",
+     "incident": "node:cell3",
+     "title": "cell3 offline"
+    },
+    {
+     "t": 300,
+     "kind": "resolved",
+     "rule": "node-offline",
+     "entity": "node:cell3",
+     "node": "cell3",
+     "severity": "crit",
+     "incident": "node:cell3",
+     "title": "cell3 is back online"
+    }
+   ],
+   "expect": [
+    {
+     "t": 0,
+     "outcomes": [],
+     "messages": []
+    },
+    {
+     "t": 10,
+     "outcomes": [
+      {
+       "rule": "node-offline",
+       "entity": "node:cell3",
+       "outcome": "planned"
+      }
+     ],
+     "messages": []
+    },
+    {
+     "t": 300,
+     "outcomes": [
+      {
+       "rule": "node-offline",
+       "entity": "node:cell3",
+       "outcome": "not-paged"
+      }
+     ],
+     "messages": []
+    }
+   ]
+  },
+  {
+   "name": "G10b planned restart that doesn't come back",
+   "settings": {
+    "criticalOnly": false,
+    "resolved": true,
+    "repeatMinutes": 60,
+    "quiet": null
+   },
+   "events": [
+    {
+     "t": 0,
+     "kind": "maintenance",
+     "node": "cell3",
+     "until": 600,
+     "reason": "Restart (SparkBox, 10:42)"
+    },
+    {
+     "t": 10,
+     "kind": "raised",
+     "rule": "node-offline",
+     "entity": "node:cell3",
+     "node": "cell3",
+     "severity": "crit",
+     "incident": "node:cell3",
+     "title": "cell3 offline"
+    },
+    {
+     "t": 900,
+     "kind": "raised",
+     "rule": "node-reboot",
+     "entity": "node:cell3",
+     "node": "cell3",
+     "severity": "crit",
+     "incident": "node:cell3",
+     "title": "cell3 didn't come back after the restart SparkBox started at 10:42"
+    }
+   ],
+   "expect": [
+    {
+     "t": 0,
+     "outcomes": [],
+     "messages": []
+    },
+    {
+     "t": 10,
+     "outcomes": [
+      {
+       "rule": "node-offline",
+       "entity": "node:cell3",
+       "outcome": "planned"
+      }
+     ],
+     "messages": []
+    },
+    {
+     "t": 900,
+     "outcomes": [
+      {
+       "rule": "node-reboot",
+       "entity": "node:cell3",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "cell3 didn't come back after the restart SparkBox started at 10:42",
+       "severity": "crit"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "G11 critical only",
+   "settings": {
+    "criticalOnly": true,
+    "resolved": true,
+    "repeatMinutes": 60,
+    "quiet": null
+   },
+   "events": [
+    {
+     "t": 0,
+     "kind": "raised",
+     "rule": "mem-high",
+     "entity": "node:cell1",
+     "node": "cell1",
+     "severity": "warn",
+     "incident": "node:cell1",
+     "title": "cell1 memory 91%"
+    },
+    {
+     "t": 60,
+     "kind": "raised",
+     "rule": "node-offline",
+     "entity": "node:cell2",
+     "node": "cell2",
+     "severity": "crit",
+     "incident": "node:cell2",
+     "title": "cell2 offline"
+    }
+   ],
+   "expect": [
+    {
+     "t": 0,
+     "outcomes": [
+      {
+       "rule": "mem-high",
+       "entity": "node:cell1",
+       "outcome": "held"
+      }
+     ],
+     "messages": []
+    },
+    {
+     "t": 60,
+     "outcomes": [
+      {
+       "rule": "node-offline",
+       "entity": "node:cell2",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "cell2 offline",
+       "severity": "crit"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "G12 resolve of a never-paged alert",
+   "settings": {
+    "criticalOnly": true,
+    "resolved": true,
+    "repeatMinutes": 60,
+    "quiet": null
+   },
+   "events": [
+    {
+     "t": 0,
+     "kind": "raised",
+     "rule": "mem-high",
+     "entity": "node:cell1",
+     "node": "cell1",
+     "severity": "warn",
+     "incident": "node:cell1",
+     "title": "cell1 memory 91%"
+    },
+    {
+     "t": 120,
+     "kind": "resolved",
+     "rule": "mem-high",
+     "entity": "node:cell1",
+     "node": "cell1",
+     "severity": "warn",
+     "incident": "node:cell1",
+     "title": "Resolved: cell1 memory 91%"
+    }
+   ],
+   "expect": [
+    {
+     "t": 0,
+     "outcomes": [
+      {
+       "rule": "mem-high",
+       "entity": "node:cell1",
+       "outcome": "held"
+      }
+     ],
+     "messages": []
+    },
+    {
+     "t": 120,
+     "outcomes": [
+      {
+       "rule": "mem-high",
+       "entity": "node:cell1",
+       "outcome": "not-paged"
+      }
+     ],
+     "messages": []
+    }
+   ]
+  },
+  {
+   "name": "G13 de-escalation",
+   "settings": {
+    "criticalOnly": false,
+    "resolved": true,
+    "repeatMinutes": 60,
+    "quiet": null
+   },
+   "events": [
+    {
+     "t": 0,
+     "kind": "raised",
+     "rule": "gpu-hot",
+     "entity": "gpu:cell1:0",
+     "node": "cell1",
+     "severity": "crit",
+     "incident": "gpu:cell1:0",
+     "title": "cell1 GPU 95 °C"
+    },
+    {
+     "t": 60,
+     "kind": "deescalated",
+     "rule": "gpu-hot",
+     "entity": "gpu:cell1:0",
+     "node": "cell1",
+     "severity": "warn",
+     "incident": "gpu:cell1:0",
+     "title": "cell1 GPU 88 °C"
+    },
+    {
+     "t": 3700,
+     "kind": "tick"
+    },
+    {
+     "t": 3800,
+     "kind": "resolved",
+     "rule": "gpu-hot",
+     "entity": "gpu:cell1:0",
+     "node": "cell1",
+     "severity": "warn",
+     "incident": "gpu:cell1:0",
+     "title": "Resolved: cell1 GPU 95 °C"
+    },
+    {
+     "t": 4400,
+     "kind": "tick"
+    }
+   ],
+   "expect": [
+    {
+     "t": 0,
+     "outcomes": [
+      {
+       "rule": "gpu-hot",
+       "entity": "gpu:cell1:0",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "cell1 GPU 95 °C",
+       "severity": "crit"
+      }
+     ]
+    },
+    {
+     "t": 60,
+     "outcomes": [
+      {
+       "rule": "gpu-hot",
+       "entity": "gpu:cell1:0",
+       "outcome": "eased"
+      }
+     ],
+     "messages": []
+    },
+    {
+     "t": 3700,
+     "outcomes": [],
+     "messages": []
+    },
+    {
+     "t": 3800,
+     "outcomes": [
+      {
+       "rule": "gpu-hot",
+       "entity": "gpu:cell1:0",
+       "outcome": "held"
+      }
+     ],
+     "messages": []
+    },
+    {
+     "t": 4400,
+     "outcomes": [],
+     "messages": [
+      {
+       "title": "Resolved: cell1 GPU 95 °C",
+       "severity": "warn"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "G14 quiet hours follow the declared zone",
+   "settings": {
+    "criticalOnly": false,
+    "resolved": true,
+    "repeatMinutes": 60,
+    "quiet": {
+     "start": "22:00",
+     "end": "07:00",
+     "tz": "Europe/Paris"
+    }
+   },
+   "events": [
+    {
+     "t": 1768512600,
+     "kind": "raised",
+     "rule": "mem-high",
+     "entity": "node:cell1",
+     "node": "cell1",
+     "severity": "warn",
+     "incident": "node:cell1",
+     "title": "cell1 memory 91%"
+    },
+    {
+     "t": 1768545000,
+     "kind": "raised",
+     "rule": "mem-high",
+     "entity": "node:cell2",
+     "node": "cell2",
+     "severity": "warn",
+     "incident": "node:cell2",
+     "title": "cell2 memory 91%"
+    }
+   ],
+   "expect": [
+    {
+     "t": 1768512600,
+     "outcomes": [
+      {
+       "rule": "mem-high",
+       "entity": "node:cell1",
+       "outcome": "held"
+      }
+     ],
+     "messages": []
+    },
+    {
+     "t": 1768545000,
+     "outcomes": [
+      {
+       "rule": "mem-high",
+       "entity": "node:cell2",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "cell2 memory 91%",
+       "severity": "warn"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "G15 quiet-hours digest: a warning held overnight and still firing at 07:00 is one message; one that cleared overnight is none",
+   "settings": {
+    "criticalOnly": false,
+    "resolved": true,
+    "repeatMinutes": 60,
+    "quiet": {
+     "start": "22:00",
+     "end": "07:00",
+     "tz": "America/New_York"
+    }
+   },
+   "events": [
+    {
+     "t": 1768536000,
+     "kind": "tick"
+    },
+    {
+     "t": 1768536000,
+     "kind": "raised",
+     "rule": "disk-full",
+     "entity": "disk:cell1:/",
+     "node": "cell1",
+     "severity": "warn",
+     "incident": "disk:cell1:/",
+     "title": "cell1 disk 86%"
+    },
+    {
+     "t": 1768536000,
+     "kind": "raised",
+     "rule": "gpu-hot",
+     "entity": "gpu:cell2:0",
+     "node": "cell2",
+     "severity": "warn",
+     "incident": "gpu:cell2:0",
+     "title": "cell2 GPU 88 °C"
+    },
+    {
+     "t": 1768546800,
+     "kind": "resolved",
+     "rule": "gpu-hot",
+     "entity": "gpu:cell2:0",
+     "node": "cell2",
+     "severity": "warn",
+     "incident": "gpu:cell2:0",
+     "title": "Resolved: cell2 GPU 88 °C"
+    },
+    {
+     "t": 1768564740,
+     "kind": "tick"
+    },
+    {
+     "t": 1768564800,
+     "kind": "tick"
+    },
+    {
+     "t": 1768566600,
+     "kind": "resolved",
+     "rule": "disk-full",
+     "entity": "disk:cell1:/",
+     "node": "cell1",
+     "severity": "warn",
+     "incident": "disk:cell1:/",
+     "title": "Resolved: cell1 disk 86%"
+    },
+    {
+     "t": 1768567200,
+     "kind": "tick"
+    }
+   ],
+   "expect": [
+    {
+     "t": 1768536000,
+     "outcomes": [
+      {
+       "rule": "disk-full",
+       "entity": "disk:cell1:/",
+       "outcome": "held"
+      },
+      {
+       "rule": "gpu-hot",
+       "entity": "gpu:cell2:0",
+       "outcome": "held"
+      }
+     ],
+     "messages": []
+    },
+    {
+     "t": 1768546800,
+     "outcomes": [
+      {
+       "rule": "gpu-hot",
+       "entity": "gpu:cell2:0",
+       "outcome": "not-paged"
+      }
+     ],
+     "messages": []
+    },
+    {
+     "t": 1768564740,
+     "outcomes": [],
+     "messages": []
+    },
+    {
+     "t": 1768564800,
+     "outcomes": [],
+     "messages": [
+      {
+       "title": "While quiet: 1 warning still firing",
+       "severity": "warn",
+       "lines": [
+        "cell1 disk 86%"
+       ]
+      }
+     ]
+    },
+    {
+     "t": 1768566600,
+     "outcomes": [
+      {
+       "rule": "disk-full",
+       "entity": "disk:cell1:/",
+       "outcome": "held"
+      }
+     ],
+     "messages": []
+    },
+    {
+     "t": 1768567200,
+     "outcomes": [],
+     "messages": [
+      {
+       "title": "Resolved: cell1 disk 86%",
+       "severity": "warn"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "G16 flap damping: a re-raise within 10 min of a resolve is flapping; the resolve goes after 10 min clear",
+   "settings": {
+    "criticalOnly": false,
+    "resolved": true,
+    "repeatMinutes": 10,
+    "quiet": null
+   },
+   "events": [
+    {
+     "t": 0,
+     "kind": "raised",
+     "rule": "gpu-hot",
+     "entity": "gpu:cell2:0",
+     "node": "cell2",
+     "severity": "crit",
+     "incident": "gpu:cell2:0",
+     "title": "cell2 GPU 95 °C"
+    },
+    {
+     "t": 60,
+     "kind": "resolved",
+     "rule": "gpu-hot",
+     "entity": "gpu:cell2:0",
+     "node": "cell2",
+     "severity": "crit",
+     "incident": "gpu:cell2:0",
+     "title": "Resolved: cell2 GPU 95 °C"
+    },
+    {
+     "t": 120,
+     "kind": "raised",
+     "rule": "gpu-hot",
+     "entity": "gpu:cell2:0",
+     "node": "cell2",
+     "severity": "crit",
+     "incident": "gpu:cell2:0",
+     "title": "cell2 GPU 95 °C"
+    },
+    {
+     "t": 180,
+     "kind": "resolved",
+     "rule": "gpu-hot",
+     "entity": "gpu:cell2:0",
+     "node": "cell2",
+     "severity": "crit",
+     "incident": "gpu:cell2:0",
+     "title": "Resolved: cell2 GPU 95 °C"
+    },
+    {
+     "t": 240,
+     "kind": "raised",
+     "rule": "gpu-hot",
+     "entity": "gpu:cell2:0",
+     "node": "cell2",
+     "severity": "crit",
+     "incident": "gpu:cell2:0",
+     "title": "cell2 GPU 95 °C"
+    },
+    {
+     "t": 600,
+     "kind": "tick"
+    },
+    {
+     "t": 650,
+     "kind": "resolved",
+     "rule": "gpu-hot",
+     "entity": "gpu:cell2:0",
+     "node": "cell2",
+     "severity": "crit",
+     "incident": "gpu:cell2:0",
+     "title": "Resolved: cell2 GPU 95 °C"
+    },
+    {
+     "t": 1200,
+     "kind": "tick"
+    },
+    {
+     "t": 1250,
+     "kind": "tick"
+    },
+    {
+     "t": 1300,
+     "kind": "raised",
+     "rule": "gpu-hot",
+     "entity": "gpu:cell2:0",
+     "node": "cell2",
+     "severity": "crit",
+     "incident": "gpu:cell2:0",
+     "title": "cell2 GPU 95 °C"
+    },
+    {
+     "t": 2000,
+     "kind": "raised",
+     "rule": "mem-high",
+     "entity": "node:cell1",
+     "node": "cell1",
+     "severity": "warn",
+     "incident": "node:cell1",
+     "title": "cell1 memory 91%"
+    },
+    {
+     "t": 2060,
+     "kind": "resolved",
+     "rule": "mem-high",
+     "entity": "node:cell1",
+     "node": "cell1",
+     "severity": "warn",
+     "incident": "node:cell1",
+     "title": "Resolved: cell1 memory 91%"
+    },
+    {
+     "t": 2120,
+     "kind": "raised",
+     "rule": "mem-high",
+     "entity": "node:cell1",
+     "node": "cell1",
+     "severity": "crit",
+     "incident": "node:cell1",
+     "title": "cell1 memory 97%"
+    }
+   ],
+   "expect": [
+    {
+     "t": 0,
+     "outcomes": [
+      {
+       "rule": "gpu-hot",
+       "entity": "gpu:cell2:0",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "cell2 GPU 95 °C",
+       "severity": "crit"
+      }
+     ]
+    },
+    {
+     "t": 60,
+     "outcomes": [
+      {
+       "rule": "gpu-hot",
+       "entity": "gpu:cell2:0",
+       "outcome": "held"
+      }
+     ],
+     "messages": []
+    },
+    {
+     "t": 120,
+     "outcomes": [
+      {
+       "rule": "gpu-hot",
+       "entity": "gpu:cell2:0",
+       "outcome": "flapping"
+      }
+     ],
+     "messages": []
+    },
+    {
+     "t": 180,
+     "outcomes": [
+      {
+       "rule": "gpu-hot",
+       "entity": "gpu:cell2:0",
+       "outcome": "held"
+      }
+     ],
+     "messages": []
+    },
+    {
+     "t": 240,
+     "outcomes": [
+      {
+       "rule": "gpu-hot",
+       "entity": "gpu:cell2:0",
+       "outcome": "flapping"
+      }
+     ],
+     "messages": []
+    },
+    {
+     "t": 600,
+     "outcomes": [],
+     "messages": [
+      {
+       "title": "Still flapping: cell2 GPU 95 °C",
+       "severity": "crit"
+      }
+     ]
+    },
+    {
+     "t": 650,
+     "outcomes": [
+      {
+       "rule": "gpu-hot",
+       "entity": "gpu:cell2:0",
+       "outcome": "held"
+      }
+     ],
+     "messages": []
+    },
+    {
+     "t": 1200,
+     "outcomes": [],
+     "messages": []
+    },
+    {
+     "t": 1250,
+     "outcomes": [],
+     "messages": [
+      {
+       "title": "Resolved: cell2 GPU 95 °C",
+       "severity": "crit"
+      }
+     ]
+    },
+    {
+     "t": 1300,
+     "outcomes": [
+      {
+       "rule": "gpu-hot",
+       "entity": "gpu:cell2:0",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "cell2 GPU 95 °C",
+       "severity": "crit"
+      }
+     ]
+    },
+    {
+     "t": 2000,
+     "outcomes": [
+      {
+       "rule": "mem-high",
+       "entity": "node:cell1",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "cell1 memory 91%",
+       "severity": "warn"
+      }
+     ]
+    },
+    {
+     "t": 2060,
+     "outcomes": [
+      {
+       "rule": "mem-high",
+       "entity": "node:cell1",
+       "outcome": "held"
+      }
+     ],
+     "messages": []
+    },
+    {
+     "t": 2120,
+     "outcomes": [
+      {
+       "rule": "mem-high",
+       "entity": "node:cell1",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "cell1 memory 97%",
+       "severity": "crit"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "G16b a node back online is never held: its return is sent at once, and going away again is a new page",
+   "settings": {
+    "criticalOnly": false,
+    "resolved": true,
+    "repeatMinutes": 10,
+    "quiet": null
+   },
+   "events": [
+    {
+     "t": 0,
+     "kind": "raised",
+     "rule": "node-offline",
+     "entity": "node:cell3",
+     "node": "cell3",
+     "severity": "crit",
+     "incident": "node:cell3",
+     "title": "cell3 offline"
+    },
+    {
+     "t": 60,
+     "kind": "resolved",
+     "rule": "node-offline",
+     "entity": "node:cell3",
+     "node": "cell3",
+     "severity": "crit",
+     "incident": "node:cell3",
+     "title": "cell3 is back online"
+    },
+    {
+     "t": 120,
+     "kind": "raised",
+     "rule": "node-offline",
+     "entity": "node:cell3",
+     "node": "cell3",
+     "severity": "crit",
+     "incident": "node:cell3",
+     "title": "cell3 offline"
+    },
+    {
+     "t": 180,
+     "kind": "resolved",
+     "rule": "node-offline",
+     "entity": "node:cell3",
+     "node": "cell3",
+     "severity": "crit",
+     "incident": "node:cell3",
+     "title": "cell3 is back online"
+    },
+    {
+     "t": 600,
+     "kind": "tick"
+    },
+    {
+     "t": 1200,
+     "kind": "tick"
+    }
+   ],
+   "expect": [
+    {
+     "t": 0,
+     "outcomes": [
+      {
+       "rule": "node-offline",
+       "entity": "node:cell3",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "cell3 offline",
+       "severity": "crit"
+      }
+     ]
+    },
+    {
+     "t": 60,
+     "outcomes": [
+      {
+       "rule": "node-offline",
+       "entity": "node:cell3",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "cell3 is back online",
+       "severity": "crit"
+      }
+     ]
+    },
+    {
+     "t": 120,
+     "outcomes": [
+      {
+       "rule": "node-offline",
+       "entity": "node:cell3",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "cell3 offline",
+       "severity": "crit"
+      }
+     ]
+    },
+    {
+     "t": 180,
+     "outcomes": [
+      {
+       "rule": "node-offline",
+       "entity": "node:cell3",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "cell3 is back online",
+       "severity": "crit"
+      }
+     ]
+    },
+    {
+     "t": 600,
+     "outcomes": [],
+     "messages": []
+    },
+    {
+     "t": 1200,
+     "outcomes": [],
+     "messages": []
+    }
+   ]
+  },
+  {
+   "name": "G16c a flapping node: gone again within 10 min of a told return it's paged, the second time as flapping; then its drops and returns aren't, unless it stays away 10 min",
+   "settings": {
+    "criticalOnly": false,
+    "resolved": true,
+    "repeatMinutes": 60,
+    "quiet": null
+   },
+   "events": [
+    {
+     "t": 0,
+     "kind": "raised",
+     "rule": "node-offline",
+     "entity": "node:cell3",
+     "node": "cell3",
+     "severity": "crit",
+     "incident": "node:cell3",
+     "title": "cell3 offline"
+    },
+    {
+     "t": 60,
+     "kind": "resolved",
+     "rule": "node-offline",
+     "entity": "node:cell3",
+     "node": "cell3",
+     "severity": "crit",
+     "incident": "node:cell3",
+     "title": "cell3 is back online"
+    },
+    {
+     "t": 120,
+     "kind": "raised",
+     "rule": "node-offline",
+     "entity": "node:cell3",
+     "node": "cell3",
+     "severity": "crit",
+     "incident": "node:cell3",
+     "title": "cell3 offline"
+    },
+    {
+     "t": 180,
+     "kind": "resolved",
+     "rule": "node-offline",
+     "entity": "node:cell3",
+     "node": "cell3",
+     "severity": "crit",
+     "incident": "node:cell3",
+     "title": "cell3 is back online"
+    },
+    {
+     "t": 240,
+     "kind": "raised",
+     "rule": "node-offline",
+     "entity": "node:cell3",
+     "node": "cell3",
+     "severity": "crit",
+     "incident": "node:cell3",
+     "title": "cell3 offline"
+    },
+    {
+     "t": 300,
+     "kind": "resolved",
+     "rule": "node-offline",
+     "entity": "node:cell3",
+     "node": "cell3",
+     "severity": "crit",
+     "incident": "node:cell3",
+     "title": "cell3 is back online"
+    },
+    {
+     "t": 360,
+     "kind": "raised",
+     "rule": "node-offline",
+     "entity": "node:cell3",
+     "node": "cell3",
+     "severity": "crit",
+     "incident": "node:cell3",
+     "title": "cell3 offline"
+    },
+    {
+     "t": 420,
+     "kind": "resolved",
+     "rule": "node-offline",
+     "entity": "node:cell3",
+     "node": "cell3",
+     "severity": "crit",
+     "incident": "node:cell3",
+     "title": "cell3 is back online"
+    },
+    {
+     "t": 480,
+     "kind": "raised",
+     "rule": "node-offline",
+     "entity": "node:cell3",
+     "node": "cell3",
+     "severity": "crit",
+     "incident": "node:cell3",
+     "title": "cell3 offline"
+    },
+    {
+     "t": 900,
+     "kind": "tick"
+    },
+    {
+     "t": 1080,
+     "kind": "tick"
+    },
+    {
+     "t": 1140,
+     "kind": "resolved",
+     "rule": "node-offline",
+     "entity": "node:cell3",
+     "node": "cell3",
+     "severity": "crit",
+     "incident": "node:cell3",
+     "title": "cell3 is back online"
+    },
+    {
+     "t": 1800,
+     "kind": "raised",
+     "rule": "node-offline",
+     "entity": "node:cell3",
+     "node": "cell3",
+     "severity": "crit",
+     "incident": "node:cell3",
+     "title": "cell3 offline"
+    }
+   ],
+   "expect": [
+    {
+     "t": 0,
+     "outcomes": [
+      {
+       "rule": "node-offline",
+       "entity": "node:cell3",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "cell3 offline",
+       "severity": "crit"
+      }
+     ]
+    },
+    {
+     "t": 60,
+     "outcomes": [
+      {
+       "rule": "node-offline",
+       "entity": "node:cell3",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "cell3 is back online",
+       "severity": "crit"
+      }
+     ]
+    },
+    {
+     "t": 120,
+     "outcomes": [
+      {
+       "rule": "node-offline",
+       "entity": "node:cell3",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "cell3 offline",
+       "severity": "crit"
+      }
+     ]
+    },
+    {
+     "t": 180,
+     "outcomes": [
+      {
+       "rule": "node-offline",
+       "entity": "node:cell3",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "cell3 is back online",
+       "severity": "crit"
+      }
+     ]
+    },
+    {
+     "t": 240,
+     "outcomes": [
+      {
+       "rule": "node-offline",
+       "entity": "node:cell3",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "cell3 offline · flapping",
+       "severity": "crit"
+      }
+     ]
+    },
+    {
+     "t": 300,
+     "outcomes": [
+      {
+       "rule": "node-offline",
+       "entity": "node:cell3",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "cell3 is back online",
+       "severity": "crit"
+      }
+     ]
+    },
+    {
+     "t": 360,
+     "outcomes": [
+      {
+       "rule": "node-offline",
+       "entity": "node:cell3",
+       "outcome": "flapping"
+      }
+     ],
+     "messages": []
+    },
+    {
+     "t": 420,
+     "outcomes": [
+      {
+       "rule": "node-offline",
+       "entity": "node:cell3",
+       "outcome": "not-paged"
+      }
+     ],
+     "messages": []
+    },
+    {
+     "t": 480,
+     "outcomes": [
+      {
+       "rule": "node-offline",
+       "entity": "node:cell3",
+       "outcome": "flapping"
+      }
+     ],
+     "messages": []
+    },
+    {
+     "t": 900,
+     "outcomes": [],
+     "messages": []
+    },
+    {
+     "t": 1080,
+     "outcomes": [],
+     "messages": [
+      {
+       "title": "Still flapping: cell3 offline",
+       "severity": "crit"
+      }
+     ]
+    },
+    {
+     "t": 1140,
+     "outcomes": [
+      {
+       "rule": "node-offline",
+       "entity": "node:cell3",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "cell3 is back online",
+       "severity": "crit"
+      }
+     ]
+    },
+    {
+     "t": 1800,
+     "outcomes": [
+      {
+       "rule": "node-offline",
+       "entity": "node:cell3",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "cell3 offline",
+       "severity": "crit"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "G17 incident across senders: the Mac's warning in an incident an agent paged is coalesced",
+   "settings": {
+    "criticalOnly": false,
+    "resolved": true,
+    "repeatMinutes": 60,
+    "quiet": null
+   },
+   "events": [
+    {
+     "t": 0,
+     "kind": "paged",
+     "severity": "crit",
+     "incident": "link:cell2/enP2p1s0f1np1",
+     "title": "cell2 half 2: RoCE losing packets · check the optic",
+     "by": "agent:cell2"
+    },
+    {
+     "t": 8,
+     "kind": "raised",
+     "rule": "port-errors",
+     "entity": "port:crs804/qsfp28-2-1",
+     "severity": "warn",
+     "incident": "link:cell2/enP2p1s0f1np1",
+     "title": "CRS804 qsfp28-2-1 errors rising"
+    },
+    {
+     "t": 2000,
+     "kind": "raised",
+     "rule": "optic-rx-low",
+     "entity": "port:crs804/qsfp28-2-1",
+     "severity": "warn",
+     "incident": "link:cell2/enP2p1s0f1np1",
+     "title": "CRS804 qsfp28-2-1 optic receive power low"
+    }
+   ],
+   "expect": [
+    {
+     "t": 0,
+     "outcomes": [],
+     "messages": []
+    },
+    {
+     "t": 8,
+     "outcomes": [
+      {
+       "rule": "port-errors",
+       "entity": "port:crs804/qsfp28-2-1",
+       "outcome": "coalesced"
+      }
+     ],
+     "messages": []
+    },
+    {
+     "t": 2000,
+     "outcomes": [
+      {
+       "rule": "optic-rx-low",
+       "entity": "port:crs804/qsfp28-2-1",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "CRS804 qsfp28-2-1 optic receive power low",
+       "severity": "warn",
+       "lines": [
+        "Also: CRS804 qsfp28-2-1 errors rising"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "C1 one incident in one window is one message; a warning within 30 min of its page coalesces",
+   "settings": {
+    "criticalOnly": false,
+    "resolved": true,
+    "repeatMinutes": 60,
+    "quiet": null
+   },
+   "events": [
+    {
+     "t": 0,
+     "kind": "raised",
+     "rule": "node-offline",
+     "entity": "node:cell3",
+     "node": "cell3",
+     "severity": "crit",
+     "incident": "node:cell3",
+     "title": "cell3 offline"
+    },
+    {
+     "t": 0,
+     "kind": "raised",
+     "rule": "container-exited",
+     "entity": "container:cell3/vllm-worker",
+     "node": "cell3",
+     "severity": "crit",
+     "incident": "node:cell3",
+     "title": "vllm-worker on cell3 exited"
+    },
+    {
+     "t": 600,
+     "kind": "raised",
+     "rule": "mem-high",
+     "entity": "node:cell3",
+     "node": "cell3",
+     "severity": "warn",
+     "incident": "node:cell3",
+     "title": "cell3 memory 91%"
+    },
+    {
+     "t": 2400,
+     "kind": "raised",
+     "rule": "fabric-flap",
+     "entity": "net:cell3/enP2p1s0f0np0",
+     "node": "cell3",
+     "severity": "warn",
+     "incident": "node:cell3",
+     "title": "cell3 fabric link flapping"
+    }
+   ],
+   "expect": [
+    {
+     "t": 0,
+     "outcomes": [
+      {
+       "rule": "node-offline",
+       "entity": "node:cell3",
+       "outcome": "sent"
+      },
+      {
+       "rule": "container-exited",
+       "entity": "container:cell3/vllm-worker",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "cell3 offline",
+       "severity": "crit",
+       "lines": [
+        "vllm-worker on cell3 exited"
+       ]
+      }
+     ]
+    },
+    {
+     "t": 600,
+     "outcomes": [
+      {
+       "rule": "mem-high",
+       "entity": "node:cell3",
+       "outcome": "coalesced"
+      }
+     ],
+     "messages": []
+    },
+    {
+     "t": 2400,
+     "outcomes": [
+      {
+       "rule": "fabric-flap",
+       "entity": "net:cell3/enP2p1s0f0np0",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "cell3 fabric link flapping",
+       "severity": "warn",
+       "lines": [
+        "Also: cell3 memory 91%"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "C2 a grouped message names every critical first, at most 6 lines",
+   "settings": {
+    "criticalOnly": false,
+    "resolved": true,
+    "repeatMinutes": 60,
+    "quiet": null
+   },
+   "events": [
+    {
+     "t": 0,
+     "kind": "raised",
+     "rule": "disk-full",
+     "entity": "disk:cell1:/",
+     "node": "cell1",
+     "severity": "warn",
+     "incident": "disk:cell1:/",
+     "title": "cell1 disk 86%"
+    },
+    {
+     "t": 0,
+     "kind": "raised",
+     "rule": "gpu-hot",
+     "entity": "gpu:cell2:0",
+     "node": "cell2",
+     "severity": "warn",
+     "incident": "gpu:cell2:0",
+     "title": "cell2 GPU 88 °C"
+    },
+    {
+     "t": 0,
+     "kind": "raised",
+     "rule": "node-offline",
+     "entity": "node:cell3",
+     "node": "cell3",
+     "severity": "crit",
+     "incident": "node:cell3",
+     "title": "cell3 offline"
+    },
+    {
+     "t": 0,
+     "kind": "raised",
+     "rule": "ntp-unsynced",
+     "entity": "node:cell1",
+     "node": "cell1",
+     "severity": "warn",
+     "incident": "node:cell1",
+     "title": "cell1 clock not synced"
+    },
+    {
+     "t": 0,
+     "kind": "raised",
+     "rule": "endpoint-down",
+     "entity": "endpoint:llama-3.3-70b",
+     "node": "cell1",
+     "severity": "crit",
+     "incident": "endpoint:llama-3.3-70b",
+     "title": "llama-3.3-70b down"
+    },
+    {
+     "t": 0,
+     "kind": "raised",
+     "rule": "net-errors",
+     "entity": "net:cell2/enP7s7",
+     "node": "cell2",
+     "severity": "warn",
+     "incident": "net:cell2/enP7s7",
+     "title": "cell2 LAN errors"
+    },
+    {
+     "t": 0,
+     "kind": "raised",
+     "rule": "unit-failed",
+     "entity": "service:gx10-0000/ollama.service",
+     "node": "gx10-0000",
+     "severity": "warn",
+     "incident": "service:gx10-0000/ollama.service",
+     "title": "ollama.service failed on gx10-0000"
+    }
+   ],
+   "expect": [
+    {
+     "t": 0,
+     "outcomes": [
+      {
+       "rule": "disk-full",
+       "entity": "disk:cell1:/",
+       "outcome": "sent"
+      },
+      {
+       "rule": "gpu-hot",
+       "entity": "gpu:cell2:0",
+       "outcome": "sent"
+      },
+      {
+       "rule": "node-offline",
+       "entity": "node:cell3",
+       "outcome": "sent"
+      },
+      {
+       "rule": "ntp-unsynced",
+       "entity": "node:cell1",
+       "outcome": "sent"
+      },
+      {
+       "rule": "endpoint-down",
+       "entity": "endpoint:llama-3.3-70b",
+       "outcome": "sent"
+      },
+      {
+       "rule": "net-errors",
+       "entity": "net:cell2/enP7s7",
+       "outcome": "sent"
+      },
+      {
+       "rule": "unit-failed",
+       "entity": "service:gx10-0000/ollama.service",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "7 alerts, 2 critical",
+       "severity": "crit",
+       "lines": [
+        "cell3 offline",
+        "llama-3.3-70b down",
+        "cell1 disk 86%",
+        "cell2 GPU 88 °C",
+        "cell1 clock not synced",
+        "cell2 LAN errors",
+        "and 1 more"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "C3 a duplicate needs the same severity and no resolve since; repeats are off at 0",
+   "settings": {
+    "criticalOnly": false,
+    "resolved": true,
+    "repeatMinutes": 0,
+    "quiet": null
+   },
+   "events": [
+    {
+     "t": 0,
+     "kind": "raised",
+     "rule": "gpu-hot",
+     "entity": "gpu:cell1:0",
+     "node": "cell1",
+     "severity": "warn",
+     "incident": "gpu:cell1:0",
+     "title": "cell1 GPU 88 °C"
+    },
+    {
+     "t": 30,
+     "kind": "raised",
+     "rule": "gpu-hot",
+     "entity": "gpu:cell1:0",
+     "node": "cell1",
+     "severity": "crit",
+     "incident": "gpu:cell1:0",
+     "title": "cell1 GPU 95 °C"
+    },
+    {
+     "t": 3700,
+     "kind": "tick"
+    },
+    {
+     "t": 3800,
+     "kind": "resolved",
+     "rule": "gpu-hot",
+     "entity": "gpu:cell1:0",
+     "node": "cell1",
+     "severity": "crit",
+     "incident": "gpu:cell1:0",
+     "title": "Resolved: cell1 GPU 95 °C"
+    },
+    {
+     "t": 4400,
+     "kind": "tick"
+    },
+    {
+     "t": 4430,
+     "kind": "raised",
+     "rule": "gpu-hot",
+     "entity": "gpu:cell1:0",
+     "node": "cell1",
+     "severity": "crit",
+     "incident": "gpu:cell1:0",
+     "title": "cell1 GPU 95 °C"
+    }
+   ],
+   "expect": [
+    {
+     "t": 0,
+     "outcomes": [
+      {
+       "rule": "gpu-hot",
+       "entity": "gpu:cell1:0",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "cell1 GPU 88 °C",
+       "severity": "warn"
+      }
+     ]
+    },
+    {
+     "t": 30,
+     "outcomes": [
+      {
+       "rule": "gpu-hot",
+       "entity": "gpu:cell1:0",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "cell1 GPU 95 °C",
+       "severity": "crit"
+      }
+     ]
+    },
+    {
+     "t": 3700,
+     "outcomes": [],
+     "messages": []
+    },
+    {
+     "t": 3800,
+     "outcomes": [
+      {
+       "rule": "gpu-hot",
+       "entity": "gpu:cell1:0",
+       "outcome": "held"
+      }
+     ],
+     "messages": []
+    },
+    {
+     "t": 4400,
+     "outcomes": [],
+     "messages": [
+      {
+       "title": "Resolved: cell1 GPU 95 °C",
+       "severity": "crit"
+      }
+     ]
+    },
+    {
+     "t": 4430,
+     "outcomes": [
+      {
+       "rule": "gpu-hot",
+       "entity": "gpu:cell1:0",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "cell1 GPU 95 °C",
+       "severity": "crit"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "C4 resolutions off: a paged alert's resolve isn't sent",
+   "settings": {
+    "criticalOnly": false,
+    "resolved": false,
+    "repeatMinutes": 60,
+    "quiet": null
+   },
+   "events": [
+    {
+     "t": 0,
+     "kind": "raised",
+     "rule": "node-offline",
+     "entity": "node:cell3",
+     "node": "cell3",
+     "severity": "crit",
+     "incident": "node:cell3",
+     "title": "cell3 offline"
+    },
+    {
+     "t": 60,
+     "kind": "resolved",
+     "rule": "node-offline",
+     "entity": "node:cell3",
+     "node": "cell3",
+     "severity": "crit",
+     "incident": "node:cell3",
+     "title": "cell3 is back online"
+    }
+   ],
+   "expect": [
+    {
+     "t": 0,
+     "outcomes": [
+      {
+       "rule": "node-offline",
+       "entity": "node:cell3",
+       "outcome": "sent"
+      }
+     ],
+     "messages": [
+      {
+       "title": "cell3 offline",
+       "severity": "crit"
+      }
+     ]
+    },
+    {
+     "t": 60,
+     "outcomes": [
+      {
+       "rule": "node-offline",
+       "entity": "node:cell3",
+       "outcome": "not-paged"
+      }
+     ],
+     "messages": []
+    }
+   ]
+  }
+ ]
+}

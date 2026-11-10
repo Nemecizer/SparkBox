@@ -1,0 +1,58 @@
+{"node":"gx10-0000","tsMs":1792950449244,"kind":"mlx5","code":null,"text":"mlx5_core 0000:01:00.0: Port module event: module 0, Cable unplugged","severity":"warn","process":null}
+{"node":"gx10-0000","tsMs":1792950449247,"kind":"mlx5","code":null,"text":"mlx5_core 0002:01:00.0: Port module event: module 0, Cable unplugged","severity":"warn","process":null}
+{"node":"gx10-0000","tsMs":1792950450922,"kind":"mlx5","code":null,"text":"mlx5_core 0002:01:00.0 enP2p1s0f0np0: Link down","severity":"warn","process":null}
+{"node":"gx10-0000","tsMs":1792950451447,"kind":"mlx5","code":null,"text":"mlx5_core 0000:01:00.0 enp1s0f0np0: Link down","severity":"warn","process":null}
+{"node":"cell1","tsMs":1792962489357,"kind":"mlx5","code":null,"text":"mlx5_core 0000:01:00.0: Port module event: module 0, Cable unplugged","severity":"warn","process":null}
+{"node":"cell1","tsMs":1792962489360,"kind":"mlx5","code":null,"text":"mlx5_core 0002:01:00.0: Port module event: module 0, Cable unplugged","severity":"warn","process":null}
+{"node":"cell1","tsMs":1792962491127,"kind":"mlx5","code":null,"text":"mlx5_core 0002:01:00.0 enP2p1s0f0np0: Link down","severity":"warn","process":null}
+{"node":"cell1","tsMs":1792962491642,"kind":"mlx5","code":null,"text":"mlx5_core 0000:01:00.0 enp1s0f0np0: Link down","severity":"warn","process":null}
+{"node":"cell2","tsMs":1792962521419,"kind":"mlx5","code":null,"text":"mlx5_core 0000:01:00.0: Port module event: module 0, Cable unplugged","severity":"warn","process":null}
+{"node":"cell2","tsMs":1792962521422,"kind":"mlx5","code":null,"text":"mlx5_core 0002:01:00.0: Port module event: module 0, Cable unplugged","severity":"warn","process":null}
+{"node":"cell2","tsMs":1792962523112,"kind":"mlx5","code":null,"text":"mlx5_core 0002:01:00.0 enP2p1s0f0np0: Link down","severity":"warn","process":null}
+{"node":"cell2","tsMs":1792962523779,"kind":"mlx5","code":null,"text":"mlx5_core 0000:01:00.0 enp1s0f0np0: Link down","severity":"warn","process":null}
+{"node":"cell3","tsMs":1792962532395,"kind":"mlx5","code":null,"text":"mlx5_core 0000:01:00.0: Port module event: module 0, Cable unplugged","severity":"warn","process":null}
+{"node":"cell3","tsMs":1792962532398,"kind":"mlx5","code":null,"text":"mlx5_core 0002:01:00.0: Port module event: module 0, Cable unplugged","severity":"warn","process":null}
+{"node":"cell3","tsMs":1792962534111,"kind":"mlx5","code":null,"text":"mlx5_core 0002:01:00.0 enP2p1s0f0np0: Link down","severity":"warn","process":null}
+{"node":"cell3","tsMs":1792962534663,"kind":"mlx5","code":null,"text":"mlx5_core 0000:01:00.0 enp1s0f0np0: Link down","severity":"warn","process":null}
+{"node":"cell1","tsMs":1793038581337,"kind":"mlx5","code":null,"text":"mlx5_core 0002:01:00.1 enP2p1s0f1np1: Link down","severity":"warn","process":null}
+{"node":"cell1","tsMs":1793038581337,"kind":"mlx5","code":null,"text":"mlx5_core 0000:01:00.1 enp1s0f1np1: Link down","severity":"warn","process":null}
+{"node":"cell1","tsMs":1793038581339,"kind":"mlx5","code":null,"text":"mlx5_core 0000:01:00.1 rocep1s0f1: Port: 1 Link DOWN","severity":"warn","process":null}
+{"node":"cell1","tsMs":1793038581339,"kind":"mlx5","code":null,"text":"mlx5_core 0002:01:00.1 roceP2p1s0f1: Port: 1 Link DOWN","severity":"warn","process":null}
+{"node":"cell2","tsMs":1793038587230,"kind":"mlx5","code":null,"text":"mlx5_core 0002:01:00.1 enP2p1s0f1np1: Link down","severity":"warn","process":null}
+{"node":"cell2","tsMs":1793038587230,"kind":"mlx5","code":null,"text":"mlx5_core 0000:01:00.1 enp1s0f1np1: Link down","severity":"warn","process":null}
+{"node":"cell2","tsMs":1793038587231,"kind":"mlx5","code":null,"text":"mlx5_core 0002:01:00.1 roceP2p1s0f1: Port: 1 Link DOWN","severity":"warn","process":null}
+{"node":"cell3","tsMs":1793038587331,"kind":"mlx5","code":null,"text":"mlx5_core 0002:01:00.1 enP2p1s0f1np1: Link down","severity":"warn","process":null}
+{"node":"cell3","tsMs":1793038587331,"kind":"mlx5","code":null,"text":"mlx5_core 0000:01:00.1 enp1s0f1np1: Link down","severity":"warn","process":null}
+{"node":"cell3","tsMs":1793038587333,"kind":"mlx5","code":null,"text":"mlx5_core 0000:01:00.1 rocep1s0f1: Port: 1 Link DOWN","severity":"warn","process":null}
+{"node":"cell3","tsMs":1793038587333,"kind":"mlx5","code":null,"text":"mlx5_core 0002:01:00.1 roceP2p1s0f1: Port: 1 Link DOWN","severity":"warn","process":null}
+{"node":"gx10-0000","tsMs":1793038587457,"kind":"mlx5","code":null,"text":"mlx5_core 0002:01:00.1 enP2p1s0f1np1: Link down","severity":"warn","process":null}
+{"node":"gx10-0000","tsMs":1793038587457,"kind":"mlx5","code":null,"text":"mlx5_core 0000:01:00.1 enp1s0f1np1: Link down","severity":"warn","process":null}
+{"node":"gx10-0000","tsMs":1793038587459,"kind":"mlx5","code":null,"text":"mlx5_core 0000:01:00.1 rocep1s0f1: Port: 1 Link DOWN","severity":"warn","process":null}
+{"node":"gx10-0000","tsMs":1793038587459,"kind":"mlx5","code":null,"text":"mlx5_core 0002:01:00.1 roceP2p1s0f1: Port: 1 Link DOWN","severity":"warn","process":null}
+{"node":"cell2","tsMs":1793038588250,"kind":"mlx5","code":null,"text":"mlx5_core 0000:01:00.1 rocep1s0f1: Port: 1 Link DOWN","severity":"warn","process":null}
+{"node":"cell2","tsMs":1793039288653,"kind":"mlx5","code":null,"text":"mlx5_core 0002:01:00.1 enP2p1s0f1np1: Link down","severity":"warn","process":null}
+{"node":"cell2","tsMs":1793039288653,"kind":"mlx5","code":null,"text":"mlx5_core 0000:01:00.1 enp1s0f1np1: Link down","severity":"warn","process":null}
+{"node":"cell2","tsMs":1793039288654,"kind":"mlx5","code":null,"text":"mlx5_core 0002:01:00.1 roceP2p1s0f1: Port: 1 Link DOWN","severity":"warn","process":null}
+{"node":"cell2","tsMs":1793039288654,"kind":"mlx5","code":null,"text":"mlx5_core 0000:01:00.1 rocep1s0f1: Port: 1 Link DOWN","severity":"warn","process":null}
+{"node":"cell1","tsMs":1793039288712,"kind":"mlx5","code":null,"text":"mlx5_core 0000:01:00.1 enp1s0f1np1: Link down","severity":"warn","process":null}
+{"node":"cell1","tsMs":1793039288712,"kind":"mlx5","code":null,"text":"mlx5_core 0002:01:00.1 enP2p1s0f1np1: Link down","severity":"warn","process":null}
+{"node":"cell1","tsMs":1793039288713,"kind":"mlx5","code":null,"text":"mlx5_core 0000:01:00.1 rocep1s0f1: Port: 1 Link DOWN","severity":"warn","process":null}
+{"node":"cell1","tsMs":1793039288714,"kind":"mlx5","code":null,"text":"mlx5_core 0002:01:00.1 roceP2p1s0f1: Port: 1 Link DOWN","severity":"warn","process":null}
+{"node":"gx10-0000","tsMs":1793039288730,"kind":"mlx5","code":null,"text":"mlx5_core 0000:01:00.1 enp1s0f1np1: Link down","severity":"warn","process":null}
+{"node":"gx10-0000","tsMs":1793039288730,"kind":"mlx5","code":null,"text":"mlx5_core 0002:01:00.1 enP2p1s0f1np1: Link down","severity":"warn","process":null}
+{"node":"gx10-0000","tsMs":1793039288730,"kind":"mlx5","code":null,"text":"mlx5_core 0000:01:00.1 rocep1s0f1: Port: 1 Link DOWN","severity":"warn","process":null}
+{"node":"cell3","tsMs":1793039288755,"kind":"mlx5","code":null,"text":"mlx5_core 0000:01:00.1 enp1s0f1np1: Link down","severity":"warn","process":null}
+{"node":"cell3","tsMs":1793039288755,"kind":"mlx5","code":null,"text":"mlx5_core 0002:01:00.1 enP2p1s0f1np1: Link down","severity":"warn","process":null}
+{"node":"cell3","tsMs":1793039288756,"kind":"mlx5","code":null,"text":"mlx5_core 0000:01:00.1 rocep1s0f1: Port: 1 Link DOWN","severity":"warn","process":null}
+{"node":"cell3","tsMs":1793039288757,"kind":"mlx5","code":null,"text":"mlx5_core 0002:01:00.1 roceP2p1s0f1: Port: 1 Link DOWN","severity":"warn","process":null}
+{"node":"gx10-0000","tsMs":1793039289782,"kind":"mlx5","code":null,"text":"mlx5_core 0002:01:00.1 roceP2p1s0f1: Port: 1 Link DOWN","severity":"warn","process":null}
+{"node":"cell1","tsMs":1793039343409,"kind":"mlx5","code":null,"text":"mlx5_core 0000:01:00.1 enp1s0f1np1: Link down","severity":"warn","process":null}
+{"node":"cell1","tsMs":1793039343409,"kind":"mlx5","code":null,"text":"mlx5_core 0002:01:00.1 enP2p1s0f1np1: Link down","severity":"warn","process":null}
+{"node":"cell2","tsMs":1793039346048,"kind":"mlx5","code":null,"text":"mlx5_core 0000:01:00.1 enp1s0f1np1: Link down","severity":"warn","process":null}
+{"node":"cell2","tsMs":1793039346048,"kind":"mlx5","code":null,"text":"mlx5_core 0002:01:00.1 enP2p1s0f1np1: Link down","severity":"warn","process":null}
+{"node":"cell3","tsMs":1793039346555,"kind":"mlx5","code":null,"text":"mlx5_core 0000:01:00.1 enp1s0f1np1: Link down","severity":"warn","process":null}
+{"node":"cell3","tsMs":1793039346556,"kind":"mlx5","code":null,"text":"mlx5_core 0002:01:00.1 enP2p1s0f1np1: Link down","severity":"warn","process":null}
+{"node":"gx10-0000","tsMs":1793039347697,"kind":"mlx5","code":null,"text":"mlx5_core 0000:01:00.1 enp1s0f1np1: Link down","severity":"warn","process":null}
+{"node":"gx10-0000","tsMs":1793039347698,"kind":"mlx5","code":null,"text":"mlx5_core 0002:01:00.1 enP2p1s0f1np1: Link down","severity":"warn","process":null}
+{"node":"gx10-0000","tsMs":1793039347731,"kind":"mlx5","code":null,"text":"mlx5_core 0000:01:00.1 enp1s0f1np1: Link down","severity":"warn","process":null}
+{"node":"gx10-0000","tsMs":1793039347731,"kind":"mlx5","code":null,"text":"mlx5_core 0002:01:00.1 enP2p1s0f1np1: Link down","severity":"warn","process":null}

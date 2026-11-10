@@ -1,0 +1,166 @@
+/* ---- p6-term-files: editor window ---- */
+
+/* Syntax colours (Xcode-like, contrast-checked against --surface in both themes). */
+.sb-editor {
+  --cm-keyword: #9b2393;
+  --cm-string: #c41a16;
+  --cm-number: #1c00cf;
+  --cm-comment: #5d6c79;
+  --cm-property: #2f6f78;
+  --cm-function: #3900a0;
+  --cm-meta: #643820;
+  --cm-selection: color-mix(in oklch, var(--accent) 24%, transparent);
+  --cm-selection-match: color-mix(in oklch, var(--accent) 12%, transparent);
+  --cm-active-line: color-mix(in oklch, var(--text) 4%, transparent);
+  --cm-trailing: color-mix(in oklch, var(--critical) 22%, transparent);
+  --cm-bracket: color-mix(in oklch, var(--accent) 18%, transparent);
+  --cm-match: color-mix(in oklch, var(--warning) 32%, transparent);
+  --cm-match-current: color-mix(in oklch, var(--warning) 62%, transparent);
+}
+:root[data-theme="dark"] .sb-editor {
+  --cm-keyword: #fc5fa3;
+  --cm-string: #fc6a5d;
+  --cm-number: #d0bf69;
+  --cm-comment: #8a96a3;
+  --cm-property: #67b7a4;
+  --cm-function: #b281eb;
+  --cm-meta: #fd8f3f;
+  --cm-selection: color-mix(in oklch, var(--accent) 38%, transparent);
+  --cm-active-line: color-mix(in oklch, var(--text) 5%, transparent);
+  --cm-trailing: color-mix(in oklch, var(--critical) 32%, transparent);
+}
+:root[data-theme="black"] .sb-editor {
+  --cm-keyword: #fc5fa3;
+  --cm-string: #fc6a5d;
+  --cm-number: #d0bf69;
+  --cm-comment: #8a96a3;
+  --cm-property: #67b7a4;
+  --cm-function: #b281eb;
+  --cm-meta: #fd8f3f;
+  --cm-selection: color-mix(in oklch, var(--accent) 38%, transparent);
+  --cm-active-line: color-mix(in oklch, var(--text) 5%, transparent);
+  --cm-trailing: color-mix(in oklch, var(--critical) 32%, transparent);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .sb-editor {
+    --cm-keyword: #fc5fa3;
+    --cm-string: #fc6a5d;
+    --cm-number: #d0bf69;
+    --cm-comment: #8a96a3;
+    --cm-property: #67b7a4;
+    --cm-function: #b281eb;
+    --cm-meta: #fd8f3f;
+    --cm-selection: color-mix(in oklch, var(--accent) 38%, transparent);
+    --cm-active-line: color-mix(in oklch, var(--text) 5%, transparent);
+    --cm-trailing: color-mix(in oklch, var(--critical) 32%, transparent);
+  }
+}
+
+.sb-editor { position: relative; background: var(--surface); }
+.sb-editor-loading { flex: 1; display: grid; place-items: center; padding: var(--sp-6, 16px); }
+.sb-editor-host { flex: 1; min-height: 0; overflow: hidden; }
+.sb-editor-host .cm-editor { height: 100%; }
+.sb-editor-host .cm-editor.cm-focused { outline: none; }
+.sb-editor-where { max-width: 52%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text-2); font-size: var(--fs-xs, 10.5px); }
+
+.sb-editor-bar {
+  flex: none; display: flex; align-items: center; gap: var(--sp-3, 6px);
+  padding: var(--sp-2, 4px) var(--sp-5, 12px); min-height: calc(var(--sp-7, 24px) + var(--sp-4, 8px));
+  border-bottom: var(--hairline-w, 1px) solid var(--hairline); font-size: var(--fs-sm, 11px); color: var(--text);
+}
+.sb-editor-bar.warn { background: var(--warn-bg); }
+.sb-editor-bar.warn > svg { color: var(--warn-text); flex: none; }
+.sb-editor-bar.info { background: var(--info-bg, var(--surface-2)); color: var(--text-2); }
+.sb-editor-bar.info > svg { color: var(--info, var(--accent)); flex: none; }
+
+.sb-editor-status {
+  flex: none; display: flex; align-items: center; gap: var(--sp-5, 12px);
+  padding: var(--sp-1, 2px) var(--sp-5, 12px); border-top: var(--hairline-w, 1px) solid var(--hairline);
+  background: var(--chrome); color: var(--text-2); font-size: var(--fs-xs, 10.5px); font-variant-numeric: tabular-nums;
+}
+.sb-editor-status-btn {
+  border: 0; background: none; padding: var(--hairline-w, 1px) var(--sp-2, 4px); margin: calc(-1 * var(--hairline-w, 1px)) calc(-1 * var(--sp-2, 4px)); border-radius: var(--r-sm, 4px);
+  color: inherit; font: inherit; cursor: pointer;
+}
+.sb-editor-status-btn:hover { background: var(--hover); color: var(--text); }
+.sb-editor-dirty { color: var(--text); font-weight: var(--fw-medium, 500); }
+
+/* CodeMirror's search and go-to-line panels, in the app's control style. */
+.sb-editor .cm-panel.cm-search { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2, 4px) var(--sp-3, 6px); padding: var(--sp-3, 6px) var(--sp-4, 8px); }
+.sb-editor .cm-panel input[type="text"], .sb-editor .cm-panel .cm-textfield {
+  font: inherit; font-size: var(--fs-sm, 11px); padding: var(--sp-1, 2px) var(--sp-3, 6px); border: var(--hairline-w, 1px) solid var(--field-border, var(--border));
+  border-radius: var(--r-sm, 4px); background: var(--surface); color: var(--text);
+}
+.sb-editor .cm-panel .cm-textfield:focus { outline: var(--focus-width, 2px) solid var(--focus-ring, var(--accent)); outline-offset: calc(-1 * var(--hairline-w, 1px)); }
+.sb-editor .cm-panel button, .sb-editor .cm-panel .cm-button {
+  font: inherit; font-size: var(--fs-sm, 11px); padding: var(--sp-1, 2px) var(--sp-4, 8px); border: var(--hairline-w, 1px) solid var(--tool-border, var(--border));
+  border-radius: var(--r-sm, 4px); background: var(--surface); background-image: none; color: var(--text); cursor: pointer;
+}
+.sb-editor .cm-panel button:hover { background: var(--hover); }
+.sb-editor .cm-panel label { display: inline-flex; align-items: center; gap: var(--sp-1, 2px); font-size: var(--fs-sm, 11px); color: var(--text-2); }
+.sb-editor .cm-panel button[name="close"] { border: 0; background: none; font-size: var(--fs-lg, 15px); color: var(--muted); padding: 0 var(--sp-2, 4px); }
+.sb-editor .cm-gotoLine { padding: var(--sp-3, 6px) var(--sp-4, 8px); }
+
+/* Sheets: Review changes and Show diff slide down from the top, like a macOS sheet. */
+.sb-editor-sheet-back {
+  position: absolute; inset: 0; z-index: 40; display: flex; justify-content: center; align-items: flex-start;
+  background: var(--overlay, rgba(0, 0, 0, 0.25));
+  animation: sb-sheet-fade var(--dur-2, 180ms) var(--ease, ease-out);
+}
+.sb-editor-sheet {
+  width: min(var(--sheet-w, 880px), 94%); max-height: 86%; display: flex; flex-direction: column;
+  background: var(--surface); color: var(--text); border: var(--hairline-w, 1px) solid var(--border); border-top: 0;
+  border-radius: 0 0 var(--r-xl, 12px) var(--r-xl, 12px); box-shadow: var(--shadow-pop);
+  animation: sb-sheet-in var(--dur-3, 260ms) var(--ease, ease-out);
+}
+.sb-editor-sheet-title { padding: var(--sp-5, 12px) var(--sp-6, 16px) var(--sp-3, 6px); font-size: var(--fs-md, 13px); font-weight: var(--fw-semibold, 600); }
+.sb-editor-sheet-body { flex: 1; min-height: calc(5 * var(--sp-7, 24px)); overflow: auto; padding: 0 var(--sp-6, 16px); }
+.sb-editor-sheet-actions { display: flex; align-items: center; justify-content: flex-end; gap: var(--sp-4, 8px); padding: var(--sp-5, 12px) var(--sp-6, 16px); }
+.sb-editor-sheet-note { margin-right: auto; font-size: var(--fs-xs, 10.5px); max-width: 60%; }
+@keyframes sb-sheet-in { from { transform: translateY(calc(-1 * var(--sp-5, 12px))); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes sb-sheet-fade { from { opacity: 0; } to { opacity: 1; } }
+
+/* Diffs */
+.sb-diff { display: flex; flex-direction: column; border: var(--hairline-w, 1px) solid var(--hairline); border-radius: var(--r-md, 6px); overflow: hidden; }
+.sb-diff-head { display: flex; gap: var(--sp-5, 12px); align-items: center; padding: var(--sp-2, 4px) var(--sp-4, 8px); background: var(--surface-2); border-bottom: var(--hairline-w, 1px) solid var(--hairline); font-size: var(--fs-xs, 10.5px); }
+.sb-diff-del-label { color: var(--crit-text); font-weight: var(--fw-medium, 500); }
+.sb-diff-add-label { color: var(--good-text); font-weight: var(--fw-medium, 500); }
+.sb-diff-empty { padding: var(--sp-6, 16px); text-align: center; }
+.sb-diff-body { font-size: var(--fs-mono, 11.5px); line-height: 1.5; overflow-x: auto; }
+.sb-diff-at { padding: var(--sp-1, 2px) var(--sp-4, 8px); color: var(--muted); background: var(--surface-2); border-top: var(--hairline-w, 1px) solid var(--hairline); }
+.sb-diff-hunk:first-child .sb-diff-at { border-top: 0; }
+.sb-diff-line { display: grid; grid-template-columns: 4.5ch 4.5ch 2ch 1fr; white-space: pre; }
+.sb-diff-line.add { background: var(--good-bg); }
+.sb-diff-line.del { background: var(--crit-bg); }
+.sb-diff-no { text-align: right; padding-right: var(--sp-3, 6px); color: var(--muted); user-select: none; font-variant-numeric: tabular-nums; }
+.sb-diff-sign { text-align: center; user-select: none; color: var(--text-2); }
+.sb-diff-line.add .sb-diff-sign { color: var(--good-text); font-weight: 600; }
+.sb-diff-line.del .sb-diff-sign { color: var(--crit-text); font-weight: 600; }
+.sb-diff-text { padding-right: var(--sp-4, 8px); }
+.sb-editor-review-warn { margin-bottom: var(--sp-4, 8px); border: var(--hairline-w, 1px) solid var(--warning-border, var(--warning)); border-radius: var(--r-md, 6px); }
+
+/* ---- r2-live: the close question (Save, Don't Save, Cancel) ---- */
+.sb-editor-sheet.small { width: min(calc(18 * var(--sp-7, 24px)), 94%); }
+.sb-editor-sheet.small .sb-editor-sheet-body { flex: none; min-height: 0; }
+.sb-editor-sheet-actions > .spacer { flex: 1; }
+.sb-editor-close-text { margin: 0; color: var(--text-2); font-size: var(--fs-sm, 11px); line-height: 1.45; }
+.sb-editor-kbd {
+  margin-left: var(--sp-3, 6px); padding: 0 var(--sp-1, 2px); border-radius: var(--r-sm, 4px);
+  font: inherit; font-size: var(--fs-2xs, 10.5px); opacity: 0.75;
+}
+
+/* Read-only while Admin mode is locked: neutral, never alarm colour. */
+.sb-editor-bar.sb-editor-locked { background: var(--surface-2); }
+.sb-editor-bar.sb-editor-locked > svg { color: var(--text-2); }
+
+/* A file only root can read: the explanation is the window's content. */
+.sb-editor-rootonly {
+  flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: var(--sp-3, 6px); padding: var(--sp-7, 24px); text-align: center;
+}
+.sb-editor-rootonly-icon { color: var(--text-2); }
+.sb-editor-rootonly-title { margin: 0; font-size: var(--fs-lg, 14px); font-weight: 600; color: var(--text); }
+.sb-editor-rootonly-facts { font-weight: var(--fw-regular, 400); color: var(--text-2); }
+.sb-editor-rootonly-body { margin: 0; max-width: 46ch; font-size: var(--fs-sm, 11px); color: var(--text-2); }
+.sb-editor-rootonly-path { margin: 0 0 var(--sp-3, 6px); max-width: 90%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--fs-xs, 10.5px); }
+.sb-editor-rootonly .btn svg { vertical-align: -1px; }

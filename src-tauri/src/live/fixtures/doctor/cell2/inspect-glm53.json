@@ -1,0 +1,142 @@
+[
+ {
+  "Id": "2e35a6ef4126ae096e64798c7a2b301a8accea2d308dca36a073991974046ae5",
+  "Created": "2026-10-26T22:20:25.000000000Z",
+  "Path": "/bin/bash",
+  "Args": [
+   "/glm53/inner.sh",
+   "1"
+  ],
+  "State": {
+   "Status": "exited",
+   "Running": false,
+   "Paused": false,
+   "Restarting": false,
+   "OOMKilled": false,
+   "Dead": false,
+   "Pid": 0,
+   "ExitCode": 1,
+   "Error": "",
+   "StartedAt": "2026-10-26T22:20:26.000000000Z",
+   "FinishedAt": "2026-10-26T22:21:19.000000000Z"
+  },
+  "Image": "sha256:3f6e0c1b7a9d2e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f",
+  "Name": "/glm53",
+  "RestartCount": 0,
+  "HostConfig": {
+   "Binds": [
+    "/home/sparkuser/.cache/flashinfer:/root/.cache/flashinfer",
+    "/home/sparkuser/.triton:/root/.triton",
+    "/home/sparkuser/glm53:/glm53:ro",
+    "/home/sparkuser/models:/models:ro",
+    "/home/sparkuser/.cache/vllm:/root/.cache/vllm"
+   ],
+   "NetworkMode": "host",
+   "IpcMode": "host",
+   "ShmSize": 17179869184,
+   "RestartPolicy": {
+    "Name": "no",
+    "MaximumRetryCount": 0
+   },
+   "DeviceRequests": [
+    {
+     "Driver": "",
+     "Count": -1,
+     "DeviceIDs": null,
+     "Capabilities": [
+      [
+       "gpu"
+      ]
+     ],
+     "Options": {}
+    }
+   ]
+  },
+  "Mounts": [
+   {
+    "Type": "bind",
+    "Source": "/home/sparkuser/.cache/flashinfer",
+    "Destination": "/root/.cache/flashinfer",
+    "RW": true
+   },
+   {
+    "Type": "bind",
+    "Source": "/home/sparkuser/.triton",
+    "Destination": "/root/.triton",
+    "RW": true
+   },
+   {
+    "Type": "bind",
+    "Source": "/home/sparkuser/glm53",
+    "Destination": "/glm53",
+    "RW": false
+   },
+   {
+    "Type": "bind",
+    "Source": "/home/sparkuser/models",
+    "Destination": "/models",
+    "RW": false
+   },
+   {
+    "Type": "bind",
+    "Source": "/home/sparkuser/.cache/vllm",
+    "Destination": "/root/.cache/vllm",
+    "RW": true
+   }
+  ],
+  "Config": {
+   "Hostname": "cell2-example",
+   "Env": [
+    "NCCL_IGNORE_CPU_AFFINITY=1",
+    "PORT=8000",
+    "GPU_MEM_UTIL=0.87",
+    "MN_IF_NAME=enp1s0f1np1",
+    "TP_SOCKET_IFNAME=enp1s0f1np1",
+    "HEAD_IP=192.168.100.1",
+    "SERVED_NAME=glm-5.3-flash",
+    "MTP_TOKENS=<redacted>",
+    "MOE_BACKEND=",
+    "API_KEY=<redacted>",
+    "UCX_NET_DEVICES=enp1s0f1np1",
+    "NCCL_IB_HCA=rocep1s0f1,roceP2p1s0f1",
+    "OMPI_MCA_btl_tcp_if_include=enp1s0f1np1",
+    "MODEL_LOCAL_NAME=GLM-5.3-Flash-NVFP4",
+    "NCCL_SOCKET_IFNAME=enp1s0f1np1",
+    "NCCL_IB_DISABLE=0",
+    "GLOO_SOCKET_IFNAME=enp1s0f1np1",
+    "MASTER_PORT=29501",
+    "MAX_MODEL_LEN=524288",
+    "MAX_NUM_SEQS=8",
+    "NNODES=4",
+    "PATH=/usr/local/cuda/bin:/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+    "NVARCH=sbsa",
+    "NVIDIA_REQUIRE_CUDA=cuda>=13.0 brand=unknown,driver>=535,driver<536 brand=grid,driver>=535,driver<536 brand=tesla,driver>=535,driver<536 brand=nvidia,driver>=535,driver<536 brand=quadro,driver>=535,driver<536 brand=quadrortx,driver>=535,driver<536 brand=nvidiartx,driver>=535,driver<536 brand=vapps,driver>=535,driver<536 brand=vpc,driver>=535,driver<536 brand=vcs,driver>=535,driver<536 brand=vws,driver>=535,driver<536 brand=cloudgaming,driver>=535,driver<536 brand=unknown,driver>=550,driver<551 brand=grid,driver>=550,driver<551 brand=tesla,driver>=550,driver<551 brand=nvidia,driver>=550,driver<551 brand=quadro,driver>=550,driver<551 brand=quadrortx,driver>=550,driver<551 brand=nvidiartx,driver>=550,driver<551 brand=vapps,driver>=550,driver<551 brand=vpc,driver>=550,driver<551 brand=vcs,driver>=550,driver<551 brand=vws,driver>=550,driver<551 brand=cloudgaming,driver>=550,driver<551 brand=unknown,driver>=565,driver<566 brand=grid,driver>=565,driver<566 brand=tesla,driver>=565,driver<566 brand=nvidia,driver>=565,driver<566 brand=quadro,driver>=565,driver<566 brand=quadrortx,driver>=565,driver<566 brand=nvidiartx,driver>=565,driver<566 brand=vapps,driver>=565,driver<566 brand=vpc,driver>=565,driver<566 brand=vcs,driver>=565,driver<566 brand=vws,driver>=565,driver<566 brand=cloudgaming,driver>=565,driver<566 brand=unknown,driver>=570,driver<571 brand=grid,driver>=570,driver<571 brand=tesla,driver>=570,driver<571 brand=nvidia,driver>=570,driver<571 brand=quadro,driver>=570,driver<571 brand=quadrortx,driver>=570,driver<571 brand=nvidiartx,driver>=570,driver<571 brand=vapps,driver>=570,driver<571 brand=vpc,driver>=570,driver<571 brand=vcs,driver>=570,driver<571 brand=vws,driver>=570,driver<571 brand=cloudgaming,driver>=570,driver<571 brand=unknown,driver>=575,driver<576 brand=grid,driver>=575,driver<576 brand=tesla,driver>=575,driver<576 brand=nvidia,driver>=575,driver<576 brand=quadro,driver>=575,driver<576 brand=quadrortx,driver>=575,driver<576 brand=nvidiartx,driver>=575,driver<576 brand=vapps,driver>=575,driver<576 brand=vpc,drive"
+   ],
+   "Cmd": [
+    "/glm53/inner.sh",
+    "1"
+   ],
+   "Entrypoint": [
+    "/bin/bash"
+   ],
+   "Image": "vllm/vllm-openai:glm53-flash-arm64-cu130",
+   "Labels": {
+    "ai.vllm.build.commit": "385dce36bcee42309924a5ece951a96db3dce7f2",
+    "ai.vllm.build.pipeline": "019d130e-464e-4ff7-b84b-492992c0c06b",
+    "ai.vllm.build.url": "https://buildkite.com/vllm/release-v2/builds/6303",
+    "ai.vllm.image.tag": "vllm/vllm-openai:nightly-385dce36bcee42309924a5ece951a96db3dce7f2",
+    "maintainer": "NVIDIA CORPORATION <cudatools@nvidia.com>",
+    "org.opencontainers.image.ref.name": "ubuntu",
+    "org.opencontainers.image.revision": "385dce36bcee42309924a5ece951a96db3dce7f2",
+    "org.opencontainers.image.source": "https://github.com/vllm-project/vllm",
+    "org.opencontainers.image.url": "https://buildkite.com/vllm/release-v2/builds/6303",
+    "org.opencontainers.image.version": "vllm/vllm-openai:nightly-385dce36bcee42309924a5ece951a96db3dce7f2"
+   }
+  },
+  "NetworkSettings": {
+   "Networks": {
+    "host": {}
+   }
+  }
+ }
+]

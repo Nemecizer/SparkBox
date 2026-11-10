@@ -1,0 +1,17 @@
+Inst linux-crashdump [6.8.0-147.147] (6.8.0-149.149 Ubuntu:24.04/noble-updates [arm64])
+Inst linux-nvidia-7.0-headers-7.0.0-1025 (7.0.0-1025.26~24.04.1 Ubuntu:24.04/noble-updates [all])
+Inst linux-headers-7.0.0-1025-nvidia (7.0.0-1025.26~24.04.1 Ubuntu:24.04/noble-updates [arm64])
+Inst linux-modules-7.0.0-1025-nvidia (7.0.0-1025.26~24.04.1 Ubuntu:24.04/noble-updates [arm64])
+Inst linux-image-7.0.0-1025-nvidia (7.0.0-1025.26~24.04.1 Ubuntu:24.04/noble-updates [arm64])
+Inst linux-modules-nvidia-580-open-7.0.0-1025-nvidia (7.0.0-1025.26~24.04.1 Ubuntu:24.04/noble-updates [arm64])
+Inst linux-nvidia-hwe-24.04 [7.0.0-1024.25~24.04.1] (7.0.0-1025.26~24.04.1 Ubuntu:24.04/noble-updates [arm64]) [linux-modules-nvidia-580-open-nvidia-hwe-24.04:arm64 on linux-nvidia-hwe-24.04:arm64] [linux-modules-nvidia-580-open-nvidia-hwe-24.04:arm64 ]
+Inst linux-modules-nvidia-580-open-nvidia-hwe-24.04 [7.0.0-1024.25~24.04.1] (7.0.0-1025.26~24.04.1 Ubuntu:24.04/noble-updates [arm64]) []
+Inst linux-modules-nvidia-fs-7.0.0-1025-nvidia (7.0.0-1025.26~24.04.1 Ubuntu:24.04/noble-updates [arm64]) []
+Inst linux-image-nvidia-hwe-24.04 [7.0.0-1024.25~24.04.1] (7.0.0-1025.26~24.04.1 Ubuntu:24.04/noble-updates [arm64]) []
+Inst linux-headers-nvidia-hwe-24.04 [7.0.0-1024.25~24.04.1] (7.0.0-1025.26~24.04.1 Ubuntu:24.04/noble-updates [arm64])
+Inst linux-libc-dev [6.8.0-147.147] (6.8.0-149.149 Ubuntu:24.04/noble-updates [arm64])
+Inst linux-modules-nvidia-fs-nvidia-hwe-24.04 [7.0.0-1024.25~24.04.1] (7.0.0-1025.26~24.04.1 Ubuntu:24.04/noble-updates [arm64])
+Inst linux-tools-common [6.8.0-147.147] (6.8.0-149.149 Ubuntu:24.04/noble-updates [all])
+Inst linux-nvidia-7.0-tools-7.0.0-1025 (7.0.0-1025.26~24.04.1 Ubuntu:24.04/noble-updates [arm64])
+Inst linux-tools-7.0.0-1025-nvidia (7.0.0-1025.26~24.04.1 Ubuntu:24.04/noble-updates [arm64])
+Inst linux-tools-nvidia-hwe-24.04 [7.0.0-1024.25~24.04.1] (7.0.0-1025.26~24.04.1 Ubuntu:24.04/noble-updates [arm64])

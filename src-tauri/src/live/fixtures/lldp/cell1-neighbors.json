@@ -1,0 +1,84 @@
+{
+  "lldp": {
+    "interface": [
+      {
+        "enp1s0f1np1": {
+          "via": "LLDP",
+          "rid": "1",
+          "age": "3 days, 14:02:51",
+          "chassis": {
+            "cell1-example": {
+              "id": { "type": "mac", "value": "fc:9d:05:d5:54:96" },
+              "descr": "Ubuntu 24.04.5 LTS Linux 7.0.0-1019-nvidia #19~24.04.2-Ubuntu SMP PREEMPT_DYNAMIC Sun Sep  6 18:35:11 UTC 2 aarch64",
+              "mgmt-ip": ["192.168.50.51", "fe80::1"],
+              "capability": [
+                { "type": "Bridge", "enabled": false },
+                { "type": "Router", "enabled": false },
+                { "type": "Wlan", "enabled": false },
+                { "type": "Station", "enabled": true }
+              ]
+            }
+          },
+          "port": {
+            "id": { "type": "mac", "value": "fc:9d:05:ed:d4:6c" },
+            "descr": "enP2p1s0f1np1",
+            "ttl": "120",
+            "mfs": "9000"
+          }
+        }
+      },
+      {
+        "enP2p1s0f1np1": {
+          "via": "LLDP",
+          "rid": "1",
+          "age": "3 days, 14:02:51",
+          "chassis": {
+            "cell1-example": {
+              "id": { "type": "mac", "value": "fc:9d:05:d5:54:96" },
+              "descr": "Ubuntu 24.04.5 LTS Linux 7.0.0-1019-nvidia #19~24.04.2-Ubuntu SMP PREEMPT_DYNAMIC Sun Sep  6 18:35:11 UTC 2 aarch64",
+              "mgmt-ip": ["192.168.50.51", "fe80::1"],
+              "capability": [
+                { "type": "Bridge", "enabled": false },
+                { "type": "Router", "enabled": false },
+                { "type": "Wlan", "enabled": false },
+                { "type": "Station", "enabled": true }
+              ]
+            }
+          },
+          "port": {
+            "id": { "type": "mac", "value": "fc:9d:05:c3:bb:46" },
+            "descr": "enp1s0f1np1",
+            "ttl": "120",
+            "mfs": "9000"
+          }
+        }
+      },
+      {
+        "enP7s7": {
+          "via": "LLDP",
+          "rid": "2",
+          "age": "0 day, 03:41:09",
+          "chassis": {
+            "cell3-example": {
+              "id": { "type": "mac", "value": "fc:9d:05:5e:bd:9c" },
+              "descr": "Ubuntu 24.04.5 LTS Linux 7.0.0-1019-nvidia #19~24.04.2-Ubuntu SMP PREEMPT_DYNAMIC Sun Sep  6 18:35:11 UTC 2 aarch64",
+              "mgmt-ip": ["192.168.50.98", "fe80::3"],
+              "capability": [
+                { "type": "Bridge", "enabled": false },
+                { "type": "Router", "enabled": false },
+                { "type": "Wlan", "enabled": false },
+                { "type": "Station", "enabled": true }
+              ]
+            }
+          },
+          "port": {
+            "id": { "type": "mac", "value": "fc:9d:05:5e:bd:9c" },
+            "descr": "enP7s7",
+            "ttl": "120",
+            "mfs": "1514"
+          }
+        }
+      }
+    ]
+  }
+}

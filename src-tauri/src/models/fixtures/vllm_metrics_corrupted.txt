@@ -1,0 +1,20 @@
+# HELP vllm:num_requests_running Number of requests in model execution batches.
+# TYPE vllm:num_requests_running gauge
+vllm:num_requests_running{engine="0",model_name="gemma-3-27b-it"} 1.0
+vllm:num_requests_running{engine="1",model_name="gemma-3-27b-it"} 0.0
+# HELP vllm:num_requests_waiting Number of requests waiting to be processed.
+# TYPE vllm:num_requests_waiting gauge
+vllm:num_requests_waiting{engine="0",model_name="gemma-3-27b-it"} 0.0
+vllm:num_requests_waiting{engine="1",model_name="gemma-3-27b-it"} 0.0
+# HELP vllm:generation_tokens_total Number of generation tokens processed.
+# TYPE vllm:generation_tokens_total counter
+vllm:generation_tokens_total{engine="0",model_name="gemma-3-27b-it"} 4120.0
+vllm:generation_tokens_total{engine="1",model_name="gemma-3-27b-it"} 380.0
+vllm:generation_tokens_created{engine="0",model_name="gemma-3-27b-it"} 1.761472830113e+09
+vllm:generation_tokens_created{engine="1",model_name="gemma-3-27b-it"} 1.761472830113e+09
+# HELP vllm:corrupted_requests_total Corrupted requests, in terms of total number of requests with NaNs in logits.
+# TYPE vllm:corrupted_requests_total counter
+vllm:corrupted_requests_total{engine="0",model_name="gemma-3-27b-it"} 2.0
+vllm:corrupted_requests_total{engine="1",model_name="gemma-3-27b-it"} 1.0
+vllm:corrupted_requests_created{engine="0",model_name="gemma-3-27b-it"} 1.761472830113e+09
+vllm:corrupted_requests_created{engine="1",model_name="gemma-3-27b-it"} 1.761472830113e+09

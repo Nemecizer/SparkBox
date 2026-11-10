@@ -1,0 +1,212 @@
+/* ---- p6-term-files: Files window ---- */
+
+.sb-files { position: relative; background: var(--surface); }
+.sb-panes { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-4, 8px); padding: var(--sp-4, 8px) var(--sp-5, 12px); }
+
+/* A pane: the active one has an accent border; the other's selection is grey. */
+.sb-pane {
+  position: relative; min-width: 0; min-height: 0; display: flex; flex-direction: column;
+  border: 1px solid var(--hairline); border-radius: var(--r-lg, 8px); background: var(--surface); overflow: hidden;
+  transition: border-color var(--dur-1, 120ms) var(--ease, ease), box-shadow var(--dur-1, 120ms) var(--ease, ease);
+}
+.sb-pane.active { border-color: var(--accent); box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 35%, transparent); }
+.sb-pane.drop { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 30%, transparent); background: color-mix(in srgb, var(--accent) 4%, var(--surface)); }
+.sb-pane.active table.grid tbody tr.sel, .sb-pane.active table.grid tbody tr[aria-selected="true"] { background: var(--sel); color: var(--sel-text, var(--text)); }
+.sb-pane:not(.active) .table-wrap:focus-within table.grid tbody tr.sel,
+.sb-pane:not(.active) table.grid tbody tr.sel,
+.sb-pane:not(.active) table.grid tbody tr[aria-selected="true"] { background: var(--sel-inactive); color: var(--text); }
+.sb-pane table.grid tbody tr.sb-drop-row { background: color-mix(in srgb, var(--accent) 22%, var(--surface)) !important; box-shadow: inset 0 0 0 2px var(--accent); }
+.sb-pane table.grid tbody tr.sb-dot-row td { color: var(--text-2); }
+
+.sb-pane-bar {
+  flex: none; display: flex; align-items: center; gap: 2px; padding: 4px 6px;
+  background: var(--chrome); border-bottom: 1px solid var(--hairline); min-width: 0;
+}
+.sb-pane-place { max-width: 128px; margin-right: 4px; }
+/* A narrow pane (Files beside an editor) keeps its room for the path: Back and Forward stay
+   on ⌘[ and ⌘], and the location menu narrows. */
+.sb-pane-bar { container-type: inline-size; }
+@container (max-width: 400px) {
+  .sb-pane-bar .sb-pane-hist { display: none; }
+  .sb-pane-bar .sb-pane-place { max-width: 92px; }
+}
+.sb-pane-bar .tool.icon-only { padding: 3px 5px; }
+.sb-pane-bar .status { margin-right: 2px; }
+
+/* Breadcrumbs */
+.sb-crumbs {
+  flex: 1; min-width: 0; display: flex; align-items: center; gap: 0; overflow: hidden; height: 24px;
+  margin: 0 2px; padding: 0 2px 0 4px; border: 1px solid transparent; border-radius: var(--r-sm, 4px);
+}
+.sb-crumbs:hover { border-color: var(--hairline); background: var(--surface); }
+/* Crumbs keep their width so Breadcrumbs can see the overflow and fold the middle into "…";
+   once everything that can fold has, the current folder shortens with an ellipsis. */
+.sb-crumb-wrap { display: inline-flex; align-items: center; flex: none; }
+.sb-crumbs.tight .sb-crumb-wrap, .sb-crumbs.tight .sb-crumb { flex: 0 1 auto; min-width: 0; }
+.sb-crumb {
+  flex: none; max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  padding: 2px 4px; border: 0; border-radius: var(--r-sm, 4px); background: none; color: var(--text-2);
+  font: inherit; font-size: var(--fs-sm, 11px); cursor: pointer;
+}
+.sb-crumb:hover { background: var(--hover); color: var(--text); }
+.sb-crumb.last { color: var(--text); font-weight: var(--fw-medium, 500); cursor: text; }
+.sb-crumb.more { display: inline-grid; place-items: center; }
+.sb-crumb-sep { flex: none; color: var(--muted); }
+.sb-crumbs-fill { flex: 1; align-self: stretch; min-width: 12px; border: 0; background: none; cursor: text; }
+.sb-crumb-star { flex: none; display: grid; place-items: center; width: 20px; height: 20px; border: 0; border-radius: var(--r-sm, 4px); background: none; color: var(--muted); cursor: pointer; }
+.sb-crumb-star:hover { background: var(--hover); color: var(--text); }
+/* A favourite is not a warning: filled, in the text colour (amber is reserved for state). */
+.sb-crumb-star.on { color: var(--text-2); }
+.sb-crumb-star.on svg { fill: currentColor; }
+.sb-crumbs-input { flex: 1; min-width: 60px; height: 24px; margin: 0 2px; font-size: var(--fs-sm, 11px); }
+
+/* Favourites */
+.sb-pane-favs {
+  flex: none; display: flex; gap: 4px; padding: 4px 8px; overflow-x: auto; scrollbar-width: none;
+  border-bottom: 1px solid var(--hairline); background: var(--surface-2);
+}
+.sb-pane-favs::-webkit-scrollbar { display: none; }
+.sb-fav {
+  flex: none; display: inline-flex; align-items: center; gap: 4px; padding: 1px 8px; height: 20px;
+  border: 1px solid var(--hairline); border-radius: 999px; background: var(--surface); color: var(--text-2);
+  font: inherit; font-size: var(--fs-xs, 10.5px); cursor: pointer;
+}
+.sb-fav:hover { color: var(--text); border-color: var(--border); }
+.sb-fav.on { background: var(--sel); border-color: color-mix(in srgb, var(--accent) 45%, transparent); color: var(--text); }
+.sb-fav svg { color: var(--muted); }
+
+/* Body: the table, plus overlays that never shift it. */
+.sb-pane-body { position: relative; flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.sb-pane-body > .table-wrap { flex: 1; min-height: 0; border: 0; border-radius: 0; }
+.sb-pane-busy {
+  position: absolute; left: 0; right: 0; top: 0; height: 2px; z-index: 4; overflow: hidden;
+  background: color-mix(in srgb, var(--accent) 20%, transparent);
+}
+.sb-pane-busy::after {
+  content: ""; position: absolute; top: 0; bottom: 0; width: 30%; background: var(--accent);
+  animation: sb-busy 1s var(--ease, ease-in-out) infinite;
+}
+@keyframes sb-busy { from { left: -30%; } to { left: 100%; } }
+@media (prefers-reduced-motion: reduce) { .sb-pane-busy::after { animation: none; left: 0; width: 100%; opacity: 0.5; } }
+.sb-pane-error {
+  position: absolute; left: 8px; right: 8px; top: 30px; z-index: 5; display: flex; align-items: flex-start; gap: 8px;
+  padding: 6px 6px 6px 10px; border: 1px solid color-mix(in srgb, var(--critical) 40%, transparent); border-left: 3px solid var(--critical);
+  border-radius: var(--r-md, 6px); background: var(--crit-bg, var(--surface)); color: var(--crit-text);
+  font-size: var(--fs-sm, 11px); box-shadow: var(--shadow-pop);
+}
+.sb-pane-error > span { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.sb-pane-offline { position: absolute; inset: 40px 12px auto; z-index: 3; text-align: center; font-size: var(--fs-sm, 11px); }
+
+.sb-file-name { display: inline-flex; align-items: center; gap: 6px; min-width: 0; max-width: 100%; }
+/* The icon keeps its size; a long name (90-NM-f558ba17-….yaml) shrank it to half. */
+.sb-file-name > svg { flex: none; }
+.sb-file-label { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sb-alias {
+  flex: none; display: inline-flex; align-items: center; gap: 2px; padding: 0 4px; height: 14px;
+  border-radius: 3px; background: var(--surface-3); color: var(--text-2); font-size: var(--fs-2xs, 10px);
+}
+.sb-pane .ico-dir { color: var(--accent); }
+.sb-pane .ico-file { color: var(--text-2); }
+
+.sb-pane-foot {
+  flex: none; display: flex; align-items: center; gap: 8px; padding: 3px 10px;
+  border-top: 1px solid var(--hairline); background: var(--chrome); color: var(--text-2);
+  font-size: var(--fs-xs, 10.5px); font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden;
+}
+
+/* Drag ghost */
+body.sb-files-dragging, body.sb-files-dragging * { cursor: default !important; user-select: none !important; }
+.sb-files-ghost {
+  position: fixed; left: 0; top: 0; z-index: var(--z-popover, 20000); pointer-events: none;
+  display: flex; align-items: center; gap: 6px; max-width: 380px; padding: 5px 8px;
+  background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: var(--r-md, 6px);
+  box-shadow: var(--shadow-pop); font-size: var(--fs-sm, 11px); opacity: 0.96;
+}
+.sb-files-ghost-icon { display: grid; place-items: center; color: var(--text-2); }
+.sb-files-ghost-icon.folder { color: var(--accent); }
+.sb-files-ghost-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: var(--fw-medium, 500); }
+.sb-files-ghost-count {
+  flex: none; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 999px; display: grid; place-items: center;
+  background: var(--critical); color: #fff; font-size: var(--fs-2xs, 10px); font-weight: 700;
+}
+.sb-files-ghost-op { flex: none; color: var(--accent-text, var(--accent)); font-size: var(--fs-xs, 10.5px); }
+.sb-files-ghost.move .sb-files-ghost-op { color: var(--serious-text, #ad4216); }
+.sb-files-ghost.nowhere .sb-files-ghost-op { color: var(--muted); }
+
+/* Info popover */
+.sb-info {
+  position: fixed; z-index: var(--z-popover, 20000); width: 300px; padding: 12px 14px 8px;
+  background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: var(--r-lg, 8px);
+  box-shadow: var(--shadow-pop); font-size: var(--fs-sm, 11px);
+}
+.sb-info-head { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; }
+.sb-info-name { font-size: var(--fs-md, 13px); font-weight: var(--fw-semibold, 600); overflow-wrap: anywhere; }
+.sb-info-grid { display: grid; grid-template-columns: 80px 1fr; gap: 4px 10px; margin: 0; }
+.sb-info-grid dt { color: var(--text-2); text-align: right; }
+.sb-info-grid dd { margin: 0; min-width: 0; }
+.sb-info-path { overflow-wrap: anywhere; font-size: var(--fs-xs, 10.5px); }
+.sb-info-foot { margin-top: 10px; padding-top: 6px; border-top: 1px solid var(--hairline); font-size: var(--fs-2xs, 10px); text-align: center; }
+
+/* Conflict sheet */
+.sb-files-sheet-back {
+  position: absolute; inset: 0; z-index: 40; display: flex; justify-content: center; align-items: flex-start;
+  background: var(--overlay, rgba(0, 0, 0, 0.25)); animation: sb-files-fade var(--dur-2, 180ms) var(--ease, ease-out);
+}
+.sb-files-sheet {
+  width: min(860px, 94%); max-height: 86%; display: flex; flex-direction: column;
+  background: var(--surface); color: var(--text); border: 1px solid var(--border); border-top: 0;
+  border-radius: 0 0 var(--r-xl, 12px) var(--r-xl, 12px); box-shadow: var(--shadow-pop);
+  animation: sb-files-in var(--dur-3, 260ms) var(--ease, ease-out);
+}
+@keyframes sb-files-in { from { transform: translateY(-14px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes sb-files-fade { from { opacity: 0; } to { opacity: 1; } }
+.sb-files-sheet-title { padding: 14px 18px 2px; font-size: var(--fs-md, 13px); font-weight: var(--fw-semibold, 600); }
+.sb-files-sheet-sub { margin: 0; padding: 2px 18px 10px; color: var(--text-2); font-size: var(--fs-sm, 11px); }
+.sb-conflict-list { flex: 1; min-height: 0; overflow: auto; margin: 0 18px; border: 1px solid var(--hairline); border-radius: var(--r-md, 6px); }
+.sb-conflict-row {
+  display: grid; grid-template-columns: minmax(140px, 1.3fr) 1fr 1fr 150px; gap: 10px; align-items: center;
+  padding: 5px 10px; border-bottom: 1px solid var(--hairline); font-size: var(--fs-sm, 11px);
+}
+.sb-conflict-row:last-child { border-bottom: 0; }
+.sb-conflict-row.head { position: sticky; top: 0; background: var(--surface-2); color: var(--text-2); font-weight: var(--fw-semibold, 600); font-size: var(--fs-xs, 10.5px); }
+.sb-conflict-row:nth-child(even):not(.head) { background: var(--zebra, transparent); }
+.sb-conflict-name { display: inline-flex; align-items: center; gap: 6px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: var(--fw-medium, 500); }
+.sb-conflict-side { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 8px; }
+.sb-conflict-row select { width: 100%; }
+.sb-conflict-all { display: inline-flex; align-items: center; gap: 6px; font-size: var(--fs-sm, 11px); color: var(--text-2); }
+.sb-files-sheet-actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; padding: 12px 18px 14px; }
+.sb-files-sheet-note { margin-right: auto; font-size: var(--fs-xs, 10.5px); max-width: 52%; }
+
+/* Transfer queue */
+.sb-tq { flex: none; max-height: 34%; display: flex; flex-direction: column; border-top: 1px solid var(--hairline); background: var(--surface-2); }
+.sb-tq-head { flex: none; display: flex; align-items: center; gap: 10px; padding: 4px 12px; font-size: var(--fs-sm, 11px); }
+.sb-tq-toggle { display: inline-flex; align-items: center; gap: 4px; padding: 2px 4px; border: 0; border-radius: var(--r-sm, 4px); background: none; color: var(--text); font: inherit; font-weight: var(--fw-semibold, 600); cursor: pointer; }
+.sb-tq-toggle:hover { background: var(--hover); }
+.sb-tq-list { flex: 1; min-height: 0; overflow-y: auto; margin: 0; padding: 0 8px 6px; list-style: none; }
+.sb-tq-row {
+  display: grid; grid-template-columns: 18px 1fr auto; gap: 8px; align-items: center;
+  padding: 6px 8px; border: 1px solid var(--hairline); border-radius: var(--r-md, 6px); background: var(--surface); margin-top: 4px;
+}
+.sb-tq-ico.running { color: var(--accent); }
+.sb-tq-ico.waiting { color: var(--text-2); }
+.sb-tq-ico.done { color: var(--good-text); }
+.sb-tq-ico.failed { color: var(--crit-text); }
+.sb-tq-ico.cancelled { color: var(--muted); }
+.sb-tq-main { min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.sb-tq-line { display: flex; align-items: baseline; gap: 10px; min-width: 0; font-size: var(--fs-sm, 11px); }
+.sb-tq-what { font-weight: var(--fw-semibold, 600); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sb-tq-route { display: inline-flex; align-items: center; gap: 4px; color: var(--text-2); white-space: nowrap; }
+.sb-tq-main .meter { width: 100%; }
+.sb-tq-main .meter-track { flex: 1; }
+.sb-tq-detail { font-size: var(--fs-xs, 10.5px); color: var(--text-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.sb-tq-detail.failed { color: var(--crit-text); white-space: normal; }
+.sb-tq-current { font-size: var(--fs-2xs, 10px); color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sb-tq-actions { display: flex; align-items: center; gap: 4px; }
+.sb-tq-actions .btn { display: inline-flex; align-items: center; gap: 4px; }
+.sb-tq-x { display: grid; place-items: center; width: 20px; height: 20px; border: 0; border-radius: var(--r-sm, 4px); background: none; color: var(--muted); cursor: pointer; }
+.sb-tq-x:hover { background: var(--hover); color: var(--text); }
+
+/* Tile size: one pane at a time, the switcher above it. */
+.sb-panes.single { grid-template-columns: 1fr; padding-top: var(--sp-2, 4px); }
+.sb-pane-switch { flex: none; display: flex; justify-content: center; align-items: center; gap: var(--sp-2, 4px); padding: var(--sp-3, 6px) var(--sp-5, 12px) 0; }
+.sb-pane-switch .segmented { max-width: 100%; }

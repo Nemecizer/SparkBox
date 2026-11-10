@@ -1,0 +1,88 @@
+{
+  "comment": "The one RoCE alert per fabric interface (rule roce-iface): which counters it watches, their default lines and what each group of rising counters means. Rates are per second over the last 10 s (fabric::rates). A 'sustained' counter raises only when its 60 s average is past the line too, and pause frames only once they have run past theirs for pauseStormS (the Fabric verdict's storm); any other counter raises on its 10 s rate. Once raised, the alert holds while any loss, PHY or drop counter still grows (the Fabric verdict's own test) and pause frames stay past their line; then it clears after the rule's clear time. Read by health::roce_rules and fabric::rates (src-tauri) and by the node agent (agent_test.py runs the cases).",
+  "rule": "roce-iface",
+  "rateWindowS": 10,
+  "sustainWindowS": 60,
+  "pauseStormS": 30,
+  "counters": [
+    {"key": "outOfSequence", "label": "Out of sequence", "group": "loss", "sustained": true, "warn": 1, "crit": 100},
+    {"key": "packetSeqErr", "label": "Sequence errors", "group": "loss", "sustained": true, "warn": 1, "crit": 100},
+    {"key": "localAckTimeoutErr", "label": "ACK timeouts", "group": "loss", "sustained": true, "warn": 1, "crit": 20},
+    {"key": "impliedNakSeqErr", "label": "Implied NAKs", "group": "loss", "sustained": true, "warn": 1, "crit": 100},
+    {"key": "rxCrcErrorsPhy", "label": "CRC errors", "group": "phy", "sustained": false, "warn": 0, "crit": 10},
+    {"key": "rxSymbolErrPhy", "label": "Symbol errors (PHY)", "group": "phy", "sustained": false, "warn": 0, "crit": 10},
+    {"key": "symbolError", "label": "Symbol errors (port)", "group": "phy", "sustained": false, "warn": 0, "crit": 10},
+    {"key": "portRcvErrors", "label": "Receive errors", "group": "phy", "sustained": false, "warn": 0, "crit": 10},
+    {"key": "rxDiscardsPhy", "label": "Discards (PHY)", "group": "drop", "sustained": true, "warn": 1, "crit": null},
+    {"key": "rxOutOfBuffer", "label": "Out of buffer", "group": "drop", "sustained": true, "warn": 1, "crit": null},
+    {"key": "portXmitDiscards", "label": "Transmit discards", "group": "drop", "sustained": true, "warn": 1, "crit": null},
+    {"key": "txPause", "label": "Pause sent", "group": "pause", "sustained": true, "warn": 10000, "crit": null},
+    {"key": "rxPause", "label": "Pause received", "group": "pause", "sustained": true, "warn": 10000, "crit": null}
+  ],
+  "groups": {
+    "loss": {"headline": "RoCE retransmitting", "cause": "packets are being dropped: congestion or PFC off"},
+    "phy": {"headline": "PHY errors rising", "cause": "check the optic or cable"},
+    "drop": {"headline": "Dropping packets", "cause": "packets are being dropped: congestion or PFC off"},
+    "pause": {"headline": "PFC pause storm", "cause": "find the node that sends the pause frames"}
+  },
+  "causeOrder": ["phy", "pause", "loss", "drop"],
+  "info": ["ecnMarked", "cnpSent", "cnpHandled"],
+  "cases": [
+    {
+      "name": "retransmits with CRC and symbol errors: critical, the optic is named",
+      "rates": {"outOfSequence": [162, 150], "packetSeqErr": [12, 11], "localAckTimeoutErr": [3.4, 3.1], "rxCrcErrorsPhy": [18, 17], "rxSymbolErrPhy": [7, 6.5]},
+      "active": false,
+      "expect": {"severity": "crit", "message": "RoCE retransmitting · CRC and symbol errors rising · check the optic or cable"}
+    },
+    {
+      "name": "retransmits without PHY errors: congestion or PFC",
+      "rates": {"outOfSequence": [4.2, 3.9], "localAckTimeoutErr": [1.5, 1.2]},
+      "active": false,
+      "expect": {"severity": "warn", "message": "RoCE retransmitting · packets are being dropped: congestion or PFC off"}
+    },
+    {
+      "name": "a burst that hasn't lasted a minute doesn't raise",
+      "rates": {"outOfSequence": [30, 0.4]},
+      "active": false,
+      "expect": null
+    },
+    {
+      "name": "one CRC error is enough: PHY errors are never normal",
+      "rates": {"rxCrcErrorsPhy": [0.1, 0.017]},
+      "active": false,
+      "expect": {"severity": "warn", "message": "CRC errors rising · check the optic or cable"}
+    },
+    {
+      "name": "a pause storm",
+      "rates": {"txPause": [50200, 49800]},
+      "pauseStormS": 35,
+      "active": false,
+      "expect": {"severity": "warn", "message": "PFC pause storm · find the node that sends the pause frames"}
+    },
+    {
+      "name": "pause frames past the line for less than 30 s aren't a storm yet",
+      "rates": {"txPause": [50200, 19000]},
+      "pauseStormS": 12,
+      "active": false,
+      "expect": null
+    },
+    {
+      "name": "ECN marks and CNPs alone are DCQCN at work, not an alert",
+      "rates": {"ecnMarked": [8000, 7600], "cnpSent": [7200, 6900]},
+      "active": false,
+      "expect": null
+    },
+    {
+      "name": "raised and still losing a little: held, at warning",
+      "rates": {"outOfSequence": [0.3, 2.0]},
+      "active": true,
+      "expect": {"severity": "warn", "message": "RoCE retransmitting · packets are being dropped: congestion or PFC off"}
+    },
+    {
+      "name": "raised and the counters stopped: nothing holds it (it recovers)",
+      "rates": {"outOfSequence": [0, 41], "rxCrcErrorsPhy": [0, 4.6]},
+      "active": true,
+      "expect": null
+    }
+  ]
+}

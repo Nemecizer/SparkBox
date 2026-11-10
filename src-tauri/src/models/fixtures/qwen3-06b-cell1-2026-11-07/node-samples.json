@@ -1,0 +1,202 @@
+{
+  "captureDate": "2026-11-07",
+  "sourceApp": "2464e0c",
+  "model": "Qwen/Qwen3-0.6B",
+  "imageId": "sha256:5a0f8b914da56ea2ae2dbe569e4219a14605ce798e7eff12ae6db63328adc4f1",
+  "context": 4096,
+  "gpuMemoryShare": 0.2,
+  "tensorParallel": 1,
+  "pipelineParallel": 1,
+  "cgroupLayout": "systemd",
+  "logFacts": {
+    "kvGiB": "21.22",
+    "kvTokens": "198,656",
+    "weightsGiB": "1.12"
+  },
+  "rawCaptureSha256": "88287c3b538d9183f6041ef6904e9762dbb1133145e16eef500af225632aab18",
+  "samples": [
+    {
+      "phase": "idle",
+      "elapsedMs": 0,
+      "gpuCsv": "0, 58, 13.44, 2411, 580.178.04, 3003, [N/A], P0, 0x0000000000000000",
+      "appsCsv": "4242, VLLM::EngineCore, 23717",
+      "meminfo": "MemTotal:       127598612 kB\nMemFree:        55058504 kB\nMemAvailable:   93249284 kB\nBuffers:          475568 kB\nCached:         38494392 kB\nSwapCached:            0 kB\nActive:         38741372 kB\nInactive:        5576048 kB\nActive(anon):    5420092 kB\nInactive(anon):        0 kB\nActive(file):   33321280 kB\nInactive(file):  5576048 kB\nUnevictable:       26508 kB\nMlocked:           26508 kB\nSwapTotal:      16777212 kB\nSwapFree:       16777212 kB\nZswap:                 0 kB\nZswapped:              0 kB\nDirty:               976 kB\nWriteback:             0 kB\nAnonPages:       5374564 kB\nMapped:          1421368 kB\nShmem:             65144 kB\nKReclaimable:     434856 kB\nSlab:             963016 kB\nSReclaimable:     434856 kB\nSUnreclaim:       528160 kB\nKernelStack:       24896 kB\nShadowCallStack:    6304 kB\nPageTables:        52992 kB\nSecPageTables:     58408 kB\nNFS_Unstable:          0 kB\nBounce:                0 kB\nWritebackTmp:          0 kB\nCommitLimit:    80576516 kB\nCommitted_AS:   26529752 kB\nVmallocTotal:   135288315904 kB\nVmallocUsed:      352740 kB\nVmallocChunk:          0 kB\nPercpu:            32080 kB\nHardwareCorrupted:     0 kB\nAnonHugePages:      8192 kB\nShmemHugePages:        0 kB\nShmemPmdMapped:        0 kB\nFileHugePages:   1841152 kB\nFilePmdMapped:         0 kB\nCmaTotal:              0 kB\nCmaFree:               0 kB\nBalloon:               0 kB\nGPUActive:             0 kB\nGPUReclaim:            0 kB\nHugePages_Total:       0\nHugePages_Free:        0\nHugePages_Rsvd:        0\nHugePages_Surp:        0\nHugepagesize:       2048 kB\nHugetlb:               0 kB\n",
+      "cpuStat": "usage_usec 173535308\nuser_usec 159853359\nsystem_usec 13681949\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 0\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+      "memoryCurrent": 4951273472,
+      "memoryStat": "anon 4387979264\nfile 418942976\nkernel 141778944\nkernel_stack 2801664\npagetables 14864384\nsec_pagetables 0\npercpu 2200\nsock 0\nvmalloc 8192\nshmem 54996992\nzswap 0\nzswapped 0\nfile_mapped 57090048\nfile_dirty 0\nfile_writeback 0\nswapcached 0\nanon_thp 8388608\nfile_thp 134217728\nshmem_thp 0\ninactive_anon 0\nactive_anon 4442943488\ninactive_file 363945984\nactive_file 0\nunevictable 32768\nslab_reclaimable 68822008\nslab_unreclaimable 4116936\nslab 72938944\nworkingset_refault_anon 0\nworkingset_refault_file 0\nworkingset_activate_anon 0\nworkingset_activate_file 0\nworkingset_restore_anon 0\nworkingset_restore_file 0\nworkingset_nodereclaim 0\npgdemote_kswapd 0\npgdemote_direct 0\npgdemote_khugepaged 0\npgdemote_proactive 0\npgpromote_success 0\npgscan 0\npgsteal 0\npswpin 0\npswpout 0\npgscan_kswapd 0\npgscan_direct 0\npgscan_khugepaged 0\npgscan_proactive 0\npgsteal_kswapd 0\npgsteal_direct 0\npgsteal_khugepaged 0\npgsteal_proactive 0\npgfault 4810839\npgmajfault 0\npgrefill 0\npgactivate 0\npgdeactivate 0\npglazyfree 0\npglazyfreed 0\nswpin_zero 0\nswpout_zero 0\nzswpin 0\nzswpout 0\nzswpwb 0\nthp_fault_alloc 4\nthp_collapse_alloc 0\nthp_swpout 0\nthp_swpout_fallback 0\nnuma_pages_migrated 0\nnuma_pte_updates 0\nnuma_hint_faults 0\n",
+      "pressure": "some avg10=0.00 avg60=0.00 avg300=0.00 total=4658\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=4658\n",
+      "vmstat": {
+        "pswpin": 0,
+        "pswpout": 0,
+        "pgmajfault": 30743,
+        "oom_kill": 0
+      }
+    },
+    {
+      "phase": "generating",
+      "elapsedMs": 32001,
+      "gpuCsv": "96, 66, 36.51, 2444, 580.178.04, 3003, [N/A], P0, 0x0000000000000000",
+      "appsCsv": "4242, VLLM::EngineCore, 23717",
+      "meminfo": "MemTotal:       127598612 kB\nMemFree:        55036680 kB\nMemAvailable:   93227572 kB\nBuffers:          475620 kB\nCached:         38494400 kB\nSwapCached:            0 kB\nActive:         38735604 kB\nInactive:        5576120 kB\nActive(anon):    5414324 kB\nInactive(anon):        0 kB\nActive(file):   33321280 kB\nInactive(file):  5576120 kB\nUnevictable:       26508 kB\nMlocked:           26508 kB\nSwapTotal:      16777212 kB\nSwapFree:       16777212 kB\nZswap:                 0 kB\nZswapped:              0 kB\nDirty:               948 kB\nWriteback:             0 kB\nAnonPages:       5368300 kB\nMapped:          1404152 kB\nShmem:             65144 kB\nKReclaimable:     434896 kB\nSlab:             963064 kB\nSReclaimable:     434896 kB\nSUnreclaim:       528168 kB\nKernelStack:       24976 kB\nShadowCallStack:    6324 kB\nPageTables:        53192 kB\nSecPageTables:     58408 kB\nNFS_Unstable:          0 kB\nBounce:                0 kB\nWritebackTmp:          0 kB\nCommitLimit:    80576516 kB\nCommitted_AS:   26360428 kB\nVmallocTotal:   135288315904 kB\nVmallocUsed:      352776 kB\nVmallocChunk:          0 kB\nPercpu:            32080 kB\nHardwareCorrupted:     0 kB\nAnonHugePages:      8192 kB\nShmemHugePages:        0 kB\nShmemPmdMapped:        0 kB\nFileHugePages:   1841152 kB\nFilePmdMapped:         0 kB\nCmaTotal:              0 kB\nCmaFree:               0 kB\nBalloon:               0 kB\nGPUActive:             0 kB\nGPUReclaim:            0 kB\nHugePages_Total:       0\nHugePages_Free:        0\nHugePages_Rsvd:        0\nHugePages_Surp:        0\nHugepagesize:       2048 kB\nHugetlb:               0 kB\n",
+      "cpuStat": "usage_usec 190297120\nuser_usec 175054057\nsystem_usec 15243063\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 0\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+      "memoryCurrent": 4951007232,
+      "memoryStat": "anon 4388012032\nfile 418942976\nkernel 141787136\nkernel_stack 2801664\npagetables 14864384\nsec_pagetables 0\npercpu 2200\nsock 4096\nvmalloc 8192\nshmem 54996992\nzswap 0\nzswapped 0\nfile_mapped 57090048\nfile_dirty 0\nfile_writeback 0\nswapcached 0\nanon_thp 8388608\nfile_thp 134217728\nshmem_thp 0\ninactive_anon 0\nactive_anon 4442968064\ninactive_file 363945984\nactive_file 0\nunevictable 32768\nslab_reclaimable 68823048\nslab_unreclaimable 4125824\nslab 72948872\nworkingset_refault_anon 0\nworkingset_refault_file 0\nworkingset_activate_anon 0\nworkingset_activate_file 0\nworkingset_restore_anon 0\nworkingset_restore_file 0\nworkingset_nodereclaim 0\npgdemote_kswapd 0\npgdemote_direct 0\npgdemote_khugepaged 0\npgdemote_proactive 0\npgpromote_success 0\npgscan 0\npgsteal 0\npswpin 0\npswpout 0\npgscan_kswapd 0\npgscan_direct 0\npgscan_khugepaged 0\npgscan_proactive 0\npgsteal_kswapd 0\npgsteal_direct 0\npgsteal_khugepaged 0\npgsteal_proactive 0\npgfault 4810847\npgmajfault 0\npgrefill 0\npgactivate 0\npgdeactivate 0\npglazyfree 0\npglazyfreed 0\nswpin_zero 0\nswpout_zero 0\nzswpin 0\nzswpout 0\nzswpwb 0\nthp_fault_alloc 4\nthp_collapse_alloc 0\nthp_swpout 0\nthp_swpout_fallback 0\nnuma_pages_migrated 0\nnuma_pte_updates 0\nnuma_hint_faults 0\n",
+      "pressure": "some avg10=0.00 avg60=0.00 avg300=0.00 total=4658\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=4658\n",
+      "vmstat": {
+        "pswpin": 0,
+        "pswpout": 0,
+        "pgmajfault": 30743,
+        "oom_kill": 0
+      }
+    },
+    {
+      "phase": "after",
+      "elapsedMs": 100001,
+      "gpuCsv": "0, 60, 13.84, 2411, 580.178.04, 3003, [N/A], P0, 0x0000000000000000",
+      "appsCsv": "4242, VLLM::EngineCore, 23717",
+      "meminfo": "MemTotal:       127598612 kB\nMemFree:        55033660 kB\nMemAvailable:   93224716 kB\nBuffers:          475764 kB\nCached:         38494420 kB\nSwapCached:            0 kB\nActive:         38735712 kB\nInactive:        5576284 kB\nActive(anon):    5414432 kB\nInactive(anon):        0 kB\nActive(file):   33321280 kB\nInactive(file):  5576284 kB\nUnevictable:       26508 kB\nMlocked:           26508 kB\nSwapTotal:      16777212 kB\nSwapFree:       16777212 kB\nZswap:                 0 kB\nZswapped:              0 kB\nDirty:              1032 kB\nWriteback:             0 kB\nAnonPages:       5368412 kB\nMapped:          1404156 kB\nShmem:             65144 kB\nKReclaimable:     434896 kB\nSlab:             963128 kB\nSReclaimable:     434896 kB\nSUnreclaim:       528232 kB\nKernelStack:       24992 kB\nShadowCallStack:    6328 kB\nPageTables:        53200 kB\nSecPageTables:     58408 kB\nNFS_Unstable:          0 kB\nBounce:                0 kB\nWritebackTmp:          0 kB\nCommitLimit:    80576516 kB\nCommitted_AS:   26361540 kB\nVmallocTotal:   135288315904 kB\nVmallocUsed:      352748 kB\nVmallocChunk:          0 kB\nPercpu:            32080 kB\nHardwareCorrupted:     0 kB\nAnonHugePages:      8192 kB\nShmemHugePages:        0 kB\nShmemPmdMapped:        0 kB\nFileHugePages:   1841152 kB\nFilePmdMapped:         0 kB\nCmaTotal:              0 kB\nCmaFree:               0 kB\nBalloon:               0 kB\nGPUActive:             0 kB\nGPUReclaim:            0 kB\nHugePages_Total:       0\nHugePages_Free:        0\nHugePages_Rsvd:        0\nHugePages_Surp:        0\nHugepagesize:       2048 kB\nHugetlb:               0 kB\n",
+      "cpuStat": "usage_usec 208846026\nuser_usec 191259875\nsystem_usec 17586151\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 0\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+      "memoryCurrent": 4951539712,
+      "memoryStat": "anon 4388048896\nfile 418942976\nkernel 141778944\nkernel_stack 2801664\npagetables 14868480\nsec_pagetables 0\npercpu 2200\nsock 0\nvmalloc 8192\nshmem 54996992\nzswap 0\nzswapped 0\nfile_mapped 57090048\nfile_dirty 0\nfile_writeback 0\nswapcached 0\nanon_thp 8388608\nfile_thp 134217728\nshmem_thp 0\ninactive_anon 0\nactive_anon 4443013120\ninactive_file 363945984\nactive_file 0\nunevictable 32768\nslab_reclaimable 68822008\nslab_unreclaimable 4119144\nslab 72941152\nworkingset_refault_anon 0\nworkingset_refault_file 0\nworkingset_activate_anon 0\nworkingset_activate_file 0\nworkingset_restore_anon 0\nworkingset_restore_file 0\nworkingset_nodereclaim 0\npgdemote_kswapd 0\npgdemote_direct 0\npgdemote_khugepaged 0\npgdemote_proactive 0\npgpromote_success 0\npgscan 0\npgsteal 0\npswpin 0\npswpout 0\npgscan_kswapd 0\npgscan_direct 0\npgscan_khugepaged 0\npgscan_proactive 0\npgsteal_kswapd 0\npgsteal_direct 0\npgsteal_khugepaged 0\npgsteal_proactive 0\npgfault 4810856\npgmajfault 0\npgrefill 0\npgactivate 0\npgdeactivate 0\npglazyfree 0\npglazyfreed 0\nswpin_zero 0\nswpout_zero 0\nzswpin 0\nzswpout 0\nzswpwb 0\nthp_fault_alloc 4\nthp_collapse_alloc 0\nthp_swpout 0\nthp_swpout_fallback 0\nnuma_pages_migrated 0\nnuma_pte_updates 0\nnuma_hint_faults 0\n",
+      "pressure": "some avg10=0.00 avg60=0.00 avg300=0.00 total=4658\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=4658\n",
+      "vmstat": {
+        "pswpin": 0,
+        "pswpout": 0,
+        "pgmajfault": 30743,
+        "oom_kill": 0
+      }
+    }
+  ],
+  "timeline": [
+    {
+      "elapsedMs": 0,
+      "gpuCsv": "0, 58, 13.44, 2411, 580.178.04, 3003, [N/A], P0, 0x0000000000000000",
+      "metrics": "vllm:num_requests_running{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:num_requests_waiting{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:kv_cache_usage_perc{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:num_preemptions_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:prompt_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 2562.0\nvllm:generation_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 12306.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"stop\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"length\",model_name=\"qwen3-0.6b\"} 7.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"abort\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"error\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"repetition\",model_name=\"qwen3-0.6b\"} 0.0"
+    },
+    {
+      "elapsedMs": 4000,
+      "gpuCsv": "96, 60, 20.48, 2450, 580.178.04, 3003, [N/A], P0, 0x0000000000000000",
+      "metrics": "vllm:num_requests_running{engine=\"0\",model_name=\"qwen3-0.6b\"} 1.0\nvllm:num_requests_waiting{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:kv_cache_usage_perc{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0028997180829641866\nvllm:num_preemptions_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:prompt_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 3586.0\nvllm:generation_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 12375.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"stop\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"length\",model_name=\"qwen3-0.6b\"} 8.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"abort\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"error\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"repetition\",model_name=\"qwen3-0.6b\"} 0.0"
+    },
+    {
+      "elapsedMs": 8000,
+      "gpuCsv": "96, 62, 35.53, 2457, 580.178.04, 3003, [N/A], P0, 0x0000000000000000",
+      "metrics": "vllm:num_requests_running{engine=\"0\",model_name=\"qwen3-0.6b\"} 1.0\nvllm:num_requests_waiting{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:kv_cache_usage_perc{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.005477245267821229\nvllm:num_preemptions_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:prompt_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 3586.0\nvllm:generation_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 12893.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"stop\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"length\",model_name=\"qwen3-0.6b\"} 8.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"abort\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"error\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"repetition\",model_name=\"qwen3-0.6b\"} 0.0"
+    },
+    {
+      "elapsedMs": 12000,
+      "gpuCsv": "96, 63, 35.86, 2457, 580.178.04, 3003, [N/A], P0, 0x0000000000000000",
+      "metrics": "vllm:num_requests_running{engine=\"0\",model_name=\"qwen3-0.6b\"} 1.0\nvllm:num_requests_waiting{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:kv_cache_usage_perc{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.00805477245267816\nvllm:num_preemptions_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:prompt_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 3586.0\nvllm:generation_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 13395.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"stop\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"length\",model_name=\"qwen3-0.6b\"} 8.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"abort\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"error\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"repetition\",model_name=\"qwen3-0.6b\"} 0.0"
+    },
+    {
+      "elapsedMs": 16001,
+      "gpuCsv": "96, 64, 36.01, 2444, 580.178.04, 3003, [N/A], P0, 0x0000000000000000",
+      "metrics": "vllm:num_requests_running{engine=\"0\",model_name=\"qwen3-0.6b\"} 1.0\nvllm:num_requests_waiting{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:kv_cache_usage_perc{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.010471204188481686\nvllm:num_preemptions_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:prompt_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 3586.0\nvllm:generation_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 13881.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"stop\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"length\",model_name=\"qwen3-0.6b\"} 8.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"abort\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"error\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"repetition\",model_name=\"qwen3-0.6b\"} 0.0"
+    },
+    {
+      "elapsedMs": 20001,
+      "gpuCsv": "96, 64, 36.31, 2444, 580.178.04, 3003, [N/A], P0, 0x0000000000000000",
+      "metrics": "vllm:num_requests_running{engine=\"0\",model_name=\"qwen3-0.6b\"} 1.0\nvllm:num_requests_waiting{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:kv_cache_usage_perc{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.012887635924285101\nvllm:num_preemptions_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:prompt_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 3586.0\nvllm:generation_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 14355.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"stop\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"length\",model_name=\"qwen3-0.6b\"} 8.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"abort\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"error\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"repetition\",model_name=\"qwen3-0.6b\"} 0.0"
+    },
+    {
+      "elapsedMs": 24000,
+      "gpuCsv": "96, 65, 36.09, 2444, 580.178.04, 3003, [N/A], P0, 0x0000000000000000",
+      "metrics": "vllm:num_requests_running{engine=\"0\",model_name=\"qwen3-0.6b\"} 1.0\nvllm:num_requests_waiting{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:kv_cache_usage_perc{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.005155054369714085\nvllm:num_preemptions_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:prompt_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 4098.0\nvllm:generation_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 14870.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"stop\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"length\",model_name=\"qwen3-0.6b\"} 9.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"abort\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"error\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"repetition\",model_name=\"qwen3-0.6b\"} 0.0"
+    },
+    {
+      "elapsedMs": 28000,
+      "gpuCsv": "96, 65, 36.39, 2444, 580.178.04, 3003, [N/A], P0, 0x0000000000000000",
+      "metrics": "vllm:num_requests_running{engine=\"0\",model_name=\"qwen3-0.6b\"} 1.0\nvllm:num_requests_waiting{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:kv_cache_usage_perc{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.007652033830044314\nvllm:num_preemptions_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:prompt_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 4098.0\nvllm:generation_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 15373.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"stop\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"length\",model_name=\"qwen3-0.6b\"} 9.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"abort\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"error\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"repetition\",model_name=\"qwen3-0.6b\"} 0.0"
+    },
+    {
+      "elapsedMs": 32001,
+      "gpuCsv": "96, 66, 36.51, 2444, 580.178.04, 3003, [N/A], P0, 0x0000000000000000",
+      "metrics": "vllm:num_requests_running{engine=\"0\",model_name=\"qwen3-0.6b\"} 1.0\nvllm:num_requests_waiting{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:kv_cache_usage_perc{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.010149013290374542\nvllm:num_preemptions_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:prompt_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 4098.0\nvllm:generation_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 15860.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"stop\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"length\",model_name=\"qwen3-0.6b\"} 9.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"abort\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"error\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"repetition\",model_name=\"qwen3-0.6b\"} 0.0"
+    },
+    {
+      "elapsedMs": 36000,
+      "gpuCsv": "96, 66, 36.74, 2444, 580.178.04, 3003, [N/A], P0, 0x0000000000000000",
+      "metrics": "vllm:num_requests_running{engine=\"0\",model_name=\"qwen3-0.6b\"} 1.0\nvllm:num_requests_waiting{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:kv_cache_usage_perc{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.012484897301651254\nvllm:num_preemptions_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:prompt_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 4098.0\nvllm:generation_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 16336.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"stop\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"length\",model_name=\"qwen3-0.6b\"} 9.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"abort\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"error\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"repetition\",model_name=\"qwen3-0.6b\"} 0.0"
+    },
+    {
+      "elapsedMs": 40000,
+      "gpuCsv": "96, 67, 36.59, 2444, 580.178.04, 3003, [N/A], P0, 0x0000000000000000",
+      "metrics": "vllm:num_requests_running{engine=\"0\",model_name=\"qwen3-0.6b\"} 1.0\nvllm:num_requests_waiting{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:kv_cache_usage_perc{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.004752315747080127\nvllm:num_preemptions_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:prompt_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 4610.0\nvllm:generation_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 16845.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"stop\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"length\",model_name=\"qwen3-0.6b\"} 10.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"abort\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"error\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"repetition\",model_name=\"qwen3-0.6b\"} 0.0"
+    },
+    {
+      "elapsedMs": 44000,
+      "gpuCsv": "96, 67, 37.03, 2444, 580.178.04, 3003, [N/A], P0, 0x0000000000000000",
+      "metrics": "vllm:num_requests_running{engine=\"0\",model_name=\"qwen3-0.6b\"} 1.0\nvllm:num_requests_waiting{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:kv_cache_usage_perc{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.007329842931937169\nvllm:num_preemptions_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:prompt_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 4610.0\nvllm:generation_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 17351.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"stop\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"length\",model_name=\"qwen3-0.6b\"} 10.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"abort\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"error\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"repetition\",model_name=\"qwen3-0.6b\"} 0.0"
+    },
+    {
+      "elapsedMs": 48001,
+      "gpuCsv": "96, 68, 37.01, 2444, 580.178.04, 3003, [N/A], P0, 0x0000000000000000",
+      "metrics": "vllm:num_requests_running{engine=\"0\",model_name=\"qwen3-0.6b\"} 1.0\nvllm:num_requests_waiting{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:kv_cache_usage_perc{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.009746274667740584\nvllm:num_preemptions_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:prompt_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 4610.0\nvllm:generation_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 17840.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"stop\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"length\",model_name=\"qwen3-0.6b\"} 10.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"abort\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"error\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"repetition\",model_name=\"qwen3-0.6b\"} 0.0"
+    },
+    {
+      "elapsedMs": 52001,
+      "gpuCsv": "96, 68, 37.34, 2444, 580.178.04, 3003, [N/A], P0, 0x0000000000000000",
+      "metrics": "vllm:num_requests_running{engine=\"0\",model_name=\"qwen3-0.6b\"} 1.0\nvllm:num_requests_waiting{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:kv_cache_usage_perc{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.01216270640354411\nvllm:num_preemptions_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:prompt_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 4610.0\nvllm:generation_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 18318.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"stop\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"length\",model_name=\"qwen3-0.6b\"} 10.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"abort\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"error\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"repetition\",model_name=\"qwen3-0.6b\"} 0.0"
+    },
+    {
+      "elapsedMs": 56000,
+      "gpuCsv": "96, 68, 37.03, 2444, 580.178.04, 3003, [N/A], P0, 0x0000000000000000",
+      "metrics": "vllm:num_requests_running{engine=\"0\",model_name=\"qwen3-0.6b\"} 1.0\nvllm:num_requests_waiting{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:kv_cache_usage_perc{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.004430124848972983\nvllm:num_preemptions_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:prompt_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 5122.0\nvllm:generation_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 18819.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"stop\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"length\",model_name=\"qwen3-0.6b\"} 11.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"abort\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"error\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"repetition\",model_name=\"qwen3-0.6b\"} 0.0"
+    },
+    {
+      "elapsedMs": 60001,
+      "gpuCsv": "96, 69, 37.28, 2444, 580.178.04, 3003, [N/A], P0, 0x0000000000000000",
+      "metrics": "vllm:num_requests_running{engine=\"0\",model_name=\"qwen3-0.6b\"} 1.0\nvllm:num_requests_waiting{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:kv_cache_usage_perc{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.006927104309303211\nvllm:num_preemptions_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:prompt_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 5122.0\nvllm:generation_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 19328.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"stop\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"length\",model_name=\"qwen3-0.6b\"} 11.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"abort\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"error\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"repetition\",model_name=\"qwen3-0.6b\"} 0.0"
+    },
+    {
+      "elapsedMs": 64000,
+      "gpuCsv": "96, 69, 37.40, 2444, 580.178.04, 3003, [N/A], P0, 0x0000000000000000",
+      "metrics": "vllm:num_requests_running{engine=\"0\",model_name=\"qwen3-0.6b\"} 1.0\nvllm:num_requests_waiting{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:kv_cache_usage_perc{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.009424083769633551\nvllm:num_preemptions_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:prompt_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 5122.0\nvllm:generation_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 19819.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"stop\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"length\",model_name=\"qwen3-0.6b\"} 11.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"abort\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"error\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"repetition\",model_name=\"qwen3-0.6b\"} 0.0"
+    },
+    {
+      "elapsedMs": 68000,
+      "gpuCsv": "96, 69, 37.60, 2444, 580.178.04, 3003, [N/A], P0, 0x0000000000000000",
+      "metrics": "vllm:num_requests_running{engine=\"0\",model_name=\"qwen3-0.6b\"} 1.0\nvllm:num_requests_waiting{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:kv_cache_usage_perc{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.011840515505436966\nvllm:num_preemptions_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:prompt_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 5122.0\nvllm:generation_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 20299.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"stop\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"length\",model_name=\"qwen3-0.6b\"} 11.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"abort\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"error\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"repetition\",model_name=\"qwen3-0.6b\"} 0.0"
+    },
+    {
+      "elapsedMs": 72001,
+      "gpuCsv": "0, 65, 15.10, 2411, 580.178.04, 3003, [N/A], P0, 0x0000000000000000",
+      "metrics": "vllm:num_requests_running{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:num_requests_waiting{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:kv_cache_usage_perc{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:num_preemptions_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:prompt_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 5122.0\nvllm:generation_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 20514.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"stop\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"length\",model_name=\"qwen3-0.6b\"} 12.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"abort\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"error\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"repetition\",model_name=\"qwen3-0.6b\"} 0.0"
+    },
+    {
+      "elapsedMs": 76001,
+      "gpuCsv": "0, 64, 14.89, 2411, 580.178.04, 3003, [N/A], P0, 0x0000000000000000",
+      "metrics": "vllm:num_requests_running{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:num_requests_waiting{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:kv_cache_usage_perc{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:num_preemptions_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:prompt_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 5122.0\nvllm:generation_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 20514.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"stop\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"length\",model_name=\"qwen3-0.6b\"} 12.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"abort\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"error\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"repetition\",model_name=\"qwen3-0.6b\"} 0.0"
+    },
+    {
+      "elapsedMs": 80000,
+      "gpuCsv": "0, 63, 14.75, 2411, 580.178.04, 3003, [N/A], P0, 0x0000000000000000",
+      "metrics": "vllm:num_requests_running{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:num_requests_waiting{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:kv_cache_usage_perc{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:num_preemptions_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:prompt_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 5122.0\nvllm:generation_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 20514.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"stop\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"length\",model_name=\"qwen3-0.6b\"} 12.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"abort\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"error\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"repetition\",model_name=\"qwen3-0.6b\"} 0.0"
+    },
+    {
+      "elapsedMs": 84000,
+      "gpuCsv": "0, 62, 14.43, 2411, 580.178.04, 3003, [N/A], P0, 0x0000000000000000",
+      "metrics": "vllm:num_requests_running{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:num_requests_waiting{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:kv_cache_usage_perc{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:num_preemptions_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:prompt_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 5122.0\nvllm:generation_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 20514.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"stop\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"length\",model_name=\"qwen3-0.6b\"} 12.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"abort\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"error\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"repetition\",model_name=\"qwen3-0.6b\"} 0.0"
+    },
+    {
+      "elapsedMs": 88000,
+      "gpuCsv": "0, 62, 14.31, 2411, 580.178.04, 3003, [N/A], P0, 0x0000000000000000",
+      "metrics": "vllm:num_requests_running{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:num_requests_waiting{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:kv_cache_usage_perc{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:num_preemptions_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:prompt_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 5122.0\nvllm:generation_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 20514.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"stop\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"length\",model_name=\"qwen3-0.6b\"} 12.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"abort\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"error\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"repetition\",model_name=\"qwen3-0.6b\"} 0.0"
+    },
+    {
+      "elapsedMs": 92001,
+      "gpuCsv": "0, 61, 14.08, 2411, 580.178.04, 3003, [N/A], P0, 0x0000000000000000",
+      "metrics": "vllm:num_requests_running{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:num_requests_waiting{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:kv_cache_usage_perc{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:num_preemptions_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:prompt_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 5122.0\nvllm:generation_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 20514.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"stop\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"length\",model_name=\"qwen3-0.6b\"} 12.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"abort\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"error\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"repetition\",model_name=\"qwen3-0.6b\"} 0.0"
+    },
+    {
+      "elapsedMs": 96000,
+      "gpuCsv": "0, 61, 14.02, 2411, 580.178.04, 3003, [N/A], P0, 0x0000000000000000",
+      "metrics": "vllm:num_requests_running{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:num_requests_waiting{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:kv_cache_usage_perc{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:num_preemptions_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:prompt_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 5122.0\nvllm:generation_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 20514.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"stop\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"length\",model_name=\"qwen3-0.6b\"} 12.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"abort\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"error\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"repetition\",model_name=\"qwen3-0.6b\"} 0.0"
+    },
+    {
+      "elapsedMs": 100001,
+      "gpuCsv": "0, 60, 13.84, 2411, 580.178.04, 3003, [N/A], P0, 0x0000000000000000",
+      "metrics": "vllm:num_requests_running{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:num_requests_waiting{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:kv_cache_usage_perc{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:num_preemptions_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:prompt_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 5122.0\nvllm:generation_tokens_total{engine=\"0\",model_name=\"qwen3-0.6b\"} 20514.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"stop\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"length\",model_name=\"qwen3-0.6b\"} 12.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"abort\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"error\",model_name=\"qwen3-0.6b\"} 0.0\nvllm:request_success_total{engine=\"0\",finished_reason=\"repetition\",model_name=\"qwen3-0.6b\"} 0.0"
+    }
+  ]
+}

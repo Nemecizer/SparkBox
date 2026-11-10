@@ -1,0 +1,4 @@
+PING 192.168.101.4 (192.168.101.4) from 192.168.101.1 enP2p1s0f1np1: 8972(9000) bytes of data.
+
+--- 192.168.101.4 ping statistics ---
+3 packets transmitted, 0 received, 100% packet loss, time 2047ms

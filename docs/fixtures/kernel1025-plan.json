@@ -1,0 +1,106 @@
+{
+  "packages": [
+    {
+      "name": "linux-crashdump",
+      "from": "6.8.0-147.147",
+      "to": "6.8.0-149.149",
+      "new": false
+    },
+    {
+      "name": "linux-nvidia-7.0-headers-7.0.0-1025",
+      "from": null,
+      "to": "7.0.0-1025.26~24.04.1",
+      "new": true
+    },
+    {
+      "name": "linux-headers-7.0.0-1025-nvidia",
+      "from": null,
+      "to": "7.0.0-1025.26~24.04.1",
+      "new": true
+    },
+    {
+      "name": "linux-modules-7.0.0-1025-nvidia",
+      "from": null,
+      "to": "7.0.0-1025.26~24.04.1",
+      "new": true
+    },
+    {
+      "name": "linux-image-7.0.0-1025-nvidia",
+      "from": null,
+      "to": "7.0.0-1025.26~24.04.1",
+      "new": true
+    },
+    {
+      "name": "linux-modules-nvidia-580-open-7.0.0-1025-nvidia",
+      "from": null,
+      "to": "7.0.0-1025.26~24.04.1",
+      "new": true
+    },
+    {
+      "name": "linux-nvidia-hwe-24.04",
+      "from": "7.0.0-1024.25~24.04.1",
+      "to": "7.0.0-1025.26~24.04.1",
+      "new": false
+    },
+    {
+      "name": "linux-modules-nvidia-580-open-nvidia-hwe-24.04",
+      "from": "7.0.0-1024.25~24.04.1",
+      "to": "7.0.0-1025.26~24.04.1",
+      "new": false
+    },
+    {
+      "name": "linux-modules-nvidia-fs-7.0.0-1025-nvidia",
+      "from": null,
+      "to": "7.0.0-1025.26~24.04.1",
+      "new": true
+    },
+    {
+      "name": "linux-image-nvidia-hwe-24.04",
+      "from": "7.0.0-1024.25~24.04.1",
+      "to": "7.0.0-1025.26~24.04.1",
+      "new": false
+    },
+    {
+      "name": "linux-headers-nvidia-hwe-24.04",
+      "from": "7.0.0-1024.25~24.04.1",
+      "to": "7.0.0-1025.26~24.04.1",
+      "new": false
+    },
+    {
+      "name": "linux-libc-dev",
+      "from": "6.8.0-147.147",
+      "to": "6.8.0-149.149",
+      "new": false
+    },
+    {
+      "name": "linux-modules-nvidia-fs-nvidia-hwe-24.04",
+      "from": "7.0.0-1024.25~24.04.1",
+      "to": "7.0.0-1025.26~24.04.1",
+      "new": false
+    },
+    {
+      "name": "linux-tools-common",
+      "from": "6.8.0-147.147",
+      "to": "6.8.0-149.149",
+      "new": false
+    },
+    {
+      "name": "linux-nvidia-7.0-tools-7.0.0-1025",
+      "from": null,
+      "to": "7.0.0-1025.26~24.04.1",
+      "new": true
+    },
+    {
+      "name": "linux-tools-7.0.0-1025-nvidia",
+      "from": null,
+      "to": "7.0.0-1025.26~24.04.1",
+      "new": true
+    },
+    {
+      "name": "linux-tools-nvidia-hwe-24.04",
+      "from": "7.0.0-1024.25~24.04.1",
+      "to": "7.0.0-1025.26~24.04.1",
+      "new": false
+    }
+  ]
+}

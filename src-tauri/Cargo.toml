@@ -1,0 +1,102 @@
+[package]
+license = "MIT"
+name = "sparkbox"
+version = "0.1.0"
+description = "WinBox-style manager for a DGX Spark inference cluster"
+edition = "2021"
+
+[lib]
+name = "sparkbox_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = ["tray-icon", "image-png"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["time", "process", "io-util", "net", "sync", "macros", "rt-multi-thread"] }
+getrandom = "0.3"
+fastrand = "2"
+keyring = { version = "3", features = ["apple-native"] }
+axum = "0.8.9"
+futures-util = "0.3.34"
+bytes = "1.12.1"
+tokio-stream = "0.1.19"
+reqwest = { version = "0.13.5", default-features = false, features = ["json", "stream", "rustls", "socks"] }
+url = "2.5.8"
+tauri-plugin-opener = "2.7.2"
+tauri-plugin-autostart = "2.7.0"
+russh = "0.65.0"
+tokio-socks = "0.5.3"
+sha2 = "0.11.1"
+sha1 = "=0.11.0" # Git blob verification for pinned NVIDIA documentation (already locked transitively).
+base64 = "0.22"
+# ── P1 design ──
+# ── P2 shell ──
+# Remembers the main window's size, position and full-screen state between launches. Exact pin: matches tauri 2.12.
+tauri-plugin-window-state = "=2.5.0"
+# ── P3 ops ──
+# Touch ID / Mac password for Admin mode (LocalAuthentication). Same objc2 0.6 family Tauri already uses.
+objc2 = "0.6.5"
+block2 = "0.6.2"
+objc2-local-authentication = { version = "0.3.2", default-features = false, features = ["std", "block2", "LAContext", "LAError"] }
+# Declared once here; packages that need more Foundation classes add features to this line (P6: NSFileManager/NSURL).
+objc2-foundation = { version = "0.3.2", default-features = false, features = ["std", "NSString", "NSError", "NSObject", "NSURL", "NSFileManager", "block2", "NSNotification", "NSDistributedNotificationCenter", "NSOperation", "NSProcessInfo"] }
+# Secret redaction in the activity log and task logs (already in the tree via other crates).
+regex = "1.13.1"
+# ── P4 world ──
+# Retry-After's HTTP-date on the Firewalla cloud's 429s. Already in the tree (hyper).
+httpdate = "=1.0.3"
+# Pins the CRS804's self-signed certificate (trust on first use) with a custom verifier; reqwest
+# has no pinning API. Exact pin and features: the rustls reqwest already builds, so nothing new compiles.
+tokio-rustls = "=0.26.6"
+rustls = { version = "=0.23.46", default-features = false, features = ["std", "tls12", "aws_lc_rs"] }
+# ── P5 monitoring ──
+# macOS notifications for alerts and finished tasks (notify.rs). Exact pin: matches tauri 2.12 and the rand 0.10 already locked.
+tauri-plugin-notification = "=2.8.0"
+# ── P6 term-files ──
+# Fallback for Files › Move to Trash when NSFileManager refuses (asks Finder instead). Same objc2 0.6 family.
+trash = "=5.2.9"
+# statvfs (free space) and getpwuid_r (owner names) for the Mac pane; already in the tree.
+libc = "0.2"
+# ── P7 ai ──
+# ── r2-design ──
+# ── r2-shell ──
+# ── r2-safety ──
+# Wipes secrets from memory when the Keychain cache is dropped (secrets.rs). Already in the tree (rustls, russh).
+zeroize = "=1.9.1"
+# (objc2-foundation above gained block2 + NSNotification + NSDistributedNotificationCenter + NSOperation: Admin mode relocks on com.apple.screenIsLocked.)
+# ── r2-fabric ──
+# ── r2-monitor ──
+# Email alerts (delivery/smtp.rs): SMTP with STARTTLS or implicit TLS over the rustls, aws-lc-rs and
+# platform certificate verifier reqwest already builds, so lettre itself is the only new crate.
+lettre = { version = "=0.11.23", default-features = false, features = ["builder", "smtp-transport", "tokio1", "tokio1-rustls", "aws-lc-rs", "rustls-platform-verifier"] }
+# ── r2-live ──
+# ── r2-ai ──
+# ── r3-paging ──
+# Quiet hours in one declared IANA zone (notify.rs), whatever the Mac's or a node's clock says. Exact pin:
+# the version serde_with already locks, so only its default tz-database features are new.
+jiff = "=0.2.38"
+# ── r3-agent ──
+# ── r3-incidents ──
+# ── r3-serving ──
+# ── r3-charts ──
+# ── r3-desk ──
+# ── r3-safety ──
+# ── r4-nodes ──
+# ── r4-serving ──
+# ── r4-alerts ──
+# ── r4-agent ──
+# ── r4-safety ──
+# ── r4-demo ──
+# ── r4-craft ──
+# ── p1r1-x ──
+# Signs and checks the write fence (live/fence.rs): ECDSA P-256 over SHA-256. Exact pins: the versions
+# russh already builds with these default features (ecdsa, pkcs8, std), so nothing new compiles.
+p256 = "=0.14.0"
+ecdsa = { version = "=0.17.0", default-features = false }
+# ── p1r2-mac ──
+# (objc2-foundation above gained NSProcessInfo: App Nap held off while Live, awake.rs. It enables the
+# crate's bitflags feature, bitflags 2.13.2 already in the lock. The sleep assertion is IOKit's C API, no crate.)

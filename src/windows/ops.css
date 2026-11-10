@@ -1,0 +1,282 @@
+/* ---- p3-ops: Tasks, Activity log, Fleet Command, Services, Containers, Workloads, Updates ---- */
+
+.ops-window { min-height: 0; }
+.ops-window .hint { padding: var(--sp-3, 6px) var(--sp-5, 12px); font-size: var(--fs-sm, 11px); color: var(--muted); border-top: var(--bw, 1px) solid var(--hairline, var(--border)); }
+
+/* List above, detail beside it when there's room, below it when not. */
+.ops-split { flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) minmax(20rem, 44%); }
+.ops-split-list { min-width: 0; min-height: 0; display: flex; flex-direction: column; overflow: hidden; }
+.ops-split-list > * { flex: 1 1 auto; min-height: 0; }
+.ops-split-detail { min-width: 0; min-height: 0; overflow: auto; border-left: var(--bw, 1px) solid var(--border); background: var(--surface-2, var(--surface)); }
+@container (max-width: 47.5rem) {
+  .ops-split { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) minmax(10rem, 42%); }
+  .ops-split-detail { border-left: none; border-top: var(--bw, 1px) solid var(--border); }
+}
+
+.ops-detail { padding: var(--sp-5, 12px) var(--sp-6, 16px); display: flex; flex-direction: column; gap: var(--sp-4, 8px); }
+.ops-detail .section-title { margin: var(--sp-3, 6px) 0 0; }
+.ops-detail-head { display: flex; align-items: center; gap: var(--sp-3, 6px); flex-wrap: wrap; }
+.ops-detail-title { margin: 0; font-size: var(--fs-md, 13px); font-weight: var(--fw-semibold, 600); line-height: 1.35; overflow-wrap: anywhere; }
+.ops-kv { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: var(--sp-2, 4px) var(--sp-5, 12px); margin: 0; font-size: var(--fs-sm, 11px); }
+.ops-kv > div { display: contents; }
+.ops-kv dt { color: var(--muted); }
+.ops-kv dd { margin: 0; overflow-wrap: anywhere; }
+.ops-detail-progress { display: flex; flex-direction: column; gap: var(--sp-2, 4px); }
+.ops-progress-text { font-size: var(--fs-sm, 11px); }
+
+.ops-state { display: inline-flex; align-items: center; gap: var(--sp-2, 4px); }
+.ops-badges { display: inline-flex; gap: var(--sp-2, 4px); align-items: center; }
+.ops-step-detail.crit { color: var(--crit-text, #c62828); }
+
+/* Steps timeline */
+.ops-steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.ops-step { display: grid; grid-template-columns: calc(var(--sp-6, 16px) + var(--sp-1, 2px)) minmax(0, 1fr) auto; gap: var(--sp-3, 6px); align-items: start; padding: var(--sp-2, 4px) 0; position: relative; }
+.ops-step:not(:last-child)::after { content: ""; position: absolute; left: calc(var(--sp-3, 6px) + var(--bw, 1px)); top: calc(var(--sp-6, 16px) + var(--sp-2, 4px)); bottom: -4px; width: var(--bw, 1px); background: var(--border); }
+.ops-step.ok > svg { color: var(--text-2, var(--muted)); }
+.ops-step.failed > svg { color: var(--crit-text, #c62828); }
+.ops-step.running > svg { color: var(--accent-text, var(--accent)); }
+.ops-step.skipped { color: var(--muted); }
+.ops-step-label { font-weight: var(--fw-medium, 500); }
+.ops-step-detail { font-size: var(--fs-sm, 11px); color: var(--muted); overflow-wrap: anywhere; }
+
+/* Activity log rows */
+.ops-what { display: inline-flex; align-items: center; gap: var(--sp-2, 4px); min-width: 0; max-width: 100%; }
+.ops-what.child { padding-left: calc(var(--sp-6, 16px) + var(--sp-1, 2px)); }
+.ops-what-title { font-weight: var(--fw-medium, 500); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ops-what-cmd { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--fs-mono, 11.5px); }
+.ops-what-summary { white-space: nowrap; }
+.ops-disclosure { display: inline-grid; place-items: center; width: var(--sp-6, 16px); height: var(--sp-6, 16px); padding: 0; border: none; background: none; color: var(--muted); border-radius: var(--r-sm, 4px); cursor: default; flex: none; }
+.ops-disclosure:hover { background: var(--hover, var(--surface-3)); color: var(--text); }
+.ops-disclosure:focus-visible { outline: var(--sp-1, 2px) solid var(--focus-ring, var(--accent)); outline-offset: var(--bw, 1px); }
+.ops-disclosure-space { width: var(--sp-6, 16px); flex: none; }
+table.grid tbody tr.ops-child-row td { background: color-mix(in srgb, var(--surface-2, var(--surface)) 70%, transparent); }
+.ops-cmd-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--sp-2, 4px); font-size: var(--fs-sm, 11px); }
+.ops-cmd-list li { display: grid; grid-template-columns: auto auto minmax(0, 1fr); gap: var(--sp-3, 6px); align-items: center; }
+.ops-cmd-list .mono { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Impact lists in confirmations */
+.ops-confirm p { margin: 0 0 var(--sp-4, 8px); }
+.ops-confirm-note { color: var(--muted); font-size: var(--fs-sm, 11px); }
+.ops-impact { list-style: none; margin: 0 0 var(--sp-4, 8px); padding: 0; display: flex; flex-direction: column; gap: var(--sp-3, 6px); }
+.ops-impact-item { display: grid; grid-template-columns: var(--sp-6, 16px) minmax(0, 1fr); gap: var(--sp-3, 6px); align-items: start; line-height: 1.4; }
+.ops-impact-mark { display: inline-grid; place-items: center; width: var(--sp-6, 16px); height: var(--sp-6, 16px); border-radius: 50%; font-size: var(--fs-2xs, 10.5px); font-weight: var(--fw-semibold, 600); margin-top: var(--bw, 1px); }
+.ops-impact-item.crit .ops-impact-mark { background: var(--crit-bg, #fde8e8); color: var(--crit-text, #c62828); }
+.ops-impact-item.warn .ops-impact-mark { background: var(--warn-bg, #fff4d6); color: var(--warn-text, #8a5a00); }
+.ops-impact-item.info .ops-impact-mark { background: var(--surface-3, #eee); color: var(--text-2, var(--muted)); }
+.ops-when { border: none; margin: 0; padding: 0; display: flex; gap: var(--sp-5, 12px); align-items: center; flex-wrap: wrap; }
+.ops-when legend { float: left; margin-right: var(--sp-4, 8px); color: var(--muted); font-size: var(--fs-sm, 11px); padding: 0; }
+.ops-when-option { display: inline-flex; gap: var(--sp-2, 4px); align-items: center; }
+
+/* Fleet Command */
+.fleet {
+  --ansi-black: #3b3f45; --ansi-red: #c4302b; --ansi-green: #2e7d32; --ansi-yellow: #9a6700; --ansi-blue: #1f5fbf; --ansi-magenta: #8e3fa8; --ansi-cyan: #0f7b83; --ansi-white: #8a8f98;
+  --ansi-bright-black: #6b7079; --ansi-bright-red: #d9433e; --ansi-bright-green: #3a9440; --ansi-bright-yellow: #b07a00; --ansi-bright-blue: #3878d8; --ansi-bright-magenta: #a653c2; --ansi-bright-cyan: #1a929b; --ansi-bright-white: #5c6168;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .fleet {
+    --ansi-black: #6e737c; --ansi-red: #ff6b63; --ansi-green: #6fcf74; --ansi-yellow: #e6c35c; --ansi-blue: #6ea8ff; --ansi-magenta: #d18bf0; --ansi-cyan: #5fd0d8; --ansi-white: #d0d4da;
+    --ansi-bright-black: #9097a1; --ansi-bright-red: #ff8a84; --ansi-bright-green: #8ee392; --ansi-bright-yellow: #f2d47c; --ansi-bright-blue: #92bdff; --ansi-bright-magenta: #e0a8f5; --ansi-bright-cyan: #85e0e6; --ansi-bright-white: #f2f4f7;
+  }
+}
+:root[data-theme="dark"] .fleet, :root[data-theme="black"] .fleet {
+  --ansi-black: #6e737c; --ansi-red: #ff6b63; --ansi-green: #6fcf74; --ansi-yellow: #e6c35c; --ansi-blue: #6ea8ff; --ansi-magenta: #d18bf0; --ansi-cyan: #5fd0d8; --ansi-white: #d0d4da;
+  --ansi-bright-black: #9097a1; --ansi-bright-red: #ff8a84; --ansi-bright-green: #8ee392; --ansi-bright-yellow: #f2d47c; --ansi-bright-blue: #92bdff; --ansi-bright-magenta: #e0a8f5; --ansi-bright-cyan: #85e0e6; --ansi-bright-white: #f2f4f7;
+}
+
+.fleet .fleet-targets { display: flex; gap: var(--sp-2, 4px); flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+.fleet .fleet-node { display: inline-flex; align-items: center; gap: var(--sp-2, 4px); white-space: nowrap; }
+.fleet .fleet-node:not(.on) { opacity: 0.62; }
+.fleet .fleet-node-state { font-size: var(--fs-2xs, 10px); padding: 0 var(--sp-2, 4px); border-radius: var(--r-sm, 4px); background: var(--surface-3); color: var(--text-2); font-variant-numeric: tabular-nums; }
+/* Done is quiet: the plain chip; only failures and timeouts are coloured. */
+.fleet .fleet-node-state.ok { background: var(--surface-3); color: var(--text-2); }
+.fleet .fleet-node-state.failed { background: var(--crit-bg); color: var(--crit-text); }
+.fleet .fleet-node-state.timedOut { background: var(--warn-bg); color: var(--warn-text); }
+.fleet .fleet-node-state.running { background: var(--info-bg, var(--sel)); color: var(--accent-text, var(--accent)); }
+
+.fleet .fleet-input { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: stretch; gap: var(--sp-3, 6px); padding: var(--sp-4, 8px) var(--sp-5, 12px) var(--sp-2, 4px); }
+.fleet .fleet-prompt { align-self: start; padding-top: var(--sp-2, 4px); color: var(--muted); font-weight: var(--fw-semibold, 600); width: 1ch; }
+.fleet .fleet-input.root .fleet-prompt { color: var(--crit-text); }
+.fleet .fleet-input.root textarea { border-color: var(--state-warn-edge, var(--warn)); box-shadow: 0 0 0 var(--bw, 1px) var(--state-warn-edge, var(--warn)) inset; }
+.fleet .fleet-side { display: flex; flex-direction: column; gap: var(--sp-2, 4px); align-items: flex-end; }
+.fleet .fleet-side-row { display: flex; align-items: center; gap: var(--sp-3, 6px); }
+.fleet .kbd-hint { opacity: 0.75; font-weight: var(--fw-regular, 400); margin-left: var(--sp-1, 2px); }
+.fleet .snippets { align-items: center; padding: var(--sp-1, 2px) var(--sp-5, 12px) var(--sp-3, 6px); }
+
+.fleet .fleet-history { flex: none; max-height: 11.875rem; overflow: auto; border-top: var(--bw, 1px) solid var(--hairline, var(--border)); border-bottom: var(--bw, 1px) solid var(--hairline, var(--border)); background: var(--surface-2, var(--surface)); }
+.fleet .fleet-history-row { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1.2fr) auto auto auto auto; gap: var(--sp-4, 8px); align-items: center; padding: var(--sp-2, 4px) var(--sp-5, 12px); font-size: var(--fs-sm, 11px); }
+.fleet .fleet-history-row:hover { background: var(--hover); }
+.fleet .fleet-history-cmd { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.fleet .fleet-bar { flex: none; display: flex; align-items: center; gap: var(--sp-4, 8px); padding: var(--sp-2, 4px) var(--sp-5, 12px); border-top: var(--bw, 1px) solid var(--hairline, var(--border)); }
+.fleet .fleet-bar-cmd { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; max-width: 45%; }
+
+.fleet .fleet-results { padding: var(--sp-3, 6px) var(--sp-5, 12px) var(--sp-4, 8px); grid-template-columns: repeat(auto-fill, minmax(23.75rem, 1fr)); }
+.fleet .fleet-results > .pad { grid-column: 1 / -1; }
+.fleet .fleet-card { border: var(--bw, 1px) solid var(--border); border-radius: var(--r-md, 6px); overflow: hidden; background: var(--surface); display: flex; flex-direction: column; min-width: 0; }
+.fleet .fleet-card.failed { border-color: color-mix(in srgb, var(--critical, #d32f2f) 55%, var(--border)); }
+.fleet .fleet-card.timedOut { border-color: color-mix(in srgb, var(--warning, #b7791f) 55%, var(--border)); }
+.fleet .fleet-head { gap: var(--sp-3, 6px); }
+.fleet pre.fleet-out {
+  margin: 0; padding: var(--sp-3, 6px) var(--sp-4, 8px); font-family: var(--mono); font-size: var(--fs-mono, 11.5px); line-height: 1.45;
+  min-height: calc(3 * 1.45em + var(--sp-5, 12px)); max-height: 21.25rem; overflow: auto; white-space: pre; background: var(--surface); color: var(--text);
+}
+.fleet pre.fleet-out.wrap { white-space: pre-wrap; overflow-wrap: anywhere; }
+.fleet .fleet-stderr { color: var(--crit-text, #c62828); }
+.fleet .fleet-csv { grid-column: 1 / -1; overflow: auto; border: var(--bw, 1px) solid var(--border); border-radius: var(--r-md, 6px); }
+.ops-confirm-cmd { padding: var(--sp-3, 6px) var(--sp-4, 8px); background: var(--surface-2, var(--surface)); border-radius: var(--r-sm, 4px); overflow-wrap: anywhere; }
+
+/* Workloads: the priority stepper for the selected process */
+.ops-nice { flex: none; display: flex; align-items: center; gap: var(--sp-3, 6px); padding: var(--sp-3, 6px) var(--sp-5, 12px); border-bottom: var(--bw, 1px) solid var(--hairline, var(--border)); background: var(--surface-2, var(--surface)); flex-wrap: wrap; }
+.ops-nice input.narrow { width: 3.5rem; text-align: center; }
+.ops-nice .btn.small.icon { width: calc(var(--sp-6, 16px) + var(--sp-3, 6px)); padding: 0; display: inline-grid; place-items: center; }
+.ops-nice-hint { font-size: var(--fs-sm, 11px); flex-basis: 100%; text-align: right; }
+@container (min-width: 68.75rem) { .ops-nice-hint { flex-basis: auto; } }
+
+/* Containers: hover quick actions, deployment groups */
+.ops-name-cell { display: flex; align-items: center; gap: var(--sp-2, 4px); min-width: 0; position: relative; }
+.ops-name-cell.child { padding-left: calc(var(--sp-6, 16px) + var(--sp-1, 2px)); }
+.ops-name-cell > .strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* Overlaid at the cell's right edge, so hidden actions take no room from the name. */
+.ops-quick { position: absolute; right: 0; top: 50%; transform: translateY(-50%); display: inline-flex; gap: var(--bw, 1px); padding-left: var(--sp-3, 6px); opacity: 0; pointer-events: none; transition: opacity var(--dur-1, 120ms) var(--ease, ease); background: linear-gradient(to right, transparent, var(--hover, var(--surface)) var(--sp-4, 8px)); }
+table.grid tbody tr.sel .ops-quick { background: linear-gradient(to right, transparent, var(--sel, var(--surface)) var(--sp-4, 8px)); }
+table.grid tbody tr:hover .ops-quick, table.grid tbody tr:focus-within .ops-quick { opacity: 1; pointer-events: auto; }
+.ops-quick .tool.icon-only { height: calc(var(--sp-6, 16px) + var(--sp-1, 2px)); padding: 0 var(--sp-1, 2px); }
+.ops-group-label { display: inline-flex; align-items: center; gap: var(--sp-2, 4px); font-weight: var(--fw-semibold, 600); }
+table.grid tbody tr.ops-group-row td { background: var(--surface-2, var(--surface)); }
+
+/* Services: matrix cells, targets, journal */
+.ops-cell { display: inline-flex; align-items: center; gap: var(--sp-1, 2px); border: var(--bw, 1px) solid transparent; background: none; padding: var(--bw, 1px) var(--sp-2, 4px); border-radius: var(--r-sm, 4px); color: inherit; font: inherit; cursor: default; max-width: 100%; }
+.ops-cell:hover { background: var(--hover, var(--surface-3)); }
+.ops-cell.on { border-color: var(--accent, #0a84ff); background: color-mix(in srgb, var(--accent, #0a84ff) 10%, transparent); }
+.ops-cell:focus-visible { outline: var(--sp-1, 2px) solid var(--focus-ring, var(--accent)); outline-offset: var(--bw, 1px); }
+.ops-targets { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2, 4px); }
+.ops-small { font-size: var(--fs-sm, 11px); }
+.ops-journal { list-style: none; margin: 0; padding: 0; font-family: var(--mono); font-size: var(--fs-mono, 11.5px); line-height: 1.45; display: flex; flex-direction: column; gap: var(--bw, 1px); }
+.ops-journal li { display: grid; grid-template-columns: auto auto minmax(0, 1fr); gap: var(--sp-3, 6px); align-items: baseline; padding: var(--bw, 1px) var(--sp-2, 4px); border-radius: var(--r-sm, 4px); }
+.ops-journal li:not(.err):not(.warning) { grid-template-columns: auto minmax(0, 1fr); }
+.ops-journal li.err { background: var(--crit-bg); color: var(--crit-text); }
+.ops-journal li.warning { background: var(--warn-bg); color: var(--warn-text); }
+.ops-journal-time { color: var(--muted); white-space: nowrap; }
+.ops-journal li.err .ops-journal-time, .ops-journal li.warning .ops-journal-time { color: inherit; opacity: 0.8; }
+.ops-journal-text { overflow-wrap: anywhere; white-space: pre-wrap; }
+.ops-raw summary { cursor: default; color: var(--muted); font-size: var(--fs-sm, 11px); padding: var(--sp-2, 4px) 0; }
+
+/* Updates */
+.ops-updates { flex: 1 1 auto; min-height: 0; display: grid; grid-template-rows: minmax(7.5rem, auto) minmax(0, 1fr); }
+.ops-updates-nodes { max-height: 16.25rem; min-height: 0; overflow: auto; border-bottom: var(--bw, 1px) solid var(--border); display: flex; flex-direction: column; }
+.ops-updates-nodes > * { flex: 1 1 auto; }
+.ops-drift { color: var(--warn-text, #8a5a00); display: inline-flex; gap: var(--sp-2, 4px); align-items: center; }
+.ops-pkg { display: inline-flex; gap: var(--sp-2, 4px); align-items: center; min-width: 0; }
+.ops-list { list-style: none; margin: 0; padding: 0; font-size: var(--fs-sm, 11px); display: flex; flex-direction: column; gap: var(--bw, 1px); }
+.ops-list li { overflow-wrap: anywhere; }
+
+/* Settings › Security & privacy */
+.ops-sec-state { display: inline-flex; align-items: center; gap: var(--sp-3, 6px); }
+.ops-sec-text { font-size: var(--fs-sm, 11px); line-height: 1.45; max-width: 52ch; display: block; }
+.fleet .fleet-versions { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+.fleet .fleet-versions .fleet-csv { margin: var(--sp-3, 6px) var(--sp-5, 12px); flex: 0 1 auto; }
+/* Long version strings wrap in their column rather than pushing the table sideways. */
+.fleet .fleet-versions table.grid td { white-space: normal; overflow-wrap: anywhere; vertical-align: top; }
+.fleet td.fleet-drift { color: var(--warn-text, #8a5a00); background: color-mix(in srgb, var(--warning, #b7791f) 10%, transparent); }
+.fleet td.fleet-drift .badge { margin-left: var(--sp-3, 6px); }
+.fleet .fleet-drift-text { color: var(--warn-text, #8a5a00); font-weight: var(--fw-medium, 500); }
+.fleet .fleet-csv table.grid th, .fleet .fleet-csv table.grid td { padding-left: var(--sp-5, 12px); padding-right: var(--sp-5, 12px); }
+
+/* ---- r2-safety ---- */
+
+/* The detail pane only opens for a selected row. */
+.ops-split.no-detail { grid-template-columns: minmax(0, 1fr); }
+@container (max-width: 47.5rem) { .ops-split.no-detail { grid-template-rows: minmax(0, 1fr); } }
+
+.ops-activity .ops-what { line-height: var(--lh-row, 1.4); }
+.ops-activity .ops-disclosure, .ops-activity .ops-disclosure-space { align-self: center; }
+.ops-ok { color: var(--text-2, var(--muted)); }
+
+.ops-detail-titles { display: flex; flex-direction: column; min-width: 0; flex: 1 1 auto; }
+.ops-detail-sub { font-size: var(--fs-sm, 11px); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Fleet's Destructive tier. */
+.ops-danger-banner {
+  display: flex; flex-direction: column; gap: var(--sp-1, 2px);
+  margin: 0 0 var(--sp-4, 8px); padding: var(--sp-4, 8px) var(--sp-5, 12px);
+  border: var(--bw-crit, 1.5px) solid var(--state-crit-edge, var(--crit));
+  background: var(--state-crit-band, var(--crit-bg));
+  border-radius: var(--r-md, 6px);
+  color: var(--text);
+}
+.ops-danger-banner strong { color: var(--crit-text, var(--crit)); font-weight: var(--fw-semibold, 600); }
+
+.fleet .fleet-power-hint {
+  flex: none; display: flex; align-items: center; flex-wrap: wrap; gap: var(--sp-3, 6px);
+  margin: 0 var(--sp-5, 12px) var(--sp-3, 6px); padding: var(--sp-3, 6px) var(--sp-4, 8px);
+  border: var(--bw, 1px) solid var(--state-warn-edge, var(--warn)); border-radius: var(--r-md, 6px);
+  font-size: var(--fs-sm, 11px);
+}
+.fleet .fleet-power-hint > span { flex: 1 1 18rem; min-width: 0; }
+
+
+/* ---- r2-finish ---- */
+/* "on" before the node chips is one word: the chips give way, never it ("o.."). */
+.toolbar .toolbar-text.fleet-on { flex: none; }
+/* The What cell's inline-flex sat on the text baseline, so a row without a chevron was 3px taller
+   and its text 3px lower than Time and Node. Middle-aligned, every row lines up. */
+.ops-activity td .ops-what { vertical-align: middle; }
+
+/* ---- r3-desk ---- */
+
+/* Activity log: the What header starts where the rows' text does, past the cell padding and the
+   chevron gutter (8 + 16 + 4 px); r2's rule left out the cell's own 8 px. */
+.ops-activity th[data-col="what"] .th-label,
+.ops-activity th[data-col="what"] .th-sort { padding-left: calc(var(--sp-4, 8px) + var(--sp-6, 16px) + var(--sp-2, 4px)); }
+/* Footers the windows draw themselves (counts the table can't: operations, containers in groups). */
+.ops-split-list > .ops-activity-foot, .containers-window > .table-footer { flex: none; }
+.ops-activity .ops-demo-mark {
+  font-size: var(--fs-2xs, 10px); font-weight: var(--fw-semibold, 600); letter-spacing: 0.02em;
+  padding: 0 var(--sp-2, 4px); border-radius: var(--r-sm, 4px);
+  color: var(--text-2, var(--muted)); border: var(--bw, 1px) solid var(--hairline, var(--border));
+}
+/* Tiled narrow (460 px), nothing is cut off at the window's edge: the buttons go icon-only
+   (each keeps its name as a tooltip) and the filters wrap onto a second row, where the selects
+   and the search field share the width. */
+@container (max-width: 620px) {
+  .ops-window .toolbar { flex-wrap: wrap; row-gap: 3px; }
+  .ops-window .toolbar .tool .tool-label { display: none; }
+  .ops-window .toolbar .tool { padding: 0 6px; }
+  .ops-window .toolbar > select { flex: 1 1 0; min-width: 6.5rem; max-width: 12rem; text-overflow: ellipsis; }
+  .ops-window .toolbar > .search-field { flex: 1 1 8rem; min-width: 6rem; }
+  .ops-window .toolbar > .spacer { flex-basis: 0; }
+}
+
+/* ---- r4-safety ---- */
+
+/* "root" is a fact, not a warning: a neutral outline tag beside the command. */
+.ops-activity .ops-tag {
+  flex: none; font-size: var(--fs-2xs, 10px); font-weight: var(--fw-semibold, 600); letter-spacing: 0.02em; line-height: 1.5;
+  padding: 0 var(--sp-2, 4px); border-radius: var(--r-sm, 4px);
+  color: var(--text-2, var(--muted)); border: var(--bw, 1px) solid var(--hairline, var(--border));
+}
+
+/* Images: one line per node above the table ("gx10-0000: 5 images · 41.2 GiB · 2 unused for 186 days"),
+   each a button that narrows the table to that node. */
+.ops-images .ops-images-nodes {
+  flex: none; list-style: none; margin: 0; padding: var(--sp-2, 4px) var(--sp-5, 12px);
+  display: flex; flex-wrap: wrap; gap: var(--sp-1, 2px) var(--sp-6, 16px);
+  border-bottom: var(--hairline-w, 1px) solid var(--hairline, var(--border));
+  font-size: var(--fs-sm, 11px); color: var(--text-2, var(--muted));
+}
+.ops-images .ops-images-node {
+  font: inherit; color: inherit; background: none; border: 0; padding: var(--sp-1, 2px) 0; cursor: pointer; text-align: left;
+}
+.ops-images .ops-images-node:hover, .ops-images .ops-images-node[aria-pressed="true"] { color: var(--text); text-decoration: underline; text-underline-offset: 2px; }
+.ops-images .ops-images-old { color: var(--text-2, var(--muted)); }
+.ops-images .ops-tag {
+  font-size: var(--fs-2xs, 10px); font-weight: var(--fw-semibold, 600); letter-spacing: 0.02em; line-height: 1.5;
+  padding: 0 var(--sp-2, 4px); border-radius: var(--r-sm, 4px);
+  color: var(--text-2, var(--muted)); border: var(--bw, 1px) solid var(--hairline, var(--border));
+}
+.ops-images > .table-footer { flex: none; }
+
+/* Restart… and Shut down…: the models paragraph and the recovery checkbox. */
+.ops-confirm .ops-confirm-models { margin: var(--sp-2, 4px) 0 0; color: var(--text); }
+.ops-confirm .ops-confirm-follow { display: flex; align-items: flex-start; gap: var(--sp-3, 6px); margin-top: var(--sp-4, 8px); font-size: var(--fs-sm, 11px); }
+.ops-confirm .ops-confirm-follow input { margin-top: 2px; }

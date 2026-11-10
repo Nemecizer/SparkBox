@@ -1,0 +1,46 @@
+# Written for SparkBox's tests from SGLang's documented metric names (python -m sglang.launch_server --enable-metrics).
+# HELP sglang:prompt_tokens_total Number of prefill tokens processed.
+# TYPE sglang:prompt_tokens_total counter
+sglang:prompt_tokens_total{model_name="Qwen/Qwen3-32B"} 812044.0
+# HELP sglang:generation_tokens_total Number of generation tokens processed.
+# TYPE sglang:generation_tokens_total counter
+sglang:generation_tokens_total{model_name="Qwen/Qwen3-32B"} 96210.0
+# HELP sglang:num_requests_total Number of requests processed.
+# TYPE sglang:num_requests_total counter
+sglang:num_requests_total{model_name="Qwen/Qwen3-32B"} 411.0
+# HELP sglang:num_running_reqs The number of running requests.
+# TYPE sglang:num_running_reqs gauge
+sglang:num_running_reqs{model_name="Qwen/Qwen3-32B"} 2.0
+# HELP sglang:num_queue_reqs The number of requests in the waiting queue.
+# TYPE sglang:num_queue_reqs gauge
+sglang:num_queue_reqs{model_name="Qwen/Qwen3-32B"} 1.0
+# HELP sglang:token_usage The token usage.
+# TYPE sglang:token_usage gauge
+sglang:token_usage{model_name="Qwen/Qwen3-32B"} 0.31
+# HELP sglang:gen_throughput The generation throughput (token/s).
+# TYPE sglang:gen_throughput gauge
+sglang:gen_throughput{model_name="Qwen/Qwen3-32B"} 24.6
+# HELP sglang:cache_hit_rate The prefix cache hit rate.
+# TYPE sglang:cache_hit_rate gauge
+sglang:cache_hit_rate{model_name="Qwen/Qwen3-32B"} 0.42
+# HELP sglang:time_to_first_token_seconds Histogram of time to first token in seconds.
+# TYPE sglang:time_to_first_token_seconds histogram
+sglang:time_to_first_token_seconds_bucket{le="0.1",model_name="Qwen/Qwen3-32B"} 12.0
+sglang:time_to_first_token_seconds_bucket{le="0.2",model_name="Qwen/Qwen3-32B"} 90.0
+sglang:time_to_first_token_seconds_bucket{le="0.4",model_name="Qwen/Qwen3-32B"} 300.0
+sglang:time_to_first_token_seconds_bucket{le="0.6",model_name="Qwen/Qwen3-32B"} 380.0
+sglang:time_to_first_token_seconds_bucket{le="0.8",model_name="Qwen/Qwen3-32B"} 400.0
+sglang:time_to_first_token_seconds_bucket{le="1.0",model_name="Qwen/Qwen3-32B"} 405.0
+sglang:time_to_first_token_seconds_bucket{le="2.0",model_name="Qwen/Qwen3-32B"} 410.0
+sglang:time_to_first_token_seconds_bucket{le="+Inf",model_name="Qwen/Qwen3-32B"} 411.0
+sglang:time_to_first_token_seconds_sum{model_name="Qwen/Qwen3-32B"} 121.3
+sglang:time_to_first_token_seconds_count{model_name="Qwen/Qwen3-32B"} 411.0
+# HELP sglang:inter_token_latency_seconds Histogram of inter-token latency in seconds.
+# TYPE sglang:inter_token_latency_seconds histogram
+sglang:inter_token_latency_seconds_bucket{le="0.02",model_name="Qwen/Qwen3-32B"} 400.0
+sglang:inter_token_latency_seconds_bucket{le="0.04",model_name="Qwen/Qwen3-32B"} 52000.0
+sglang:inter_token_latency_seconds_bucket{le="0.06",model_name="Qwen/Qwen3-32B"} 93000.0
+sglang:inter_token_latency_seconds_bucket{le="0.08",model_name="Qwen/Qwen3-32B"} 95800.0
+sglang:inter_token_latency_seconds_bucket{le="+Inf",model_name="Qwen/Qwen3-32B"} 96210.0
+sglang:inter_token_latency_seconds_sum{model_name="Qwen/Qwen3-32B"} 3790.2
+sglang:inter_token_latency_seconds_count{model_name="Qwen/Qwen3-32B"} 96210.0

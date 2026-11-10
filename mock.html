@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>SparkBox (browser preview)</title>
+    <script>
+      // Same pre-paint appearance as index.html.
+      try {
+        var a = JSON.parse(localStorage.getItem("sparkbox.appearance") || "{}");
+        var t = new URLSearchParams(location.search).get("theme") || a.theme;
+        var r = document.documentElement;
+        if (t === "light" || t === "dark") r.setAttribute("data-theme", t);
+        if (a.contrast === "more") r.setAttribute("data-contrast", "more");
+        if (a.motion === "reduce") r.setAttribute("data-motion", "reduce");
+        if (a.textScale === 0.92 || a.textScale === 1.12 || a.textScale === 1.25) r.style.setProperty("--text-scale", String(a.textScale));
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/dev/mockMain.tsx"></script>
+  </body>
+</html>

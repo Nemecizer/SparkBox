@@ -1,0 +1,1 @@
+{"channels":[{"id":"phone","kind":"ntfy","name":"Phone (ntfy)","enabled":true,"criticalOnly":false,"server":"https://ntfy.sh","topic":"sparkbox-a7f3","secrets":{"token":"tk_fixture_not_a_real_token"}}],"endpointKeys":{},"metrics":{"token":null}}

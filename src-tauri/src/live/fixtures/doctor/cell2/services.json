@@ -1,0 +1,625 @@
+[
+{
+"unit": "accounts-daemon.service",
+"active": "active",
+"sub": "running",
+"enabled": "enabled",
+"description": "Accounts Service"
+},
+{
+"unit": "alsa-restore.service",
+"active": "active",
+"sub": "exited",
+"enabled": "static",
+"description": "Save/Restore Sound Card State"
+},
+{
+"unit": "anacron.service",
+"active": "active",
+"sub": "running",
+"enabled": "enabled",
+"description": "Run anacron jobs"
+},
+{
+"unit": "apparmor.service",
+"active": "active",
+"sub": "exited",
+"enabled": "enabled",
+"description": "Load AppArmor profiles"
+},
+{
+"unit": "apport.service",
+"active": "active",
+"sub": "exited",
+"enabled": "enabled",
+"description": "automatic crash report generation"
+},
+{
+"unit": "avahi-daemon.service",
+"active": "active",
+"sub": "running",
+"enabled": "enabled",
+"description": "Avahi mDNS/DNS-SD Stack"
+},
+{
+"unit": "blk-availability.service",
+"active": "active",
+"sub": "exited",
+"enabled": "enabled",
+"description": "Availability of block devices"
+},
+{
+"unit": "bluetooth.service",
+"active": "active",
+"sub": "running",
+"enabled": "enabled",
+"description": "Bluetooth service"
+},
+{
+"unit": "colord.service",
+"active": "active",
+"sub": "running",
+"enabled": "static",
+"description": "Manage, Install and Generate Color Profiles"
+},
+{
+"unit": "console-setup.service",
+"active": "active",
+"sub": "exited",
+"enabled": "enabled",
+"description": "Set console font and keymap"
+},
+{
+"unit": "containerd.service",
+"active": "active",
+"sub": "running",
+"enabled": "enabled",
+"description": "containerd container runtime"
+},
+{
+"unit": "cron.service",
+"active": "active",
+"sub": "running",
+"enabled": "enabled",
+"description": "Regular background program processing daemon"
+},
+{
+"unit": "cups-browsed.service",
+"active": "active",
+"sub": "running",
+"enabled": "enabled",
+"description": "Make remote CUPS printers available locally"
+},
+{
+"unit": "cups.service",
+"active": "active",
+"sub": "running",
+"enabled": "enabled",
+"description": "CUPS Scheduler"
+},
+{
+"unit": "dbus.service",
+"active": "active",
+"sub": "running",
+"enabled": "static",
+"description": "D-Bus System Message Bus"
+},
+{
+"unit": "dgx-dashboard-admin.service",
+"active": "active",
+"sub": "running",
+"enabled": "enabled",
+"description": "NVIDIA DGX Dashboard Admin Service"
+},
+{
+"unit": "dgx-dashboard.service",
+"active": "active",
+"sub": "running",
+"enabled": "enabled",
+"description": "NVIDIA DGX Dashboard Service"
+},
+{
+"unit": "docker.service",
+"active": "active",
+"sub": "running",
+"enabled": "enabled",
+"description": "Docker Application Container Engine"
+},
+{
+"unit": "earlyoom.service",
+"active": "active",
+"sub": "running",
+"enabled": "enabled",
+"description": "Early OOM Daemon"
+},
+{
+"unit": "finalrd.service",
+"active": "active",
+"sub": "exited",
+"enabled": "enabled",
+"description": "Create final runtime dir for shutdown pivot root"
+},
+{
+"unit": "fwupd.service",
+"active": "active",
+"sub": "running",
+"enabled": "static",
+"description": "Firmware update daemon"
+},
+{
+"unit": "gnome-remote-desktop.service",
+"active": "active",
+"sub": "running",
+"enabled": "enabled",
+"description": "GNOME Remote Desktop"
+},
+{
+"unit": "kdump-tools.service",
+"active": "active",
+"sub": "exited",
+"enabled": "enabled",
+"description": "Kernel crash dump capture service"
+},
+{
+"unit": "keyboard-setup.service",
+"active": "active",
+"sub": "exited",
+"enabled": "enabled",
+"description": "Set the console keyboard layout"
+},
+{
+"unit": "kmod-static-nodes.service",
+"active": "active",
+"sub": "exited",
+"enabled": "static",
+"description": "Create List of Static Device Nodes"
+},
+{
+"unit": "lldpd.service",
+"active": "active",
+"sub": "running",
+"enabled": "enabled",
+"description": "LLDP daemon"
+},
+{
+"unit": "lvm2-monitor.service",
+"active": "active",
+"sub": "exited",
+"enabled": "enabled",
+"description": "Monitoring of LVM2 mirrors, snapshots etc. using dmeventd or progress polling"
+},
+{
+"unit": "ModemManager.service",
+"active": "active",
+"sub": "running",
+"enabled": "enabled",
+"description": "Modem Manager"
+},
+{
+"unit": "multipathd.service",
+"active": "active",
+"sub": "running",
+"enabled": "enabled",
+"description": "Device-Mapper Multipath Device Controller"
+},
+{
+"unit": "networkd-dispatcher.service",
+"active": "active",
+"sub": "running",
+"enabled": "enabled",
+"description": "Dispatcher daemon for systemd-networkd"
+},
+{
+"unit": "NetworkManager.service",
+"active": "active",
+"sub": "running",
+"enabled": "enabled",
+"description": "Network Manager"
+},
+{
+"unit": "nvidia-dgx-telemetry.service",
+"active": "active",
+"sub": "running",
+"enabled": "enabled",
+"description": "NVIDIA DGX Telemetry Service"
+},
+{
+"unit": "nvidia-nvme-interrupt-coalescing.service",
+"active": "active",
+"sub": "exited",
+"enabled": "enabled",
+"description": "Configure NVMe Interrupt Coalescing"
+},
+{
+"unit": "nvidia-persistenced.service",
+"active": "active",
+"sub": "running",
+"enabled": "enabled",
+"description": "NVIDIA Persistence Daemon"
+},
+{
+"unit": "openvpn.service",
+"active": "active",
+"sub": "exited",
+"enabled": "enabled",
+"description": "OpenVPN service"
+},
+{
+"unit": "plymouth-quit-wait.service",
+"active": "active",
+"sub": "exited",
+"enabled": "static",
+"description": "Hold until boot process finishes up"
+},
+{
+"unit": "plymouth-quit.service",
+"active": "active",
+"sub": "exited",
+"enabled": "static",
+"description": "Terminate Plymouth Boot Screen"
+},
+{
+"unit": "plymouth-read-write.service",
+"active": "active",
+"sub": "exited",
+"enabled": "static",
+"description": "Tell Plymouth To Write Out Runtime Data"
+},
+{
+"unit": "plymouth-start.service",
+"active": "active",
+"sub": "exited",
+"enabled": "static",
+"description": "Show Plymouth Boot Screen"
+},
+{
+"unit": "polkit.service",
+"active": "active",
+"sub": "running",
+"enabled": "static",
+"description": "Authorization Manager"
+},
+{
+"unit": "postfix.service",
+"active": "active",
+"sub": "exited",
+"enabled": "enabled",
+"description": "Postfix Mail Transport Agent"
+},
+{
+"unit": "postfix@-.service",
+"active": "active",
+"sub": "running",
+"enabled": "?",
+"description": "Postfix Mail Transport Agent (instance -)"
+},
+{
+"unit": "ras-mc-ctl.service",
+"active": "active",
+"sub": "exited",
+"enabled": "enabled",
+"description": "Initialize EDAC v3.0.0 Drivers For Machine Hardware"
+},
+{
+"unit": "rasdaemon.service",
+"active": "active",
+"sub": "running",
+"enabled": "enabled",
+"description": "RAS daemon to log the RAS events"
+},
+{
+"unit": "rdma-load-modules@infiniband.service",
+"active": "active",
+"sub": "exited",
+"enabled": "?",
+"description": "Load RDMA modules from /etc/rdma/modules/infiniband.conf"
+},
+{
+"unit": "rdma-load-modules@rdma.service",
+"active": "active",
+"sub": "exited",
+"enabled": "?",
+"description": "Load RDMA modules from /etc/rdma/modules/rdma.conf"
+},
+{
+"unit": "rdma-load-modules@roce.service",
+"active": "active",
+"sub": "exited",
+"enabled": "?",
+"description": "Load RDMA modules from /etc/rdma/modules/roce.conf"
+},
+{
+"unit": "rdma-ndd.service",
+"active": "active",
+"sub": "running",
+"enabled": "static",
+"description": "RDMA Node Description Daemon"
+},
+{
+"unit": "rpc-statd-notify.service",
+"active": "active",
+"sub": "exited",
+"enabled": "static",
+"description": "Notify NFS peers of a restart"
+},
+{
+"unit": "rsyslog.service",
+"active": "active",
+"sub": "running",
+"enabled": "enabled",
+"description": "System Logging Service"
+},
+{
+"unit": "rtkit-daemon.service",
+"active": "active",
+"sub": "running",
+"enabled": "disabled",
+"description": "RealtimeKit Scheduling Policy Service"
+},
+{
+"unit": "serial-getty@ttyS0.service",
+"active": "active",
+"sub": "running",
+"enabled": "?",
+"description": "Serial Getty on ttyS0"
+},
+{
+"unit": "setvtrgb.service",
+"active": "active",
+"sub": "exited",
+"enabled": "enabled",
+"description": "Set console scheme"
+},
+{
+"unit": "smartmontools.service",
+"active": "active",
+"sub": "running",
+"enabled": "enabled",
+"description": "Self Monitoring and Reporting Technology (SMART) Daemon"
+},
+{
+"unit": "snapd.apparmor.service",
+"active": "active",
+"sub": "exited",
+"enabled": "enabled",
+"description": "Load AppArmor profiles managed internally by snapd"
+},
+{
+"unit": "snapd.seeded.service",
+"active": "active",
+"sub": "exited",
+"enabled": "enabled",
+"description": "Wait until snapd is fully seeded"
+},
+{
+"unit": "snapd.service",
+"active": "active",
+"sub": "running",
+"enabled": "enabled",
+"description": "Snap Daemon"
+},
+{
+"unit": "srp_daemon.service",
+"active": "active",
+"sub": "exited",
+"enabled": "enabled",
+"description": "Daemon that discovers and logs in to SRP target systems"
+},
+{
+"unit": "ssh.service",
+"active": "active",
+"sub": "running",
+"enabled": "disabled",
+"description": "OpenBSD Secure Shell server"
+},
+{
+"unit": "switcheroo-control.service",
+"active": "active",
+"sub": "running",
+"enabled": "enabled",
+"description": "Switcheroo Control Proxy service"
+},
+{
+"unit": "sysstat.service",
+"active": "active",
+"sub": "exited",
+"enabled": "enabled",
+"description": "Resets System Activity Logs"
+},
+{
+"unit": "systemd-binfmt.service",
+"active": "active",
+"sub": "exited",
+"enabled": "static",
+"description": "Set Up Additional Binary Formats"
+},
+{
+"unit": "systemd-fsck@dev-disk-by\\x2duuid-CAAB\\x2dF3C5.service",
+"active": "active",
+"sub": "exited",
+"enabled": "?",
+"description": "File System Check on /dev/disk/by-uuid/CAAB-F3C5"
+},
+{
+"unit": "systemd-journal-flush.service",
+"active": "active",
+"sub": "exited",
+"enabled": "static",
+"description": "Flush Journal to Persistent Storage"
+},
+{
+"unit": "systemd-journald.service",
+"active": "active",
+"sub": "running",
+"enabled": "static",
+"description": "Journal Service"
+},
+{
+"unit": "systemd-logind.service",
+"active": "active",
+"sub": "running",
+"enabled": "static",
+"description": "User Login Management"
+},
+{
+"unit": "systemd-modules-load.service",
+"active": "active",
+"sub": "exited",
+"enabled": "static",
+"description": "Load Kernel Modules"
+},
+{
+"unit": "systemd-networkd.service",
+"active": "active",
+"sub": "running",
+"enabled": "disabled",
+"description": "Network Configuration"
+},
+{
+"unit": "systemd-random-seed.service",
+"active": "active",
+"sub": "exited",
+"enabled": "static",
+"description": "Load/Save OS Random Seed"
+},
+{
+"unit": "systemd-remount-fs.service",
+"active": "active",
+"sub": "exited",
+"enabled": "enabled-runtime",
+"description": "Remount Root and Kernel File Systems"
+},
+{
+"unit": "systemd-resolved.service",
+"active": "active",
+"sub": "running",
+"enabled": "enabled",
+"description": "Network Name Resolution"
+},
+{
+"unit": "systemd-sysctl.service",
+"active": "active",
+"sub": "exited",
+"enabled": "static",
+"description": "Apply Kernel Variables"
+},
+{
+"unit": "systemd-timedated.service",
+"active": "active",
+"sub": "running",
+"enabled": "static",
+"description": "Time & Date Service"
+},
+{
+"unit": "systemd-timesyncd.service",
+"active": "active",
+"sub": "running",
+"enabled": "enabled",
+"description": "Network Time Synchronization"
+},
+{
+"unit": "systemd-tmpfiles-setup-dev-early.service",
+"active": "active",
+"sub": "exited",
+"enabled": "static",
+"description": "Create Static Device Nodes in /dev gracefully"
+},
+{
+"unit": "systemd-tmpfiles-setup-dev.service",
+"active": "active",
+"sub": "exited",
+"enabled": "static",
+"description": "Create Static Device Nodes in /dev"
+},
+{
+"unit": "systemd-tmpfiles-setup.service",
+"active": "active",
+"sub": "exited",
+"enabled": "static",
+"description": "Create Volatile Files and Directories"
+},
+{
+"unit": "systemd-udev-trigger.service",
+"active": "active",
+"sub": "exited",
+"enabled": "static",
+"description": "Coldplug All udev Devices"
+},
+{
+"unit": "systemd-udevd.service",
+"active": "active",
+"sub": "running",
+"enabled": "static",
+"description": "Rule-based Manager for Device Events and Files"
+},
+{
+"unit": "systemd-update-utmp.service",
+"active": "active",
+"sub": "exited",
+"enabled": "static",
+"description": "Record System Boot/Shutdown in UTMP"
+},
+{
+"unit": "systemd-user-sessions.service",
+"active": "active",
+"sub": "exited",
+"enabled": "static",
+"description": "Permit User Sessions"
+},
+{
+"unit": "udisks2.service",
+"active": "active",
+"sub": "running",
+"enabled": "enabled",
+"description": "Disk Manager"
+},
+{
+"unit": "ufw.service",
+"active": "active",
+"sub": "exited",
+"enabled": "enabled",
+"description": "Uncomplicated firewall"
+},
+{
+"unit": "upower.service",
+"active": "active",
+"sub": "running",
+"enabled": "disabled",
+"description": "Daemon for power management"
+},
+{
+"unit": "user-runtime-dir@1000.service",
+"active": "active",
+"sub": "exited",
+"enabled": "?",
+"description": "User Runtime Directory /run/user/1000"
+},
+{
+"unit": "user@1000.service",
+"active": "active",
+"sub": "running",
+"enabled": "?",
+"description": "User Manager for UID 1000"
+},
+{
+"unit": "wpa_supplicant.service",
+"active": "active",
+"sub": "running",
+"enabled": "enabled",
+"description": "WPA supplicant"
+},
+{
+"unit": "xrdp-sesman.service",
+"active": "active",
+"sub": "running",
+"enabled": "enabled",
+"description": "xrdp session manager"
+},
+{
+"unit": "xrdp.service",
+"active": "active",
+"sub": "running",
+"enabled": "enabled",
+"description": "xrdp daemon"
+}
+]

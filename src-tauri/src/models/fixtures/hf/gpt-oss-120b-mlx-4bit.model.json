@@ -1,0 +1,181 @@
+{
+ "id": "mlx-community/gpt-oss-120b-4bit",
+ "sha": "08e7899579b5dd5e0364e4bcd32578134072e22d",
+ "library_name": "transformers",
+ "pipeline_tag": "text-generation",
+ "tags": [
+  "transformers",
+  "safetensors",
+  "gpt_oss",
+  "text-generation",
+  "vllm",
+  "conversational",
+  "license:apache-2.0",
+  "endpoints_compatible",
+  "4-bit",
+  "region:us"
+ ],
+ "gated": false,
+ "safetensors": {
+  "parameters": {
+   "BF16": 3689969472,
+   "U32": 14598604800
+  },
+  "total": 116829154368
+ },
+ "siblings": [
+  {
+   "rfilename": ".gitattributes",
+   "size": 1570
+  },
+  {
+   "rfilename": "README.md",
+   "size": 770
+  },
+  {
+   "rfilename": "chat_template.jinja",
+   "size": 15934
+  },
+  {
+   "rfilename": "config.json",
+   "size": 2269
+  },
+  {
+   "rfilename": "generation_config.json",
+   "size": 165
+  },
+  {
+   "rfilename": "model-00001-of-00013.safetensors",
+   "size": 5154528757,
+   "lfs": {
+    "sha256": "6d61e9c197a7f18a3f78e8c5ddc86a3d3cb2299ec61cee8fc6550ed3142c8208",
+    "size": 5154528757
+   }
+  },
+  {
+   "rfilename": "model-00002-of-00013.safetensors",
+   "size": 5359821538,
+   "lfs": {
+    "sha256": "585d025ddebfa4d8da9cb776a192cda24027f99479fdbcc55e7321a2d0ba5ef2",
+    "size": 5359821538
+   }
+  },
+  {
+   "rfilename": "model-00003-of-00013.safetensors",
+   "size": 4896072625,
+   "lfs": {
+    "sha256": "a88a694c0eed9f63516bde70351186bed511e452e8774f3f6c0a160e985855cc",
+    "size": 4896072625
+   }
+  },
+  {
+   "rfilename": "model-00004-of-00013.safetensors",
+   "size": 5359821403,
+   "lfs": {
+    "sha256": "68985d43180d29f8d64fc28e4eca8779e3bd67f941b8d33b876c504720993265",
+    "size": 5359821403
+   }
+  },
+  {
+   "rfilename": "model-00005-of-00013.safetensors",
+   "size": 4896072747,
+   "lfs": {
+    "sha256": "9e9672b3a40c18c2300bb0f3e9bc803e68bd80f98583e556405a00d72d4ac3e5",
+    "size": 4896072747
+   }
+  },
+  {
+   "rfilename": "model-00006-of-00013.safetensors",
+   "size": 5344653819,
+   "lfs": {
+    "sha256": "c5e2991df6b66c07270b19eadf7a79f4d6949e0ee37d33338978aec664b68124",
+    "size": 5344653819
+   }
+  },
+  {
+   "rfilename": "model-00007-of-00013.safetensors",
+   "size": 4896072771,
+   "lfs": {
+    "sha256": "ca428d9a23994c50f35965d60bc487325315dcd8188b3f36ad5af5ff1e88f3fa",
+    "size": 4896072771
+   }
+  },
+  {
+   "rfilename": "model-00008-of-00013.safetensors",
+   "size": 5359821670,
+   "lfs": {
+    "sha256": "0a11ee61e016e3bd55ad88cb25c16a6a7d8f59877abed2d49d042327f38b76de",
+    "size": 5359821670
+   }
+  },
+  {
+   "rfilename": "model-00009-of-00013.safetensors",
+   "size": 4896072725,
+   "lfs": {
+    "sha256": "6d6b302051d253b106778d38e2d1943fe93f95578f4cafdf33e7eb5c0e337b80",
+    "size": 4896072725
+   }
+  },
+  {
+   "rfilename": "model-00010-of-00013.safetensors",
+   "size": 5359821628,
+   "lfs": {
+    "sha256": "6891dae45de1ac295332ae17e444116d272196c5a715ddabc8b604cb21cd361f",
+    "size": 5359821628
+   }
+  },
+  {
+   "rfilename": "model-00011-of-00013.safetensors",
+   "size": 4896072681,
+   "lfs": {
+    "sha256": "c185ad8907180b5d6cb387918ed75bf4886563c6099a364d83a92ce49a1694bb",
+    "size": 4896072681
+   }
+  },
+  {
+   "rfilename": "model-00012-of-00013.safetensors",
+   "size": 5344653887,
+   "lfs": {
+    "sha256": "ab2fc1e6a7ef9f3a4e954ada02caefb7e079f2f55362e75299152abcbb7ef5d0",
+    "size": 5344653887
+   }
+  },
+  {
+   "rfilename": "model-00013-of-00013.safetensors",
+   "size": 4011018459,
+   "lfs": {
+    "sha256": "f99813a191248a830e460c88957909e5b310d32efe8e1147522e0fc7b5b9a718",
+    "size": 4011018459
+   }
+  },
+  {
+   "rfilename": "model.safetensors.index.json",
+   "size": 110265
+  },
+  {
+   "rfilename": "special_tokens_map.json",
+   "size": 440
+  },
+  {
+   "rfilename": "tokenizer.json",
+   "size": 27868174,
+   "lfs": {
+    "sha256": "0614fe83cadab421296e664e1f48f4261fa8fef6e03e63bb75c20f38e37d07d3",
+    "size": 27868174
+   }
+  },
+  {
+   "rfilename": "tokenizer_config.json",
+   "size": 4200
+  }
+ ],
+ "config": {
+  "architectures": [
+   "GptOssForCausalLM"
+  ],
+  "model_type": "gpt_oss",
+  "quantization_config": {
+   "bits": 4
+  }
+ }
+}

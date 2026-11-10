@@ -1,0 +1,175 @@
+{
+ "hostname": "gx10-0000",
+ "osrelease": "7.0.0-1019-nvidia",
+ "uptimeS": 323790,
+ "bootId": "9e77d02b-1916-443e-9b16-6476becb6a81",
+ "bios": "GX10DGX.0106.2026.0707.0731",
+ "cx7Fw": "28.50.1002",
+ "docker": "29.6.2",
+ "nets": {
+  "enP2p1s0f0np0": {
+   "mtu": 1500,
+   "carrier": 2,
+   "rxDrops": 0,
+   "txDrops": 0,
+   "rxErrors": 0,
+   "txErrors": 0
+  },
+  "enP2p1s0f1np1": {
+   "mtu": 9000,
+   "carrier": 11,
+   "rxDrops": 0,
+   "txDrops": 5,
+   "rxErrors": 0,
+   "txErrors": 0
+  },
+  "enP7s7": {
+   "mtu": 1500,
+   "carrier": 2,
+   "rxDrops": 0,
+   "txDrops": 0,
+   "rxErrors": 0,
+   "txErrors": 0
+  },
+  "enp1s0f0np0": {
+   "mtu": 1500,
+   "carrier": 2,
+   "rxDrops": 0,
+   "txDrops": 0,
+   "rxErrors": 0,
+   "txErrors": 0
+  },
+  "enp1s0f1np1": {
+   "mtu": 9000,
+   "carrier": 11,
+   "rxDrops": 0,
+   "txDrops": 6,
+   "rxErrors": 0,
+   "txErrors": 0
+  },
+  "wlP9s9": {
+   "mtu": 1500,
+   "carrier": 1,
+   "rxDrops": 0,
+   "txDrops": 0,
+   "rxErrors": 0,
+   "txErrors": 0
+  }
+ },
+ "containers": [
+  {
+   "name": "glm53",
+   "id": "9eadeae9efaf",
+   "image": "vllm/vllm-openai:glm53-flash-arm64-cu130",
+   "state": "exited",
+   "exitCode": 1,
+   "startedAt": 1793053224,
+   "finishedAt": 1793053279,
+   "command": "/bin/bash /glm53/inner.sh 3",
+   "restartPolicy": "no",
+   "labels": {
+    "ai.vllm.build.commit": "385dce36bcee42309924a5ece951a96db3dce7f2",
+    "ai.vllm.build.pipeline": "019d130e-464e-4ff7-b84b-492992c0c06b",
+    "ai.vllm.build.url": "https://buildkite.com/vllm/release-v2/builds/6303",
+    "ai.vllm.image.tag": "vllm/vllm-openai:nightly-385dce36bcee42309924a5ece951a96db3dce7f2",
+    "maintainer": "NVIDIA CORPORATION <cudatools@nvidia.com>",
+    "org.opencontainers.image.ref.name": "ubuntu",
+    "org.opencontainers.image.revision": "385dce36bcee42309924a5ece951a96db3dce7f2",
+    "org.opencontainers.image.source": "https://github.com/vllm-project/vllm",
+    "org.opencontainers.image.url": "https://buildkite.com/vllm/release-v2/builds/6303",
+    "org.opencontainers.image.version": "vllm/vllm-openai:nightly-385dce36bcee42309924a5ece951a96db3dce7f2"
+   },
+   "fullId": "9eadeae9efaf0cdd942d04cb364cb0c5b9da08bf4623338d6b17b4dffbb13705"
+  },
+  {
+   "name": "vigilant_hofstadter",
+   "id": "22e0f93fdd26",
+   "image": "nvcr.io/nvidia/vllm:26.03.post1-py3",
+   "state": "exited",
+   "exitCode": 0,
+   "startedAt": 1777186384,
+   "finishedAt": 1777186771,
+   "command": "/opt/nvidia/nvidia_entrypoint.sh vllm serve openai/gpt-oss-20b",
+   "restartPolicy": "no",
+   "labels": {
+    "com.nvidia.build.id": "295860572",
+    "com.nvidia.build.ref": "c9cbd3a6f46587fcce010740e6c055da7ddc2506",
+    "com.nvidia.cublas.version": "13.3.0.5",
+    "com.nvidia.cuda.version": "9.0",
+    "com.nvidia.cudnn.version": "9.20.0.48",
+    "com.nvidia.cufft.version": "12.2.0.37",
+    "com.nvidia.curand.version": "10.4.2.51",
+    "com.nvidia.cusolver.version": "12.1.0.51",
+    "com.nvidia.cusparse.version": "12.7.9.17",
+    "com.nvidia.cusparselt.version": "0.9.0.3",
+    "com.nvidia.nccl.version": "2.29.7",
+    "com.nvidia.npp.version": "13.1.0.44",
+    "com.nvidia.nvjpeg.version": "13.0.4.44",
+    "com.nvidia.vllm.version": "0.17.1+bd67d66a",
+    "com.nvidia.volumes.needed": "nvidia_driver",
+    "org.opencontainers.image.ref.name": "ubuntu",
+    "org.opencontainers.image.version": "24.04"
+   },
+   "fullId": "22e0f93fdd264d70dec7b4a081e0103fdac73bb71ed522b42b42dbccc89dd154"
+  },
+  {
+   "name": "adoring_northcutt",
+   "id": "be055f9ffc73",
+   "image": "nvcr.io/nvidia/cuda:13.0.1-devel-ubuntu24.04",
+   "state": "exited",
+   "exitCode": 0,
+   "startedAt": 1777185292,
+   "finishedAt": 1777185292,
+   "command": "/opt/nvidia/nvidia_entrypoint.sh nvidia-smi",
+   "restartPolicy": "no",
+   "labels": {
+    "maintainer": "NVIDIA CORPORATION <cudatools@nvidia.com>",
+    "org.opencontainers.image.ref.name": "ubuntu",
+    "org.opencontainers.image.version": "24.04"
+   },
+   "fullId": "be055f9ffc733ec0bb64780848c06e4793f0bfb13a4a0d9cc21d647cd6446127"
+  },
+  {
+   "name": "jovial_elgamal",
+   "id": "0f42a56925ba",
+   "image": "nvcr.io/nvidia/cuda:13.0.1-devel-ubuntu24.04",
+   "state": "exited",
+   "exitCode": 0,
+   "startedAt": 1777185282,
+   "finishedAt": 1777185282,
+   "command": "/opt/nvidia/nvidia_entrypoint.sh nvidia-smi",
+   "restartPolicy": "no",
+   "labels": {
+    "maintainer": "NVIDIA CORPORATION <cudatools@nvidia.com>",
+    "org.opencontainers.image.ref.name": "ubuntu",
+    "org.opencontainers.image.version": "24.04"
+   },
+   "fullId": "0f42a56925ba44b8af5620cc3e86395a5238d63083d84c2d212a02419948961c"
+  },
+  {
+   "name": "gracious_babbage",
+   "id": "40a05cea602d",
+   "image": "nvcr.io/nvidia/cuda:13.0.1-devel-ubuntu24.04",
+   "state": "exited",
+   "exitCode": 0,
+   "startedAt": 1777185261,
+   "finishedAt": 1777185262,
+   "command": "/opt/nvidia/nvidia_entrypoint.sh nvidia-smi",
+   "restartPolicy": "no",
+   "labels": {
+    "maintainer": "NVIDIA CORPORATION <cudatools@nvidia.com>",
+    "org.opencontainers.image.ref.name": "ubuntu",
+    "org.opencontainers.image.version": "24.04"
+   },
+   "fullId": "40a05cea602d1cc22da438caba1985c1d5ff3f89a85f8076940c4ded2bb67e3f"
+  }
+ ],
+ "gpu": {
+  "utilPct": 0,
+  "tempC": 44,
+  "powerW": 5.37,
+  "smClockMhz": 208,
+  "clockMaxMhz": 3003,
+  "pstate": "P8"
+ }
+}

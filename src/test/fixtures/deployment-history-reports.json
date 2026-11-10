@@ -1,0 +1,196 @@
+[
+  {
+    "id": "example-01",
+    "state": "stopped",
+    "unloadReport": {
+      "atMs": 1794000000000,
+      "ok": true,
+      "summary": "Containers stopped, memory returned and port closed.",
+      "nodes": [
+        {
+          "node": "cell1",
+          "stopped": true,
+          "memAvailable": 128849018880,
+          "memBack": true,
+          "portClosed": true,
+          "newShm": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "example-02",
+    "state": "stopped",
+    "unloadReport": {
+      "atMs": 1794000060000,
+      "ok": true,
+      "summary": "Containers stopped, memory returned and port closed.",
+      "nodes": [
+        {
+          "node": "cell1",
+          "stopped": true,
+          "memAvailable": 128849018880,
+          "memBack": true,
+          "portClosed": true,
+          "newShm": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "example-03",
+    "state": "stopped",
+    "unloadReport": {
+      "atMs": 1794000120000,
+      "ok": true,
+      "summary": "Containers stopped, memory returned and port closed.",
+      "nodes": [
+        {
+          "node": "cell1",
+          "stopped": true,
+          "memAvailable": 128849018880,
+          "memBack": true,
+          "portClosed": true,
+          "newShm": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "example-04",
+    "state": "stopped",
+    "unloadReport": {
+      "atMs": 1794000180000,
+      "ok": true,
+      "summary": "Containers stopped, memory returned and port closed.",
+      "nodes": [
+        {
+          "node": "cell1",
+          "stopped": true,
+          "memAvailable": 128849018880,
+          "memBack": true,
+          "portClosed": true,
+          "newShm": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "example-05",
+    "state": "stopped",
+    "unloadReport": {
+      "atMs": 1794000240000,
+      "ok": false,
+      "summary": "Shared memory remains; original warning kept.",
+      "nodes": [
+        {
+          "node": "cell1",
+          "stopped": true,
+          "memAvailable": 128849018880,
+          "memBack": true,
+          "portClosed": true,
+          "newShm": [
+            "example-semaphore"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "example-06",
+    "state": "stopped",
+    "unloadReport": {
+      "atMs": 1794000300000,
+      "ok": true,
+      "summary": "Containers stopped, memory returned and port closed.",
+      "nodes": [
+        {
+          "node": "cell1",
+          "stopped": true,
+          "memAvailable": 128849018880,
+          "memBack": true,
+          "portClosed": true,
+          "newShm": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "example-07",
+    "state": "stopped",
+    "unloadReport": {
+      "atMs": 1794000360000,
+      "ok": true,
+      "summary": "Containers stopped, memory returned and port closed.",
+      "nodes": [
+        {
+          "node": "cell1",
+          "stopped": true,
+          "memAvailable": 128849018880,
+          "memBack": true,
+          "portClosed": true,
+          "newShm": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "example-08",
+    "state": "stopped",
+    "unloadReport": {
+      "atMs": 1794000420000,
+      "ok": false,
+      "summary": "Shared memory remains; original warning kept.",
+      "nodes": [
+        {
+          "node": "cell1",
+          "stopped": true,
+          "memAvailable": 128849018880,
+          "memBack": true,
+          "portClosed": true,
+          "newShm": [
+            "example-semaphore"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "example-09",
+    "state": "stopped",
+    "unloadReport": {
+      "atMs": 1794000480000,
+      "ok": true,
+      "summary": "Containers stopped, memory returned and port closed.",
+      "nodes": [
+        {
+          "node": "cell1",
+          "stopped": true,
+          "memAvailable": 128849018880,
+          "memBack": true,
+          "portClosed": true,
+          "newShm": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "example-10",
+    "state": "stopped",
+    "unloadReport": {
+      "atMs": 1794000540000,
+      "ok": true,
+      "summary": "Containers stopped, memory returned and port closed.",
+      "nodes": [
+        {
+          "node": "cell1",
+          "stopped": true,
+          "memAvailable": 128849018880,
+          "memBack": true,
+          "portClosed": true,
+          "newShm": []
+        }
+      ]
+    }
+  }
+]

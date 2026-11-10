@@ -1,0 +1,166 @@
+[
+ {
+  "_id": "68134f29d882a15c6a3b8c5b",
+  "id": "Qwen/Qwen3-32B-AWQ",
+  "downloads": 503859,
+  "likes": 152,
+  "lastModified": "2025-05-21T06:17:51.000Z",
+  "pipeline_tag": "text-generation",
+  "tags": [
+   "transformers",
+   "safetensors",
+   "qwen3",
+   "text-generation",
+   "conversational",
+   "arxiv:2309.00071",
+   "arxiv:2505.09388",
+   "base_model:Qwen/Qwen3-32B",
+   "base_model:quantized:Qwen/Qwen3-32B",
+   "license:apache-2.0",
+   "text-generation-inference",
+   "endpoints_compatible",
+   "4-bit",
+   "awq",
+   "region:us"
+  ],
+  "library_name": "transformers",
+  "safetensors": {
+   "parameters": {
+    "I32": 31205621760,
+    "BF16": 1556501504
+   },
+   "total": 32762123264
+  },
+  "config": {
+   "architectures": [
+    "Qwen3ForCausalLM"
+   ],
+   "model_type": "qwen3",
+   "quantization_config": {
+    "bits": 4,
+    "quant_method": "awq"
+   }
+  }
+ },
+ {
+  "_id": "689287fa5ca740ee917dee4a",
+  "id": "lmstudio-community/gpt-oss-120b-MLX-8bit",
+  "downloads": 25523,
+  "likes": 15,
+  "lastModified": "2025-08-06T00:08:35.000Z",
+  "pipeline_tag": "text-generation",
+  "tags": [
+   "transformers",
+   "safetensors",
+   "gpt_oss",
+   "text-generation",
+   "vllm",
+   "mlx",
+   "conversational",
+   "base_model:openai/gpt-oss-120b",
+   "base_model:quantized:openai/gpt-oss-120b",
+   "license:apache-2.0",
+   "endpoints_compatible",
+   "8-bit",
+   "region:us"
+  ],
+  "library_name": "transformers",
+  "safetensors": {
+   "parameters": {
+    "U32": 116788838400,
+    "BF16": 40318272
+   },
+   "total": 116829154368
+  },
+  "config": {
+   "architectures": [
+    "GptOssForCausalLM"
+   ],
+   "model_type": "gpt_oss",
+   "quantization_config": {
+    "bits": 8
+   }
+  }
+ },
+ {
+  "_id": "6894dcf7bdef683991886a0a",
+  "id": "unsloth/gpt-oss-120b-unsloth-bnb-4bit",
+  "downloads": 4325,
+  "likes": 20,
+  "lastModified": "2026-10-05T07:53:37.000Z",
+  "pipeline_tag": "text-generation",
+  "tags": [
+   "transformers",
+   "safetensors",
+   "gpt_oss",
+   "text-generation",
+   "openai",
+   "unsloth",
+   "conversational",
+   "base_model:openai/gpt-oss-120b",
+   "base_model:quantized:openai/gpt-oss-120b",
+   "license:apache-2.0",
+   "endpoints_compatible",
+   "4-bit",
+   "bitsandbytes",
+   "region:us"
+  ],
+  "library_name": "transformers",
+  "safetensors": {
+   "parameters": {
+    "F32": 210240,
+    "F16": 1211645952,
+    "U8": 115617300480
+   },
+   "total": 116829156672
+  },
+  "config": {
+   "architectures": [
+    "GptOssForCausalLM"
+   ],
+   "model_type": "gpt_oss",
+   "quantization_config": {
+    "load_in_4bit": true,
+    "load_in_8bit": false,
+    "quant_method": "bitsandbytes"
+   }
+  }
+ },
+ {
+  "_id": "68935ccd4774b9133cbe3fb4",
+  "id": "mlx-community/gpt-oss-120b-4bit",
+  "downloads": 902,
+  "likes": 10,
+  "lastModified": "2025-08-06T13:54:59.000Z",
+  "pipeline_tag": "text-generation",
+  "tags": [
+   "transformers",
+   "safetensors",
+   "gpt_oss",
+   "text-generation",
+   "vllm",
+   "conversational",
+   "license:apache-2.0",
+   "endpoints_compatible",
+   "4-bit",
+   "region:us"
+  ],
+  "library_name": "transformers",
+  "safetensors": {
+   "parameters": {
+    "BF16": 3689969472,
+    "U32": 14598604800
+   },
+   "total": 116829154368
+  },
+  "config": {
+   "architectures": [
+    "GptOssForCausalLM"
+   ],
+   "model_type": "gpt_oss",
+   "quantization_config": {
+    "bits": 4
+   }
+  }
+ }
+]

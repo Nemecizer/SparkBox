@@ -1,0 +1,10 @@
+.rdp-window { overflow: auto; height: 100%; }
+.rdp-window .toolbar { flex-wrap: wrap; }
+.rdp-window .toolbar label { display: flex; align-items: center; gap: 6px; }
+.rdp-node { border-bottom: 1px solid var(--border); padding: 14px 0; }
+.rdp-heading { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.rdp-checks { margin: 12px 0; }
+.rdp-checks > div { margin: 8px 0; }
+.rdp-checks dt { font-weight: 600; }
+.rdp-checks dd { margin: 3px 0 0 16px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.rdp-fingerprint { overflow-wrap: anywhere; }

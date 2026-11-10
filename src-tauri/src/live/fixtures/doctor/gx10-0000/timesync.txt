@@ -1,0 +1,13 @@
+       Server: 192.168.50.1 (_gateway)
+Poll interval: 34min 8s (min: 32s; max 34min 8s)
+         Leap: normal
+      Version: 4
+      Stratum: 2
+    Reference: D8EF2304
+    Precision: 1us (-24)
+Root distance: 13.882ms (max: 5s)
+       Offset: -312us
+        Delay: 1.077ms
+       Jitter: 422us
+ Packet count: 129
+    Frequency: +3.211ppm

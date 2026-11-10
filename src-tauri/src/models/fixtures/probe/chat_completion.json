@@ -1,0 +1,1 @@
+{"id":"chatcmpl-2b6d0e1f9a3c4d58","object":"chat.completion","created":1761649200,"model":"llama-3.3-70b","choices":[{"index":0,"message":{"role":"assistant","content":"Hello","refusal":null,"tool_calls":[]},"logprobs":null,"finish_reason":"length","stop_reason":null}],"usage":{"prompt_tokens":36,"total_tokens":37,"completion_tokens":1}}

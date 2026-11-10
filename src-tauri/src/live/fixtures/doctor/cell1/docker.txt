@@ -1,0 +1,3 @@
+srw-rw---- 1 root docker 0 Oct 25 17:08 /var/run/docker.sock
+29.6.2
+7da4d848a41aefe02d3543e6c8cc46326426cadaa673f0c6cd707e95b0ceb135 glm53 vllm/vllm-openai:glm53-flash-arm64-cu130 exited Exited (1) 2 days ago

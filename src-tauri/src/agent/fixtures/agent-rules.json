@@ -1,0 +1,13 @@
+{
+  "comment": "The rules a node agent evaluates itself (sparkbox_agent.py EVALUATES must equal this list; agent_test.py checks). SparkBox leaves one of these alerts to the agent only while that node's agent is healthy and acknowledges the current settings hash (agent::agent_sends); endpoint rules also need the head node's agent to list the endpoint in endpointsProbed. Generic threshold and rate rules on the entity kinds in genericEntities are evaluated too. peerRule: raised by the leader agent for a peer nothing answers on; SparkBox leaves node-offline to the agents only when a healthy, current agent lists that node in peersMissing.",
+  "coded": [
+    "mem-high", "disk-full", "gpu-hot", "gpu-throttle", "ntp-unsynced",
+    "kernel-xid", "kernel-mlx5", "kernel-oom", "kernel-hung",
+    "fabric-down", "fabric-flap", "net-errors", "fabric-mtu",
+    "crash-loop", "container-exited", "unit-failed",
+    "endpoint-down", "endpoint-stalled", "roce-iface", "gpu-unreadable", "fabric-lost", "agent-wedged"
+  ],
+  "genericEntities": ["node", "net", "container", "endpoint"],
+  "endpointRules": ["endpoint-down", "endpoint-stalled", "endpoint-ttft", "endpoint-waiting", "endpoint-kv"],
+  "peerRule": "peer-unreachable"
+}

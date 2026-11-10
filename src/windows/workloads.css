@@ -1,0 +1,114 @@
+/* ---- r2-shell: Containers, Services, Workloads and Inspect. Overrides of ops.css, scoped under
+   each window's root class. Healthy is quiet; only problems are coloured. */
+
+/* ---- Containers */
+
+.containers-window .containers-foot { display: inline-flex; align-items: center; gap: var(--sp-2, 4px); white-space: nowrap; }
+.containers-window .mid-ellipsis { max-width: 100%; }
+
+/* ---- Services: the matrix */
+
+/* Running is a grey check, nothing more; failed, masked and out-of-step cells carry colour. */
+.services-window .svc-cell.quiet { color: var(--muted); }
+.services-window .svc-cell.quiet .svc-check { color: var(--muted); opacity: 0.8; }
+.services-window .svc-cell.quiet .svc-word { color: var(--text-2); }
+.services-window .svc-cell.plain { color: var(--text-2); }
+.services-window .svc-cell.warn { color: var(--warn-text); }
+.services-window .svc-cell.crit { color: var(--crit-text); font-weight: var(--fw-semibold, 600); }
+
+/* The detail pane gets at least 520 px beside the list; narrower windows stack it below. */
+.services-window .svc-split { grid-template-columns: minmax(0, 1fr) minmax(520px, 44%); }
+.services-window .ops-split-detail:focus { outline: none; }
+@container (max-width: 1060px) {
+  .services-window .svc-split { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(96px, 1fr) minmax(140px, 55%); }
+  .services-window .svc-split .ops-split-detail { border-left: none; border-top: 1px solid var(--border); }
+}
+
+/* ---- Services: the journal. One line per entry, never wrapped mid-name; scroll sideways for long ones. */
+
+.services-window .svc-journal-scroll {
+  overflow-x: auto; overflow-y: hidden;
+  border: 1px solid var(--hairline); border-radius: var(--r-md, 6px); background: var(--surface);
+  padding: var(--sp-1, 2px) var(--sp-1, 2px) 12px;
+}
+.services-window .svc-journal { min-width: max-content; }
+/* Time, badge, text (errors and warnings carry a badge; other lines don't). */
+.services-window .svc-journal li { grid-template-columns: auto auto max-content; justify-content: start; white-space: pre; }
+.services-window .svc-journal li:not(.err):not(.warning) { grid-template-columns: auto max-content; }
+.services-window .svc-journal .ops-journal-text { white-space: pre; overflow-wrap: normal; }
+/* Lines that arrived since the last action. */
+.services-window .svc-journal li.fresh { box-shadow: inset 2px 0 0 var(--accent); }
+.services-window .svc-journal li.fresh:not(.err):not(.warning) { background: color-mix(in srgb, var(--accent) 8%, transparent); }
+
+/* ---- r3-desk: one severity per failed unit, and a Wrap toggle */
+
+/* A failed unit's error lines read in its alert's tone: amber for the default warning. */
+.services-window .svc-journal li.err.tone-warn { background: var(--warn-bg); color: var(--warn-text); }
+/* Wrap (on by default when there's an error line, so the reason is never cut): lines wrap and nothing scrolls sideways. */
+.services-window .svc-journal-scroll.wrap { overflow-x: hidden; }
+.services-window .svc-journal-scroll.wrap .svc-journal { min-width: 0; }
+.services-window .svc-journal-scroll.wrap .svc-journal li { grid-template-columns: auto auto minmax(0, 1fr); white-space: normal; }
+.services-window .svc-journal-scroll.wrap .svc-journal li:not(.err):not(.warning) { grid-template-columns: auto minmax(0, 1fr); }
+.services-window .svc-journal-scroll.wrap .ops-journal-text { white-space: pre-wrap; overflow-wrap: anywhere; }
+.services-window .svc-journal-head { display: flex; align-items: baseline; gap: var(--sp-4, 8px); }
+.services-window .svc-journal-head .section-title { flex: 1 1 auto; }
+.services-window .svc-wrap { font-size: var(--fs-sm, 11px); color: var(--text-2, var(--muted)); white-space: nowrap; }
+/* The Error row shows the whole sentence (two lines at most), the full line on hover. */
+.services-window .svc-why { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }
+
+/* ---- Workloads */
+
+.ops-window .wl-detail {
+  flex: none; display: flex; flex-direction: column; gap: var(--sp-3, 6px);
+  padding: var(--sp-3, 6px) var(--sp-5, 12px);
+  border-bottom: 1px solid var(--hairline, var(--border)); background: var(--surface-2, var(--surface));
+}
+
+/* ---- Inspect: environment with hidden values */
+
+.inspect-env { list-style: none; margin: 0; padding: var(--sp-3, 6px) var(--sp-4, 8px); font-family: var(--mono); font-size: var(--fs-mono); }
+.inspect-env li { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0; min-height: 22px; overflow-wrap: anywhere; }
+.inspect-env-name { color: var(--text); }
+.inspect-env-hidden { color: var(--muted); letter-spacing: 0.04em; }
+.inspect-env-revealed { color: var(--text); background: var(--warn-bg); border-radius: var(--r-sm, 4px); padding: 0 3px; }
+.inspect-env .inspect-reveal { display: inline-flex; align-items: center; gap: 4px; height: 20px; margin-left: var(--sp-3, 6px); padding: 0 8px; font-family: var(--font); }
+
+/* ---- r3-desk: Workloads' Runs in (kind icon + name; a long name ends in an ellipsis) and offline rows */
+
+/* max-width and the name's min-width let the flex box shrink to its cell; without them it kept
+   its text's width and the cell clipped it with no ellipsis ("xdg-desktop-portal-"). */
+.ops-window .wl-in { display: inline-flex; align-items: center; gap: var(--sp-2, 4px); min-width: 0; max-width: 100%; white-space: nowrap; vertical-align: top; }
+.ops-window .wl-in svg { flex: none; color: var(--muted); }
+.ops-window .wl-in-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+/* A node that's offline keeps its last-known rows: greyed, its state "unknown · cell3 offline". */
+.ops-window table.grid tbody tr.row-stale .strong { font-weight: var(--fw-regular, 400); }
+.ops-window .ops-stale { white-space: nowrap; }
+
+/* ---- r4-nodes: Workloads holds still while it's read; SparkBox's own and kernel threads are tagged */
+
+.ops-window .wl-hold { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; }
+.ops-window .wl-name { display: inline-flex; align-items: baseline; gap: var(--sp-3, 6px); min-width: 0; max-width: 100%; vertical-align: top; }
+.ops-window .wl-name .strong { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.ops-window .wl-tag {
+  flex: none; padding: 0 var(--sp-2, 4px); border: 1px solid var(--hairline, var(--border)); border-radius: var(--r-sm, 4px);
+  color: var(--text-2); font-size: var(--fs-2xs, 10px); line-height: 1.5;
+}
+
+/* ---- r4-nodes: Services as they really are */
+
+/* An idle unit (a timer starts it, it runs once, it's static) is grey, like a quiet one. */
+.services-window .svc-cell.idle { color: var(--text-2); }
+/* A narrow node column ends its word in an ellipsis ("activat…"), not a hard cut; the dot stays whole. */
+.services-window .svc-cell { min-width: 0; }
+.services-window .svc-cell > .status { min-width: 0; max-width: 100%; }
+.services-window .svc-cell > .status > svg { flex: none; }
+.services-window .svc-cell > .status > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* The detail's header stays in view; the journal scrolls in its own box below it. */
+.services-window .ops-detail-head { position: sticky; top: 0; z-index: 1; background: var(--surface-2, var(--surface)); padding-top: var(--sp-2, 4px); margin-top: calc(-1 * var(--sp-2, 4px)); }
+.services-window .svc-journal-scroll { max-height: min(48vh, 420px); overflow-y: auto; }
+.services-window .svc-journal-scroll.wrap { overflow-y: auto; }
+/* Nothing selected: the placeholder is one line, and the table keeps its rows (tile size). */
+@container (max-width: 1060px) {
+  .services-window .svc-split.no-detail { grid-template-rows: minmax(96px, 1fr) auto; }
+  .services-window .svc-split.no-detail .ops-split-detail .pad { padding: var(--sp-3, 6px) var(--sp-5, 12px); }
+}

@@ -1,0 +1,478 @@
+{
+  "comment": "One-second fresh node frames; total 256 GiB, available 6 GiB, measured GPU pool 224 GiB unless overridden. Both Mac and agent evaluate this fixture. No live cluster evidence. Expected events: [second, rule, event, severity].",
+  "cases": [
+    {
+      "name": "98 percent used with an observed GPU pool and 6 GiB available is expected",
+      "segments": [
+        {
+          "secs": 90
+        }
+      ],
+      "expect": []
+    },
+    {
+      "name": "configured reservation works on single",
+      "segments": [
+        {
+          "secs": 90,
+          "gpuGiB": 0,
+          "share": "0.87",
+          "role": "single"
+        }
+      ],
+      "expect": []
+    },
+    {
+      "name": "configured reservation works on head",
+      "segments": [
+        {
+          "secs": 90,
+          "gpuGiB": 0,
+          "share": "0.87",
+          "role": "head"
+        }
+      ],
+      "expect": []
+    },
+    {
+      "name": "configured reservation works on worker",
+      "segments": [
+        {
+          "secs": 90,
+          "gpuGiB": 0,
+          "share": "0.87",
+          "role": "worker"
+        }
+      ],
+      "expect": []
+    },
+    {
+      "name": "headroom warns after 60 seconds then escalates and clears",
+      "segments": [
+        {
+          "secs": 61,
+          "availableGiB": 3
+        },
+        {
+          "secs": 1,
+          "availableGiB": 1
+        },
+        {
+          "secs": 31
+        }
+      ],
+      "expect": [
+        [
+          61,
+          "mem-available",
+          "raised",
+          "warn"
+        ],
+        [
+          62,
+          "mem-available",
+          "escalated",
+          "crit"
+        ],
+        [
+          93,
+          "mem-available",
+          "resolved",
+          "crit"
+        ]
+      ]
+    },
+    {
+      "name": "headroom boundaries are strict and clear hysteresis is respected",
+      "segments": [
+        {
+          "secs": 70,
+          "availableGiB": 4
+        },
+        {
+          "secs": 61,
+          "availableGiB": 2
+        },
+        {
+          "secs": 1,
+          "availableGiB": 1.9
+        },
+        {
+          "secs": 31,
+          "availableGiB": 5
+        },
+        {
+          "secs": 31,
+          "availableGiB": 5.1
+        }
+      ],
+      "expect": [
+        [
+          131,
+          "mem-available",
+          "raised",
+          "warn"
+        ],
+        [
+          132,
+          "mem-available",
+          "escalated",
+          "crit"
+        ],
+        [
+          163,
+          "mem-available",
+          "eased",
+          "warn"
+        ],
+        [
+          194,
+          "mem-available",
+          "resolved",
+          "warn"
+        ]
+      ]
+    },
+    {
+      "name": "PSI remains independent of the expected pool",
+      "segments": [
+        {
+          "secs": 31,
+          "psi": 12
+        },
+        {
+          "secs": 31,
+          "psi": 0
+        }
+      ],
+      "expect": [
+        [
+          31,
+          "mem-pressure",
+          "raised",
+          "warn"
+        ],
+        [
+          62,
+          "mem-pressure",
+          "resolved",
+          "warn"
+        ]
+      ]
+    },
+    {
+      "name": "sustained swap-in warns and recovers after the clear hold",
+      "segments": [
+        {
+          "secs": 61,
+          "swapMiBs": 2
+        },
+        {
+          "secs": 10,
+          "swapMiBs": 0.1
+        },
+        {
+          "secs": 31,
+          "swapMiBs": 0
+        }
+      ],
+      "expect": [
+        [
+          61,
+          "mem-swap-in",
+          "raised",
+          "warn"
+        ],
+        [
+          102,
+          "mem-swap-in",
+          "resolved",
+          "warn"
+        ]
+      ]
+    },
+    {
+      "name": "short swap-in bursts and occupied swap do not warn",
+      "segments": [
+        {
+          "secs": 20,
+          "swapMiBs": 2
+        },
+        {
+          "secs": 90,
+          "swapMiBs": 0,
+          "swapUsedGiB": 12
+        }
+      ],
+      "expect": []
+    },
+    {
+      "name": "stopped containers do not retain a declared reservation",
+      "segments": [
+        {
+          "secs": 70,
+          "gpuGiB": 0,
+          "share": ".87"
+        },
+        {
+          "secs": 3,
+          "gpuGiB": 0,
+          "share": ".87",
+          "state": "exited"
+        },
+        {
+          "secs": 1,
+          "gpuGiB": 0,
+          "share": ".87"
+        }
+      ],
+      "expect": [
+        [
+          73,
+          "mem-high",
+          "raised",
+          "crit"
+        ],
+        [
+          74,
+          "mem-high",
+          "resolved",
+          "crit"
+        ]
+      ]
+    },
+    {
+      "name": "disabling headroom retains the percentage fallback",
+      "segments": [
+        {
+          "secs": 3
+        }
+      ],
+      "expect": [
+        [
+          3,
+          "mem-high",
+          "raised",
+          "crit"
+        ]
+      ],
+      "headroomEnabled": false
+    },
+    {
+      "name": "inconsistent headroom retains the percentage fallback",
+      "segments": [
+        {
+          "secs": 3,
+          "invalidAvailable": true
+        }
+      ],
+      "expect": [
+        [
+          3,
+          "mem-high",
+          "raised",
+          "crit"
+        ]
+      ]
+    },
+    {
+      "name": "unreadable GPU does not discount its cached allocation",
+      "segments": [
+        {
+          "secs": 3,
+          "gpuReadable": false
+        }
+      ],
+      "expect": [
+        [
+          3,
+          "mem-high",
+          "raised",
+          "crit"
+        ]
+      ]
+    },
+    {
+      "name": "invalid share NaN is not reservation evidence",
+      "segments": [
+        {
+          "secs": 3,
+          "gpuGiB": 0,
+          "share": "NaN"
+        }
+      ],
+      "expect": [
+        [
+          3,
+          "mem-high",
+          "raised",
+          "crit"
+        ]
+      ]
+    },
+    {
+      "name": "invalid share inf is not reservation evidence",
+      "segments": [
+        {
+          "secs": 3,
+          "gpuGiB": 0,
+          "share": "inf"
+        }
+      ],
+      "expect": [
+        [
+          3,
+          "mem-high",
+          "raised",
+          "crit"
+        ]
+      ]
+    },
+    {
+      "name": "invalid share -1 is not reservation evidence",
+      "segments": [
+        {
+          "secs": 3,
+          "gpuGiB": 0,
+          "share": "-1"
+        }
+      ],
+      "expect": [
+        [
+          3,
+          "mem-high",
+          "raised",
+          "crit"
+        ]
+      ]
+    },
+    {
+      "name": "invalid share 1 is not reservation evidence",
+      "segments": [
+        {
+          "secs": 3,
+          "gpuGiB": 0,
+          "share": "1"
+        }
+      ],
+      "expect": [
+        [
+          3,
+          "mem-high",
+          "raised",
+          "crit"
+        ]
+      ]
+    },
+    {
+      "name": "invalid share garbage is not reservation evidence",
+      "segments": [
+        {
+          "secs": 3,
+          "gpuGiB": 0,
+          "share": "garbage"
+        }
+      ],
+      "expect": [
+        [
+          3,
+          "mem-high",
+          "raised",
+          "crit"
+        ]
+      ]
+    },
+    {
+      "name": "a missing swap reading resets pending and holds firing until measured recovery",
+      "segments": [
+        {
+          "secs": 40,
+          "swapMiBs": 2
+        },
+        {
+          "secs": 10,
+          "swapMiBs": null
+        },
+        {
+          "secs": 61,
+          "swapMiBs": 2
+        },
+        {
+          "secs": 40,
+          "swapMiBs": null
+        },
+        {
+          "secs": 31,
+          "swapMiBs": 0
+        }
+      ],
+      "expect": [
+        [
+          111,
+          "mem-swap-in",
+          "raised",
+          "warn"
+        ],
+        [
+          182,
+          "mem-swap-in",
+          "resolved",
+          "warn"
+        ]
+      ]
+    },
+    {
+      "name": "missing headroom holds an existing alert and restarts its clear hold",
+      "segments": [
+        {
+          "secs": 61,
+          "availableGiB": 3
+        },
+        {
+          "secs": 20
+        },
+        {
+          "secs": 40,
+          "invalidAvailable": true
+        },
+        {
+          "secs": 31
+        }
+      ],
+      "expect": [
+        [
+          61,
+          "mem-available",
+          "raised",
+          "warn"
+        ],
+        [
+          152,
+          "mem-available",
+          "resolved",
+          "warn"
+        ]
+      ],
+      "focus": [
+        "mem-available"
+      ]
+    },
+    {
+      "name": "OOM kills are never discounted",
+      "segments": [
+        {
+          "secs": 3,
+          "oom": true
+        }
+      ],
+      "expect": [
+        [
+          1,
+          "kernel-oom",
+          "raised",
+          "crit"
+        ]
+      ]
+    }
+  ]
+}

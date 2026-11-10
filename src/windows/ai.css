@@ -1,0 +1,607 @@
+/* AI windows: Endpoints, Models, Chat, Server, Providers (p7-ai). Every rule is
+   scoped under an .ai-* class and uses the design tokens, with fallbacks. */
+
+/* ---- Endpoint cards (EndpointCard.tsx): quiet when serving, red when down */
+
+.ai-endpoints-body {
+  flex: 1;
+  overflow: auto;
+  padding: var(--sp-5, 12px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5, 12px);
+}
+
+.ai-ep-list { display: flex; flex-direction: column; gap: var(--sp-4, 8px); }
+
+.ai-card {
+  border: 1px solid var(--border, #d0d0d0);
+  border-radius: var(--r-lg, 8px);
+  background: var(--surface, #fff);
+  padding: var(--sp-4, 8px) var(--sp-5, 12px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3, 6px);
+  min-width: 0;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+}
+.ai-card.sel { border-color: var(--accent, #0a66d8); box-shadow: 0 0 0 1px var(--accent, #0a66d8); }
+/* Down: a red edge and a red header band; full opacity (offline is never dimmed). */
+.ai-card.ai-card-crit { border: 1.5px solid var(--state-crit-edge, var(--critical, #c62828)); }
+.ai-card.ai-card-crit > .ai-card-head {
+  margin: calc(-1 * var(--sp-4, 8px)) calc(-1 * var(--sp-5, 12px)) 0;
+  padding: var(--sp-3, 6px) var(--sp-5, 12px);
+  border-radius: var(--r-lg, 8px) var(--r-lg, 8px) 0 0;
+  background: var(--state-crit-band, color-mix(in srgb, var(--critical, #c62828) 12%, var(--surface, #fff)));
+}
+.ai-card.compact { cursor: pointer; gap: var(--sp-2, 4px); }
+.ai-card.compact:hover { background: var(--hover, #f6f6f6); }
+.ai-card.compact:focus-visible { outline: 2px solid var(--accent, #0a66d8); outline-offset: 1px; }
+
+.ai-card-head { display: flex; align-items: center; gap: var(--sp-3, 6px) var(--sp-4, 8px); flex-wrap: wrap; min-width: 0; }
+.ai-card-engine { font-size: var(--fs-xs, 10.5px); color: var(--text-2, #444); font-weight: var(--fw-semibold, 600); letter-spacing: 0.02em; flex: none; }
+.ai-card-model { font-size: var(--fs-md, 13px); min-width: 0; max-width: 46ch; }
+.ai-card.compact .ai-card-model { flex: 1; }
+.ai-card-where { display: inline-flex; align-items: center; gap: var(--sp-2, 4px) var(--sp-4, 8px); flex-wrap: wrap; font-size: var(--fs-sm, 11px); min-width: 0; }
+.ai-card-nodes { display: inline-flex; flex-wrap: wrap; gap: var(--sp-1, 2px) var(--sp-2, 4px); }
+.ai-node { font-size: var(--fs-xs, 10.5px); color: var(--text-2, #444); }
+.ai-node + .ai-node::before { content: "·"; margin-right: var(--sp-2, 4px); color: var(--muted, #888); }
+.ai-node.missing { color: var(--crit-text, #b32228); font-weight: var(--fw-semibold, 600); text-decoration: line-through; text-decoration-thickness: 1px; }
+.ai-card-reason { font-size: var(--fs-sm, 11px); color: var(--text-2, #444); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ai-card-reason.crit { color: var(--crit-text, #b32228); font-weight: var(--fw-semibold, 600); }
+.ai-card-sup { font-size: var(--fs-sm, 11px); }
+.ai-card-url { display: flex; align-items: center; gap: var(--sp-3, 6px); font-size: var(--fs-sm, 11px); min-width: 0; }
+.ai-card-url .mono { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ai-card-ollama { display: flex; flex-wrap: wrap; gap: var(--sp-2, 4px) var(--sp-5, 12px); font-size: var(--fs-sm, 11px); }
+.ai-card-actions { display: flex; align-items: center; gap: var(--sp-3, 6px); flex-wrap: wrap; }
+.ai-card-actions .btn svg, .ai-card-actions .btn .lucide { margin-right: var(--sp-2, 4px); }
+.ai-card-off .ai-card-model { color: var(--text-2, #444); }
+
+/* The state: Ready is a small neutral dot and the word; Loading carries its progress; Down is red. */
+.ai-pill { display: inline-flex; align-items: center; gap: var(--sp-2, 4px); font-size: var(--fs-sm, 11px); white-space: nowrap; flex: none; }
+.ai-pill-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--dot-ok, #7fa388); }
+.ai-pill-ok .ai-pill-word { color: var(--text-2, #444); }
+.ai-pill-progress .ai-pill-word { color: var(--text, #111); }
+.ai-pill-crit .ai-pill-word { color: var(--crit-text, #b32228); font-weight: var(--fw-semibold, 600); }
+.ai-pill-off .ai-pill-word { color: var(--muted, #777); }
+.ai-pill-bar { width: 44px; height: 4px; border-radius: 2px; background: var(--track, #e5e5e5); overflow: hidden; }
+.ai-pill-bar > i { display: block; height: 100%; background: var(--accent, #0a66d8); }
+
+.ai-icon-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border: 0;
+  border-radius: var(--r-sm, 4px);
+  background: transparent;
+  color: var(--muted, #777);
+  cursor: pointer;
+}
+.ai-icon-btn:hover { background: var(--hover, #eee); color: var(--text, #111); }
+
+.ai-ollama-model { white-space: nowrap; }
+
+/* The same six numbers for every engine, in cells that share the width. */
+.ai-cells {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--sp-3, 6px);
+}
+/* The Dashboard's card: its four numbers always side by side. */
+.ai-cells.compact { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--sp-2, 4px); }
+.ai-cell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1, 2px);
+  padding: var(--sp-2, 4px) var(--sp-3, 6px);
+  border-radius: var(--r-md, 6px);
+  background: var(--surface-2, #f6f6f6);
+  min-width: 0;
+}
+.ai-cell-label { font-size: var(--fs-2xs, 10.5px); color: var(--muted, #777); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ai-cell-value { font-size: var(--fs-md, 13px); font-weight: var(--fw-semibold, 600); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ai-cell-value.muted { font-weight: var(--fw-regular, 400); }
+.ai-cell-unit { font-weight: var(--fw-regular, 400); color: var(--muted, #777); font-size: var(--fs-sm, 11px); }
+.ai-cell-sub { font-size: var(--fs-2xs, 10.5px); color: var(--muted, #777); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ai-cell .spark { margin-top: var(--sp-1, 2px); width: 100%; }
+.ai-cells.compact .ai-cell .spark { height: 14px; }
+/* Four to a row on the Dashboard's card: a little less padding and a smaller unit, so
+   "3.33 tok/s" fits whole at 1220 px instead of ending "3.33 to…". */
+.ai-cells.compact .ai-cell { padding: var(--sp-2, 4px); }
+.ai-cells.compact .ai-cell-unit { font-size: var(--fs-2xs, 10.5px); }
+
+/* Models › Loaded: the compact list. */
+.ai-state-cell { display: inline-flex; align-items: center; gap: var(--sp-3, 6px); min-width: 0; }
+.ai-state-cell .truncate { min-width: 0; }
+
+/* ---- Models window */
+
+.ai-tabs-row { display: flex; align-items: flex-end; gap: var(--sp-4, 8px); border-bottom: 1px solid var(--hairline, #ddd); }
+.ai-tabs-row .tabs { border-bottom: 0; flex: 1; min-width: 0; }
+.ai-settings-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0 var(--sp-5, 12px) var(--sp-2, 4px) 0;
+  padding: 2px 6px;
+  border: 0;
+  border-radius: var(--r-sm, 4px);
+  background: transparent;
+  color: var(--accent-text, #0a4fa8);
+  font-size: var(--fs-sm, 11px);
+  cursor: pointer;
+}
+.ai-settings-link:hover { background: var(--hover, #eee); }
+
+.ai-lib-name { display: inline-flex; align-items: center; gap: var(--sp-3, 6px); min-width: 0; max-width: 100%; vertical-align: top; }
+/* Lets a long repo name end in an ellipsis inside its cell instead of being clipped. */
+.ai-lib-name > .strong { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.ai-badge-btn { border: 0; padding: 0; background: transparent; cursor: pointer; }
+.ai-section-head { display: flex; align-items: center; gap: var(--sp-4, 8px); margin-bottom: var(--sp-3, 6px); }
+.ai-section-head .section-title { margin: 0; flex: none; white-space: nowrap; }
+/* The run's details give way (ellipsis, full text on hover) so the title and the export buttons stay on one line. */
+.ai-section-head .ai-section-sub { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.ai-hub .hub-hits { display: flex; flex-direction: column; min-width: 0; }
+.ai-chips { display: flex; flex-wrap: wrap; gap: var(--sp-2, 4px); padding: var(--sp-3, 6px); border-bottom: 1px solid var(--hairline, #ddd); }
+.ai-chips .chip.on { background: var(--sel, #dbe7fb); color: var(--text, #111); }
+.ai-recommended { display: flex; flex-direction: column; gap: var(--sp-2, 4px); padding: var(--sp-4, 8px); }
+.ai-rec {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  text-align: left;
+  padding: var(--sp-3, 6px) var(--sp-4, 8px);
+  border: 1px solid var(--hairline, #ddd);
+  border-radius: var(--r-md, 6px);
+  background: var(--surface, #fff);
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+}
+.ai-rec:hover { background: var(--hover, #f2f2f2); }
+.ai-rec.on { border-color: var(--accent, #0a66d8); }
+.ai-rec .muted { font-size: var(--fs-sm, 11px); }
+
+.ai-fit-head { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-4, 8px); margin-bottom: var(--sp-3, 6px); }
+.ai-fit-head .section-title { margin: 0; }
+.ai-fit table.grid td.num, .ai-fit table.grid td .num { font-variant-numeric: tabular-nums; }
+.ai-th-tip { text-decoration: underline dotted var(--muted, #888); text-underline-offset: 3px; cursor: help; }
+
+/* ---- Load page */
+
+.ai-load {
+  flex: 1;
+  overflow: auto;
+  padding: var(--sp-5, 12px) var(--sp-6, 16px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5, 12px);
+}
+.ai-load .fg-control input.wide, .ai-load .fg-control select.wide { width: min(520px, 100%); }
+.ai-inline { display: inline-flex; align-items: center; gap: var(--sp-3, 6px); flex-wrap: wrap; }
+.ai-node-picks { display: flex; flex-wrap: wrap; gap: var(--sp-3, 6px) var(--sp-6, 16px); padding: var(--sp-4, 8px) var(--sp-5, 12px); }
+.ai-step { padding: var(--sp-4, 8px) var(--sp-5, 12px) 0; }
+.ai-step:last-of-type { padding-bottom: var(--sp-4, 8px); }
+.ai-step + .note { padding: 0 var(--sp-5, 12px) var(--sp-4, 8px); margin: 0; }
+.ai-load input.invalid { border-color: var(--critical, #c62828); box-shadow: 0 0 0 1px var(--critical, #c62828); }
+
+/* Fields the AI advisor filled in: tinted, with a small "AI" mark. */
+.ai-filled, .ai-load .ai-filled input, .ai-load .ai-filled select {
+  background: color-mix(in srgb, var(--accent, #0a66d8) 9%, var(--surface, #fff));
+  border-color: color-mix(in srgb, var(--accent, #0a66d8) 45%, var(--field-border, #bbb));
+}
+.ai-filled { position: relative; border-radius: var(--r-sm, 4px); }
+.ai-filled::after {
+  content: "AI";
+  position: absolute;
+  top: -7px;
+  right: -6px;
+  padding: 0 3px;
+  font-size: var(--fs-2xs, 10.5px);
+  line-height: 12px;
+  font-weight: var(--fw-semibold, 600);
+  border-radius: 3px;
+  background: var(--accent-fill, #0a66d8);
+  color: var(--on-accent, #fff);
+  pointer-events: none;
+}
+input.ai-filled::after, select.ai-filled::after { content: none; }
+
+.ai-remote { display: flex; gap: var(--sp-3, 6px); align-items: flex-start; margin: var(--sp-3, 6px) var(--sp-5, 12px); }
+.ai-override { padding-top: var(--sp-2, 4px); }
+
+.ai-plans { display: flex; flex-direction: column; gap: var(--sp-5, 12px); padding: var(--sp-4, 8px) var(--sp-5, 12px); }
+.ai-plan { display: flex; flex-direction: column; gap: var(--sp-2, 4px); font-size: var(--fs-sm, 11px); }
+.ai-plan-head { display: flex; align-items: center; gap: var(--sp-3, 6px); }
+/* Where the node ends up: in use (grey), weights, runtime, KV cache; red only past the end of memory. */
+/* The empty track is darker than every segment, so free memory never reads as the KV cache. */
+.ai-plan-bar {
+  position: relative;
+  display: flex;
+  height: 12px;
+  border-radius: var(--r-sm, 4px);
+  background: color-mix(in srgb, var(--text, #111) 16%, var(--surface, #fff));
+  overflow: visible;
+}
+/* A 2 px surface gap ends every segment (the dataviz spacer, the memory split bar's width), so neighbours
+   of one lightness still part: the in-use hatch from the host runtime, the KV cache from the free track. */
+.ai-plan-bar > .seg { height: 100%; flex: none; box-shadow: inset -2px 0 0 var(--surface, #fff); }
+.ai-plan-bar > .seg:first-child { border-radius: var(--r-sm, 4px) 0 0 var(--r-sm, 4px); }
+/* What's in use already isn't this load's: hatched, so it never reads as the KV cache's grey. */
+.ai-plan .seg-others { background: repeating-linear-gradient(135deg, var(--plan-hatch, color-mix(in srgb, var(--muted, #888) 40%, var(--track, #e8e8e8))) 0 3px, var(--track, #e8e8e8) 3px 6px); }
+.ai-plan .seg-weights { background: var(--m-mem, #009cba); }
+.ai-plan .seg-overhead { background: var(--m-cpu, #2c74cd); }
+/* The KV cache is this load's too: a light hatch of the weights' hue. */
+.ai-plan .seg-kv, .ai-plan-legend .sw.seg-kv {
+  background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--m-mem, #009cba) 55%, var(--surface, #fff)) 0 3px, color-mix(in srgb, var(--m-mem, #009cba) 28%, var(--surface, #fff)) 3px 6px);
+}
+/* What doesn't fit: a hatch the other way from the in-use segment's (45° against 135°), with a solid
+   red edge, so a protanope (to whom this red and that grey are alike) tells the two by texture. */
+.ai-plan-bar > .seg-over {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(45deg, var(--critical, #c62828) 0 3px, color-mix(in srgb, var(--critical, #c62828) 30%, var(--surface, #fff)) 3px 6px);
+  box-shadow: inset 0 0 0 1px var(--critical, #c62828);
+  border-radius: 0 var(--r-sm, 4px) var(--r-sm, 4px) 0;
+}
+.ai-plan-line { position: absolute; top: -3px; bottom: -3px; width: 0; border-left: 1px dashed var(--text-2, #444); }
+.ai-plan-total { position: absolute; top: -3px; bottom: -3px; width: 0; border-left: 2px solid var(--text, #111); }
+.ai-plan-legend { display: flex; flex-wrap: wrap; gap: var(--sp-2, 4px) var(--sp-5, 12px); font-size: var(--fs-2xs, 10.5px); }
+.ai-plan-legend .sw { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: var(--sp-2, 4px); vertical-align: -1px; }
+.ai-plan-legend .sw.seg-others { background: repeating-linear-gradient(135deg, var(--plan-hatch-key, color-mix(in srgb, var(--muted, #888) 55%, var(--track, #e8e8e8))) 0 2px, var(--track, #e8e8e8) 2px 4px); }
+.ai-plan-legend .sw.line { width: 0; height: 10px; border-left: 1px dashed var(--text-2, #444); border-radius: 0; }
+.ai-plan-legend .sw.seg-free { background: color-mix(in srgb, var(--text, #111) 16%, var(--surface, #fff)); }
+/* Why the primary button is off, next to it. */
+.ai-blocked { font-size: var(--fs-sm, 11px); color: var(--text-2, #444); max-width: 46ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.ai-settings { padding: 0; }
+.ai-settings-save { display: flex; gap: var(--sp-3, 6px); justify-content: flex-end; }
+
+/* ---- Model picker (Chat, Server) */
+
+.ai-picker { position: relative; display: inline-flex; min-width: 0; }
+.ai-picker-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3, 6px);
+  height: 26px;
+  max-width: 420px;
+  padding: 0 var(--sp-4, 8px);
+  border: 1px solid var(--field-border, #c8c8c8);
+  border-radius: var(--r-md, 6px);
+  background: var(--surface, #fff);
+  color: var(--text, #111);
+  font: inherit;
+  cursor: pointer;
+  min-width: 0;
+}
+.ai-picker-button:hover:not(:disabled) { background: var(--hover, #f3f3f3); }
+.ai-picker-button:disabled { color: var(--btn-disabled-fg, #999); cursor: default; }
+.ai-picker-model { font-weight: var(--fw-semibold, 600); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ai-picker-provider { font-size: var(--fs-sm, 11px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ai-picker-pop {
+  position: fixed;
+  z-index: var(--z-popover, 20000);
+  width: min(460px, 80vw);
+  max-height: 420px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border, #ccc);
+  border-radius: var(--r-lg, 8px);
+  background: var(--surface, #fff);
+  box-shadow: var(--shadow-pop, 0 8px 24px rgba(0, 0, 0, 0.18));
+  overflow: hidden;
+}
+.ai-picker-head { display: flex; align-items: center; padding-right: var(--sp-3, 6px); }
+.ai-picker-search { margin: var(--sp-3, 6px); width: auto; flex: 1; min-width: 0; }
+.ai-picker-list { overflow: auto; padding-bottom: var(--sp-3, 6px); }
+.ai-picker-group {
+  padding: var(--sp-3, 6px) var(--sp-5, 12px) var(--sp-1, 2px);
+  font-size: var(--fs-2xs, 10px);
+  font-weight: var(--fw-semibold, 600);
+  color: var(--muted, #777);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.ai-picker-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "model status" "provider status";
+  column-gap: var(--sp-4, 8px);
+  padding: 3px var(--sp-5, 12px);
+  cursor: pointer;
+}
+.ai-picker-item-model { grid-area: model; font-weight: var(--fw-medium, 500); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ai-picker-item-provider { grid-area: provider; font-size: var(--fs-2xs, 10px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ai-picker-item .ai-pick-status { grid-area: status; align-self: center; }
+.ai-picker-item.active { background: var(--sel, #dbe7fb); }
+.ai-picker-item.current .ai-picker-item-model::after { content: "  ✓"; color: var(--accent-text, #0a4fa8); }
+.ai-picker-item.disabled { cursor: default; opacity: 0.6; }
+.ai-picker-empty { padding: var(--sp-5, 12px); }
+.ai-pick-status { display: inline-flex; align-items: center; gap: var(--sp-3, 6px); font-size: var(--fs-2xs, 10px); white-space: nowrap; }
+
+/* ---- Chat */
+
+.ai-chat .msg-foot { display: flex; align-items: center; gap: var(--sp-3, 6px); flex-wrap: wrap; }
+.ai-chat .msg-foot > .num { margin-right: auto; }
+.ai-branch { display: inline-flex; align-items: center; gap: 2px; font-size: var(--fs-sm, 11px); color: var(--muted, #777); }
+.ai-user-foot { display: flex; justify-content: flex-end; align-items: center; gap: var(--sp-2, 4px); margin-top: 2px; opacity: 0.85; }
+.ai-chat .msg.user.editing { width: min(640px, 100%); }
+.ai-chat .msg.user.editing textarea { width: 100%; font: inherit; }
+.ai-edit-actions { display: flex; justify-content: flex-end; gap: var(--sp-3, 6px); margin-top: var(--sp-2, 4px); }
+.ai-waiting { font-size: var(--fs-sm, 11px); }
+.md .md-img { display: inline-flex; align-items: center; gap: 4px; padding: 1px 6px; border: 1px dashed var(--hairline, #ccc); border-radius: var(--r-sm, 4px); }
+.md .md-img-blocked { color: var(--muted, #777); }
+
+/* The composer: the message field grows with what's typed (up to 8 lines), Send sits inside it. */
+.ai-chat .composer { position: relative; display: block; padding: var(--sp-4, 8px) var(--sp-5, 12px); }
+.ai-chat .composer textarea {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  resize: none;
+  min-height: 0;
+  margin: 0;
+  padding: var(--sp-3, 6px) calc(var(--sp-7, 24px) + var(--sp-5, 12px)) var(--sp-3, 6px) var(--sp-4, 8px);
+  border: 1px solid var(--field-border, #c8c8c8);
+  border-radius: var(--r-lg, 8px);
+  background: var(--surface, #fff);
+  font: inherit;
+  line-height: 1.45;
+  overflow-y: hidden;
+}
+.ai-chat .composer textarea:focus { outline: none; border-color: var(--accent, #0a66d8); box-shadow: 0 0 0 1px var(--accent, #0a66d8); }
+.ai-chat .composer-send {
+  position: absolute;
+  right: calc(var(--sp-5, 12px) + var(--sp-2, 4px));
+  bottom: calc(var(--sp-4, 8px) + var(--sp-2, 4px));
+  display: inline-grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--accent-fill, #0a66d8);
+  color: var(--on-accent, #fff);
+  cursor: pointer;
+}
+.ai-chat .composer-send:disabled { background: var(--btn-disabled-bg, #e3e3e3); color: var(--btn-disabled-fg, #999); cursor: default; }
+.ai-chat .composer-send.stop { background: var(--text, #111); color: var(--surface, #fff); }
+.ai-chat .tool .tool-label { margin-left: var(--sp-2, 4px); }
+
+/* ---- Server */
+
+.ai-server-body {
+  flex: 1;
+  overflow: auto;
+  padding: var(--sp-5, 12px) var(--sp-6, 16px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5, 12px);
+}
+.ai-banner { display: flex; gap: var(--sp-3, 6px); align-items: flex-start; margin: var(--sp-3, 6px) var(--sp-5, 12px) 0; }
+.ai-pad { padding: var(--sp-4, 8px) var(--sp-5, 12px); }
+.ai-origins { width: min(420px, 100%); font-size: var(--fs-sm, 11px); }
+.ai-field-err { font-size: var(--fs-2xs, 10px); margin-top: 2px; }
+.ai-log-err { margin-left: var(--sp-3, 6px); color: var(--muted, #777); overflow: hidden; text-overflow: ellipsis; max-width: 40ch; display: inline-block; vertical-align: bottom; }
+.ai-server select.invalid, .ai-server input.invalid { border-color: var(--critical, #c62828); box-shadow: 0 0 0 1px var(--critical, #c62828); }
+.ai-aliases select { max-width: 420px; }
+
+/* ---- Providers */
+
+.ai-provider { display: flex; flex-direction: column; gap: var(--sp-3, 6px); }
+.ai-allow { border-top: 1px solid var(--hairline, #ddd); padding-top: var(--sp-3, 6px); }
+.ai-allow-head { display: flex; align-items: center; gap: var(--sp-4, 8px); flex-wrap: wrap; margin-bottom: var(--sp-3, 6px); }
+.ai-allow-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 2px var(--sp-5, 12px);
+  max-height: 220px;
+  overflow: auto;
+}
+.ai-allow-item { display: flex; align-items: center; gap: var(--sp-3, 6px); min-width: 0; font-size: var(--fs-sm, 11px); }
+.ai-allow-item .mono { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Hugging Face split view */
+.ai-hub { flex: 1; min-height: 0; display: grid; grid-template-rows: minmax(0, 1fr); }
+.ai-hub-hits { display: flex; flex-direction: column; min-width: 0; min-height: 0; overflow: auto; border-right: 1px solid var(--hairline, #ddd); }
+.ai-hub-hits .table-wrap { flex: 1; }
+.ai-hub-detail { min-width: 0; min-height: 0; overflow: auto; }
+.ai-splitter { cursor: col-resize; background: transparent; position: relative; }
+.ai-splitter::after { content: ""; position: absolute; inset: 0 2px; border-radius: 1px; }
+.ai-splitter:hover::after, .ai-splitter:focus-visible::after { background: var(--accent, #0a66d8); opacity: 0.5; }
+.ai-fit-scroll { overflow-x: auto; max-width: 100%; margin-bottom: var(--sp-4, 8px); }
+/* Fits the pane: long headers wrap, values never do; it only scrolls sideways when even that can't fit. */
+.ai-fit-scroll table.grid.fit { width: 100%; }
+.ai-fit-scroll td, .ai-fit-scroll th { white-space: nowrap; padding-right: 10px; }
+/* Short headers on one line (the full words are in each tooltip), "Fits now" one word. */
+.ai-fit-scroll table.grid th { white-space: nowrap; vertical-align: bottom; padding-top: 3px; padding-bottom: 3px; }
+.ai-fit-scroll table.grid th.num { text-align: right; }
+.ai-fit-now { white-space: nowrap; }
+.ai-fit-facts { display: flex; flex-wrap: wrap; gap: var(--sp-2, 4px) var(--sp-6, 16px); margin: 0 0 var(--sp-3, 6px); font-size: var(--fs-sm, 11px); }
+.ai-fit-facts div { display: flex; gap: var(--sp-3, 6px); }
+.ai-fit-facts dt { color: var(--text-2, #444); }
+.ai-fit-facts dd { margin: 0; }
+
+/* ---- Ollama */
+.ai-pull { display: flex; align-items: center; gap: var(--sp-3, 6px); padding: var(--sp-4, 8px) var(--sp-5, 12px); border-bottom: 1px solid var(--hairline, #ddd); flex-wrap: wrap; }
+.ai-pull input { width: 240px; }
+.ai-pull .muted { font-size: var(--fs-sm, 11px); }
+.ai-pull-row { display: grid; grid-template-columns: auto minmax(120px, 1fr) auto; align-items: center; gap: var(--sp-4, 8px); padding: var(--sp-3, 6px) var(--sp-5, 12px); font-size: var(--fs-sm, 11px); }
+
+/* ---- Benchmarks */
+.ai-bench { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(320px, 400px) minmax(0, 1fr); overflow: hidden; }
+.ai-bench-form { overflow: auto; padding: var(--sp-5, 12px); display: flex; flex-direction: column; gap: var(--sp-5, 12px); border-right: 1px solid var(--hairline, #ddd); }
+.ai-bench-results { overflow: auto; padding: var(--sp-5, 12px); display: flex; flex-direction: column; gap: var(--sp-5, 12px); min-width: 0; }
+.ai-run { display: flex; align-items: center; gap: var(--sp-3, 6px); padding: 4px var(--sp-5, 12px); cursor: pointer; font-size: var(--fs-sm, 11px); }
+.ai-run.on { background: var(--sel, #dbe7fb); }
+.ai-run-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ai-run-swatch, .ai-chart-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; flex: none; }
+.ai-chart { position: relative; }
+.ai-chart svg { width: 100%; height: auto; display: block; }
+.ai-chart-legend { display: flex; flex-wrap: wrap; gap: var(--sp-2, 4px) var(--sp-5, 12px); font-size: var(--fs-sm, 11px); margin-bottom: var(--sp-3, 6px); color: var(--text-2, #444); }
+.ai-chart-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.ai-chart .ai-grid { stroke: var(--chart-grid, #e5e5e5); stroke-width: 1; }
+.ai-chart .ai-axis { fill: var(--chart-axis-text, #777); font-size: var(--fs-2xs, 10.5px); font-variant-numeric: tabular-nums; }
+.ai-chart .ai-axis-title { fill: var(--muted, #777); font-size: var(--fs-2xs, 10.5px); }
+.ai-chart .ai-direct-label { fill: var(--text-2, #444); font-size: var(--fs-2xs, 10.5px); }
+.ai-chart .ai-crosshair { stroke: var(--muted, #888); stroke-dasharray: 3 3; }
+.ai-tooltip {
+  position: absolute;
+  transform: translate(12px, -50%);
+  pointer-events: none;
+  background: var(--surface, #fff);
+  border: 1px solid var(--border, #ccc);
+  border-radius: var(--r-md, 6px);
+  box-shadow: var(--shadow-pop, 0 6px 18px rgba(0, 0, 0, 0.16));
+  padding: 6px 8px;
+  font-size: var(--fs-sm, 11px);
+  white-space: nowrap;
+  z-index: 2;
+}
+
+/* ---- Endpoints: how it proved it generates, and its History */
+.ai-card-proof { font-size: var(--fs-sm, 11px); color: var(--text-2, #444); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ai-card-proof.note { color: var(--text, #111); }
+/* A Help tip at the end of a one-line row: the text is cut, never the icon. */
+.ai-card-line { display: flex; align-items: center; gap: var(--sp-2, 4px); min-width: 0; }
+.ai-card-line > .ai-card-proof { min-width: 0; }
+.ai-history { min-height: 0; }
+.ai-history-body { flex: 1; min-height: 0; overflow: auto; padding: var(--sp-4, 8px) var(--sp-5, 12px); display: flex; flex-direction: column; gap: var(--sp-5, 12px); }
+.ai-history-body .tchart { min-height: 0; }
+.ai-history-none { font-size: var(--fs-sm, 11px); padding: var(--sp-2, 4px) 0; }
+
+/* ---- Hugging Face list */
+.ai-hit-name { display: flex; flex-direction: column; min-width: 0; max-width: 100%; line-height: 1.25; }
+.ai-hit-name .mid-ellipsis { min-width: 0; }
+.ai-hit-org { display: flex; align-items: center; gap: var(--sp-3, 6px); min-width: 0; font-size: var(--fs-sm, 11px); }
+.ai-hit-org .muted { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.ai-hit-org .badge { flex: none; }
+
+/* ---- r4-serving: quiet endpoint states, failed deployments, idle servers ---- */
+
+/* Idle (answers, nothing in memory) and Paused (a planned restart): neutral words, grey edges. */
+.ai-pill-idle .ai-pill-word { color: var(--text-2, #444); }
+.ai-pill-paused .ai-pill-word { color: var(--text-2, #444); }
+.ai-pill-idle::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  border: 1px solid var(--muted, #888);
+  box-sizing: border-box;
+}
+.ai-pill-paused svg { color: var(--muted, #777); }
+.ai-card.ai-card-paused { border-color: var(--border-strong, var(--muted, #999)); border-style: dashed; }
+.ai-card.ai-card-idle .ai-card-model { color: var(--text, #111); }
+.ai-card-reach { font-size: var(--fs-sm, 11px); color: var(--text-2, #444); }
+.ai-card-disk { display: flex; flex-wrap: wrap; gap: var(--sp-2, 4px) var(--sp-5, 12px); font-size: var(--fs-sm, 11px); }
+.ai-card-stale { color: var(--muted, #888); }
+
+/* A failed deployment: the card stays neutral; only the pill is red (it's past, not an outage). */
+.ai-dep-card { gap: var(--sp-2, 4px); }
+.ai-failed-pill {
+  flex: none;
+  font-size: var(--fs-xs, 10.5px);
+  font-weight: var(--fw-semibold, 600);
+  color: var(--on-crit, #fff);
+  background: var(--critical, #c62828);
+  border-radius: var(--r-sm, 4px);
+  padding: 0 var(--sp-2, 4px);
+  line-height: 1.6;
+}
+.ai-dep-where { font-size: var(--fs-sm, 11px); }
+.ai-dep-exit, .ai-dep-cause { font-size: var(--fs-sm, 11px); min-width: 0; }
+.ai-dep-cause { color: var(--text, #111); }
+.ai-dep-line { font-size: var(--fs-xs, 10.5px); color: var(--text-2, #444); max-width: 100%; }
+.ai-dep-card.compact-dep .ai-card-actions { margin-top: var(--sp-1, 2px); }
+
+/* The Explain… sheet. */
+.ai-pm-sheet { display: flex; flex-direction: column; gap: var(--sp-3, 6px); max-width: 64ch; }
+.ai-pm-sheet p { margin: 0; }
+.ai-pm-lines {
+  margin: 0;
+  padding: var(--sp-3, 6px) var(--sp-4, 8px);
+  background: var(--code-bg, var(--surface-2, #f4f4f4));
+  border-radius: var(--r-md, 6px);
+  font-size: var(--fs-xs, 10.5px);
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 220px;
+  overflow: auto;
+}
+.ai-pm-lines .decisive { color: var(--crit-text, #b32228); font-weight: var(--fw-semibold, 600); }
+
+/* Servers up with nothing in memory: one quiet line. */
+.ai-idle-line {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2, 4px);
+  border: 0;
+  background: transparent;
+  padding: 0;
+  font: inherit;
+  font-size: var(--fs-sm, 11px);
+  color: var(--text-2, #444);
+  cursor: pointer;
+  text-align: left;
+}
+.ai-idle-line:hover span:first-of-type { text-decoration: underline; }
+.ai-idle-dot { width: 6px; height: 6px; border-radius: 50%; border: 1px solid var(--muted, #888); flex: none; }
+
+/* Models › Loaded: a failed deployment's row reads like the others, with its red pill. */
+.ai-loaded-failed .ai-failed-pill { margin-right: var(--sp-2, 4px); }
+/* The vLLM process outside its share: grey like what's in use, but solid (it's this load's). */
+.ai-plan .seg-host, .ai-plan-legend .sw.seg-host { background: var(--plan-host, color-mix(in srgb, var(--muted, #888) 55%, var(--surface, #fff))); }
+/* A node whose GPU failed can't be picked. */
+.ai-node-picks .node-pick.disabled { color: var(--muted, #777); cursor: not-allowed; }
+.ai-fit-seen { margin: var(--sp-2, 4px) 0 0; font-size: var(--fs-sm, 11px); }
+.ai-hub-have { font-size: var(--fs-sm, 11px); color: var(--text-2, #444); align-self: center; padding: 0 var(--sp-3, 6px); white-space: nowrap; }
+/* Settings › Models: images the cluster already runs, as suggestions. */
+.ai-seen-images { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--sp-1, 2px) var(--sp-4, 8px); margin-top: var(--sp-2, 4px); font-size: var(--fs-sm, 11px); }
+.ai-seen-images button.link { font-size: var(--fs-sm, 11px); }
+
+/* Models › Library: the table, Ollama's tags, and the selected folder's detail pane. */
+.ai-lib-body { flex: 1; min-height: 0; display: flex; }
+.ai-lib-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.ai-lib-detail {
+  width: 300px;
+  flex: none;
+  border-left: 1px solid var(--border, #d0d0d0);
+  padding: var(--sp-4, 8px) var(--sp-5, 12px);
+  overflow: auto;
+  font-size: var(--fs-sm, 11px);
+}
+.ai-lib-detail h4 { margin: 0 0 var(--sp-3, 6px); font-size: var(--fs-md, 13px); overflow-wrap: anywhere; }
+.ai-lib-detail dl { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: var(--sp-2, 4px) var(--sp-4, 8px); margin: 0; }
+.ai-lib-detail dt { color: var(--muted, #777); }
+.ai-lib-detail dd { margin: 0; min-width: 0; }
+/* The nodes on one line, their folder under it at the pane's full width (beside a node name
+   the folder was squeezed to "~/GLM…" and pushed past the edge). */
+.ai-lib-copy { display: flex; flex-direction: column; min-width: 0; }
+.ai-lib-copy + .ai-lib-copy { margin-top: var(--sp-2, 4px); }
+.ai-lib-ollama { padding: var(--sp-3, 6px) var(--sp-5, 12px); border-top: 1px solid var(--border, #d0d0d0); font-size: var(--fs-sm, 11px); }
+.ai-lib-ollama h4 { margin: 0 0 var(--sp-2, 4px); }
+.ai-lib-ollama ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--sp-1, 2px); }
+
+/* Containers' Deployments view: a member's name stays whole; its rank line gives way. */
+.ops-name-cell > .strong.ai-name-whole { flex: none; overflow: visible; }
+.ops-name-cell > .ai-member-line { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ai-lib-copy > span:first-child { flex: none; }
+
+/* Local evidence is visually separate from serving cards and has no node actions. */
+.deployment-history .scroll { min-height: 0; }
+.history-path, .history-text { overflow-wrap: anywhere; white-space: pre-wrap; }
+.history-source { display: flex; gap: var(--sp-4, 8px); align-items: center; }
+.history-source select { min-width: 0; max-width: 100%; }
+.history-filters { display: flex; gap: var(--sp-6, 12px); flex-wrap: wrap; margin-top: var(--sp-6, 12px); }
+.history-filters label { display: flex; align-items: center; gap: var(--sp-3, 6px); }
+.history-record { border: 1px solid var(--hairline, #ddd); border-radius: 4px; padding: var(--sp-6, 12px); margin-bottom: var(--sp-6, 12px); }
+.history-record h3 { margin-top: 0; }
+.history-node { border-top: 1px solid var(--hairline, #ddd); margin-top: var(--sp-4, 8px); padding-top: var(--sp-4, 8px); }

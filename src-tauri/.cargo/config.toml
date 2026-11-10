@@ -1,0 +1,4 @@
+# Dev builds run through scripts/sign-and-run.sh, which signs them with your
+# Apple certificate (when you have one) so macOS keeps SparkBox's Keychain access.
+[target.aarch64-apple-darwin]
+runner = "../scripts/sign-and-run.sh"

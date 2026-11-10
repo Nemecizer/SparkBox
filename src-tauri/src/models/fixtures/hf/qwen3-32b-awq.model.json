@@ -1,0 +1,119 @@
+{
+ "id": "Qwen/Qwen3-32B-AWQ",
+ "sha": "0499c3ac83fdef8810b907a23894ba91e95eddd8",
+ "library_name": "transformers",
+ "pipeline_tag": "text-generation",
+ "tags": [
+  "transformers",
+  "safetensors",
+  "qwen3",
+  "text-generation",
+  "conversational",
+  "arxiv:2309.00071",
+  "arxiv:2505.09388",
+  "base_model:Qwen/Qwen3-32B",
+  "base_model:quantized:Qwen/Qwen3-32B",
+  "license:apache-2.0",
+  "text-generation-inference",
+  "endpoints_compatible",
+  "4-bit",
+  "awq",
+  "region:us"
+ ],
+ "gated": false,
+ "safetensors": {
+  "parameters": {
+   "I32": 31205621760,
+   "BF16": 1556501504
+  },
+  "total": 32762123264
+ },
+ "siblings": [
+  {
+   "rfilename": ".gitattributes",
+   "size": 1570
+  },
+  {
+   "rfilename": "LICENSE",
+   "size": 11544
+  },
+  {
+   "rfilename": "README.md",
+   "size": 16885
+  },
+  {
+   "rfilename": "config.json",
+   "size": 907
+  },
+  {
+   "rfilename": "generation_config.json",
+   "size": 239
+  },
+  {
+   "rfilename": "merges.txt",
+   "size": 1671853
+  },
+  {
+   "rfilename": "model-00001-of-00004.safetensors",
+   "size": 4966384688,
+   "lfs": {
+    "sha256": "ab7988215e3b087c884e0c14ce1994a64aac31dc9a37a4bcf29f5b45f3506e2e",
+    "size": 4966384688
+   }
+  },
+  {
+   "rfilename": "model-00002-of-00004.safetensors",
+   "size": 4998723112,
+   "lfs": {
+    "sha256": "46faff349f1dd18ffe76993edd3d9fd32941d042331dc590525409bbe3d37edf",
+    "size": 4998723112
+   }
+  },
+  {
+   "rfilename": "model-00003-of-00004.safetensors",
+   "size": 4949671152,
+   "lfs": {
+    "sha256": "6e9f763d8c31ad19f1cd67b0b599a38edffd76a4465a22ff5f7fcac46d820e63",
+    "size": 4949671152
+   }
+  },
+  {
+   "rfilename": "model-00004-of-00004.safetensors",
+   "size": 4410702792,
+   "lfs": {
+    "sha256": "87f180889fead12b00b1bdf4dca3a3a14e4510e1e200bf56e31898e120b993d8",
+    "size": 4410702792
+   }
+  },
+  {
+   "rfilename": "model.safetensors.index.json",
+   "size": 131598
+  },
+  {
+   "rfilename": "tokenizer.json",
+   "size": 11422654,
+   "lfs": {
+    "sha256": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+    "size": 11422654
+   }
+  },
+  {
+   "rfilename": "tokenizer_config.json",
+   "size": 9732
+  },
+  {
+   "rfilename": "vocab.json",
+   "size": 2776833
+  }
+ ],
+ "config": {
+  "architectures": [
+   "Qwen3ForCausalLM"
+  ],
+  "model_type": "qwen3",
+  "quantization_config": {
+   "bits": 4,
+   "quant_method": "awq"
+  }
+ }
+}

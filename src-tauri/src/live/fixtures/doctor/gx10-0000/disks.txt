@@ -1,0 +1,54 @@
+/dev/nvme0n1p2 / ext4 rw,relatime,errors=remount-ro 0 0
+/dev/loop0 /snap/bare/5 squashfs ro,nodev,relatime,errors=continue,threads=single 0 0
+/dev/loop1 /snap/core22/2412 squashfs ro,nodev,relatime,errors=continue,threads=single 0 0
+/dev/loop3 /snap/core24/2125 squashfs ro,nodev,relatime,errors=continue,threads=single 0 0
+/dev/loop4 /snap/core22/2956 squashfs ro,nodev,relatime,errors=continue,threads=single 0 0
+/dev/loop2 /snap/core24/1644 squashfs ro,nodev,relatime,errors=continue,threads=single 0 0
+/dev/loop6 /snap/firefox/8188 squashfs ro,nodev,relatime,errors=continue,threads=single 0 0
+/dev/loop5 /snap/firefox/8461 squashfs ro,nodev,relatime,errors=continue,threads=single 0 0
+/dev/loop7 /snap/firmware-updater/263 squashfs ro,nodev,relatime,errors=continue,threads=single 0 0
+/dev/loop8 /snap/gnome-42-2204/245 squashfs ro,nodev,relatime,errors=continue,threads=single 0 0
+/dev/loop9 /snap/firmware-updater/227 squashfs ro,nodev,relatime,errors=continue,threads=single 0 0
+/dev/loop10 /snap/gnome-46-2404/154 squashfs ro,nodev,relatime,errors=continue,threads=single 0 0
+/dev/loop11 /snap/gtk-common-themes/1535 squashfs ro,nodev,relatime,errors=continue,threads=single 0 0
+/dev/loop12 /snap/mesa-2404/1166 squashfs ro,nodev,relatime,errors=continue,threads=single 0 0
+/dev/loop13 /snap/mesa-2404/1836 squashfs ro,nodev,relatime,errors=continue,threads=single 0 0
+/dev/loop14 /snap/snap-store/1217 squashfs ro,nodev,relatime,errors=continue,threads=single 0 0
+/dev/loop15 /snap/snapd/26869 squashfs ro,nodev,relatime,errors=continue,threads=single 0 0
+/dev/loop16 /snap/snap-store/1448 squashfs ro,nodev,relatime,errors=continue,threads=single 0 0
+/dev/loop17 /snap/snapd/28255 squashfs ro,nodev,relatime,errors=continue,threads=single 0 0
+/dev/loop18 /snap/snapd-desktop-integration/396 squashfs ro,nodev,relatime,errors=continue,threads=single 0 0
+/dev/loop19 /snap/snapd-desktop-integration/363 squashfs ro,nodev,relatime,errors=continue,threads=single 0 0
+/dev/loop20 /snap/thunderbird/1295 squashfs ro,nodev,relatime,errors=continue,threads=single 0 0
+/dev/loop21 /snap/thunderbird/1300 squashfs ro,nodev,relatime,errors=continue,threads=single 0 0
+/dev/nvme0n1p1 /boot/efi vfat rw,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=iso8859-1,shortname=mixed,errors=remount-ro 0 0
+Filesystem        1B-blocks         Used    Available Use% Mounted on
+efivarfs             262144        36272       225872  14% /sys/firmware/efi/efivars
+/dev/nvme0n1p2 982819848192 373903474688 558916337664  41% /
+/dev/nvme0n1p1    535805952      7729152    528076800   2% /boot/efi
+NAME                 SIZE TYPE MOUNTPOINT
+loop0                4096 loop /snap/bare/5
+loop1            72310784 loop /snap/core22/2412
+loop2            64864256 loop /snap/core24/1644
+loop3            64839680 loop /snap/core24/2125
+loop4            72339456 loop /snap/core22/2956
+loop5           247439360 loop /snap/firefox/8461
+loop6           279007232 loop /snap/firefox/8188
+loop7            78032896 loop /snap/firmware-updater/263
+loop8           527392768 loop /snap/gnome-42-2204/245
+loop9            16310272 loop /snap/firmware-updater/227
+loop10          579809280 loop /snap/gnome-46-2404/154
+loop11           96141312 loop /snap/gtk-common-themes/1535
+loop12          183046144 loop /snap/mesa-2404/1166
+loop13          197390336 loop /snap/mesa-2404/1836
+loop14           12808192 loop /snap/snap-store/1217
+loop15           44703744 loop /snap/snapd/26869
+loop16           77398016 loop /snap/snap-store/1448
+loop17           40513536 loop /snap/snapd/28255
+loop18             823296 loop /snap/snapd-desktop-integration/396
+loop19             573440 loop /snap/snapd-desktop-integration/363
+loop20          226877440 loop /snap/thunderbird/1295
+loop21          226922496 loop /snap/thunderbird/1300
+nvme0n1     1000204886016 disk 
+├─nvme0n1p1     536870912 part /boot/efi
+└─nvme0n1p2  999665172480 part /

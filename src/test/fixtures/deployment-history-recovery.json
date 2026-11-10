@@ -1,0 +1,45 @@
+[
+  {
+    "spec": {
+      "id": "example-ready",
+      "servedName": "Qwen example",
+      "nodes": [
+        "cell1",
+        "cell2"
+      ]
+    },
+    "state": "ready",
+    "startedAt": 1794000000,
+    "generation": 2,
+    "message": "Historical Ready observation; current state is unknown."
+  },
+  {
+    "spec": {
+      "id": "example-stopped",
+      "servedName": "Qwen example",
+      "nodes": [
+        "cell1"
+      ]
+    },
+    "state": "stopped",
+    "startedAt": 1793990000,
+    "generation": 0,
+    "unloadReport": {
+      "atMs": 1794000240000,
+      "ok": false,
+      "summary": "Shared memory remains; original warning kept.",
+      "nodes": [
+        {
+          "node": "cell1",
+          "stopped": true,
+          "memAvailable": 128849018880,
+          "memBack": true,
+          "portClosed": true,
+          "newShm": [
+            "example-semaphore"
+          ]
+        }
+      ]
+    }
+  }
+]

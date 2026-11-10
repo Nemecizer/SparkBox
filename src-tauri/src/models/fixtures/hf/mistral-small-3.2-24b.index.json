@@ -1,0 +1,18 @@
+{
+ "_note": "model.safetensors.index.json captured 2026-10-28; weight_map trimmed to one tensor per shard.",
+ "metadata": {
+  "total_size": 48022722560
+ },
+ "weight_map": {
+  "language_model.lm_head.weight": "model-00010-of-00010.safetensors",
+  "language_model.model.embed_tokens.weight": "model-00001-of-00010.safetensors",
+  "language_model.model.layers.10.input_layernorm.weight": "model-00003-of-00010.safetensors",
+  "language_model.model.layers.11.input_layernorm.weight": "model-00004-of-00010.safetensors",
+  "language_model.model.layers.15.input_layernorm.weight": "model-00005-of-00010.safetensors",
+  "language_model.model.layers.19.input_layernorm.weight": "model-00006-of-00010.safetensors",
+  "language_model.model.layers.2.input_layernorm.weight": "model-00002-of-00010.safetensors",
+  "language_model.model.layers.24.input_layernorm.weight": "model-00007-of-00010.safetensors",
+  "language_model.model.layers.28.input_layernorm.weight": "model-00008-of-00010.safetensors",
+  "language_model.model.layers.32.input_layernorm.weight": "model-00009-of-00010.safetensors"
+ }
+}

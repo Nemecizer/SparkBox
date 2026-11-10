@@ -1,0 +1,60 @@
+/* ---- p3-ops: Tasks chip (status bar) and its drawer ---- */
+
+.tasks-chip { max-width: 320px; gap: var(--sp-2, 4px); }
+.tasks-chip .tasks-chip-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.tasks-chip.busy { color: var(--accent-text, var(--accent)); }
+.tasks-chip.failed { color: var(--crit-text, #c62828); }
+.tasks-chip.warning { color: var(--warn-text, var(--warn)); }
+
+/* Done is quiet; only exceptions are coloured. */
+.task-icon.ok { color: var(--text-2, var(--muted)); }
+.task-icon.warning { color: var(--warn-text, var(--warn)); }
+.task-icon.failed { color: var(--crit-text, #c62828); }
+.task-icon.cancelled { color: var(--muted); }
+.task-icon.running { color: var(--accent-text, var(--accent)); }
+
+.tasks-drawer {
+  position: fixed;
+  z-index: var(--z-popover, 20000);
+  width: min(460px, calc(100vw - 16px));
+  max-height: min(560px, calc(100vh - 80px));
+  overflow: auto;
+  background: var(--surface, #fff);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg, 8px);
+  box-shadow: var(--shadow-pop, 0 8px 28px rgba(0, 0, 0, 0.25));
+  padding: var(--sp-3, 6px) 0;
+  font-size: var(--fs-base, 12.5px);
+  outline: none;
+}
+.tasks-drawer-head {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3, 6px);
+  padding: var(--sp-3, 6px) var(--sp-5, 12px) var(--sp-2, 4px);
+}
+.tasks-drawer-head .section-title { margin: 0; }
+.tasks-empty { padding: var(--sp-2, 4px) var(--sp-5, 12px) var(--sp-4, 8px); font-size: var(--fs-sm, 11px); line-height: 1.45; }
+
+.task-running { padding: var(--sp-3, 6px) var(--sp-5, 12px); border-bottom: 1px solid var(--hairline, var(--border)); }
+.task-running:last-of-type { border-bottom: none; }
+.task-row { display: flex; align-items: center; gap: var(--sp-3, 6px); min-width: 0; }
+.task-title { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: var(--fw-medium, 500); }
+.task-sub { display: flex; gap: var(--sp-4, 8px); font-size: var(--fs-sm, 11px); margin-top: var(--sp-1, 2px); }
+.task-step { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.task-bar { height: 4px; border-radius: 2px; background: var(--track, var(--surface-3)); overflow: hidden; margin-top: var(--sp-2, 4px); }
+.task-bar-fill { height: 100%; background: var(--accent-fill, var(--accent)); transition: width var(--dur-2, 180ms) var(--ease, ease); }
+.task-bar.indeterminate .task-bar-fill { width: 30%; animation: task-indeterminate 1.4s var(--ease, ease) infinite; }
+@keyframes task-indeterminate { from { transform: translateX(-100%); } to { transform: translateX(340%); } }
+@media (prefers-reduced-motion: reduce) { .task-bar.indeterminate .task-bar-fill { animation: none; width: 100%; opacity: 0.35; } }
+:root[data-motion="reduce"] .task-bar.indeterminate .task-bar-fill { animation: none; width: 100%; opacity: 0.35; }
+
+.task-recent { list-style: none; margin: 0; padding: 0; }
+.task-recent .task-row { padding: var(--sp-2, 4px) var(--sp-5, 12px); }
+.task-recent .task-row:hover { background: var(--hover, var(--surface-2)); }
+.task-recent .task-title { flex: 0 0 auto; max-width: 55%; }
+.task-row > svg, .tasks-chip > svg { flex: none; }
+.task-outcome { flex: 1 1 0; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--fs-sm, 11px); }
+.task-recent .task-row.failed .task-outcome { color: var(--crit-text, #c62828); }

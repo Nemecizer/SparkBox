@@ -1,0 +1,22 @@
+/* ---- r2-live: Updates window, a running upgrade ---- */
+.upd-run { display: flex; flex-direction: column; gap: var(--sp-4, 8px); min-height: 0; height: 100%; }
+.upd-phase { font-size: var(--fs-sm, 11px); color: var(--text-2); font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.upd-progress { height: var(--sp-2, 4px); border-radius: var(--r-sm, 4px); background: var(--track, var(--surface-2)); overflow: hidden; flex: none; }
+.upd-progress-bar { height: 100%; background: var(--accent); transition: width var(--dur-2, 180ms) var(--ease, ease-out); }
+.upd-meta { display: flex; align-items: center; gap: var(--sp-3, 6px); min-width: 0; font-size: var(--fs-xs, 10.5px); flex: none; }
+.upd-meta .mono { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.upd-log {
+  flex: 1; min-height: calc(6 * var(--sp-7, 24px)); margin: 0; overflow: auto;
+  padding: var(--sp-3, 6px) var(--sp-4, 8px); border: var(--hairline-w, 1px) solid var(--hairline); border-radius: var(--r-md, 6px);
+  background: var(--surface-2); color: var(--text); font-size: var(--fs-mono, 11.5px); line-height: 1.45; white-space: pre-wrap; word-break: break-word;
+}
+.rolling-restarts { display: flex; flex-wrap: wrap; gap: 8px 12px; }
+.upd-row-action { display: inline-flex; }
+.upd-row-action .tool-label { display: inline; }
+.upd-restart { display: inline-flex; flex-direction: column; align-items: flex-start; gap: var(--sp-2, 4px); }
+.upd-restart .tool-label { display: inline; }
+.upd-restart .link-plain { font-size: var(--fs-xs, 10.5px); }
+
+/* Keep recovery and confirmation visible while reviewing a complete system package set. */
+.protected-packages { max-height: 190px; overflow: auto; overflow-wrap: anywhere; }
+.protected-update-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }

@@ -1,0 +1,22 @@
+{
+  "schema": 2,
+  "node": "cell3",
+  "name": "cell3",
+  "index": 2,
+  "port": 9469,
+  "peers": [
+    {"id": "cell1", "name": "cell1", "index": 0, "lan": "192.168.1.101", "fabric": ["192.168.100.11", "192.168.101.11"]},
+    {"id": "cell2", "name": "cell2", "index": 1, "lan": "192.168.1.102", "fabric": ["192.168.100.12", "192.168.101.12"]},
+    {"id": "cell3", "name": "cell3", "index": 2, "lan": "192.168.1.103", "fabric": ["192.168.100.13", "192.168.101.13"]},
+    {"id": "gx10-0000", "name": "gx10-0000", "index": 3, "lan": "192.168.1.104", "fabric": ["192.168.100.14", "192.168.101.14"]}
+  ],
+  "switchMgmt": "192.168.88.1",
+  "endpoints": [],
+  "silences": [{"id": "s-1", "rule": "disk-full", "entity": "disk:gx10-0000:/", "untilMs": null, "reason": "expanding the disk on Friday"}],
+  "quiet": {"start": "22:00", "end": "07:00", "tz": "America/New_York"},
+  "repeatMinutes": 60,
+  "criticalOnly": false,
+  "resolved": true,
+  "categories": {"node": true, "disk": true, "gpu": true, "fabric": true, "containers": true},
+  "metrics": {"enabled": false, "port": 9470}
+}

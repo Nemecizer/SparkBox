@@ -1,0 +1,4 @@
+srw-rw---- 1 root docker 0 Oct 25 17:08 /var/run/docker.sock
+29.6.2
+015bcb21d2bdae24150ac8921a1f0ed545a14f05b3f192a407264903c299e1d2 glm53 vllm/vllm-openai:glm53-flash-arm64-cu130 exited Exited (1) 2 days ago
+2dd50c8247bbc5c88518fe4a2e1fd16b7ee322e7ac6464e7aab16c1e60e4e1f2 workbench-proxy docker.io/traefik:v3.6.1 exited Exited (0) 12 days ago

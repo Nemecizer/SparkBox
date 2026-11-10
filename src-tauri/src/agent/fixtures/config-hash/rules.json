@@ -1,0 +1,1 @@
+{"version":1,"rules":[{"id":"mem-high","entity":"node","metric":"mem_pct","warn":90,"crit":97,"forS":60,"clearS":60,"label":"Memory used · over 90%"}]}

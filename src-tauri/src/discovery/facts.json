@@ -1,0 +1,131 @@
+{
+  "192.168.50.51": {
+    "hostname": "cell1-example",
+    "machineId": "00000000000000000000000000000001",
+    "model": "MSI EdgeXpert",
+    "gpu": "NVIDIA GB10",
+    "interfaces": [
+      {
+        "name": "enP7s7",
+        "mac": "02:00:00:45:00:01",
+        "addresses": [
+          "192.168.50.51/24"
+        ],
+        "mtu": 1500,
+        "speedMbps": 2500
+      },
+      {
+        "name": "enp1s0f1np1",
+        "mac": "02:00:00:10:00:01",
+        "addresses": [
+          "192.168.100.1/24"
+        ],
+        "mtu": 9000,
+        "speedMbps": 200000
+      }
+    ],
+    "neighbors": [
+      {
+        "iface": "enp1s0f1np1",
+        "system": "CRS804 DDQ",
+        "chassis": "02:00:00:80:04:01",
+        "port": "qsfp56-dd-1-1"
+      }
+    ]
+  },
+  "192.168.50.154": {
+    "hostname": "cell2-example",
+    "machineId": "00000000000000000000000000000002",
+    "model": "MSI EdgeXpert",
+    "gpu": "NVIDIA GB10",
+    "interfaces": [
+      {
+        "name": "enP7s7",
+        "mac": "02:00:00:45:00:02",
+        "addresses": [
+          "192.168.50.154/24"
+        ],
+        "mtu": 1500,
+        "speedMbps": 2500
+      },
+      {
+        "name": "enp1s0f1np1",
+        "mac": "02:00:00:10:00:02",
+        "addresses": [
+          "192.168.100.2/24"
+        ],
+        "mtu": 9000,
+        "speedMbps": 200000
+      }
+    ],
+    "neighbors": [
+      {
+        "iface": "enp1s0f1np1",
+        "system": "CRS804 DDQ",
+        "chassis": "02:00:00:80:04:01",
+        "port": "qsfp56-dd-2-1"
+      }
+    ]
+  },
+  "192.168.50.98": {
+    "hostname": "cell3-example",
+    "machineId": "00000000000000000000000000000003",
+    "model": "MSI EdgeXpert",
+    "gpu": "NVIDIA GB10",
+    "interfaces": [
+      {
+        "name": "enP7s7",
+        "mac": "02:00:00:45:00:03",
+        "addresses": [
+          "192.168.50.98/24"
+        ],
+        "mtu": 1500,
+        "speedMbps": 2500
+      },
+      {
+        "name": "enp1s0f1np1",
+        "mac": "02:00:00:10:00:03",
+        "addresses": [
+          "192.168.100.3/24"
+        ],
+        "mtu": 9000,
+        "speedMbps": 200000
+      }
+    ],
+    "neighbors": [
+      {
+        "iface": "enp1s0f1np1",
+        "system": "CRS804 DDQ",
+        "chassis": "02:00:00:80:04:01",
+        "port": "qsfp56-dd-3-1"
+      }
+    ]
+  },
+  "192.168.50.181": {
+    "hostname": "gx10-0000",
+    "machineId": "00000000000000000000000000000004",
+    "model": "ASUS Ascent GX10",
+    "gpu": "NVIDIA GB10",
+    "interfaces": [
+      {
+        "name": "enP7s7",
+        "mac": "02:00:00:45:00:04",
+        "addresses": [
+          "192.168.50.181/24"
+        ],
+        "mtu": 1500,
+        "speedMbps": 2500
+      },
+      {
+        "name": "enp1s0f1np1",
+        "mac": "02:00:00:10:00:04",
+        "addresses": [
+          "192.168.100.4/24"
+        ],
+        "mtu": 9000,
+        "speedMbps": 200000
+      }
+    ],
+    "neighbors": []
+  }
+}

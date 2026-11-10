@@ -1,0 +1,11 @@
+Connected to 9c:53:22:ff:6a:9b (on wlP9s9)
+	SSID: ExampleLAN
+	freq: 5200
+	RX: 2081955113 bytes (2617823 packets)
+	TX: 31377902 bytes (176201 packets)
+	signal: -52 dBm
+	rx bitrate: 780.0 MBit/s VHT-MCS 8 80MHz short GI VHT-NSS 2
+	tx bitrate: 866.7 MBit/s VHT-MCS 9 80MHz short GI VHT-NSS 2
+	bss flags: short-slot-time
+	dtim period: 3
+	beacon int: 100

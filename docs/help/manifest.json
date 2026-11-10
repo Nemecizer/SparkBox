@@ -1,0 +1,6196 @@
+{
+  "schema": 1,
+  "about": "The spec for SparkBox Help. Article files live at docs/help/<file>. toc gives the order of the table of contents, helpMenu the macOS Help menu (an entry with toc stands for that whole section of the table of contents, and one with section opens its page), windowHelp and settingsHelp the article behind each window's and Settings section's info button. verified: true = proven on the owner's cluster; false = test systems only, the Help window shows one calm line; null = doesn't touch the cluster, no line. proof, where present, is a fact the article states in one plain sentence.",
+  "calmLine": "Built and tested on test systems. Not yet proven on your cluster.",
+  "notArticles": [
+    "STYLE.md",
+    "INFO-ICONS.md",
+    "README.md"
+  ],
+  "seedExample": {
+    "article": "check-disk-space",
+    "tip": "models.load.gpu-share",
+    "note": "The help-system builder seeds these two so writers can copy the pattern. The owning writer replaces them with the finished text."
+  },
+  "areas": [
+    {
+      "id": "start",
+      "title": "Getting Started"
+    },
+    {
+      "id": "safety",
+      "title": "Safety and Access"
+    },
+    {
+      "id": "desk",
+      "title": "The SparkBox Window"
+    },
+    {
+      "id": "monitor",
+      "title": "Monitoring"
+    },
+    {
+      "id": "alerts",
+      "title": "Alerts and Notifications"
+    },
+    {
+      "id": "network",
+      "title": "Network"
+    },
+    {
+      "id": "models",
+      "title": "Models"
+    },
+    {
+      "id": "ai",
+      "title": "Chat and AI Apps"
+    },
+    {
+      "id": "ops",
+      "title": "Node Operations"
+    },
+    {
+      "id": "updates",
+      "title": "Updates"
+    },
+    {
+      "id": "tools",
+      "title": "Terminal and Files"
+    },
+    {
+      "id": "settings",
+      "title": "Settings"
+    },
+    {
+      "id": "reference",
+      "title": "Reference"
+    },
+    {
+      "id": "troubleshooting",
+      "title": "Troubleshooting"
+    }
+  ],
+  "toc": [
+    {
+      "id": "getting-started",
+      "title": "Getting Started",
+      "groups": [
+        {
+          "title": null,
+          "articles": [
+            "getting-started",
+            "what-is-sparkbox",
+            "tour-the-demo",
+            "your-first-model",
+            "connect-your-cluster",
+            "run-your-first-real-model",
+            "using-help"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "how-to",
+      "title": "How-To Guides",
+      "groups": [
+        {
+          "title": "Connect and log in",
+          "articles": [
+            "save-the-cluster-password",
+            "check-your-nodes",
+            "switch-between-demo-and-live",
+            "add-or-change-a-node",
+            "trust-a-host-key",
+            "set-up-key-login",
+            "add-switches-and-gateway"
+          ]
+        },
+        {
+          "title": "Stay in control",
+          "articles": [
+            "unlock-admin-mode",
+            "use-look-only-mode",
+            "open-a-fence",
+            "find-what-sparkbox-did"
+          ]
+        },
+        {
+          "title": "Run models",
+          "lead": "models-in-plain-words",
+          "articles": [
+            "find-a-model-that-fits",
+            "get-a-hugging-face-token",
+            "keep-this-mac-awake",
+            "download-a-model",
+            "follow-a-download",
+            "copy-a-model-to-other-nodes",
+            "prepare-the-cluster",
+            "load-a-model-on-one-node",
+            "load-a-model-on-several-nodes",
+            "use-a-recipe-for-a-load",
+            "choose-load-settings",
+            "tell-if-a-model-is-working",
+            "chat-with-a-cluster-model",
+            "benchmark-a-model",
+            "restart-or-change-a-model",
+            "unload-a-model",
+            "delete-a-model",
+            "fix-a-load-that-failed",
+            "clear-what-an-earlier-load-left-behind",
+            "use-ollama"
+          ]
+        },
+        {
+          "title": "Cloud models and apps",
+          "articles": [
+            "add-a-cloud-provider",
+            "chat-with-a-cloud-model",
+            "run-sparkbox-as-a-server",
+            "create-an-api-key",
+            "connect-an-app",
+            "give-a-model-a-short-name",
+            "use-a-model-from-another-computer"
+          ]
+        },
+        {
+          "title": "Watch your cluster",
+          "articles": [
+            "read-the-dashboard",
+            "read-the-charts",
+            "check-disk-space",
+            "find-out-why-a-node-restarted",
+            "open-the-dgx-dashboard"
+          ]
+        },
+        {
+          "title": "Alerts and notifications",
+          "articles": [
+            "respond-to-an-alert",
+            "change-alert-rules",
+            "get-notifications-on-this-mac",
+            "get-alerts-on-your-phone",
+            "set-up-always-on-monitoring"
+          ]
+        },
+        {
+          "title": "Updates",
+          "articles": [
+            "see-pending-updates",
+            "check-for-updates",
+            "simulate-an-update",
+            "install-updates",
+            "pin-the-gpu-stack"
+          ]
+        },
+        {
+          "title": "Manage nodes",
+          "articles": [
+            "restart-a-node",
+            "recover-a-frozen-node",
+            "get-a-gpu-driver-answering",
+            "shut-down-and-wake-a-node",
+            "turn-the-whole-cluster-off-and-on",
+            "use-maintenance-mode",
+            "run-a-command-on-every-node",
+            "see-and-stop-processes",
+            "manage-containers",
+            "check-docker-images",
+            "restart-a-service"
+          ]
+        },
+        {
+          "title": "Terminal and files",
+          "articles": [
+            "open-a-terminal",
+            "check-and-repair-rdp",
+            "copy-files",
+            "edit-a-file",
+            "read-a-root-only-file",
+            "delete-and-restore-files",
+            "use-and-update-a-playbook"
+          ]
+        },
+        {
+          "title": "Network",
+          "articles": [
+            "connect-the-vpn",
+            "check-the-fabric",
+            "test-the-fabric",
+            "see-what-a-port-connects-to",
+            "see-whats-plugged-into-the-switch-x",
+            "connect-firewalla-cloud",
+            "manage-a-switch-port"
+          ]
+        },
+        {
+          "title": "Look after SparkBox",
+          "articles": [
+            "arrange-your-windows",
+            "capture-evidence",
+            "collect-diagnostics",
+            "back-up-sparkbox",
+            "restore-sparkbox",
+            "reset-sparkbox"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "features",
+      "title": "Feature Guide",
+      "groups": [
+        {
+          "title": "The SparkBox window",
+          "articles": [
+            "sparkbox-window",
+            "top-bar-and-status-bar",
+            "windows-and-layouts",
+            "command-palette",
+            "tables-and-menus",
+            "menu-bar-icon"
+          ]
+        },
+        {
+          "title": "Overview",
+          "articles": [
+            "dashboard",
+            "topology",
+            "alerts-window",
+            "cluster-metrics",
+            "node-window"
+          ]
+        },
+        {
+          "title": "Models",
+          "articles": [
+            "models-window",
+            "models-library",
+            "models-hugging-face",
+            "models-load-page",
+            "models-loaded",
+            "models-benchmarks",
+            "models-jobs",
+            "models-prepare-cluster",
+            "endpoints",
+            "ollama"
+          ]
+        },
+        {
+          "title": "Chat and AI apps",
+          "articles": [
+            "chat",
+            "server",
+            "providers"
+          ]
+        },
+        {
+          "title": "Workloads",
+          "articles": [
+            "workloads",
+            "containers",
+            "images",
+            "inspect-window",
+            "services"
+          ]
+        },
+        {
+          "title": "Network",
+          "articles": [
+            "vpn",
+            "fabric",
+            "fabric-doctor",
+            "switch-window",
+            "firewalla-view"
+          ]
+        },
+        {
+          "title": "Tools",
+          "articles": [
+            "files",
+            "editor",
+            "terminal",
+            "rdp",
+            "fleet-command",
+            "activity-log",
+            "updates",
+            "tasks",
+            "connect-my-sparks",
+            "how-to-library"
+          ]
+        },
+        {
+          "title": "Settings",
+          "articles": [
+            "settings-window",
+            "settings-general",
+            "settings-appearance",
+            "settings-cluster-login",
+            "settings-nodes",
+            "settings-switches",
+            "settings-data-source",
+            "settings-demo-scenarios",
+            "settings-notifications",
+            "settings-alerts",
+            "settings-terminal",
+            "settings-models",
+            "settings-security",
+            "settings-fence",
+            "settings-diagnostics"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "concepts",
+      "title": "Concepts",
+      "groups": [
+        {
+          "title": "SparkBox and your cluster",
+          "articles": [
+            "your-cluster",
+            "demo-and-live",
+            "fabric-and-rdma"
+          ]
+        },
+        {
+          "title": "Safety",
+          "articles": [
+            "admin-mode",
+            "ssh-sudo-and-host-keys",
+            "keychain-and-secrets",
+            "the-fence",
+            "leases-and-identity"
+          ]
+        },
+        {
+          "title": "Models",
+          "articles": [
+            "models-in-plain-words",
+            "engines",
+            "memory-on-a-spark",
+            "tokens-and-context",
+            "formats-and-quantization",
+            "splitting-a-model",
+            "endpoints-and-apis"
+          ]
+        },
+        {
+          "title": "Running a node",
+          "articles": [
+            "containers-and-images",
+            "services-and-processes",
+            "packages-and-updates",
+            "tasks-and-jobs",
+            "alerts-and-incidents",
+            "always-on-agent"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Reference",
+      "groups": [
+        {
+          "title": null,
+          "articles": [
+            "keyboard-shortcuts",
+            "menu-reference",
+            "model-questions",
+            "status-words",
+            "alert-rules-reference",
+            "files-and-folders",
+            "ports-reference",
+            "whats-proven",
+            "whats-coming"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "troubleshooting",
+      "title": "Troubleshooting",
+      "groups": [
+        {
+          "title": null,
+          "articles": [
+            "troubleshooting",
+            "errors-connection",
+            "errors-admin-and-safety",
+            "errors-models",
+            "errors-updates-and-power",
+            "errors-files-and-terminal",
+            "errors-ai",
+            "errors-network",
+            "errors-alerts-and-agent"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "glossary",
+      "title": "Glossary",
+      "groups": [
+        {
+          "title": null,
+          "articles": [
+            "glossary"
+          ]
+        }
+      ]
+    }
+  ],
+  "helpMenu": [
+    {
+      "label": "SparkBox Help",
+      "accelerator": "CmdOrCtrl+Shift+/",
+      "article": null,
+      "note": "The same keys as Command-?, which the menu shows as Shift-Command-/. Opens the Help window where you last were, or its home page"
+    },
+    {
+      "label": "Getting Started",
+      "submenu": [
+        {
+          "toc": "getting-started"
+        }
+      ]
+    },
+    {
+      "label": "How-To Guides",
+      "submenu": [
+        {
+          "label": "Connect Your Cluster",
+          "article": "connect-your-cluster"
+        },
+        {
+          "label": "Unlock Admin Mode",
+          "article": "unlock-admin-mode"
+        },
+        {
+          "separator": true
+        },
+        {
+          "label": "Run Your First Real Model",
+          "article": "run-your-first-real-model"
+        },
+        {
+          "label": "Find a Model That Fits",
+          "article": "find-a-model-that-fits"
+        },
+        {
+          "label": "Download a Model",
+          "article": "download-a-model"
+        },
+        {
+          "label": "Copy a Model to Other Nodes",
+          "article": "copy-a-model-to-other-nodes"
+        },
+        {
+          "label": "Load a Model on One Node",
+          "article": "load-a-model-on-one-node"
+        },
+        {
+          "label": "Load a Model on Two, Three or Four Nodes",
+          "article": "load-a-model-on-several-nodes"
+        },
+        {
+          "label": "Chat with a Cluster Model",
+          "article": "chat-with-a-cluster-model"
+        },
+        {
+          "label": "Fix a Load That Failed",
+          "article": "fix-a-load-that-failed"
+        },
+        {
+          "separator": true
+        },
+        {
+          "label": "Run SparkBox as a Server",
+          "article": "run-sparkbox-as-a-server"
+        },
+        {
+          "label": "Respond to an Alert",
+          "article": "respond-to-an-alert"
+        },
+        {
+          "label": "Install Updates on a Node",
+          "article": "install-updates"
+        },
+        {
+          "label": "Restart a Node",
+          "article": "restart-a-node"
+        },
+        {
+          "label": "Recover a Frozen Node",
+          "article": "recover-a-frozen-node"
+        },
+        {
+          "label": "Run a Command on Every Node",
+          "article": "run-a-command-on-every-node"
+        },
+        {
+          "label": "Reach Your Cluster with the VPN",
+          "article": "connect-the-vpn"
+        },
+        {
+          "separator": true
+        },
+        {
+          "toc": "how-to"
+        },
+        {
+          "separator": true
+        },
+        {
+          "label": "All How-To Guides…",
+          "section": "how-to"
+        }
+      ]
+    },
+    {
+      "label": "Feature Guide",
+      "submenu": [
+        {
+          "toc": "features"
+        },
+        {
+          "separator": true
+        },
+        {
+          "label": "All Feature Guides…",
+          "section": "features"
+        }
+      ]
+    },
+    {
+      "label": "Concepts",
+      "submenu": [
+        {
+          "toc": "concepts"
+        },
+        {
+          "separator": true
+        },
+        {
+          "label": "All Concepts…",
+          "section": "concepts"
+        }
+      ]
+    },
+    {
+      "label": "Reference",
+      "submenu": [
+        {
+          "toc": "reference"
+        },
+        {
+          "separator": true
+        },
+        {
+          "label": "All Reference Pages…",
+          "section": "reference"
+        }
+      ]
+    },
+    {
+      "separator": true
+    },
+    {
+      "label": "Troubleshooting",
+      "submenu": [
+        {
+          "toc": "troubleshooting"
+        },
+        {
+          "separator": true
+        },
+        {
+          "label": "All Troubleshooting Pages…",
+          "section": "troubleshooting"
+        }
+      ]
+    },
+    {
+      "label": "Glossary",
+      "article": "glossary"
+    },
+    {
+      "label": "Keyboard Shortcuts",
+      "article": "keyboard-shortcuts",
+      "note": "⌘/ keeps opening the quick sheet; this item opens the full article"
+    },
+    {
+      "label": "What's Proven on Your Cluster",
+      "article": "whats-proven"
+    },
+    {
+      "label": "What's Coming",
+      "article": "whats-coming"
+    },
+    {
+      "separator": true
+    },
+    {
+      "label": "Show Welcome",
+      "command": "app:welcome",
+      "note": "Existing item, kept"
+    },
+    {
+      "label": "Show Keyboard Shortcuts",
+      "command": "app:shortcuts",
+      "note": "Carries the ⌘/ shortcut: the quick sheet. Keyboard Shortcuts above opens the full article"
+    },
+    {
+      "label": "Open Diagnostics…",
+      "command": "app:doctor",
+      "note": "Existing item, kept"
+    },
+    {
+      "label": "Show Activity Log",
+      "command": "app:activity",
+      "note": "Existing item, kept"
+    }
+  ],
+  "windowHelp": {
+    "dashboard": "dashboard",
+    "node": "node-window",
+    "containers": "containers",
+    "topology": "topology",
+    "switch": "switch-window",
+    "chat": "chat",
+    "server": "server",
+    "providers": "providers",
+    "vpn": "vpn",
+    "models": "models-window",
+    "terminal": "terminal",
+    "files": "files",
+    "workloads": "workloads",
+    "services": "services",
+    "fleet": "fleet-command",
+    "activity": "activity-log",
+    "inspect": "inspect-window",
+    "settings": "settings-window",
+    "planned": "whats-coming",
+    "tasks": "tasks",
+    "updates": "updates",
+    "connect": "connect-my-sparks",
+    "alerts": "alerts-window",
+    "cluster-metrics": "cluster-metrics",
+    "editor": "editor",
+    "endpoints": "endpoints",
+    "ollama": "ollama",
+    "fabric": "fabric",
+    "images": "images",
+    "help": "using-help",
+    "rdp": "rdp",
+    "howto": "how-to-library"
+  },
+  "settingsHelp": {
+    "general": "settings-general",
+    "appearance": "settings-appearance",
+    "login": "settings-cluster-login",
+    "nodes": "settings-nodes",
+    "switches": "settings-switches",
+    "data": "settings-data-source",
+    "scenarios": "settings-demo-scenarios",
+    "notifications": "settings-notifications",
+    "alerts": "settings-alerts",
+    "terminal": "settings-terminal",
+    "models": "settings-models",
+    "security": "settings-security",
+    "fence": "settings-fence",
+    "diagnostics": "settings-diagnostics"
+  },
+  "packages": {
+    "W-START": {
+      "folder": "start"
+    },
+    "W-DESK": {
+      "folder": "desk"
+    },
+    "W-MONITOR": {
+      "folder": "monitor"
+    },
+    "W-MODELS": {
+      "folder": "models"
+    },
+    "W-AI": {
+      "folder": "ai"
+    },
+    "W-OPS": {
+      "folder": "ops"
+    },
+    "W-REF": {
+      "folder": "reference"
+    }
+  },
+  "articles": [
+    {
+      "id": "getting-started",
+      "title": "Getting started with SparkBox",
+      "type": "tutorial",
+      "area": "start",
+      "package": "W-START",
+      "file": "start/getting-started.md",
+      "summary": "Learn SparkBox in Demo, rehearse running a model, connect your real nodes, then run a real model.",
+      "verified": null,
+      "related": [
+        "tour-the-demo",
+        "connect-your-cluster",
+        "your-first-model",
+        "download-a-model",
+        "load-a-model-on-one-node",
+        "chat-with-a-cluster-model"
+      ],
+      "keywords": [
+        "start",
+        "begin",
+        "first time",
+        "new",
+        "how do i start",
+        "where do i start",
+        "how to use sparkbox",
+        "how do i use this app",
+        "use this app",
+        "use sparkbox",
+        "im new",
+        "new here",
+        "new user",
+        "beginner",
+        "first steps",
+        "get started",
+        "what do i do first",
+        "set up sparkbox"
+      ],
+      "code": [
+        "src/components/Welcome.tsx",
+        "src/windows/ConnectWizard.tsx"
+      ]
+    },
+    {
+      "id": "what-is-sparkbox",
+      "title": "What SparkBox is",
+      "type": "concept",
+      "area": "start",
+      "package": "W-START",
+      "file": "start/what-is-sparkbox.md",
+      "summary": "SparkBox is a Mac app that shows you and helps you run your DGX Spark computers from one place.",
+      "verified": null,
+      "related": [
+        "your-cluster",
+        "getting-started"
+      ],
+      "keywords": [
+        "about",
+        "overview",
+        "what does it do",
+        "what does sparkbox do",
+        "what is this app",
+        "what is sparkbox"
+      ],
+      "code": [
+        "README.md",
+        "src/windows/registry.tsx"
+      ]
+    },
+    {
+      "id": "tour-the-demo",
+      "title": "Take a tour of the Demo",
+      "type": "tutorial",
+      "area": "start",
+      "package": "W-START",
+      "file": "start/tour-the-demo.md",
+      "summary": "Explore a simulated copy of your cluster, where nothing you do can reach a real node.",
+      "verified": null,
+      "related": [
+        "demo-and-live",
+        "sparkbox-window",
+        "your-first-model"
+      ],
+      "keywords": [
+        "demo",
+        "practice",
+        "try",
+        "simulated",
+        "try it without a cluster",
+        "without a cluster",
+        "no cluster",
+        "try sparkbox",
+        "practice without risk"
+      ],
+      "code": [
+        "src-tauri/src/demo.rs",
+        "src/components/Welcome.tsx",
+        "src/windows/Dashboard.tsx"
+      ]
+    },
+    {
+      "id": "connect-your-cluster",
+      "title": "Connect your cluster",
+      "type": "tutorial",
+      "area": "start",
+      "package": "W-START",
+      "file": "start/connect-your-cluster.md",
+      "summary": "Use Connect my Sparks to save your password, check every node and switch to Live data.",
+      "verified": false,
+      "related": [
+        "connect-my-sparks",
+        "save-the-cluster-password",
+        "check-your-nodes",
+        "trust-a-host-key"
+      ],
+      "keywords": [
+        "first launch",
+        "setup",
+        "wizard",
+        "live",
+        "connect to my cluster",
+        "connect my cluster",
+        "connect my sparks",
+        "use real cluster",
+        "use my real cluster",
+        "set up my cluster",
+        "set up sparkbox",
+        "add my sparks"
+      ],
+      "code": [
+        "src/windows/ConnectWizard.tsx",
+        "src-tauri/src/onboard.rs"
+      ]
+    },
+    {
+      "id": "your-cluster",
+      "title": "Your cluster at a glance",
+      "type": "concept",
+      "area": "start",
+      "package": "W-START",
+      "file": "start/your-cluster.md",
+      "summary": "What each part of your cluster does: four nodes, a fast fabric, a home network, a gateway and this Mac.",
+      "verified": null,
+      "related": [
+        "fabric-and-rdma",
+        "what-is-sparkbox"
+      ],
+      "keywords": [
+        "hardware",
+        "nodes",
+        "network",
+        "what do I have"
+      ],
+      "code": [
+        "README.md",
+        "src-tauri/src/demo/world.rs"
+      ]
+    },
+    {
+      "id": "demo-and-live",
+      "title": "Demo and Live",
+      "type": "concept",
+      "area": "start",
+      "package": "W-START",
+      "file": "start/demo-and-live.md",
+      "summary": "Demo is a simulated cluster where nothing is real. Live is your real Sparks over SSH.",
+      "verified": null,
+      "related": [
+        "switch-between-demo-and-live",
+        "settings-data-source"
+      ],
+      "keywords": [
+        "demo",
+        "live",
+        "simulator",
+        "fake",
+        "real",
+        "difference between demo and live",
+        "demo or live",
+        "is this real data"
+      ],
+      "code": [
+        "src/windows/settings/DataSourceSection.tsx",
+        "src/lib/dataSource.ts",
+        "src-tauri/src/demo.rs"
+      ]
+    },
+    {
+      "id": "admin-mode",
+      "title": "Read-only, Admin mode and Look only",
+      "type": "concept",
+      "area": "safety",
+      "package": "W-START",
+      "file": "start/admin-mode.md",
+      "summary": "A change you ask for needs Admin mode, which locks by itself. Look-only mode goes further and stops SparkBox's own work.",
+      "verified": null,
+      "related": [
+        "unlock-admin-mode",
+        "use-look-only-mode",
+        "settings-security"
+      ],
+      "keywords": [
+        "admin",
+        "locked",
+        "padlock",
+        "permission",
+        "touch id",
+        "fingerprint",
+        "read only"
+      ],
+      "code": [
+        "src/lib/admin.ts",
+        "src-tauri/src/admin.rs",
+        "src/components/TopBar.tsx"
+      ]
+    },
+    {
+      "id": "ssh-sudo-and-host-keys",
+      "title": "SSH, sudo and host keys",
+      "type": "concept",
+      "area": "safety",
+      "package": "W-START",
+      "file": "start/ssh-sudo-and-host-keys.md",
+      "summary": "How SparkBox logs in to a node, runs commands as root, and makes sure it's talking to the right machine.",
+      "verified": null,
+      "related": [
+        "trust-a-host-key",
+        "save-the-cluster-password",
+        "set-up-key-login"
+      ],
+      "keywords": [
+        "ssh",
+        "sudo",
+        "root",
+        "fingerprint",
+        "login"
+      ],
+      "code": [
+        "src-tauri/src/live/ssh.rs",
+        "src-tauri/src/onboard.rs",
+        "src/windows/settings/LoginSection.tsx"
+      ]
+    },
+    {
+      "id": "keychain-and-secrets",
+      "title": "Where your passwords and keys go",
+      "type": "concept",
+      "area": "safety",
+      "package": "W-START",
+      "file": "start/keychain-and-secrets.md",
+      "summary": "SparkBox keeps your passwords and keys in the macOS Keychain, out of its files, logs and command lines.",
+      "verified": null,
+      "related": [
+        "save-the-cluster-password",
+        "settings-security"
+      ],
+      "keywords": [
+        "password",
+        "keychain",
+        "secret",
+        "security",
+        "privacy"
+      ],
+      "code": [
+        "src-tauri/src/secrets.rs",
+        "src-tauri/src/live/audit.rs",
+        "src/windows/settings/LoginSection.tsx"
+      ]
+    },
+    {
+      "id": "the-fence",
+      "testBuild": true,
+      "title": "The Fence",
+      "type": "concept",
+      "area": "safety",
+      "package": "W-START",
+      "file": "start/the-fence.md",
+      "summary": "The Fence limits what the test build may change. The SparkBox app itself doesn't need one.",
+      "verified": null,
+      "related": [
+        "open-a-fence",
+        "settings-fence",
+        "admin-mode",
+        "leases-and-identity"
+      ],
+      "keywords": [
+        "fence",
+        "test build",
+        "write fence",
+        "change window"
+      ],
+      "code": [
+        "src-tauri/src/live/exit.rs",
+        "src-tauri/src/live/fence.rs",
+        "src/lib/fence.ts",
+        "src/windows/settings/FenceSection.tsx"
+      ]
+    },
+    {
+      "id": "leases-and-identity",
+      "title": "Controller lease and identity pin",
+      "type": "concept",
+      "area": "safety",
+      "package": "W-START",
+      "file": "start/leases-and-identity.md",
+      "summary": "Two checks before any change: one SparkBox at a time starts changes on a node, and the node must be the machine it was.",
+      "verified": null,
+      "related": [
+        "settings-fence",
+        "the-fence"
+      ],
+      "keywords": [
+        "lease",
+        "identity",
+        "pin",
+        "re-pin",
+        "machine-id"
+      ],
+      "code": [
+        "src-tauri/src/live/lease.rs",
+        "src-tauri/src/live/identity_pin.rs",
+        "src/windows/settings/FenceSection.tsx"
+      ]
+    },
+    {
+      "id": "save-the-cluster-password",
+      "title": "Save the cluster password",
+      "type": "howto",
+      "area": "safety",
+      "package": "W-START",
+      "file": "start/save-the-cluster-password.md",
+      "summary": "Put the one password your nodes share into the Keychain, so that SparkBox can log in and use sudo.",
+      "verified": false,
+      "related": [
+        "keychain-and-secrets",
+        "settings-cluster-login",
+        "connect-your-cluster"
+      ],
+      "keywords": [
+        "password",
+        "keychain",
+        "login",
+        "sudo",
+        "change my password",
+        "change the password",
+        "change password",
+        "new password",
+        "update password",
+        "wrong password",
+        "password stopped working",
+        "password keeps failing",
+        "password not working",
+        "password failing"
+      ],
+      "code": [
+        "src/windows/settings/LoginSection.tsx",
+        "src/windows/settings/DataSourceSection.tsx",
+        "src-tauri/src/secrets.rs"
+      ]
+    },
+    {
+      "id": "get-a-gpu-driver-answering",
+      "title": "Get a node's GPU driver answering again",
+      "type": "howto",
+      "area": "ops",
+      "package": "W-START",
+      "file": "start/get-a-gpu-driver-answering.md",
+      "summary": "Record what's wrong, restart the node from SparkBox so that its checks run first, then test the GPU.",
+      "verified": false,
+      "related": [
+        "restart-a-node",
+        "check-your-nodes",
+        "collect-diagnostics",
+        "capture-evidence"
+      ],
+      "keywords": [
+        "gpu driver",
+        "nvidia-smi",
+        "gpu not answering",
+        "gpu not responding",
+        "gpu stopped working",
+        "driver broken",
+        "if the gpu driver doesn't answer"
+      ],
+      "code": [
+        "src-tauri/src/onboard.rs",
+        "src-tauri/src/ops/prereboot.rs",
+        "src/windows/node/GpuTab.tsx",
+        "src/windows/settings/NodesSection.tsx"
+      ]
+    },
+    {
+      "id": "check-your-nodes",
+      "title": "Check that your nodes are ready",
+      "type": "howto",
+      "area": "start",
+      "package": "W-START",
+      "file": "start/check-your-nodes.md",
+      "summary": "Run the connection checks on every node: SSH, host key, login, sudo, Python, Docker, the GPU driver and the fabric.",
+      "verified": false,
+      "related": [
+        "connect-my-sparks",
+        "trust-a-host-key",
+        "errors-connection",
+        "get-a-gpu-driver-answering"
+      ],
+      "keywords": [
+        "check",
+        "probe",
+        "sudo check",
+        "test connection",
+        "test my connection",
+        "can sparkbox reach my nodes"
+      ],
+      "code": [
+        "src/windows/ConnectWizard.tsx",
+        "src-tauri/src/onboard.rs"
+      ]
+    },
+    {
+      "id": "add-or-change-a-node",
+      "title": "Add or change a node",
+      "type": "howto",
+      "area": "start",
+      "package": "W-START",
+      "file": "start/add-or-change-a-node.md",
+      "summary": "Change a node's name, address or order in the inventory, or add a new one, and test it before saving.",
+      "verified": false,
+      "related": [
+        "settings-nodes",
+        "check-your-nodes"
+      ],
+      "keywords": [
+        "add node",
+        "inventory",
+        "ip address",
+        "hostname",
+        "add a new node",
+        "add a node",
+        "new node",
+        "replace a node",
+        "change a node ip",
+        "rename a node"
+      ],
+      "code": [
+        "src/windows/settings/NodesSection.tsx",
+        "src-tauri/src/inventory.rs"
+      ]
+    },
+    {
+      "id": "trust-a-host-key",
+      "title": "Trust a node's host key",
+      "type": "howto",
+      "area": "safety",
+      "package": "W-START",
+      "file": "start/trust-a-host-key.md",
+      "summary": "Confirm that a node is the machine you expect the first time you connect, or after you rebuild it.",
+      "verified": false,
+      "related": [
+        "ssh-sudo-and-host-keys",
+        "check-your-nodes"
+      ],
+      "keywords": [
+        "host key",
+        "fingerprint",
+        "trust",
+        "review",
+        "changed key",
+        "host key changed",
+        "key changed warning"
+      ],
+      "code": [
+        "src/lib/nodeStatus.ts",
+        "src/windows/ConnectWizard.tsx",
+        "src/windows/settings/DiagnosticsSection.tsx"
+      ]
+    },
+    {
+      "id": "set-up-key-login",
+      "title": "Set up key login",
+      "type": "howto",
+      "area": "safety",
+      "package": "W-START",
+      "file": "start/set-up-key-login.md",
+      "summary": "Log in to your nodes with an SSH key instead of the password, and optionally turn password login off.",
+      "verified": false,
+      "related": [
+        "settings-cluster-login",
+        "ssh-sudo-and-host-keys"
+      ],
+      "keywords": [
+        "ssh key",
+        "1password",
+        "secretive",
+        "ssh agent",
+        "passwordless",
+        "log in without a password"
+      ],
+      "code": [
+        "src/windows/settings/LoginSection.tsx"
+      ]
+    },
+    {
+      "id": "add-switches-and-gateway",
+      "title": "Add your switches and gateway",
+      "type": "howto",
+      "area": "network",
+      "package": "W-START",
+      "file": "start/add-switches-and-gateway.md",
+      "summary": "Tell SparkBox the addresses of your CRS804, Firewalla Switch X and Firewalla Gold so that it can watch them.",
+      "verified": false,
+      "related": [
+        "settings-switches",
+        "switch-window",
+        "firewalla-view"
+      ],
+      "keywords": [
+        "crs804",
+        "firewalla",
+        "routeros",
+        "rest",
+        "switch"
+      ],
+      "code": [
+        "src/windows/settings/SwitchesSection.tsx",
+        "src/windows/ConnectWizard.tsx",
+        "src-tauri/src/routeros/commands.rs"
+      ]
+    },
+    {
+      "id": "switch-between-demo-and-live",
+      "title": "Switch between Demo and Live",
+      "type": "howto",
+      "area": "start",
+      "package": "W-START",
+      "file": "start/switch-between-demo-and-live.md",
+      "summary": "Change what SparkBox shows: the simulated cluster, or your real one.",
+      "verified": false,
+      "related": [
+        "demo-and-live",
+        "settings-data-source"
+      ],
+      "keywords": [
+        "demo",
+        "live",
+        "data source",
+        "change mode",
+        "use real cluster",
+        "real data",
+        "fake data",
+        "leave demo",
+        "go live",
+        "get out of demo",
+        "stop using demo",
+        "turn off demo"
+      ],
+      "code": [
+        "src/windows/settings/DataSourceSection.tsx",
+        "src-tauri/src/menu.rs"
+      ]
+    },
+    {
+      "id": "unlock-admin-mode",
+      "title": "Unlock Admin mode",
+      "type": "howto",
+      "area": "safety",
+      "package": "W-START",
+      "file": "start/unlock-admin-mode.md",
+      "summary": "Allow changes with Touch ID or your Mac password, then lock again when you're done.",
+      "verified": false,
+      "related": [
+        "admin-mode",
+        "settings-security"
+      ],
+      "keywords": [
+        "admin",
+        "unlock",
+        "touch id",
+        "fingerprint",
+        "padlock",
+        "requires admin",
+        "make changes",
+        "cant make changes",
+        "why cant i change anything",
+        "buttons greyed out",
+        "buttons grayed out",
+        "buttons dimmed"
+      ],
+      "code": [
+        "src/lib/admin.ts",
+        "src/components/TopBar.tsx",
+        "src-tauri/src/admin.rs"
+      ]
+    },
+    {
+      "id": "open-a-fence",
+      "testBuild": true,
+      "title": "Let the test build make changes for a limited time",
+      "type": "howto",
+      "area": "safety",
+      "package": "W-START",
+      "file": "start/open-a-fence.md",
+      "summary": "Open a fence so that the test build can change chosen nodes for a limited time. Your own work never needs one.",
+      "verified": false,
+      "related": [
+        "the-fence",
+        "settings-fence",
+        "leases-and-identity"
+      ],
+      "keywords": [
+        "fence",
+        "open a fence",
+        "close fence",
+        "test build",
+        "change window",
+        "t1",
+        "t2"
+      ],
+      "code": [
+        "src/windows/settings/FenceSection.tsx",
+        "src/lib/fence.ts",
+        "src/components/FenceBanner.tsx",
+        "src-tauri/src/live/exit.rs"
+      ]
+    },
+    {
+      "id": "use-look-only-mode",
+      "title": "Use look-only mode",
+      "type": "howto",
+      "area": "safety",
+      "package": "W-START",
+      "file": "start/use-look-only-mode.md",
+      "summary": "Stop SparkBox starting any change while you look around, or while someone else is using your Mac.",
+      "verified": false,
+      "related": [
+        "admin-mode",
+        "settings-security"
+      ],
+      "keywords": [
+        "look only",
+        "read only",
+        "safe",
+        "lock everything",
+        "make sparkbox read only",
+        "block all changes"
+      ],
+      "code": [
+        "src/windows/settings/SecuritySection.tsx",
+        "src-tauri/src/admin.rs"
+      ]
+    },
+    {
+      "id": "connect-my-sparks",
+      "title": "Connect my Sparks",
+      "type": "feature",
+      "area": "start",
+      "package": "W-START",
+      "file": "start/connect-my-sparks.md",
+      "summary": "The setup wizard: account, nodes, checks, VPN, switches, then Live data.",
+      "verified": false,
+      "related": [
+        "connect-your-cluster",
+        "check-your-nodes"
+      ],
+      "keywords": [
+        "wizard",
+        "setup",
+        "onboarding"
+      ],
+      "code": [
+        "src/windows/ConnectWizard.tsx",
+        "src-tauri/src/onboard.rs"
+      ]
+    },
+    {
+      "id": "settings-window",
+      "title": "Settings",
+      "type": "feature",
+      "area": "settings",
+      "package": "W-START",
+      "file": "start/settings-window.md",
+      "summary": "All of SparkBox's settings in one window, with a search box and 14 sections.",
+      "verified": null,
+      "related": [
+        "save-the-cluster-password",
+        "add-or-change-a-node",
+        "switch-between-demo-and-live",
+        "settings-general",
+        "settings-security"
+      ],
+      "keywords": [
+        "settings",
+        "preferences",
+        "options"
+      ],
+      "code": [
+        "src/windows/Settings.tsx",
+        "src/windows/settings/index.ts"
+      ]
+    },
+    {
+      "id": "settings-cluster-login",
+      "title": "Settings: Cluster login",
+      "type": "feature",
+      "area": "settings",
+      "package": "W-START",
+      "file": "start/settings-cluster-login.md",
+      "summary": "The account SparkBox uses on every node and how it logs in: SSH agent, key file or password.",
+      "verified": false,
+      "related": [
+        "save-the-cluster-password",
+        "set-up-key-login"
+      ],
+      "keywords": [
+        "password",
+        "ssh",
+        "login",
+        "agent",
+        "key file"
+      ],
+      "code": [
+        "src/windows/settings/LoginSection.tsx"
+      ]
+    },
+    {
+      "id": "settings-nodes",
+      "title": "Settings: Nodes",
+      "type": "feature",
+      "area": "settings",
+      "package": "W-START",
+      "file": "start/settings-nodes.md",
+      "summary": "The list of your nodes: name, hostname, IP address, model and SSH port, with a test for each.",
+      "verified": false,
+      "related": [
+        "add-or-change-a-node",
+        "connect-my-sparks"
+      ],
+      "keywords": [
+        "inventory",
+        "hostname",
+        "ip fallback",
+        "ssh port",
+        "wake"
+      ],
+      "code": [
+        "src/windows/settings/NodesSection.tsx"
+      ]
+    },
+    {
+      "id": "settings-switches",
+      "title": "Settings: Switches & gateway",
+      "type": "feature",
+      "area": "settings",
+      "package": "W-START",
+      "file": "start/settings-switches.md",
+      "summary": "Addresses and login for the CRS804 DDQ, the Firewalla Switch X and the Firewalla Gold, and the optional Firewalla cloud.",
+      "verified": false,
+      "related": [
+        "add-switches-and-gateway",
+        "switch-window",
+        "connect-firewalla-cloud"
+      ],
+      "keywords": [
+        "crs804",
+        "firewalla",
+        "rest",
+        "routeros",
+        "msp",
+        "firewalla cloud"
+      ],
+      "code": [
+        "src/windows/settings/SwitchesSection.tsx"
+      ]
+    },
+    {
+      "id": "settings-data-source",
+      "title": "Settings: Data source",
+      "type": "feature",
+      "area": "settings",
+      "package": "W-START",
+      "file": "start/settings-data-source.md",
+      "summary": "Choose Demo or Live. Each keeps its own tasks, chats and terminal sessions.",
+      "verified": false,
+      "related": [
+        "demo-and-live",
+        "switch-between-demo-and-live"
+      ],
+      "keywords": [
+        "demo",
+        "live",
+        "data"
+      ],
+      "code": [
+        "src/windows/settings/DataSourceSection.tsx"
+      ]
+    },
+    {
+      "id": "settings-security",
+      "title": "Settings: Security & privacy",
+      "type": "feature",
+      "area": "settings",
+      "package": "W-START",
+      "file": "start/settings-security.md",
+      "summary": "Look-only mode, when Admin mode locks, open SSH tunnels, how long the activity log is kept, and exports.",
+      "verified": false,
+      "related": [
+        "admin-mode",
+        "unlock-admin-mode",
+        "use-look-only-mode",
+        "find-what-sparkbox-did"
+      ],
+      "keywords": [
+        "admin",
+        "lock after",
+        "retention",
+        "tunnels",
+        "privacy"
+      ],
+      "code": [
+        "src/windows/settings/SecuritySection.tsx",
+        "src-tauri/src/admin.rs"
+      ]
+    },
+    {
+      "id": "settings-fence",
+      "testBuild": true,
+      "title": "Settings: Fence",
+      "type": "feature",
+      "area": "settings",
+      "package": "W-START",
+      "file": "start/settings-fence.md",
+      "summary": "Only the test build uses a fence. Your SparkBox app needs Admin mode and nothing else.",
+      "verified": false,
+      "related": [
+        "open-a-fence",
+        "unlock-admin-mode",
+        "trust-a-host-key",
+        "the-fence",
+        "leases-and-identity"
+      ],
+      "keywords": [
+        "fence",
+        "lease",
+        "identity",
+        "re-pin",
+        "test build",
+        "t1",
+        "t2",
+        "classes of change"
+      ],
+      "code": [
+        "src/windows/settings/FenceSection.tsx",
+        "src/lib/fence.ts",
+        "src-tauri/src/live/fence.rs",
+        "src-tauri/src/live/exit.rs"
+      ]
+    },
+    {
+      "id": "arrange-your-windows",
+      "title": "Arrange your windows",
+      "type": "howto",
+      "area": "desk",
+      "package": "W-DESK",
+      "file": "desk/arrange-your-windows.md",
+      "summary": "Tile, snap and cascade windows, save a layout, and move a window to a second screen.",
+      "verified": null,
+      "related": [
+        "windows-and-layouts",
+        "keyboard-shortcuts"
+      ],
+      "keywords": [
+        "tile",
+        "snap",
+        "layout",
+        "second screen",
+        "cascade",
+        "organize",
+        "save window layout",
+        "tile windows",
+        "windows side by side",
+        "organize windows",
+        "windows overlap",
+        "second monitor",
+        "open window on second monitor"
+      ],
+      "code": [
+        "src/wm/WindowManager.tsx",
+        "src/wm/geometry.ts",
+        "src/components/WindowsMenu.tsx"
+      ]
+    },
+    {
+      "id": "open-a-terminal",
+      "title": "Open a terminal on a node",
+      "type": "howto",
+      "area": "tools",
+      "package": "W-DESK",
+      "file": "desk/open-a-terminal.md",
+      "summary": "Get a command prompt on a node, inside a container, or follow a log, from a tab in Terminal.",
+      "verified": false,
+      "related": [
+        "terminal",
+        "settings-terminal"
+      ],
+      "keywords": [
+        "ssh",
+        "shell",
+        "command line",
+        "console",
+        "terminal",
+        "ssh into a node",
+        "log in to a node",
+        "log into a node",
+        "open terminal",
+        "type commands on a node"
+      ],
+      "code": [
+        "src/windows/TerminalWindow.tsx",
+        "src/windows/terminal/QuickConnect.tsx",
+        "src/lib/terminals.ts"
+      ]
+    },
+    {
+      "id": "copy-files",
+      "title": "Copy files between your Mac and a node",
+      "type": "howto",
+      "area": "tools",
+      "package": "W-DESK",
+      "file": "desk/copy-files.md",
+      "summary": "Move files between This Mac and a node in the two-pane Files window, and choose what happens to name clashes.",
+      "verified": false,
+      "related": [
+        "files",
+        "delete-and-restore-files"
+      ],
+      "keywords": [
+        "upload",
+        "download file",
+        "transfer",
+        "sftp",
+        "move files",
+        "scp",
+        "copy files to my mac",
+        "send a file",
+        "copy a file to a node",
+        "upload a file",
+        "move a file between nodes"
+      ],
+      "code": [
+        "src/windows/FilesWindow.tsx",
+        "src/lib/transfers.ts",
+        "src-tauri/src/files/transfer.rs"
+      ]
+    },
+    {
+      "id": "edit-a-file",
+      "title": "Edit a file on a node",
+      "type": "howto",
+      "area": "tools",
+      "package": "W-DESK",
+      "file": "desk/edit-a-file.md",
+      "summary": "Open a text file on a node, change it, check the difference and save it safely.",
+      "verified": false,
+      "related": [
+        "editor",
+        "read-a-root-only-file"
+      ],
+      "keywords": [
+        "edit",
+        "editor",
+        "config file",
+        "yaml",
+        "netplan",
+        "edit a config file",
+        "change a config file",
+        "change a file on a node"
+      ],
+      "code": [
+        "src/windows/EditorWindow.tsx",
+        "src-tauri/src/files/mod.rs"
+      ]
+    },
+    {
+      "id": "read-a-root-only-file",
+      "title": "Read a file only root can read",
+      "type": "howto",
+      "area": "tools",
+      "package": "W-DESK",
+      "file": "desk/read-a-root-only-file.md",
+      "summary": "Open a protected file with Read with sudo, which uses SparkBox's own checked root helper.",
+      "verified": false,
+      "related": [
+        "edit-a-file",
+        "ssh-sudo-and-host-keys"
+      ],
+      "keywords": [
+        "sudo",
+        "root",
+        "permission denied",
+        "read with sudo",
+        "protected",
+        "run as root",
+        "open a protected file"
+      ],
+      "code": [
+        "src/windows/EditorWindow.tsx",
+        "src-tauri/src/files/mod.rs"
+      ]
+    },
+    {
+      "id": "delete-and-restore-files",
+      "title": "Delete and restore files",
+      "type": "howto",
+      "area": "tools",
+      "package": "W-DESK",
+      "file": "desk/delete-and-restore-files.md",
+      "summary": "Move files to the Trash, put them back, and bring back an earlier version of a file.",
+      "verified": false,
+      "related": [
+        "files",
+        "editor"
+      ],
+      "keywords": [
+        "trash",
+        "delete",
+        "undo",
+        "restore",
+        "previous versions",
+        "recover deleted file",
+        "get a file back",
+        "undo delete",
+        "restore a file",
+        "deleted by mistake"
+      ],
+      "code": [
+        "src/windows/FilesWindow.tsx",
+        "src/windows/EditorWindow.tsx",
+        "src-tauri/src/files/mod.rs"
+      ]
+    },
+    {
+      "id": "back-up-sparkbox",
+      "title": "Back up SparkBox",
+      "type": "howto",
+      "area": "settings",
+      "package": "W-DESK",
+      "file": "desk/back-up-sparkbox.md",
+      "summary": "Keep a copy of SparkBox's settings by copying its folders, and check you can get your passwords back.",
+      "verified": null,
+      "related": [
+        "reset-sparkbox",
+        "files-and-folders",
+        "keychain-and-secrets"
+      ],
+      "keywords": [
+        "backup",
+        "save settings",
+        "move to a new mac",
+        "export",
+        "back up settings",
+        "back up sparkbox",
+        "save my settings"
+      ],
+      "code": [
+        "src-tauri/src/lib.rs",
+        "src-tauri/src/identity.rs",
+        "src-tauri/src/inventory.rs",
+        "src-tauri/src/util.rs"
+      ]
+    },
+    {
+      "id": "restore-sparkbox",
+      "title": "Restore SparkBox from a backup",
+      "type": "howto",
+      "area": "settings",
+      "package": "W-DESK",
+      "file": "desk/restore-sparkbox.md",
+      "summary": "Put a backup of SparkBox's folders back in place, on this Mac or on a new one.",
+      "verified": null,
+      "related": [
+        "back-up-sparkbox",
+        "reset-sparkbox",
+        "files-and-folders",
+        "keychain-and-secrets"
+      ],
+      "keywords": [
+        "restore",
+        "restore backup",
+        "new mac",
+        "put settings back",
+        "recover settings"
+      ],
+      "code": [
+        "src-tauri/src/lib.rs",
+        "src-tauri/src/identity.rs",
+        "src-tauri/src/inventory.rs",
+        "src-tauri/src/util.rs"
+      ]
+    },
+    {
+      "id": "reset-sparkbox",
+      "title": "Reset SparkBox",
+      "type": "howto",
+      "area": "settings",
+      "package": "W-DESK",
+      "file": "desk/reset-sparkbox.md",
+      "summary": "Start clean by moving SparkBox's folder aside, and know what that keeps and loses.",
+      "verified": null,
+      "related": [
+        "back-up-sparkbox",
+        "files-and-folders"
+      ],
+      "keywords": [
+        "reset",
+        "start over",
+        "factory",
+        "clean",
+        "reinstall",
+        "start again from scratch",
+        "erase sparkbox settings"
+      ],
+      "code": [
+        "src-tauri/src/lib.rs",
+        "src-tauri/src/identity.rs",
+        "src-tauri/src/util.rs",
+        "src/components/CoreBanner.tsx"
+      ]
+    },
+    {
+      "id": "sparkbox-window",
+      "title": "The SparkBox window",
+      "type": "feature",
+      "area": "desk",
+      "package": "W-DESK",
+      "file": "desk/sparkbox-window.md",
+      "summary": "A tour of the main window: sidebar, top bar, the desk where windows open, and the status bar.",
+      "verified": null,
+      "related": [
+        "top-bar-and-status-bar",
+        "windows-and-layouts",
+        "command-palette"
+      ],
+      "keywords": [
+        "sidebar",
+        "main window",
+        "launcher",
+        "welcome",
+        "start"
+      ],
+      "code": [
+        "src/App.tsx",
+        "src/components/Sidebar.tsx",
+        "src/components/Launcher.tsx",
+        "src/components/Welcome.tsx"
+      ]
+    },
+    {
+      "id": "top-bar-and-status-bar",
+      "title": "The top bar and status bar",
+      "type": "feature",
+      "area": "desk",
+      "package": "W-DESK",
+      "file": "desk/top-bar-and-status-bar.md",
+      "summary": "What every word, chip and count in the top and bottom bars means, and what clicking it does.",
+      "verified": null,
+      "related": [
+        "status-words",
+        "admin-mode"
+      ],
+      "keywords": [
+        "top bar",
+        "status bar",
+        "24/7",
+        "padlock",
+        "chips",
+        "stale"
+      ],
+      "code": [
+        "src/components/TopBar.tsx",
+        "src/components/StatusBar.tsx",
+        "src/components/TasksChip.tsx"
+      ]
+    },
+    {
+      "id": "windows-and-layouts",
+      "title": "Windows and layouts",
+      "type": "feature",
+      "area": "desk",
+      "package": "W-DESK",
+      "file": "desk/windows-and-layouts.md",
+      "summary": "How SparkBox's windows behave: tiling, snapping, closing with Undo, saved layouts and separate windows.",
+      "verified": null,
+      "related": [
+        "arrange-your-windows",
+        "keyboard-shortcuts"
+      ],
+      "keywords": [
+        "windows",
+        "tile",
+        "dock",
+        "minimize",
+        "undo"
+      ],
+      "code": [
+        "src/wm/WindowManager.tsx",
+        "src/wm/geometry.ts",
+        "src/components/WindowsMenu.tsx",
+        "src/wm/PopoutRoot.tsx"
+      ]
+    },
+    {
+      "id": "command-palette",
+      "title": "The command palette",
+      "type": "feature",
+      "area": "desk",
+      "package": "W-DESK",
+      "file": "desk/command-palette.md",
+      "summary": "Press ⌘K, type a few letters, and go anywhere or run almost anything.",
+      "verified": null,
+      "related": [
+        "keyboard-shortcuts",
+        "sparkbox-window"
+      ],
+      "keywords": [
+        "search",
+        "cmd k",
+        "find",
+        "quick",
+        "palette"
+      ],
+      "code": [
+        "src/components/CommandPalette.tsx",
+        "src/lib/commands.ts"
+      ]
+    },
+    {
+      "id": "menu-bar-icon",
+      "title": "The menu bar icon",
+      "type": "feature",
+      "area": "desk",
+      "package": "W-DESK",
+      "file": "desk/menu-bar-icon.md",
+      "summary": "SparkBox's icon at the top of your screen shows the cluster at a glance and keeps running when the window closes.",
+      "verified": null,
+      "related": [
+        "settings-general",
+        "top-bar-and-status-bar"
+      ],
+      "keywords": [
+        "menu bar",
+        "tray",
+        "close window",
+        "keep running",
+        "dock badge"
+      ],
+      "code": [
+        "src-tauri/src/tray.rs",
+        "src/windows/settings/GeneralSection.tsx"
+      ]
+    },
+    {
+      "id": "tables-and-menus",
+      "title": "Lists, tables and right-click menus",
+      "type": "feature",
+      "area": "desk",
+      "package": "W-DESK",
+      "file": "desk/tables-and-menus.md",
+      "summary": "Every list in SparkBox works the same way: sort, filter, choose columns, select rows and right-click.",
+      "verified": null,
+      "related": [
+        "windows-and-layouts",
+        "keyboard-shortcuts"
+      ],
+      "keywords": [
+        "table",
+        "columns",
+        "sort",
+        "right click",
+        "context menu",
+        "filter"
+      ],
+      "code": [
+        "src/components/Table.tsx",
+        "src/components/ContextMenuHost.tsx",
+        "src/lib/contextMenu.ts",
+        "src/components/Toasts.tsx"
+      ]
+    },
+    {
+      "id": "terminal",
+      "title": "Terminal",
+      "type": "feature",
+      "area": "tools",
+      "package": "W-DESK",
+      "file": "desk/terminal.md",
+      "summary": "Tabs of real command-line sessions on your nodes, with broadcast, search and read-only log tabs.",
+      "verified": false,
+      "related": [
+        "open-a-terminal",
+        "settings-terminal"
+      ],
+      "keywords": [
+        "shell",
+        "ssh",
+        "broadcast",
+        "logs",
+        "journal"
+      ],
+      "code": [
+        "src/windows/TerminalWindow.tsx",
+        "src/windows/terminal/TabBar.tsx",
+        "src/windows/terminal/FindBar.tsx",
+        "src/windows/terminal/LockedBanner.tsx",
+        "src-tauri/src/term/mod.rs"
+      ]
+    },
+    {
+      "id": "files",
+      "title": "Files",
+      "type": "feature",
+      "area": "tools",
+      "package": "W-DESK",
+      "file": "desk/files.md",
+      "summary": "Two side-by-side panes, each showing This Mac or a node, for browsing, copying and managing files.",
+      "verified": false,
+      "related": [
+        "copy-files",
+        "delete-and-restore-files",
+        "edit-a-file"
+      ],
+      "keywords": [
+        "files",
+        "transfers",
+        "trash",
+        "favourites",
+        "panes"
+      ],
+      "code": [
+        "src/windows/FilesWindow.tsx",
+        "src/windows/files/Pane.tsx",
+        "src/windows/files/TransferQueue.tsx",
+        "src/windows/files/ConflictSheet.tsx",
+        "src/windows/files/InfoPopover.tsx"
+      ]
+    },
+    {
+      "id": "editor",
+      "title": "Editor",
+      "type": "feature",
+      "area": "tools",
+      "package": "W-DESK",
+      "file": "desk/editor.md",
+      "summary": "A text editor for files on your nodes and this Mac, with safe saving, diffs and previous versions.",
+      "verified": false,
+      "related": [
+        "edit-a-file",
+        "read-a-root-only-file"
+      ],
+      "keywords": [
+        "editor",
+        "save",
+        "diff",
+        "previous versions"
+      ],
+      "code": [
+        "src/windows/EditorWindow.tsx",
+        "src/windows/files/editor/DiffView.tsx",
+        "src/lib/editorBuffers.ts"
+      ]
+    },
+    {
+      "id": "settings-general",
+      "title": "Settings: General",
+      "type": "feature",
+      "area": "settings",
+      "package": "W-DESK",
+      "file": "desk/settings-general.md",
+      "summary": "Keep SparkBox in the menu bar, start it at login, and show upcoming features.",
+      "verified": null,
+      "related": [
+        "back-up-sparkbox",
+        "restore-sparkbox",
+        "reset-sparkbox",
+        "menu-bar-icon",
+        "settings-window"
+      ],
+      "keywords": [
+        "login",
+        "startup",
+        "upcoming",
+        "coming soon"
+      ],
+      "code": [
+        "src/windows/settings/GeneralSection.tsx"
+      ]
+    },
+    {
+      "id": "settings-appearance",
+      "title": "Settings: Appearance",
+      "type": "feature",
+      "area": "settings",
+      "package": "W-DESK",
+      "file": "desk/settings-appearance.md",
+      "summary": "Theme, text size, reduced motion and higher contrast.",
+      "verified": null,
+      "related": [
+        "arrange-your-windows",
+        "settings-window"
+      ],
+      "keywords": [
+        "dark mode",
+        "light mode",
+        "font size",
+        "contrast",
+        "accessibility",
+        "light theme",
+        "dark theme",
+        "change the theme",
+        "theme",
+        "make text bigger",
+        "bigger text",
+        "larger text",
+        "text size"
+      ],
+      "code": [
+        "src/windows/settings/AppearanceSection.tsx",
+        "src/lib/theme.ts"
+      ]
+    },
+    {
+      "id": "settings-demo-scenarios",
+      "title": "Settings: Demo scenarios",
+      "type": "feature",
+      "area": "settings",
+      "package": "W-DESK",
+      "file": "desk/settings-demo-scenarios.md",
+      "summary": "Make the simulated cluster act out a failure, so that you can practice before it happens for real.",
+      "verified": null,
+      "related": [
+        "demo-and-live",
+        "tour-the-demo"
+      ],
+      "keywords": [
+        "scenario",
+        "simulate",
+        "failure",
+        "practice",
+        "demo"
+      ],
+      "code": [
+        "src/windows/settings/ScenariosSection.tsx",
+        "src-tauri/src/demo/scenarios.rs"
+      ]
+    },
+    {
+      "id": "settings-terminal",
+      "title": "Settings: Terminal",
+      "type": "feature",
+      "area": "settings",
+      "package": "W-DESK",
+      "file": "desk/settings-terminal.md",
+      "summary": "How long idle shells stay open, and how the terminal looks and behaves.",
+      "verified": false,
+      "related": [
+        "terminal",
+        "open-a-terminal"
+      ],
+      "keywords": [
+        "font",
+        "theme",
+        "scrollback",
+        "option key",
+        "idle"
+      ],
+      "code": [
+        "src/windows/settings/TerminalSection.tsx",
+        "src/windows/terminal/prefs.ts"
+      ]
+    },
+    {
+      "id": "read-the-dashboard",
+      "title": "Read the Dashboard",
+      "type": "howto",
+      "area": "monitor",
+      "package": "W-MONITOR",
+      "file": "monitor/read-the-dashboard.md",
+      "summary": "Learn what each part of the Dashboard tells you, and spot a problem in a few seconds.",
+      "verified": false,
+      "related": [
+        "dashboard",
+        "status-words",
+        "respond-to-an-alert"
+      ],
+      "keywords": [
+        "dashboard",
+        "overview",
+        "health",
+        "what does this mean",
+        "gpu usage",
+        "gpu temperature",
+        "how is my cluster doing",
+        "is everything ok",
+        "cluster health",
+        "how busy are my nodes"
+      ],
+      "code": [
+        "src/windows/Dashboard.tsx",
+        "src/lib/metrics.ts",
+        "src/lib/health.ts"
+      ]
+    },
+    {
+      "id": "read-the-charts",
+      "title": "Read the charts",
+      "type": "howto",
+      "area": "monitor",
+      "package": "W-MONITOR",
+      "file": "monitor/read-the-charts.md",
+      "summary": "Change the time range, read exact values, use the log scale and copy a chart's data.",
+      "verified": false,
+      "related": [
+        "node-window",
+        "cluster-metrics"
+      ],
+      "keywords": [
+        "chart",
+        "graph",
+        "history",
+        "time range",
+        "log scale",
+        "gpu usage",
+        "gpu load over time",
+        "how busy was the gpu",
+        "see past activity"
+      ],
+      "code": [
+        "src/components/TimeChart.tsx",
+        "src/lib/chartScale.ts",
+        "src/lib/historyApi.ts"
+      ]
+    },
+    {
+      "id": "check-disk-space",
+      "title": "Check disk space on a node",
+      "type": "howto",
+      "area": "monitor",
+      "package": "W-MONITOR",
+      "file": "monitor/check-disk-space.md",
+      "summary": "See how full each node's disks are and find what's using the space.",
+      "verified": false,
+      "related": [
+        "node-window",
+        "delete-a-model",
+        "check-docker-images"
+      ],
+      "keywords": [
+        "disk",
+        "storage",
+        "full",
+        "free space",
+        "how much disk space left",
+        "how much space is left",
+        "out of disk space",
+        "disk full",
+        "disk space",
+        "running out of space",
+        "free disk space",
+        "how much storage"
+      ],
+      "code": [
+        "src/windows/node/HardwareTabs.tsx",
+        "src/lib/metrics.ts"
+      ]
+    },
+    {
+      "id": "find-out-why-a-node-restarted",
+      "title": "Find out why a node restarted",
+      "type": "howto",
+      "area": "monitor",
+      "package": "W-MONITOR",
+      "file": "monitor/find-out-why-a-node-restarted.md",
+      "summary": "Use a node's boot history to see when it restarted and how the last run ended.",
+      "verified": false,
+      "related": [
+        "node-window",
+        "alerts-window"
+      ],
+      "keywords": [
+        "boot history",
+        "crash",
+        "restarted",
+        "panic",
+        "why did it reboot",
+        "why did my node restart",
+        "node crashed",
+        "node restarted by itself",
+        "unexpected restart",
+        "why did it restart"
+      ],
+      "code": [
+        "src/windows/node/SystemTab.tsx",
+        "src-tauri/src/health/boots.rs",
+        "src/lib/boots.ts"
+      ]
+    },
+    {
+      "id": "open-the-dgx-dashboard",
+      "title": "Open the DGX Dashboard",
+      "type": "howto",
+      "area": "monitor",
+      "package": "W-MONITOR",
+      "file": "monitor/open-the-dgx-dashboard.md",
+      "summary": "Open NVIDIA's own dashboard for a node in your browser, through a private SSH tunnel.",
+      "verified": false,
+      "related": [
+        "node-window",
+        "settings-security"
+      ],
+      "keywords": [
+        "dgx dashboard",
+        "nvidia",
+        "tunnel",
+        "port 11000",
+        "nvidia dashboard"
+      ],
+      "code": [
+        "src/windows/NodeDetail.tsx",
+        "src/lib/opsCommands.ts",
+        "src-tauri/src/tunnels.rs"
+      ]
+    },
+    {
+      "id": "respond-to-an-alert",
+      "title": "Respond to an alert",
+      "type": "howto",
+      "area": "alerts",
+      "package": "W-MONITOR",
+      "file": "monitor/respond-to-an-alert.md",
+      "summary": "Find out what an alert means, then acknowledge it, silence it or fix it.",
+      "verified": false,
+      "related": [
+        "alerts-window",
+        "alerts-and-incidents"
+      ],
+      "keywords": [
+        "alert",
+        "acknowledge",
+        "silence",
+        "warning",
+        "critical",
+        "mute",
+        "silence an alert",
+        "got an alert",
+        "what does this alert mean",
+        "stop an alert"
+      ],
+      "code": [
+        "src/windows/AlertsWindow.tsx",
+        "src/lib/healthCommands.ts",
+        "src-tauri/src/health/silence.rs"
+      ]
+    },
+    {
+      "id": "change-alert-rules",
+      "title": "Change alert rules",
+      "type": "howto",
+      "area": "alerts",
+      "package": "W-MONITOR",
+      "file": "monitor/change-alert-rules.md",
+      "summary": "Change when an alert fires, for all nodes or one, and see what would fire before you save.",
+      "verified": false,
+      "related": [
+        "settings-alerts",
+        "alert-rules-reference"
+      ],
+      "keywords": [
+        "thresholds",
+        "rules",
+        "tune alerts",
+        "too many alerts",
+        "change alert threshold",
+        "change when alerts fire",
+        "fewer alerts"
+      ],
+      "code": [
+        "src/windows/settings/AlertRulesSection.tsx",
+        "src-tauri/src/health/rule.rs"
+      ]
+    },
+    {
+      "id": "get-notifications-on-this-mac",
+      "title": "Get notifications on this Mac",
+      "type": "howto",
+      "area": "alerts",
+      "package": "W-MONITOR",
+      "file": "monitor/get-notifications-on-this-mac.md",
+      "summary": "Turn on macOS notifications, and choose what reaches you and when, including quiet hours.",
+      "verified": false,
+      "related": [
+        "settings-notifications",
+        "get-alerts-on-your-phone"
+      ],
+      "keywords": [
+        "receive alerts",
+        "receive notifications",
+        "notifications",
+        "quiet hours",
+        "banner",
+        "mac alert",
+        "mac notifications",
+        "alert sound"
+      ],
+      "code": [
+        "src/windows/settings/NotificationsSection.tsx",
+        "src-tauri/src/notify.rs"
+      ]
+    },
+    {
+      "id": "get-alerts-on-your-phone",
+      "title": "Get alerts on your phone",
+      "type": "howto",
+      "area": "alerts",
+      "package": "W-MONITOR",
+      "file": "monitor/get-alerts-on-your-phone.md",
+      "summary": "Add ntfy, Pushover, a webhook or email as a channel, and send a test message.",
+      "verified": false,
+      "related": [
+        "settings-notifications",
+        "set-up-always-on-monitoring"
+      ],
+      "keywords": [
+        "phone",
+        "ntfy",
+        "pushover",
+        "email",
+        "webhook",
+        "slack",
+        "page",
+        "alerts on my phone",
+        "phone notification",
+        "phone alerts",
+        "email alerts",
+        "text me",
+        "send alerts to my phone"
+      ],
+      "code": [
+        "src/windows/settings/NotificationsSection.tsx",
+        "src-tauri/src/delivery/mod.rs",
+        "src-tauri/src/delivery/ntfy.rs",
+        "src-tauri/src/delivery/pushover.rs",
+        "src-tauri/src/delivery/smtp.rs",
+        "src-tauri/src/delivery/webhook.rs"
+      ]
+    },
+    {
+      "id": "set-up-always-on-monitoring",
+      "title": "Set up always-on monitoring",
+      "type": "howto",
+      "area": "alerts",
+      "package": "W-MONITOR",
+      "file": "monitor/set-up-always-on-monitoring.md",
+      "summary": "Install SparkBox's agent on your nodes so that they keep watching while your Mac is closed.",
+      "verified": false,
+      "related": [
+        "always-on-agent",
+        "get-alerts-on-your-phone",
+        "settings-notifications"
+      ],
+      "keywords": [
+        "agent",
+        "24/7",
+        "dead-man's switch",
+        "mac asleep",
+        "paging",
+        "always on monitoring",
+        "monitor while my mac sleeps",
+        "alerts when my mac is off"
+      ],
+      "code": [
+        "src/windows/settings/NotificationsSection.tsx",
+        "src-tauri/src/agent/mod.rs",
+        "src-tauri/src/agent/sparkbox_agent.py",
+        "src/lib/agent.ts"
+      ]
+    },
+    {
+      "id": "dashboard",
+      "title": "Dashboard",
+      "type": "feature",
+      "area": "monitor",
+      "package": "W-MONITOR",
+      "file": "monitor/dashboard.md",
+      "summary": "Your whole cluster on one page: node health, what's serving, capacity and activity.",
+      "verified": false,
+      "related": [
+        "read-the-dashboard",
+        "node-window"
+      ],
+      "keywords": [
+        "dashboard",
+        "overview",
+        "serving",
+        "capacity"
+      ],
+      "code": [
+        "src/windows/Dashboard.tsx",
+        "src/lib/metrics.ts"
+      ]
+    },
+    {
+      "id": "topology",
+      "title": "Topology",
+      "type": "feature",
+      "area": "monitor",
+      "package": "W-MONITOR",
+      "file": "monitor/topology.md",
+      "summary": "A live map of your nodes, switches and links, colored by health, GPU load, temperature or memory.",
+      "verified": false,
+      "related": [
+        "check-the-fabric",
+        "see-what-a-port-connects-to",
+        "connect-the-vpn",
+        "your-cluster",
+        "fabric",
+        "switch-window"
+      ],
+      "keywords": [
+        "topology",
+        "map",
+        "diagram",
+        "cabling"
+      ],
+      "code": [
+        "src/windows/Topology.tsx"
+      ]
+    },
+    {
+      "id": "cluster-metrics",
+      "title": "Cluster metrics",
+      "type": "feature",
+      "area": "monitor",
+      "package": "W-MONITOR",
+      "file": "monitor/cluster-metrics.md",
+      "summary": "Charts for every node and model side by side, with a GPU heatmap. Open it from the command palette.",
+      "verified": false,
+      "related": [
+        "read-the-charts",
+        "dashboard",
+        "command-palette"
+      ],
+      "keywords": [
+        "charts",
+        "heatmap",
+        "metrics",
+        "history"
+      ],
+      "code": [
+        "src/windows/ClusterMetrics.tsx",
+        "src/components/TimeChart.tsx"
+      ]
+    },
+    {
+      "id": "alerts-window",
+      "title": "Alerts",
+      "type": "feature",
+      "area": "alerts",
+      "package": "W-MONITOR",
+      "file": "monitor/alerts-window.md",
+      "summary": "What's wrong now, what's silenced, what happened before, kernel events, and where each alert was sent.",
+      "verified": false,
+      "related": [
+        "respond-to-an-alert",
+        "alerts-and-incidents",
+        "alert-rules-reference"
+      ],
+      "keywords": [
+        "alerts",
+        "firing",
+        "history",
+        "events",
+        "deliveries",
+        "silenced"
+      ],
+      "code": [
+        "src/windows/AlertsWindow.tsx",
+        "src-tauri/src/health/mod.rs",
+        "src-tauri/src/health/incident.rs"
+      ]
+    },
+    {
+      "id": "node-window",
+      "title": "A node's window",
+      "type": "feature",
+      "area": "monitor",
+      "package": "W-MONITOR",
+      "file": "monitor/node-window.md",
+      "summary": "Everything about one node: Overview, CPU, Memory, GPU, Disks, Network and System, with its actions.",
+      "verified": false,
+      "related": [
+        "check-disk-space",
+        "find-out-why-a-node-restarted",
+        "restart-a-node",
+        "use-maintenance-mode"
+      ],
+      "keywords": [
+        "node",
+        "cpu",
+        "gpu",
+        "memory",
+        "disks",
+        "network",
+        "system"
+      ],
+      "code": [
+        "src/windows/NodeDetail.tsx",
+        "src/windows/node/Overview.tsx",
+        "src/windows/node/GpuTab.tsx",
+        "src/windows/node/HardwareTabs.tsx",
+        "src/windows/node/NetworkTab.tsx",
+        "src/windows/node/SystemTab.tsx"
+      ]
+    },
+    {
+      "id": "settings-notifications",
+      "title": "Settings: Notifications",
+      "type": "feature",
+      "area": "settings",
+      "package": "W-MONITOR",
+      "file": "monitor/settings-notifications.md",
+      "summary": "Where alerts go, when they're sent, always-on monitoring on the nodes, and the Prometheus metrics endpoint.",
+      "verified": false,
+      "related": [
+        "get-notifications-on-this-mac",
+        "get-alerts-on-your-phone",
+        "set-up-always-on-monitoring"
+      ],
+      "keywords": [
+        "notifications",
+        "channels",
+        "quiet hours",
+        "prometheus",
+        "paging"
+      ],
+      "code": [
+        "src/windows/settings/NotificationsSection.tsx",
+        "src-tauri/src/notify.rs",
+        "src-tauri/src/delivery/mod.rs"
+      ]
+    },
+    {
+      "id": "settings-alerts",
+      "title": "Settings: Alerts",
+      "type": "feature",
+      "area": "settings",
+      "package": "W-MONITOR",
+      "file": "monitor/settings-alerts.md",
+      "summary": "Every alert rule, with its warning and critical lines, how long it must hold, and per-node overrides.",
+      "verified": false,
+      "related": [
+        "change-alert-rules",
+        "alert-rules-reference"
+      ],
+      "keywords": [
+        "rules",
+        "thresholds",
+        "would fire now"
+      ],
+      "code": [
+        "src/windows/settings/AlertRulesSection.tsx",
+        "src-tauri/src/health/rules.rs"
+      ]
+    },
+    {
+      "id": "alerts-and-incidents",
+      "title": "Alerts and incidents",
+      "type": "concept",
+      "area": "alerts",
+      "package": "W-MONITOR",
+      "file": "monitor/alerts-and-incidents.md",
+      "summary": "How a reading becomes an alert, how related alerts become one incident, and what acknowledge and silence do.",
+      "verified": null,
+      "related": [
+        "alerts-window",
+        "respond-to-an-alert"
+      ],
+      "keywords": [
+        "alert",
+        "incident",
+        "severity",
+        "silence",
+        "acknowledge",
+        "planned"
+      ],
+      "code": [
+        "src-tauri/src/health/mod.rs",
+        "src-tauri/src/health/incident.rs",
+        "src-tauri/src/health/silence.rs",
+        "src-tauri/src/health/maintenance.rs"
+      ]
+    },
+    {
+      "id": "always-on-agent",
+      "title": "The always-on agent",
+      "type": "concept",
+      "area": "alerts",
+      "package": "W-MONITOR",
+      "file": "monitor/always-on-agent.md",
+      "summary": "A small service on each node that keeps watching and can reach your phone when your Mac is closed.",
+      "verified": null,
+      "related": [
+        "set-up-always-on-monitoring",
+        "settings-notifications"
+      ],
+      "keywords": [
+        "agent",
+        "24/7",
+        "service",
+        "paging"
+      ],
+      "code": [
+        "src-tauri/src/agent/sparkbox_agent.py",
+        "src-tauri/src/agent/mod.rs",
+        "src-tauri/src/agent/sparkbox-agent.service"
+      ]
+    },
+    {
+      "id": "alert-rules-reference",
+      "title": "Alert rules reference",
+      "type": "reference",
+      "area": "alerts",
+      "package": "W-MONITOR",
+      "file": "monitor/alert-rules-reference.md",
+      "summary": "Every alert SparkBox can raise, what it watches, its default lines, and what to do about it.",
+      "verified": null,
+      "related": [
+        "settings-alerts",
+        "change-alert-rules"
+      ],
+      "keywords": [
+        "alert list",
+        "defaults",
+        "rules"
+      ],
+      "code": [
+        "src-tauri/src/health/fixtures/default-rules.json",
+        "src-tauri/src/health/rules.rs",
+        "src-tauri/src/health/roce_rules.rs"
+      ]
+    },
+    {
+      "id": "connect-the-vpn",
+      "title": "Reach your cluster with the VPN",
+      "type": "howto",
+      "area": "network",
+      "package": "W-MONITOR",
+      "file": "monitor/connect-the-vpn.md",
+      "summary": "Import a WireGuard or AmneziaWG profile, choose when the tunnel is used, and connect from away.",
+      "verified": false,
+      "related": [
+        "vpn",
+        "connect-my-sparks"
+      ],
+      "keywords": [
+        "vpn",
+        "wireguard",
+        "amneziawg",
+        "away from home",
+        "remote",
+        "tunnel",
+        "connect from outside my house",
+        "outside my house",
+        "use my cluster from anywhere",
+        "from anywhere",
+        "reach my cluster remotely",
+        "remote access",
+        "from work",
+        "while traveling"
+      ],
+      "code": [
+        "src/windows/VpnWindow.tsx",
+        "src-tauri/src/vpn/mod.rs",
+        "src/lib/vpn.ts"
+      ]
+    },
+    {
+      "id": "check-the-fabric",
+      "title": "Check the fabric",
+      "type": "howto",
+      "area": "network",
+      "package": "W-MONITOR",
+      "file": "monitor/check-the-fabric.md",
+      "summary": "Read the Fabric window's verdict, see each link's state, and accept a cabling change.",
+      "verified": false,
+      "related": [
+        "fabric",
+        "fabric-and-rdma",
+        "test-the-fabric"
+      ],
+      "keywords": [
+        "fabric",
+        "roce",
+        "lossless",
+        "cabling",
+        "200g",
+        "jumbo frames mtu",
+        "is my network ok",
+        "network problem",
+        "network health",
+        "fabric slow",
+        "fabric problem",
+        "network is slow",
+        "slow network"
+      ],
+      "code": [
+        "src/windows/FabricWindow.tsx",
+        "src-tauri/src/fabric/mod.rs",
+        "src/lib/fabric.ts"
+      ]
+    },
+    {
+      "id": "test-the-fabric",
+      "title": "Test the fabric",
+      "type": "howto",
+      "area": "network",
+      "package": "W-MONITOR",
+      "file": "monitor/test-the-fabric.md",
+      "summary": "Run the Doctor tab in Fabric to measure real speed and latency between nodes.",
+      "verified": false,
+      "related": [
+        "fabric-doctor",
+        "check-the-fabric"
+      ],
+      "keywords": [
+        "perftest",
+        "bandwidth",
+        "speed test",
+        "jumbo",
+        "mtu",
+        "doctor",
+        "fabric slow",
+        "network speed",
+        "how fast is the network",
+        "network is slow",
+        "slow network",
+        "test network speed"
+      ],
+      "code": [
+        "src/windows/fabric/FabricDoctor.tsx",
+        "src-tauri/src/fabric/doctor.rs"
+      ]
+    },
+    {
+      "id": "see-what-a-port-connects-to",
+      "title": "See what a port connects to",
+      "type": "howto",
+      "area": "network",
+      "package": "W-MONITOR",
+      "file": "monitor/see-what-a-port-connects-to.md",
+      "summary": "Use LLDP to see which switch port each node is plugged into.",
+      "verified": false,
+      "related": [
+        "switch-window",
+        "node-window"
+      ],
+      "keywords": [
+        "lldp",
+        "neighbors",
+        "cable",
+        "which port",
+        "plugged in",
+        "what is plugged into this port",
+        "which cable"
+      ],
+      "code": [
+        "src/windows/node/NetworkTab.tsx",
+        "src/windows/switch/NeighborsTab.tsx"
+      ]
+    },
+    {
+      "id": "see-whats-plugged-into-the-switch-x",
+      "title": "See what's plugged into the Switch X",
+      "type": "howto",
+      "area": "network",
+      "package": "W-MONITOR",
+      "file": "monitor/see-whats-plugged-into-the-switch-x.md",
+      "summary": "Read the Switch X's port panel, and label each port with what's plugged into it.",
+      "verified": false,
+      "related": [
+        "firewalla-view",
+        "connect-firewalla-cloud",
+        "see-what-a-port-connects-to"
+      ],
+      "keywords": [
+        "firewalla",
+        "switch x",
+        "port",
+        "plugged in",
+        "connected",
+        "lldp",
+        "label",
+        "port speed",
+        "what is connected"
+      ],
+      "code": [
+        "src/windows/switch/FirewallaView.tsx",
+        "src/windows/switch/SwitchXPanel.tsx",
+        "src/windows/switch/SwitchXDrawer.tsx",
+        "src/windows/switch/switchX.ts",
+        "src-tauri/src/firewalla/labels.rs"
+      ]
+    },
+    {
+      "id": "connect-firewalla-cloud",
+      "title": "Connect Firewalla's cloud",
+      "type": "howto",
+      "area": "network",
+      "package": "W-MONITOR",
+      "file": "start/connect-firewalla-cloud.md",
+      "summary": "Give SparkBox your Firewalla MSP domain and token, so that the Switch X's ports show real speeds and counters.",
+      "verified": false,
+      "related": [
+        "see-whats-plugged-into-the-switch-x",
+        "firewalla-view",
+        "settings-switches",
+        "keychain-and-secrets"
+      ],
+      "keywords": [
+        "firewalla",
+        "msp",
+        "cloud",
+        "token",
+        "api token",
+        "domain",
+        "switch x",
+        "link speed",
+        "poe",
+        "msp lite"
+      ],
+      "code": [
+        "src/windows/settings/SwitchesSection.tsx",
+        "src-tauri/src/firewalla/msp.rs",
+        "src-tauri/src/firewalla/mod.rs"
+      ]
+    },
+    {
+      "id": "manage-a-switch-port",
+      "title": "Manage a switch port",
+      "type": "howto",
+      "area": "network",
+      "package": "W-MONITOR",
+      "file": "monitor/manage-a-switch-port.md",
+      "summary": "Enable, disable or bounce a port on the CRS804, with the safeguards that bring it back if something goes wrong.",
+      "verified": false,
+      "related": [
+        "switch-window"
+      ],
+      "keywords": [
+        "port",
+        "bounce",
+        "disable",
+        "enable",
+        "crs804",
+        "switch port",
+        "turn a port off",
+        "restart a port"
+      ],
+      "code": [
+        "src/windows/switch/RouterOsView.tsx",
+        "src/windows/switch/PortDrawer.tsx",
+        "src-tauri/src/routeros/safety.rs"
+      ]
+    },
+    {
+      "id": "vpn",
+      "title": "VPN",
+      "type": "feature",
+      "area": "network",
+      "package": "W-MONITOR",
+      "file": "monitor/vpn.md",
+      "summary": "SparkBox's own tunnel to your Firewalla Gold, for reaching the cluster when you're away from home.",
+      "verified": false,
+      "related": [
+        "connect-the-vpn"
+      ],
+      "keywords": [
+        "vpn",
+        "tunnel",
+        "wireguard",
+        "expose",
+        "direct at home"
+      ],
+      "code": [
+        "src/windows/VpnWindow.tsx",
+        "src-tauri/src/vpn/mod.rs",
+        "tunnel/"
+      ]
+    },
+    {
+      "id": "fabric",
+      "title": "Fabric",
+      "type": "feature",
+      "area": "network",
+      "package": "W-MONITOR",
+      "file": "monitor/fabric.md",
+      "summary": "The health of the 200G network between nodes, link by link, with NCCL checks and cabling.",
+      "verified": false,
+      "related": [
+        "check-the-fabric",
+        "fabric-doctor",
+        "fabric-and-rdma"
+      ],
+      "keywords": [
+        "fabric",
+        "matrix",
+        "history",
+        "nccl",
+        "roce",
+        "pfc"
+      ],
+      "code": [
+        "src/windows/FabricWindow.tsx",
+        "src/windows/fabric/common.tsx",
+        "src/windows/fabric/RocePanel.tsx",
+        "src-tauri/src/fabric/mod.rs"
+      ]
+    },
+    {
+      "id": "fabric-doctor",
+      "title": "Fabric: Doctor tab",
+      "type": "feature",
+      "area": "network",
+      "package": "W-MONITOR",
+      "file": "monitor/fabric-doctor.md",
+      "summary": "Runs MTU checks, jumbo pings, and bandwidth and latency tests between pairs of nodes.",
+      "verified": false,
+      "related": [
+        "test-the-fabric",
+        "fabric"
+      ],
+      "keywords": [
+        "doctor",
+        "perftest",
+        "ib_write_bw",
+        "baseline"
+      ],
+      "code": [
+        "src/windows/fabric/FabricDoctor.tsx",
+        "src-tauri/src/fabric/doctor.rs"
+      ]
+    },
+    {
+      "id": "switch-window",
+      "title": "Switch window: CRS804 DDQ",
+      "type": "feature",
+      "area": "network",
+      "package": "W-MONITOR",
+      "file": "monitor/switch-window.md",
+      "summary": "The CRS804's ports, optics, neighbors and live traffic, with actions for each port.",
+      "verified": false,
+      "related": [
+        "manage-a-switch-port",
+        "see-what-a-port-connects-to",
+        "add-switches-and-gateway"
+      ],
+      "keywords": [
+        "mikrotik",
+        "crs804",
+        "ports",
+        "optics",
+        "neighbors",
+        "routeros"
+      ],
+      "code": [
+        "src/windows/SwitchWindow.tsx",
+        "src/windows/switch/RouterOsView.tsx",
+        "src/windows/switch/PortPanel.tsx",
+        "src/windows/switch/PortDrawer.tsx",
+        "src/windows/switch/NeighborsTab.tsx"
+      ]
+    },
+    {
+      "id": "firewalla-view",
+      "title": "Switch window: Firewalla devices",
+      "type": "feature",
+      "area": "network",
+      "package": "W-MONITOR",
+      "file": "monitor/firewalla-view.md",
+      "summary": "The Firewalla Switch X's ports, and reachability, latency, loss and uptime for the Switch X and Firewalla Gold.",
+      "verified": false,
+      "related": [
+        "see-whats-plugged-into-the-switch-x",
+        "connect-firewalla-cloud",
+        "add-switches-and-gateway"
+      ],
+      "keywords": [
+        "firewalla",
+        "gateway",
+        "latency",
+        "uptime",
+        "firewall",
+        "ports",
+        "lldp",
+        "port speed",
+        "port panel"
+      ],
+      "code": [
+        "src/windows/switch/FirewallaView.tsx",
+        "src/windows/switch/SwitchXPanel.tsx",
+        "src/windows/switch/SwitchXDrawer.tsx",
+        "src/windows/switch/switchX.ts",
+        "src-tauri/src/probe.rs",
+        "src-tauri/src/firewalla/mod.rs"
+      ]
+    },
+    {
+      "id": "fabric-and-rdma",
+      "title": "The fabric and RDMA",
+      "type": "concept",
+      "area": "network",
+      "package": "W-MONITOR",
+      "file": "monitor/fabric-and-rdma.md",
+      "summary": "Why your nodes have a second, much faster network, and what RDMA, RoCE and NCCL mean in plain words.",
+      "verified": null,
+      "related": [
+        "fabric",
+        "check-the-fabric",
+        "splitting-a-model"
+      ],
+      "keywords": [
+        "rdma",
+        "roce",
+        "nccl",
+        "pfc",
+        "mtu",
+        "connectx",
+        "200g"
+      ],
+      "code": [
+        "src-tauri/src/fabric/mod.rs",
+        "src/windows/FabricWindow.tsx"
+      ]
+    },
+    {
+      "id": "your-first-model",
+      "title": "Rehearse running a model in Demo",
+      "type": "tutorial",
+      "area": "start",
+      "package": "W-MODELS",
+      "file": "models/your-first-model.md",
+      "summary": "Follow the whole path once, in Demo: find a model, download it, load it, chat with it, and unload it.",
+      "verified": null,
+      "related": [
+        "models-in-plain-words",
+        "download-a-model",
+        "load-a-model-on-one-node",
+        "connect-your-cluster",
+        "run-your-first-real-model"
+      ],
+      "keywords": [
+        "first model",
+        "tutorial",
+        "beginner",
+        "start here",
+        "my first model",
+        "run my first model",
+        "first time running a model",
+        "how do i run a model",
+        "run a model"
+      ],
+      "code": [
+        "src/windows/ModelsWindow.tsx",
+        "src/windows/models/LoadPage.tsx",
+        "src/windows/ChatWindow.tsx",
+        "src-tauri/src/models/demo.rs"
+      ]
+    },
+    {
+      "id": "run-your-first-real-model",
+      "title": "Run your first real model",
+      "type": "tutorial",
+      "area": "models",
+      "package": "W-MODELS",
+      "file": "models/run-your-first-real-model.md",
+      "summary": "Load a real model on one of your nodes, check that it answers, chat with it, and unload it.",
+      "verified": false,
+      "related": [
+        "your-first-model",
+        "prepare-the-cluster",
+        "load-a-model-on-one-node",
+        "tell-if-a-model-is-working",
+        "unload-a-model"
+      ],
+      "keywords": [
+        "first real model",
+        "real load",
+        "run a model",
+        "start a model",
+        "gemma",
+        "walkthrough"
+      ],
+      "code": [
+        "src/windows/models/PrepareTab.tsx",
+        "src/windows/models/LibraryTab.tsx",
+        "src/windows/models/LoadPage.tsx",
+        "src-tauri/src/models/mod.rs",
+        "docs/acceptance/P1-session-B.md"
+      ]
+    },
+    {
+      "id": "model-questions",
+      "title": "Common questions about models",
+      "type": "reference",
+      "area": "models",
+      "package": "W-MODELS",
+      "file": "models/model-questions.md",
+      "summary": "Short answers to what people ask first: which model, what it costs, and what happens if this Mac sleeps.",
+      "verified": false,
+      "related": [
+        "run-your-first-real-model",
+        "find-a-model-that-fits",
+        "load-a-model-on-one-node",
+        "tell-if-a-model-is-working"
+      ],
+      "keywords": [
+        "faq",
+        "common questions",
+        "does my model stop",
+        "close my laptop"
+      ],
+      "code": [
+        "src-tauri/src/models/mod.rs",
+        "src-tauri/src/awake.rs",
+        "src-tauri/src/admin.rs",
+        "src-tauri/src/models/plan.rs"
+      ]
+    },
+    {
+      "id": "models-in-plain-words",
+      "title": "Models, engines, memory and context in plain words",
+      "type": "concept",
+      "area": "models",
+      "package": "W-MODELS",
+      "file": "models/models-in-plain-words.md",
+      "summary": "What a model is, what runs it, what it needs from a Spark, and the few words you need to pick one.",
+      "verified": null,
+      "related": [
+        "engines",
+        "memory-on-a-spark",
+        "tokens-and-context",
+        "find-a-model-that-fits"
+      ],
+      "keywords": [
+        "what is a model",
+        "ai",
+        "llm",
+        "beginner",
+        "explain"
+      ],
+      "code": [
+        "src-tauri/src/models/fit.rs",
+        "src/windows/models/FitTable.tsx"
+      ]
+    },
+    {
+      "id": "engines",
+      "title": "Engines: vLLM, SGLang and Ollama",
+      "type": "concept",
+      "area": "models",
+      "package": "W-MODELS",
+      "file": "models/engines.md",
+      "summary": "An engine is the program that runs a model. How SparkBox's three engines differ and which to choose.",
+      "verified": null,
+      "related": [
+        "load-a-model-on-one-node",
+        "use-ollama"
+      ],
+      "keywords": [
+        "vllm",
+        "sglang",
+        "ollama",
+        "engine",
+        "which one"
+      ],
+      "code": [
+        "src/windows/models/LoadPage.tsx",
+        "src-tauri/src/models/plan.rs",
+        "src-tauri/src/models/ollama.rs"
+      ]
+    },
+    {
+      "id": "memory-on-a-spark",
+      "title": "How memory works on a Spark",
+      "type": "concept",
+      "area": "models",
+      "package": "W-MODELS",
+      "file": "models/memory-on-a-spark.md",
+      "summary": "Each Spark has one pool of memory for CPU and GPU. Why that decides what fits, and why running out is dangerous.",
+      "verified": null,
+      "related": [
+        "choose-load-settings",
+        "find-a-model-that-fits"
+      ],
+      "keywords": [
+        "unified memory",
+        "gpu memory",
+        "kv cache",
+        "page cache",
+        "out of memory",
+        "oom"
+      ],
+      "code": [
+        "src-tauri/src/models/fit.rs",
+        "src-tauri/src/models/plan.rs",
+        "src/windows/models/LoadPage.tsx"
+      ]
+    },
+    {
+      "id": "tokens-and-context",
+      "title": "Tokens and context",
+      "type": "concept",
+      "area": "models",
+      "package": "W-MODELS",
+      "file": "models/tokens-and-context.md",
+      "summary": "Models read and write in tokens. Context is how many they can hold at once, and it costs memory.",
+      "verified": null,
+      "related": [
+        "choose-load-settings",
+        "memory-on-a-spark"
+      ],
+      "keywords": [
+        "token",
+        "context",
+        "max context",
+        "how long",
+        "tok/s"
+      ],
+      "code": [
+        "src-tauri/src/models/fit.rs"
+      ]
+    },
+    {
+      "id": "formats-and-quantization",
+      "title": "Model formats and quantization",
+      "type": "concept",
+      "area": "models",
+      "package": "W-MODELS",
+      "file": "models/formats-and-quantization.md",
+      "summary": "Why one model comes in many sizes, and what safetensors, GGUF, MLX, FP8 and NVFP4 mean for your Sparks.",
+      "verified": null,
+      "related": [
+        "find-a-model-that-fits",
+        "models-hugging-face"
+      ],
+      "keywords": [
+        "safetensors",
+        "gguf",
+        "mlx",
+        "fp8",
+        "nvfp4",
+        "quantization",
+        "bf16"
+      ],
+      "code": [
+        "src-tauri/src/models/hf.rs",
+        "src/lib/modelsApi.ts"
+      ]
+    },
+    {
+      "id": "splitting-a-model",
+      "title": "Running one model on several nodes",
+      "type": "concept",
+      "area": "models",
+      "package": "W-MODELS",
+      "file": "models/splitting-a-model.md",
+      "summary": "How a model too big for one Spark is split across nodes, what tensor and pipeline parallel mean, and how nodes start.",
+      "verified": null,
+      "related": [
+        "load-a-model-on-several-nodes",
+        "fabric-and-rdma"
+      ],
+      "keywords": [
+        "tensor parallel",
+        "pipeline parallel",
+        "multi-node",
+        "expert parallel",
+        "head",
+        "worker"
+      ],
+      "code": [
+        "src-tauri/src/models/plan.rs",
+        "src-tauri/src/models/fit.rs"
+      ]
+    },
+    {
+      "id": "find-a-model-that-fits",
+      "title": "Find a model that fits",
+      "type": "howto",
+      "area": "models",
+      "package": "W-MODELS",
+      "file": "models/find-a-model-that-fits.md",
+      "summary": "Search Hugging Face, read the fit table, and optionally ask an AI advisor whether a model will run well.",
+      "verified": false,
+      "related": [
+        "models-hugging-face",
+        "models-in-plain-words",
+        "download-a-model"
+      ],
+      "keywords": [
+        "search",
+        "fit table",
+        "how big",
+        "which model",
+        "check with ai",
+        "recommended",
+        "which model should i use",
+        "what model should i use",
+        "which model fits",
+        "what model fits",
+        "what should i use",
+        "best model",
+        "best model for my cluster",
+        "good model",
+        "what can i run",
+        "what models can i run",
+        "choose a model",
+        "pick a model",
+        "recommended models",
+        "how much memory does a model need",
+        "model size",
+        "get a model"
+      ],
+      "code": [
+        "src/windows/models/HubTab.tsx",
+        "src/windows/models/FitTable.tsx",
+        "src-tauri/src/models/fit.rs",
+        "src-tauri/src/models/advisor.rs"
+      ]
+    },
+    {
+      "id": "keep-this-mac-awake",
+      "title": "Keep this Mac awake during long work",
+      "type": "howto",
+      "area": "models",
+      "package": "W-MODELS",
+      "file": "models/keep-this-mac-awake.md",
+      "summary": "Stop this Mac sleeping during a download, a copy or a load, and see what closing the lid does.",
+      "verified": null,
+      "related": [
+        "download-a-model",
+        "load-a-model-on-one-node",
+        "copy-a-model-to-other-nodes",
+        "model-questions"
+      ],
+      "keywords": [
+        "keep awake",
+        "mac sleeps",
+        "close the lid"
+      ],
+      "code": [
+        "src-tauri/src/awake.rs"
+      ]
+    },
+    {
+      "id": "get-a-hugging-face-token",
+      "title": "Get a Hugging Face token",
+      "type": "howto",
+      "area": "models",
+      "package": "W-MODELS",
+      "file": "models/get-a-hugging-face-token.md",
+      "summary": "Create a free access token and save it in SparkBox, so that you can download gated models.",
+      "verified": false,
+      "related": [
+        "settings-models",
+        "download-a-model"
+      ],
+      "keywords": [
+        "token",
+        "hugging face",
+        "gated",
+        "license",
+        "401",
+        "hugging face login",
+        "log in to hugging face",
+        "sign in to hugging face",
+        "hugging face password",
+        "gated model",
+        "gated models",
+        "access denied download"
+      ],
+      "code": [
+        "src/windows/settings/ModelsSection.tsx",
+        "src-tauri/src/models/hf.rs"
+      ]
+    },
+    {
+      "id": "download-a-model",
+      "title": "Download a model",
+      "type": "howto",
+      "area": "models",
+      "package": "W-MODELS",
+      "file": "models/download-a-model.md",
+      "summary": "Fetch a model from Hugging Face to the node you choose, then check every file.",
+      "verified": false,
+      "related": [
+        "follow-a-download",
+        "copy-a-model-to-other-nodes",
+        "find-a-model-that-fits"
+      ],
+      "keywords": [
+        "put a model on my computer",
+        "put a model on my node",
+        "install a model",
+        "add a model",
+        "llama",
+        "download",
+        "hugging face",
+        "get model",
+        "get a model",
+        "get models",
+        "add a model",
+        "install a model",
+        "new model",
+        "download a model"
+      ],
+      "code": [
+        "src/windows/models/HubTab.tsx",
+        "src-tauri/src/models/mod.rs",
+        "src-tauri/src/live/sparkjob.py",
+        "src-tauri/src/models/hf.rs"
+      ]
+    },
+    {
+      "id": "follow-a-download",
+      "title": "Follow a download",
+      "type": "howto",
+      "area": "models",
+      "package": "W-MODELS",
+      "file": "models/follow-a-download.md",
+      "summary": "Watch a download's progress in Jobs and Tasks, stop it if you need to, and know when it's finished.",
+      "verified": false,
+      "related": [
+        "models-jobs",
+        "tasks-and-jobs",
+        "download-a-model"
+      ],
+      "keywords": [
+        "progress",
+        "jobs",
+        "how long",
+        "cancel download",
+        "download stuck",
+        "download is stuck",
+        "download slow",
+        "download is slow",
+        "slow download",
+        "download not moving",
+        "download is not moving",
+        "my download is not moving",
+        "download frozen",
+        "download stalled",
+        "download stopped",
+        "download paused",
+        "is my download still running",
+        "download progress",
+        "how long will a download take"
+      ],
+      "code": [
+        "src/windows/models/JobsTab.tsx",
+        "src-tauri/src/models/mod.rs",
+        "src-tauri/src/live/sparkjob.py"
+      ]
+    },
+    {
+      "id": "copy-a-model-to-other-nodes",
+      "title": "Copy a model to other nodes",
+      "type": "howto",
+      "area": "models",
+      "package": "W-MODELS",
+      "file": "models/copy-a-model-to-other-nodes.md",
+      "summary": "Send a model from one node to the others over the fast fabric, ready to load on several nodes.",
+      "verified": false,
+      "related": [
+        "models-library",
+        "load-a-model-on-several-nodes"
+      ],
+      "keywords": [
+        "copy",
+        "share",
+        "fabric",
+        "rsync",
+        "other nodes",
+        "copy model to other nodes",
+        "put a model on every node",
+        "share a model between nodes"
+      ],
+      "code": [
+        "src/windows/models/LibraryTab.tsx",
+        "src-tauri/src/models/mod.rs",
+        "src-tauri/src/live/sparkjob.py"
+      ]
+    },
+    {
+      "id": "prepare-the-cluster",
+      "title": "Prepare the cluster for models",
+      "type": "howto",
+      "area": "models",
+      "package": "W-MODELS",
+      "file": "models/prepare-the-cluster.md",
+      "summary": "Check Docker, disk space, the engine image, the GPU and the fabric on every node before your first load.",
+      "verified": false,
+      "related": [
+        "models-prepare-cluster",
+        "load-a-model-on-one-node"
+      ],
+      "keywords": [
+        "prepare",
+        "check nodes",
+        "ready",
+        "first load",
+        "get nodes ready",
+        "ready for a model"
+      ],
+      "code": [
+        "src/windows/models/PrepareTab.tsx",
+        "src-tauri/src/models/mod.rs"
+      ]
+    },
+    {
+      "id": "load-a-model-on-one-node",
+      "title": "Load a model on one node",
+      "type": "howto",
+      "area": "models",
+      "package": "W-MODELS",
+      "file": "models/load-a-model-on-one-node.md",
+      "summary": "Start a model on a single Spark with vLLM or SGLang, read the memory plan, and wait for Ready.",
+      "verified": false,
+      "related": [
+        "choose-load-settings",
+        "tell-if-a-model-is-working",
+        "fix-a-load-that-failed"
+      ],
+      "keywords": [
+        "load",
+        "run a model",
+        "serve",
+        "start model",
+        "deploy",
+        "sglang",
+        "start a model",
+        "how do i run a model",
+        "run model",
+        "turn on a model",
+        "use a model"
+      ],
+      "code": [
+        "src/windows/models/LoadPage.tsx",
+        "src-tauri/src/models/mod.rs",
+        "src-tauri/src/models/plan.rs",
+        "src-tauri/src/models/readiness.rs"
+      ]
+    },
+    {
+      "id": "load-a-model-on-several-nodes",
+      "title": "Load a model on two, three or four nodes",
+      "type": "howto",
+      "area": "models",
+      "package": "W-MODELS",
+      "file": "models/load-a-model-on-several-nodes.md",
+      "summary": "Split a model across nodes: pick its recipe, nodes, split and image, pass Before it starts, and wait for Ready.",
+      "verified": false,
+      "related": [
+        "splitting-a-model",
+        "copy-a-model-to-other-nodes",
+        "fix-a-load-that-failed",
+        "use-a-recipe-for-a-load",
+        "clear-what-an-earlier-load-left-behind"
+      ],
+      "keywords": [
+        "multi-node",
+        "two nodes",
+        "three nodes",
+        "four nodes",
+        "cluster load",
+        "run model across cluster",
+        "run a model across the cluster",
+        "run a model on every node",
+        "run a model on all nodes",
+        "run on all nodes",
+        "across nodes",
+        "across the cluster",
+        "use all four nodes",
+        "multi node",
+        "big model",
+        "model too big for one node",
+        "split a model"
+      ],
+      "code": [
+        "src/windows/models/LoadPage.tsx",
+        "src-tauri/src/models/plan.rs",
+        "src-tauri/src/models/mod.rs",
+        "src-tauri/src/models/supervisor.rs"
+      ]
+    },
+    {
+      "id": "use-a-recipe-for-a-load",
+      "title": "Use a recipe for a load",
+      "type": "howto",
+      "area": "models",
+      "package": "W-MODELS",
+      "file": "models/use-a-recipe-for-a-load.md",
+      "summary": "See the recipe SparkBox picked for a model, what it fills in, and what it's been verified on.",
+      "verified": false,
+      "related": [
+        "load-a-model-on-one-node",
+        "load-a-model-on-several-nodes",
+        "models-load-page",
+        "settings-models"
+      ],
+      "keywords": [
+        "recipe",
+        "recipes",
+        "load recipe",
+        "built-in recipe",
+        "generic recipe",
+        "defaults for a model",
+        "verified on"
+      ],
+      "code": [
+        "src/windows/models/LoadPage.tsx",
+        "src-tauri/src/models/recipe.rs",
+        "src-tauri/src/models/plan.rs"
+      ]
+    },
+    {
+      "id": "clear-what-an-earlier-load-left-behind",
+      "title": "Clear what an earlier load left behind",
+      "type": "howto",
+      "area": "models",
+      "package": "W-MODELS",
+      "file": "models/clear-what-an-earlier-load-left-behind.md",
+      "summary": "Remove containers an earlier load left on a node, so that a new load can start there.",
+      "verified": false,
+      "related": [
+        "load-a-model-on-one-node",
+        "load-a-model-on-several-nodes",
+        "fix-a-load-that-failed",
+        "unload-a-model",
+        "manage-containers"
+      ],
+      "keywords": [
+        "leftovers",
+        "remove leftovers",
+        "left behind",
+        "containers left",
+        "earlier load",
+        "clean up a node"
+      ],
+      "code": [
+        "src/windows/models/LoadPage.tsx",
+        "src-tauri/src/models/mod.rs",
+        "src-tauri/src/models/plan.rs"
+      ]
+    },
+    {
+      "id": "choose-load-settings",
+      "title": "Choose load settings",
+      "type": "howto",
+      "area": "models",
+      "package": "W-MODELS",
+      "file": "models/choose-load-settings.md",
+      "summary": "Decide a load's context, its memory share and who can reach it, and when to change anything else.",
+      "verified": false,
+      "related": [
+        "models-load-page",
+        "memory-on-a-spark",
+        "tokens-and-context"
+      ],
+      "keywords": [
+        "gpu memory share",
+        "max context",
+        "listen on",
+        "api key",
+        "port",
+        "keep running",
+        "which settings should i use",
+        "load settings",
+        "how many users",
+        "many users at once",
+        "how many people can use a model",
+        "not enough memory"
+      ],
+      "code": [
+        "src/windows/models/LoadPage.tsx",
+        "src-tauri/src/models/plan.rs",
+        "src-tauri/src/models/fit.rs"
+      ]
+    },
+    {
+      "id": "tell-if-a-model-is-working",
+      "title": "Tell whether a model is working",
+      "type": "howto",
+      "area": "models",
+      "package": "W-MODELS",
+      "file": "models/tell-if-a-model-is-working.md",
+      "summary": "Read a model's state, its test answer and its speed, and tell Ready from Loading, Down and Stopped.",
+      "verified": false,
+      "related": [
+        "endpoints",
+        "chat-with-a-cluster-model",
+        "fix-a-load-that-failed"
+      ],
+      "keywords": [
+        "ready",
+        "working",
+        "down",
+        "17+25",
+        "is it running",
+        "test",
+        "is my model working",
+        "is the model working",
+        "is my model running",
+        "is the model running",
+        "model not responding",
+        "model is not responding",
+        "model not answering",
+        "model gives no answer",
+        "model wont answer"
+      ],
+      "code": [
+        "src/windows/models/EndpointCard.tsx",
+        "src-tauri/src/models/readiness.rs",
+        "src-tauri/src/models/verify.rs",
+        "src-tauri/src/models/endpoints.rs"
+      ]
+    },
+    {
+      "id": "benchmark-a-model",
+      "title": "Benchmark a model",
+      "type": "howto",
+      "area": "models",
+      "package": "W-MODELS",
+      "file": "models/benchmark-a-model.md",
+      "summary": "Measure a loaded model's speed and delay at different loads, and save the results.",
+      "verified": false,
+      "related": [
+        "models-benchmarks",
+        "tell-if-a-model-is-working"
+      ],
+      "keywords": [
+        "benchmark",
+        "speed",
+        "performance",
+        "tokens per second",
+        "ttft",
+        "why is my model slow",
+        "model is slow",
+        "slow model",
+        "how fast is my model",
+        "measure speed"
+      ],
+      "code": [
+        "src/windows/models/BenchTab.tsx",
+        "src-tauri/src/models/bench.rs"
+      ]
+    },
+    {
+      "id": "restart-or-change-a-model",
+      "title": "Restart a model or change its settings",
+      "type": "howto",
+      "area": "models",
+      "package": "W-MODELS",
+      "file": "models/restart-or-change-a-model.md",
+      "summary": "Restart a loaded model, or edit its settings and load it again.",
+      "verified": false,
+      "related": [
+        "choose-load-settings",
+        "unload-a-model"
+      ],
+      "keywords": [
+        "restart model",
+        "edit and reload",
+        "reload",
+        "change settings",
+        "change model settings",
+        "reload a model"
+      ],
+      "code": [
+        "src/windows/models/endpointActions.ts",
+        "src/windows/models/LoadPage.tsx",
+        "src/windows/models/EndpointCard.tsx",
+        "src-tauri/src/models/supervisor.rs"
+      ]
+    },
+    {
+      "id": "unload-a-model",
+      "title": "Unload a model",
+      "type": "howto",
+      "area": "models",
+      "package": "W-MODELS",
+      "file": "models/unload-a-model.md",
+      "summary": "Stop a model and get its memory back, then check that nothing is left behind.",
+      "verified": false,
+      "related": [
+        "delete-a-model",
+        "tell-if-a-model-is-working"
+      ],
+      "keywords": [
+        "unload",
+        "stop model",
+        "free memory",
+        "shut down model",
+        "turn off the model",
+        "turn off a model",
+        "stop a model",
+        "stop running a model",
+        "stop the model",
+        "free gpu memory",
+        "free up gpu memory"
+      ],
+      "code": [
+        "src/windows/models/endpointActions.ts",
+        "src/windows/models/EndpointCard.tsx",
+        "src-tauri/src/models/mod.rs"
+      ]
+    },
+    {
+      "id": "delete-a-model",
+      "title": "Delete a model from a node",
+      "type": "howto",
+      "area": "models",
+      "package": "W-MODELS",
+      "file": "models/delete-a-model.md",
+      "summary": "Remove a model's files from one or more nodes to free disk space.",
+      "verified": false,
+      "related": [
+        "models-library",
+        "unload-a-model",
+        "check-disk-space"
+      ],
+      "keywords": [
+        "delete",
+        "remove",
+        "free disk",
+        "space",
+        "remove a model from disk",
+        "delete model",
+        "free up space",
+        "remove model files"
+      ],
+      "code": [
+        "src/windows/models/LibraryTab.tsx",
+        "src-tauri/src/models/mod.rs",
+        "src-tauri/src/live/sparkjob.py"
+      ]
+    },
+    {
+      "id": "fix-a-load-that-failed",
+      "title": "Fix a load that failed",
+      "type": "howto",
+      "area": "models",
+      "package": "W-MODELS",
+      "file": "models/fix-a-load-that-failed.md",
+      "summary": "Find out why a load failed, read the logs SparkBox kept, and what to try next for each common cause.",
+      "verified": false,
+      "related": [
+        "errors-models",
+        "models-loaded",
+        "memory-on-a-spark"
+      ],
+      "keywords": [
+        "failed",
+        "error",
+        "crash",
+        "explain",
+        "out of memory",
+        "exit 137",
+        "garbage output",
+        "model wont load",
+        "model will not load",
+        "load failed",
+        "load error",
+        "model crashed",
+        "model failed to start",
+        "model not responding"
+      ],
+      "code": [
+        "src/windows/models/DeploymentSummary.tsx",
+        "src/windows/models/LoadedTab.tsx",
+        "src-tauri/src/models/postmortem.rs",
+        "src-tauri/src/models/readiness.rs"
+      ]
+    },
+    {
+      "id": "models-window",
+      "title": "Models",
+      "type": "feature",
+      "area": "models",
+      "package": "W-MODELS",
+      "file": "models/models-window.md",
+      "summary": "Where you find, download, copy, load, benchmark and check models.",
+      "verified": false,
+      "related": [
+        "your-first-model",
+        "run-your-first-real-model",
+        "find-a-model-that-fits",
+        "download-a-model",
+        "load-a-model-on-one-node",
+        "models-library",
+        "models-hugging-face",
+        "models-load-page"
+      ],
+      "keywords": [
+        "models",
+        "tabs"
+      ],
+      "code": [
+        "src/windows/ModelsWindow.tsx"
+      ]
+    },
+    {
+      "id": "models-library",
+      "title": "Models: Library tab",
+      "type": "feature",
+      "area": "models",
+      "package": "W-MODELS",
+      "file": "models/models-library.md",
+      "summary": "Every model folder on your nodes: its size, which nodes have it, and whether each copy is verified.",
+      "verified": false,
+      "related": [
+        "copy-a-model-to-other-nodes",
+        "delete-a-model",
+        "load-a-model-on-one-node"
+      ],
+      "keywords": [
+        "library",
+        "verified",
+        "found",
+        "copies",
+        "find models"
+      ],
+      "code": [
+        "src/windows/models/LibraryTab.tsx"
+      ]
+    },
+    {
+      "id": "models-hugging-face",
+      "title": "Models: Hugging Face tab",
+      "type": "feature",
+      "area": "models",
+      "package": "W-MODELS",
+      "file": "models/models-hugging-face.md",
+      "summary": "Search for models, see the fit table for your Sparks, and start a download.",
+      "verified": false,
+      "related": [
+        "find-a-model-that-fits",
+        "download-a-model"
+      ],
+      "keywords": [
+        "find models",
+        "where to find models",
+        "browse models",
+        "hugging face",
+        "search",
+        "recommended",
+        "fit table",
+        "gated",
+        "mlx"
+      ],
+      "code": [
+        "src/windows/models/HubTab.tsx",
+        "src/windows/models/FitTable.tsx",
+        "src/windows/models/hfSizes.ts"
+      ]
+    },
+    {
+      "id": "models-load-page",
+      "title": "Models: the Load page",
+      "type": "feature",
+      "area": "models",
+      "package": "W-MODELS",
+      "file": "models/models-load-page.md",
+      "summary": "Every option for starting a model: recipe, nodes, split, memory plan, limits, access, the checks and what will run.",
+      "verified": false,
+      "related": [
+        "choose-load-settings",
+        "load-a-model-on-one-node",
+        "load-a-model-on-several-nodes"
+      ],
+      "keywords": [
+        "load page",
+        "memory plan",
+        "before it starts",
+        "what will run"
+      ],
+      "code": [
+        "src/windows/models/LoadPage.tsx",
+        "src-tauri/src/models/plan.rs"
+      ]
+    },
+    {
+      "id": "models-loaded",
+      "title": "Models: Loaded tab",
+      "type": "feature",
+      "area": "models",
+      "package": "W-MODELS",
+      "file": "models/models-loaded.md",
+      "summary": "What's serving right now, loads that failed or stopped, and the engine's log.",
+      "verified": false,
+      "related": [
+        "restart-or-change-a-model",
+        "unload-a-model",
+        "fix-a-load-that-failed",
+        "tell-if-a-model-is-working",
+        "endpoints"
+      ],
+      "keywords": [
+        "loaded",
+        "serving",
+        "failed",
+        "forget",
+        "log"
+      ],
+      "code": [
+        "src/windows/models/LoadedTab.tsx",
+        "src/windows/models/DeploymentSummary.tsx"
+      ]
+    },
+    {
+      "id": "models-benchmarks",
+      "title": "Models: Benchmarks tab",
+      "type": "feature",
+      "area": "models",
+      "package": "W-MODELS",
+      "file": "models/models-benchmarks.md",
+      "summary": "Run a speed sweep against a ready vLLM model and compare runs.",
+      "verified": false,
+      "related": [
+        "benchmark-a-model"
+      ],
+      "keywords": [
+        "benchmark",
+        "p50",
+        "p95",
+        "sweep",
+        "csv"
+      ],
+      "code": [
+        "src/windows/models/BenchTab.tsx"
+      ]
+    },
+    {
+      "id": "models-jobs",
+      "title": "Models: Jobs tab",
+      "type": "feature",
+      "area": "models",
+      "package": "W-MODELS",
+      "file": "models/models-jobs.md",
+      "summary": "Downloads and copies running on your nodes, with progress, Cancel and Resume download.",
+      "verified": false,
+      "related": [
+        "follow-a-download",
+        "tasks-and-jobs"
+      ],
+      "keywords": [
+        "jobs",
+        "progress",
+        "cancel"
+      ],
+      "code": [
+        "src/windows/models/JobsTab.tsx"
+      ]
+    },
+    {
+      "id": "models-prepare-cluster",
+      "title": "Models: Prepare cluster tab",
+      "type": "feature",
+      "area": "models",
+      "package": "W-MODELS",
+      "file": "models/models-prepare-cluster.md",
+      "summary": "A table showing whether each node has what it needs to load a model, kept with its age.",
+      "verified": false,
+      "related": [
+        "prepare-the-cluster"
+      ],
+      "keywords": [
+        "prepare",
+        "docker",
+        "image",
+        "free disk",
+        "rsync"
+      ],
+      "code": [
+        "src/windows/models/PrepareTab.tsx"
+      ]
+    },
+    {
+      "id": "settings-models",
+      "title": "Settings: Models",
+      "type": "feature",
+      "area": "settings",
+      "package": "W-MODELS",
+      "file": "models/settings-models.md",
+      "summary": "The model folder, engine images, your Hugging Face token, the load recipes, and the AI advisor.",
+      "verified": false,
+      "related": [
+        "get-a-hugging-face-token",
+        "models-window"
+      ],
+      "keywords": [
+        "model folder",
+        "image",
+        "token",
+        "advisor"
+      ],
+      "code": [
+        "src/windows/settings/ModelsSection.tsx"
+      ]
+    },
+    {
+      "id": "use-ollama",
+      "title": "Use Ollama",
+      "type": "howto",
+      "area": "models",
+      "package": "W-AI",
+      "file": "ai/use-ollama.md",
+      "summary": "Pull a model with Ollama, chat with it if your Mac can reach it, and delete it when you're done.",
+      "verified": false,
+      "related": [
+        "ollama",
+        "engines",
+        "chat"
+      ],
+      "keywords": [
+        "ollama",
+        "pull",
+        "gguf",
+        "small model",
+        "small models",
+        "run ollama"
+      ],
+      "code": [
+        "src/windows/OllamaWindow.tsx",
+        "src-tauri/src/models/ollama.rs"
+      ]
+    },
+    {
+      "id": "chat-with-a-cluster-model",
+      "title": "Chat with a cluster model",
+      "type": "howto",
+      "area": "ai",
+      "package": "W-AI",
+      "file": "ai/chat-with-a-cluster-model.md",
+      "summary": "Talk to a model running on your nodes, in SparkBox's Chat window.",
+      "verified": false,
+      "related": [
+        "chat",
+        "tell-if-a-model-is-working"
+      ],
+      "keywords": [
+        "chat",
+        "talk",
+        "ask",
+        "conversation",
+        "prompt",
+        "talk to the model",
+        "talk to a model",
+        "how do i chat",
+        "ask my model a question",
+        "try my model"
+      ],
+      "code": [
+        "src/windows/ChatWindow.tsx",
+        "src/windows/chat/ModelPicker.tsx",
+        "src-tauri/src/llm/chat.rs"
+      ]
+    },
+    {
+      "id": "add-a-cloud-provider",
+      "title": "Add a cloud provider",
+      "type": "howto",
+      "area": "ai",
+      "package": "W-AI",
+      "file": "ai/add-a-cloud-provider.md",
+      "summary": "Save an Anthropic or OpenAI API key, so that their models appear in Chat and the Server.",
+      "verified": false,
+      "related": [
+        "providers",
+        "chat-with-a-cloud-model",
+        "keychain-and-secrets"
+      ],
+      "keywords": [
+        "anthropic",
+        "openai",
+        "claude",
+        "gpt",
+        "api key",
+        "cloud",
+        "openai key",
+        "anthropic key",
+        "use chatgpt",
+        "chatgpt",
+        "add a cloud model"
+      ],
+      "code": [
+        "src/windows/ProvidersWindow.tsx",
+        "src-tauri/src/llm/mod.rs"
+      ]
+    },
+    {
+      "id": "chat-with-a-cloud-model",
+      "title": "Chat with a cloud model",
+      "type": "howto",
+      "area": "ai",
+      "package": "W-AI",
+      "file": "ai/chat-with-a-cloud-model.md",
+      "summary": "Talk to Claude or GPT from SparkBox. Your messages go to that company, and you pay for what you use.",
+      "verified": false,
+      "related": [
+        "add-a-cloud-provider",
+        "chat"
+      ],
+      "keywords": [
+        "claude",
+        "gpt",
+        "cloud",
+        "cost",
+        "use chatgpt",
+        "use claude"
+      ],
+      "code": [
+        "src/windows/ChatWindow.tsx",
+        "src-tauri/src/llm/chat.rs"
+      ]
+    },
+    {
+      "id": "run-sparkbox-as-a-server",
+      "title": "Run SparkBox as a server",
+      "type": "howto",
+      "area": "ai",
+      "package": "W-AI",
+      "file": "ai/run-sparkbox-as-a-server.md",
+      "summary": "Turn on the Server, so that apps on this Mac can use your models through one address.",
+      "verified": false,
+      "related": [
+        "server",
+        "create-an-api-key",
+        "connect-an-app"
+      ],
+      "keywords": [
+        "server",
+        "api",
+        "local",
+        "openai compatible",
+        "start server",
+        "use my cluster from an app",
+        "share a model with my apps",
+        "use sparkbox from an app",
+        "local api"
+      ],
+      "code": [
+        "src/windows/ServerWindow.tsx",
+        "src-tauri/src/server/mod.rs"
+      ]
+    },
+    {
+      "id": "create-an-api-key",
+      "title": "Create an API key for an app",
+      "type": "howto",
+      "area": "ai",
+      "package": "W-AI",
+      "file": "ai/create-an-api-key.md",
+      "summary": "Give an app its own SparkBox key, and revoke it when you no longer need it.",
+      "verified": false,
+      "related": [
+        "server",
+        "connect-an-app"
+      ],
+      "keywords": [
+        "api key",
+        "access key",
+        "revoke",
+        "token",
+        "make a key for an app",
+        "new api key"
+      ],
+      "code": [
+        "src/windows/ServerWindow.tsx",
+        "src-tauri/src/server/mod.rs"
+      ]
+    },
+    {
+      "id": "connect-an-app",
+      "title": "Connect an app to SparkBox",
+      "type": "howto",
+      "area": "ai",
+      "package": "W-AI",
+      "file": "ai/connect-an-app.md",
+      "summary": "Point Claude Code, Codex or your own code at the Server, using the snippets it gives you.",
+      "verified": false,
+      "related": [
+        "server",
+        "create-an-api-key",
+        "endpoints-and-apis"
+      ],
+      "keywords": [
+        "claude code",
+        "codex",
+        "sdk",
+        "curl",
+        "connect",
+        "use my cluster from an app",
+        "connect open webui",
+        "open webui",
+        "share a model with my apps",
+        "use a model from my app",
+        "connect my app",
+        "use from python",
+        "openai api"
+      ],
+      "code": [
+        "src/windows/ServerWindow.tsx",
+        "src-tauri/src/server/translate.rs"
+      ]
+    },
+    {
+      "id": "give-a-model-a-short-name",
+      "title": "Give a model a short name",
+      "type": "howto",
+      "area": "ai",
+      "package": "W-AI",
+      "file": "ai/give-a-model-a-short-name.md",
+      "summary": "Make an alias in the Server, so that you can switch models later without changing your app.",
+      "verified": false,
+      "related": [
+        "server",
+        "connect-an-app"
+      ],
+      "keywords": [
+        "alias",
+        "aliases",
+        "short name",
+        "switch models",
+        "change model"
+      ],
+      "code": [
+        "src/windows/ServerWindow.tsx",
+        "src-tauri/src/server/mod.rs"
+      ]
+    },
+    {
+      "id": "use-a-model-from-another-computer",
+      "title": "Use a model from another computer",
+      "type": "howto",
+      "area": "ai",
+      "package": "W-AI",
+      "file": "ai/use-a-model-from-another-computer.md",
+      "summary": "Reach a model on your cluster from a laptop, phone or other device on your network, with its address, name and key.",
+      "verified": false,
+      "related": [
+        "endpoints",
+        "endpoints-and-apis",
+        "restart-or-change-a-model"
+      ],
+      "keywords": [
+        "another computer",
+        "laptop",
+        "phone",
+        "use from my phone",
+        "use from my laptop",
+        "load key"
+      ],
+      "code": [
+        "src/windows/models/EndpointCard.tsx",
+        "src/windows/models/shared.tsx",
+        "src-tauri/src/models/plan.rs",
+        "src-tauri/src/models/mod.rs"
+      ]
+    },
+    {
+      "id": "endpoints",
+      "title": "Endpoints",
+      "type": "feature",
+      "area": "models",
+      "package": "W-AI",
+      "file": "ai/endpoints.md",
+      "summary": "Every model server on your cluster, whoever started it, with live speed, health and actions.",
+      "verified": false,
+      "related": [
+        "tell-if-a-model-is-working",
+        "endpoints-and-apis",
+        "unload-a-model"
+      ],
+      "keywords": [
+        "endpoints",
+        "inference",
+        "cards",
+        "ttft",
+        "kv cache",
+        "history"
+      ],
+      "code": [
+        "src/windows/EndpointsWindow.tsx",
+        "src/windows/models/EndpointCard.tsx",
+        "src/windows/models/EndpointHistory.tsx",
+        "src/lib/endpoints.ts",
+        "src-tauri/src/models/endpoints.rs"
+      ]
+    },
+    {
+      "id": "ollama",
+      "title": "Ollama",
+      "type": "feature",
+      "area": "models",
+      "package": "W-AI",
+      "file": "ai/ollama.md",
+      "summary": "Ollama's models on a node: what's installed, what's in memory, Pull and Delete.",
+      "verified": false,
+      "related": [
+        "use-ollama"
+      ],
+      "keywords": [
+        "ollama",
+        "pull",
+        "in memory"
+      ],
+      "code": [
+        "src/windows/OllamaWindow.tsx"
+      ]
+    },
+    {
+      "id": "chat",
+      "title": "Chat",
+      "type": "feature",
+      "area": "ai",
+      "package": "W-AI",
+      "file": "ai/chat.md",
+      "summary": "Talk to any model SparkBox can reach, with saved conversations, a system prompt and speed readouts.",
+      "verified": false,
+      "related": [
+        "chat-with-a-cluster-model",
+        "chat-with-a-cloud-model"
+      ],
+      "keywords": [
+        "chat",
+        "system prompt",
+        "temperature",
+        "effort",
+        "regenerate"
+      ],
+      "code": [
+        "src/windows/ChatWindow.tsx",
+        "src/windows/chat/ModelPicker.tsx",
+        "src/windows/chat/stats.ts",
+        "src/windows/chat/thread.ts"
+      ]
+    },
+    {
+      "id": "server",
+      "title": "Server",
+      "type": "feature",
+      "area": "ai",
+      "package": "W-AI",
+      "file": "ai/server.md",
+      "summary": "A local API on this Mac that gives apps one address for your cluster models and cloud models.",
+      "verified": false,
+      "related": [
+        "run-sparkbox-as-a-server",
+        "create-an-api-key",
+        "connect-an-app"
+      ],
+      "keywords": [
+        "server",
+        "access keys",
+        "aliases",
+        "origins",
+        "requests",
+        "test"
+      ],
+      "code": [
+        "src/windows/ServerWindow.tsx",
+        "src-tauri/src/server/mod.rs",
+        "src/lib/server.ts"
+      ]
+    },
+    {
+      "id": "providers",
+      "title": "Providers",
+      "type": "feature",
+      "area": "ai",
+      "package": "W-AI",
+      "file": "ai/providers.md",
+      "summary": "Where SparkBox gets models from: Anthropic, OpenAI, your cluster, and other servers you add.",
+      "verified": false,
+      "related": [
+        "add-a-cloud-provider",
+        "chat"
+      ],
+      "keywords": [
+        "providers",
+        "api key",
+        "default model",
+        "scan cluster",
+        "lm studio"
+      ],
+      "code": [
+        "src/windows/ProvidersWindow.tsx",
+        "src-tauri/src/llm/mod.rs",
+        "src-tauri/src/llm/catalog.rs"
+      ]
+    },
+    {
+      "id": "endpoints-and-apis",
+      "title": "Endpoints, ports and API keys",
+      "type": "concept",
+      "area": "ai",
+      "package": "W-AI",
+      "file": "ai/endpoints-and-apis.md",
+      "summary": "How apps talk to a model: an address, a port, a key, and the OpenAI and Anthropic ways of asking.",
+      "verified": null,
+      "related": [
+        "server",
+        "endpoints",
+        "connect-an-app"
+      ],
+      "keywords": [
+        "api",
+        "endpoint",
+        "port",
+        "openai",
+        "anthropic",
+        "url"
+      ],
+      "code": [
+        "src/lib/endpoints.ts",
+        "src-tauri/src/server/mod.rs"
+      ]
+    },
+    {
+      "id": "see-pending-updates",
+      "title": "See what updates are waiting",
+      "type": "howto",
+      "area": "updates",
+      "package": "W-OPS",
+      "file": "ops/see-pending-updates.md",
+      "summary": "Read the update counts in the sidebar and the Updates window without changing anything.",
+      "verified": false,
+      "related": [
+        "updates",
+        "check-for-updates",
+        "packages-and-updates"
+      ],
+      "keywords": [
+        "updates",
+        "pending",
+        "security",
+        "how many",
+        "how many updates",
+        "what needs updating"
+      ],
+      "code": [
+        "src/components/Sidebar.tsx",
+        "src/windows/UpdatesWindow.tsx",
+        "src-tauri/src/ops/update_check.rs"
+      ]
+    },
+    {
+      "id": "check-for-updates",
+      "title": "Check for updates now",
+      "type": "howto",
+      "area": "updates",
+      "package": "W-OPS",
+      "file": "ops/check-for-updates.md",
+      "summary": "Refresh the package lists on your nodes, so that the counts are up to the minute.",
+      "verified": false,
+      "related": [
+        "see-pending-updates",
+        "simulate-an-update"
+      ],
+      "keywords": [
+        "check all nodes",
+        "apt update",
+        "refresh"
+      ],
+      "code": [
+        "src/windows/UpdatesWindow.tsx",
+        "src-tauri/src/ops/updates.rs"
+      ]
+    },
+    {
+      "id": "simulate-an-update",
+      "title": "Simulate an update",
+      "type": "howto",
+      "area": "updates",
+      "package": "W-OPS",
+      "file": "ops/simulate-an-update.md",
+      "summary": "See exactly what an upgrade would change, without changing anything.",
+      "verified": false,
+      "related": [
+        "install-updates",
+        "updates"
+      ],
+      "keywords": [
+        "simulate",
+        "dry run",
+        "what would change",
+        "preview"
+      ],
+      "code": [
+        "src/windows/UpdatesWindow.tsx",
+        "src-tauri/src/ops/updates.rs",
+        "src-tauri/src/ops/gpu_guard.rs"
+      ]
+    },
+    {
+      "id": "install-updates",
+      "title": "Install updates on a node",
+      "type": "howto",
+      "area": "updates",
+      "package": "W-OPS",
+      "file": "ops/install-updates.md",
+      "summary": "Upgrade one node safely, follow it, and deal with services and restarts afterward.",
+      "verified": false,
+      "related": [
+        "simulate-an-update",
+        "pin-the-gpu-stack",
+        "restart-a-node"
+      ],
+      "keywords": [
+        "upgrade",
+        "install",
+        "apt",
+        "security fixes",
+        "update node",
+        "update the cluster",
+        "update everything",
+        "update my nodes",
+        "update a node",
+        "software update",
+        "apt upgrade",
+        "security patches"
+      ],
+      "code": [
+        "src/windows/UpdatesWindow.tsx",
+        "src-tauri/src/ops/updates.rs",
+        "src-tauri/src/ops/prereboot.rs"
+      ]
+    },
+    {
+      "id": "pin-the-gpu-stack",
+      "title": "Pin the GPU stack",
+      "type": "howto",
+      "area": "updates",
+      "package": "W-OPS",
+      "file": "ops/pin-the-gpu-stack.md",
+      "summary": "Hold a node's GPU software at its versions, so that you can upgrade everything else, and release it later.",
+      "verified": false,
+      "related": [
+        "packages-and-updates",
+        "install-updates"
+      ],
+      "keywords": [
+        "update nvidia",
+        "nvidia update",
+        "pin",
+        "hold",
+        "gpu stack",
+        "driver",
+        "kernel",
+        "don't update",
+        "nvidia driver",
+        "keep the gpu driver",
+        "stop driver updates",
+        "protect the gpu driver",
+        "update break my gpu",
+        "will an update break my gpu",
+        "updates break the gpu"
+      ],
+      "code": [
+        "src/windows/UpdatesWindow.tsx",
+        "src-tauri/src/ops/updates.rs",
+        "src-tauri/src/ops/gpu_guard.rs"
+      ]
+    },
+    {
+      "id": "restart-a-node",
+      "title": "Restart a node",
+      "type": "howto",
+      "area": "ops",
+      "package": "W-OPS",
+      "file": "ops/restart-a-node.md",
+      "summary": "Restart a node safely: see what goes down with it, pass the checks, and confirm it came back.",
+      "verified": false,
+      "related": [
+        "shut-down-and-wake-a-node",
+        "use-maintenance-mode",
+        "node-window"
+      ],
+      "keywords": [
+        "restart",
+        "reboot",
+        "node",
+        "kernel",
+        "is it safe to restart",
+        "safe to restart",
+        "restart a spark",
+        "reboot a spark",
+        "reboot a node"
+      ],
+      "code": [
+        "src/lib/power.ts",
+        "src-tauri/src/ops/prereboot.rs",
+        "src/windows/NodeDetail.tsx"
+      ]
+    },
+    {
+      "id": "recover-a-frozen-node",
+      "title": "Recover a frozen node",
+      "type": "howto",
+      "area": "ops",
+      "package": "W-OPS",
+      "file": "ops/recover-a-frozen-node.md",
+      "summary": "Get a node that has stopped answering running again from its power button, then find out why it froze.",
+      "verified": false,
+      "related": [
+        "restart-a-node",
+        "find-out-why-a-node-restarted",
+        "memory-on-a-spark",
+        "choose-load-settings"
+      ],
+      "keywords": [
+        "frozen",
+        "freeze",
+        "froze",
+        "hung",
+        "hang",
+        "stuck",
+        "node frozen",
+        "node is stuck",
+        "node hung",
+        "node not responding",
+        "spark frozen",
+        "spark froze",
+        "power button",
+        "hold power button",
+        "force off",
+        "power cycle",
+        "hard reset",
+        "out of memory",
+        "ran out of memory"
+      ],
+      "code": [
+        "src/windows/NodeDetail.tsx",
+        "src/lib/boots.ts",
+        "src-tauri/src/health/boots.rs"
+      ]
+    },
+    {
+      "id": "shut-down-and-wake-a-node",
+      "title": "Shut down and wake a node",
+      "type": "howto",
+      "area": "ops",
+      "package": "W-OPS",
+      "file": "ops/shut-down-and-wake-a-node.md",
+      "summary": "Turn a node off from SparkBox, and turn it back on with Wake-on-LAN or its power button.",
+      "verified": false,
+      "related": [
+        "restart-a-node",
+        "node-window",
+        "turn-the-whole-cluster-off-and-on"
+      ],
+      "keywords": [
+        "shut down",
+        "turn off",
+        "power off",
+        "wake",
+        "wake on lan",
+        "power on",
+        "turn off a spark",
+        "turn off a node",
+        "turn on a node",
+        "turn on a spark",
+        "switch off a node",
+        "power on a node"
+      ],
+      "code": [
+        "src/lib/power.ts",
+        "src-tauri/src/wol.rs",
+        "src/windows/NodeDetail.tsx"
+      ]
+    },
+    {
+      "id": "turn-the-whole-cluster-off-and-on",
+      "title": "Turn the whole cluster off and on",
+      "type": "howto",
+      "area": "ops",
+      "package": "W-OPS",
+      "file": "ops/turn-the-whole-cluster-off-and-on.md",
+      "summary": "Shut down all your nodes in a safe order, start them again, and bring the cluster back after a power cut.",
+      "verified": false,
+      "related": [
+        "shut-down-and-wake-a-node",
+        "unload-a-model",
+        "recover-a-frozen-node",
+        "find-out-why-a-node-restarted"
+      ],
+      "keywords": [
+        "whole cluster",
+        "all nodes",
+        "every node",
+        "turn everything off",
+        "turn everything on",
+        "shut everything down",
+        "start the cluster",
+        "power cut",
+        "power outage",
+        "blackout",
+        "move the cluster",
+        "moving the sparks"
+      ],
+      "code": [
+        "src/lib/power.ts",
+        "src-tauri/src/ops/mod.rs",
+        "src-tauri/src/health/reach.rs",
+        "src-tauri/src/health/boots.rs",
+        "src/lib/nodeStatus.ts"
+      ]
+    },
+    {
+      "id": "use-maintenance-mode",
+      "title": "Use maintenance mode",
+      "type": "howto",
+      "area": "ops",
+      "package": "W-OPS",
+      "file": "ops/use-maintenance-mode.md",
+      "summary": "Tell SparkBox you're working on a node, so that its alerts don't page anyone.",
+      "verified": false,
+      "related": [
+        "node-window",
+        "alerts-and-incidents"
+      ],
+      "keywords": [
+        "maintenance",
+        "planned work",
+        "quiet",
+        "stop alerts",
+        "working on a node",
+        "silence alerts during work",
+        "stop alerts while i work",
+        "stop getting alerts while i work",
+        "pause alerts"
+      ],
+      "code": [
+        "src/lib/maintenance.ts",
+        "src-tauri/src/health/maintenance.rs",
+        "src/windows/NodeDetail.tsx"
+      ]
+    },
+    {
+      "id": "run-a-command-on-every-node",
+      "title": "Run a command on every node",
+      "type": "howto",
+      "area": "ops",
+      "package": "W-OPS",
+      "file": "ops/run-a-command-on-every-node.md",
+      "summary": "Send one command to some or all nodes with Fleet Command, and compare the answers side by side.",
+      "verified": false,
+      "related": [
+        "fleet-command",
+        "open-a-terminal"
+      ],
+      "keywords": [
+        "fleet",
+        "all nodes",
+        "broadcast command",
+        "as root",
+        "snippet",
+        "run command on all nodes",
+        "run a command on all nodes",
+        "run a command everywhere",
+        "same command on every node",
+        "run as root"
+      ],
+      "code": [
+        "src/windows/FleetCommand.tsx",
+        "src/lib/power.ts",
+        "src-tauri/src/ops/fleet.rs",
+        "src-tauri/src/ops/classify.rs"
+      ]
+    },
+    {
+      "id": "see-and-stop-processes",
+      "title": "See and stop processes",
+      "type": "howto",
+      "area": "ops",
+      "package": "W-OPS",
+      "file": "ops/see-and-stop-processes.md",
+      "summary": "Find what's using a node's CPU, GPU or memory, and stop it if you need to.",
+      "verified": false,
+      "related": [
+        "workloads",
+        "services-and-processes"
+      ],
+      "keywords": [
+        "process",
+        "kill",
+        "stop",
+        "what's using memory",
+        "gpu memory",
+        "top",
+        "kill a process",
+        "stop a process",
+        "stuck process",
+        "whats using my gpu",
+        "what is using memory",
+        "whats using memory"
+      ],
+      "code": [
+        "src/windows/Workloads.tsx",
+        "src-tauri/src/ops/mod.rs"
+      ]
+    },
+    {
+      "id": "manage-containers",
+      "title": "Manage containers",
+      "type": "howto",
+      "area": "ops",
+      "package": "W-OPS",
+      "file": "ops/manage-containers.md",
+      "summary": "See the containers on your nodes and start, stop, restart or remove them, and read their logs.",
+      "verified": false,
+      "related": [
+        "containers",
+        "containers-and-images",
+        "check-docker-images"
+      ],
+      "keywords": [
+        "docker",
+        "container",
+        "logs",
+        "stop container",
+        "remove",
+        "restart container",
+        "restart a container",
+        "stop a container",
+        "container logs"
+      ],
+      "code": [
+        "src/windows/Containers.tsx",
+        "src-tauri/src/ops/containers.rs",
+        "src/lib/workloadCommands.ts"
+      ]
+    },
+    {
+      "id": "check-docker-images",
+      "title": "Check Docker images",
+      "type": "howto",
+      "area": "ops",
+      "package": "W-OPS",
+      "file": "ops/check-docker-images.md",
+      "summary": "See which images are on each node, how much disk they use, and which are unused.",
+      "verified": false,
+      "related": [
+        "images",
+        "containers-and-images",
+        "check-disk-space"
+      ],
+      "keywords": [
+        "docker image",
+        "disk",
+        "unused",
+        "dangling",
+        "old docker images",
+        "docker taking up space"
+      ],
+      "code": [
+        "src/windows/Images.tsx",
+        "src-tauri/src/ops/images.rs"
+      ]
+    },
+    {
+      "id": "restart-a-service",
+      "title": "Restart, disable or enable a service",
+      "type": "howto",
+      "area": "ops",
+      "package": "W-OPS",
+      "file": "ops/restart-a-service.md",
+      "summary": "Control a background service on a node, and read its status and log.",
+      "verified": false,
+      "related": [
+        "services",
+        "services-and-processes"
+      ],
+      "keywords": [
+        "service",
+        "systemd",
+        "restart service",
+        "journal",
+        "failed unit",
+        "read logs",
+        "service logs",
+        "service failed",
+        "restart a service"
+      ],
+      "code": [
+        "src/windows/Services.tsx",
+        "src-tauri/src/ops/services.rs",
+        "src/lib/impact.ts"
+      ]
+    },
+    {
+      "id": "find-what-sparkbox-did",
+      "title": "Find out what SparkBox did",
+      "type": "howto",
+      "area": "ops",
+      "package": "W-OPS",
+      "file": "ops/find-what-sparkbox-did.md",
+      "summary": "Look up any command SparkBox ran, when and why, and export the log.",
+      "verified": false,
+      "related": [
+        "activity-log",
+        "settings-security"
+      ],
+      "keywords": [
+        "audit",
+        "history",
+        "log",
+        "what happened",
+        "export",
+        "what changed",
+        "what changed on my cluster",
+        "who did this",
+        "what did sparkbox do",
+        "what happened on my cluster",
+        "read logs"
+      ],
+      "code": [
+        "src/windows/ActivityLog.tsx",
+        "src-tauri/src/live/audit.rs"
+      ]
+    },
+    {
+      "id": "capture-evidence",
+      "title": "Capture evidence",
+      "type": "howto",
+      "area": "ops",
+      "package": "W-OPS",
+      "file": "ops/capture-evidence.md",
+      "summary": "Record the state of every connected node before and after a big change, and compare the two.",
+      "verified": false,
+      "related": [
+        "settings-diagnostics",
+        "collect-diagnostics"
+      ],
+      "keywords": [
+        "evidence",
+        "before",
+        "after",
+        "snapshot",
+        "compare",
+        "diff",
+        "before and after"
+      ],
+      "code": [
+        "src/windows/settings/DiagnosticsSection.tsx",
+        "src-tauri/src/evidence.rs",
+        "src/lib/evidence.ts"
+      ]
+    },
+    {
+      "id": "collect-diagnostics",
+      "title": "Collect diagnostics",
+      "type": "howto",
+      "area": "ops",
+      "package": "W-OPS",
+      "file": "ops/collect-diagnostics.md",
+      "summary": "Run the Doctor report or export SparkBox's own diagnostics when something isn't working.",
+      "verified": false,
+      "related": [
+        "settings-diagnostics",
+        "troubleshooting"
+      ],
+      "keywords": [
+        "doctor",
+        "report",
+        "diagnostics",
+        "support",
+        "logs",
+        "send logs to support",
+        "report a problem",
+        "report a bug",
+        "something is wrong with sparkbox"
+      ],
+      "code": [
+        "src/windows/settings/DiagnosticsSection.tsx",
+        "src/windows/settings/SecuritySection.tsx",
+        "src-tauri/src/logging.rs"
+      ]
+    },
+    {
+      "id": "workloads",
+      "title": "Workloads",
+      "type": "feature",
+      "area": "ops",
+      "package": "W-OPS",
+      "file": "ops/workloads.md",
+      "summary": "The processes and listening ports on every node, and what each belongs to.",
+      "verified": false,
+      "related": [
+        "see-and-stop-processes",
+        "open-the-dgx-dashboard"
+      ],
+      "keywords": [
+        "processes",
+        "ports",
+        "priority",
+        "nice",
+        "signal",
+        "pid",
+        "see what is running",
+        "what is running on my nodes",
+        "what is my cluster doing"
+      ],
+      "code": [
+        "src/windows/Workloads.tsx",
+        "src/lib/knownPorts.ts"
+      ]
+    },
+    {
+      "id": "containers",
+      "title": "Containers",
+      "type": "feature",
+      "area": "ops",
+      "package": "W-OPS",
+      "file": "ops/containers.md",
+      "summary": "Every Docker container on every node, with state, exit reason and actions.",
+      "verified": false,
+      "related": [
+        "manage-containers",
+        "containers-and-images"
+      ],
+      "keywords": [
+        "docker",
+        "exited",
+        "deployments",
+        "test container"
+      ],
+      "code": [
+        "src/windows/Containers.tsx",
+        "src/lib/exits.ts"
+      ]
+    },
+    {
+      "id": "images",
+      "title": "Images",
+      "type": "feature",
+      "area": "ops",
+      "package": "W-OPS",
+      "file": "ops/images.md",
+      "summary": "A read-only list of the Docker images on each node, their sizes and what uses them.",
+      "verified": false,
+      "related": [
+        "check-docker-images"
+      ],
+      "keywords": [
+        "images",
+        "unused",
+        "dangling"
+      ],
+      "code": [
+        "src/windows/Images.tsx"
+      ]
+    },
+    {
+      "id": "services",
+      "title": "Services",
+      "type": "feature",
+      "area": "ops",
+      "package": "W-OPS",
+      "file": "ops/services.md",
+      "summary": "Background services on all nodes side by side, failed ones first, with status and journal.",
+      "verified": false,
+      "related": [
+        "restart-a-service",
+        "services-and-processes"
+      ],
+      "keywords": [
+        "services",
+        "systemd",
+        "mask",
+        "journal"
+      ],
+      "code": [
+        "src/windows/Services.tsx"
+      ]
+    },
+    {
+      "id": "fleet-command",
+      "title": "Fleet Command",
+      "type": "feature",
+      "area": "ops",
+      "package": "W-OPS",
+      "file": "ops/fleet-command.md",
+      "summary": "Run a command on several nodes at once, and compare versions across the cluster.",
+      "verified": false,
+      "related": [
+        "run-a-command-on-every-node"
+      ],
+      "keywords": [
+        "fleet",
+        "versions",
+        "snippets",
+        "canary",
+        "as root"
+      ],
+      "code": [
+        "src/windows/FleetCommand.tsx",
+        "src-tauri/src/ops/fleet.rs",
+        "src-tauri/src/ops/classify.rs"
+      ]
+    },
+    {
+      "id": "updates",
+      "title": "Updates",
+      "type": "feature",
+      "area": "updates",
+      "package": "W-OPS",
+      "file": "ops/updates.md",
+      "summary": "Pending packages on each node, with Simulate, Upgrade, Hold and Pin the GPU stack.",
+      "verified": false,
+      "related": [
+        "see-pending-updates",
+        "install-updates",
+        "pin-the-gpu-stack"
+      ],
+      "keywords": [
+        "updates",
+        "apt",
+        "held",
+        "needrestart",
+        "dgx os",
+        "firmware"
+      ],
+      "code": [
+        "src/windows/UpdatesWindow.tsx",
+        "src-tauri/src/ops/updates.rs"
+      ]
+    },
+    {
+      "id": "tasks",
+      "title": "Tasks",
+      "type": "feature",
+      "area": "ops",
+      "package": "W-OPS",
+      "file": "ops/tasks.md",
+      "summary": "Everything SparkBox is doing or has done, with steps, logs and Cancel.",
+      "verified": false,
+      "related": [
+        "find-what-sparkbox-did",
+        "follow-a-download",
+        "tasks-and-jobs"
+      ],
+      "keywords": [
+        "tasks",
+        "progress",
+        "cancel",
+        "running"
+      ],
+      "code": [
+        "src/windows/TasksWindow.tsx",
+        "src/lib/tasks.ts",
+        "src/components/TasksChip.tsx",
+        "src-tauri/src/tasks.rs"
+      ]
+    },
+    {
+      "id": "activity-log",
+      "title": "Activity log",
+      "type": "feature",
+      "area": "ops",
+      "package": "W-OPS",
+      "file": "ops/activity-log.md",
+      "summary": "A record of every command SparkBox ran on a node and every change on this Mac.",
+      "verified": false,
+      "related": [
+        "find-what-sparkbox-did",
+        "settings-security"
+      ],
+      "keywords": [
+        "audit",
+        "changes",
+        "everything",
+        "export",
+        "refused"
+      ],
+      "code": [
+        "src/windows/ActivityLog.tsx",
+        "src-tauri/src/live/audit.rs"
+      ]
+    },
+    {
+      "id": "inspect-window",
+      "title": "Inspect",
+      "type": "feature",
+      "area": "ops",
+      "package": "W-OPS",
+      "file": "ops/inspect-window.md",
+      "summary": "A container's full details: image, state, ports, mounts and labels, with secret-looking values hidden.",
+      "verified": false,
+      "related": [
+        "containers",
+        "manage-containers"
+      ],
+      "keywords": [
+        "inspect",
+        "docker inspect",
+        "mounts",
+        "labels"
+      ],
+      "code": [
+        "src/windows/InspectWindow.tsx"
+      ]
+    },
+    {
+      "id": "settings-diagnostics",
+      "title": "Settings: Diagnostics",
+      "type": "feature",
+      "area": "settings",
+      "package": "W-OPS",
+      "file": "ops/settings-diagnostics.md",
+      "summary": "The Doctor report, evidence captures, and SparkBox's list of trusted host keys.",
+      "verified": false,
+      "related": [
+        "capture-evidence",
+        "collect-diagnostics"
+      ],
+      "keywords": [
+        "doctor",
+        "evidence",
+        "host keys",
+        "known hosts"
+      ],
+      "code": [
+        "src/windows/settings/DiagnosticsSection.tsx",
+        "src-tauri/src/evidence.rs"
+      ]
+    },
+    {
+      "id": "containers-and-images",
+      "title": "Containers and images",
+      "type": "concept",
+      "area": "ops",
+      "package": "W-OPS",
+      "file": "ops/containers-and-images.md",
+      "summary": "A container is a program in its own sealed box. An image is the recipe it starts from. Why models run this way.",
+      "verified": null,
+      "related": [
+        "containers",
+        "images",
+        "engines"
+      ],
+      "keywords": [
+        "docker",
+        "container",
+        "image",
+        "what is"
+      ],
+      "code": [
+        "src-tauri/src/ops/containers.rs",
+        "src-tauri/src/ops/images.rs"
+      ]
+    },
+    {
+      "id": "services-and-processes",
+      "title": "Services and processes",
+      "type": "concept",
+      "area": "ops",
+      "package": "W-OPS",
+      "file": "ops/services-and-processes.md",
+      "summary": "A process is a running program. A service is one the system keeps running for you.",
+      "verified": null,
+      "related": [
+        "services",
+        "workloads"
+      ],
+      "keywords": [
+        "systemd",
+        "process",
+        "service",
+        "daemon",
+        "unit"
+      ],
+      "code": [
+        "src-tauri/src/ops/services.rs",
+        "src/windows/Workloads.tsx"
+      ]
+    },
+    {
+      "id": "packages-and-updates",
+      "title": "Packages, updates and the GPU stack",
+      "type": "concept",
+      "area": "updates",
+      "package": "W-OPS",
+      "file": "ops/packages-and-updates.md",
+      "summary": "How software on a node is updated, and why the GPU stack needs more care than the rest.",
+      "verified": null,
+      "related": [
+        "updates",
+        "pin-the-gpu-stack",
+        "simulate-an-update"
+      ],
+      "keywords": [
+        "apt",
+        "package",
+        "gpu stack",
+        "hold",
+        "phasing",
+        "kernel"
+      ],
+      "code": [
+        "src-tauri/src/ops/updates.rs",
+        "src-tauri/src/ops/gpu_guard.rs",
+        "src/windows/UpdatesWindow.tsx"
+      ]
+    },
+    {
+      "id": "tasks-and-jobs",
+      "title": "Tasks and jobs",
+      "type": "concept",
+      "area": "ops",
+      "package": "W-OPS",
+      "file": "ops/tasks-and-jobs.md",
+      "summary": "A task is anything SparkBox is doing. A job is long work running by itself on a node.",
+      "verified": null,
+      "related": [
+        "tasks",
+        "models-jobs"
+      ],
+      "keywords": [
+        "task",
+        "job",
+        "background",
+        "keeps running"
+      ],
+      "code": [
+        "src-tauri/src/tasks.rs",
+        "src-tauri/src/live/sparkjob.py",
+        "src/lib/tasks.ts"
+      ]
+    },
+    {
+      "id": "using-help",
+      "title": "Find your way around Help",
+      "type": "reference",
+      "area": "reference",
+      "package": "W-REF",
+      "file": "reference/using-help.md",
+      "summary": "Find what you need: info icons, search, the table of contents, and what the labels on a page mean.",
+      "verified": null,
+      "related": [
+        "getting-started",
+        "glossary"
+      ],
+      "keywords": [
+        "help",
+        "search",
+        "info icon",
+        "how do i use help",
+        "search help"
+      ],
+      "code": [
+        "src/help/"
+      ]
+    },
+    {
+      "id": "keyboard-shortcuts",
+      "title": "Keyboard shortcuts",
+      "type": "reference",
+      "area": "reference",
+      "package": "W-REF",
+      "file": "reference/keyboard-shortcuts.md",
+      "summary": "The keyboard shortcuts in SparkBox, grouped by what they act on.",
+      "verified": null,
+      "related": [
+        "command-palette",
+        "menu-reference"
+      ],
+      "keywords": [
+        "shortcuts",
+        "keys",
+        "keyboard",
+        "hotkeys"
+      ],
+      "code": [
+        "src/lib/keymap.ts",
+        "src-tauri/src/menu.rs",
+        "src/components/ShortcutsHelp.tsx",
+        "src/windows/terminal/keys.ts"
+      ]
+    },
+    {
+      "id": "menu-reference",
+      "title": "Menu bar reference",
+      "type": "reference",
+      "area": "reference",
+      "package": "W-REF",
+      "file": "reference/menu-reference.md",
+      "summary": "Every item in SparkBox's macOS menus and what it does.",
+      "verified": null,
+      "related": [
+        "keyboard-shortcuts",
+        "menu-bar-icon"
+      ],
+      "keywords": [
+        "menu",
+        "file",
+        "view",
+        "go",
+        "cluster",
+        "window"
+      ],
+      "code": [
+        "src-tauri/src/menu.rs",
+        "src/lib/menuBridge.ts"
+      ]
+    },
+    {
+      "id": "status-words",
+      "title": "What the status words mean",
+      "type": "reference",
+      "area": "reference",
+      "package": "W-REF",
+      "file": "reference/status-words.md",
+      "summary": "Every status word and color in SparkBox, for nodes, models, switches, tasks and the VPN.",
+      "verified": null,
+      "related": [
+        "top-bar-and-status-bar",
+        "read-the-dashboard"
+      ],
+      "keywords": [
+        "online",
+        "offline",
+        "stale",
+        "ready",
+        "down",
+        "colors",
+        "icons",
+        "dots",
+        "what does ready mean",
+        "what does online mean",
+        "what does offline mean",
+        "what does stale mean",
+        "what does down mean",
+        "what does this word mean"
+      ],
+      "code": [
+        "src/lib/vocabulary.ts",
+        "src/lib/nodeStatus.ts",
+        "src/lib/health.ts",
+        "src/components/ui.tsx"
+      ]
+    },
+    {
+      "id": "files-and-folders",
+      "title": "Where SparkBox keeps things",
+      "type": "reference",
+      "area": "reference",
+      "package": "W-REF",
+      "file": "reference/files-and-folders.md",
+      "summary": "Every folder and file SparkBox keeps on this Mac and on your nodes.",
+      "verified": null,
+      "related": [
+        "back-up-sparkbox",
+        "keychain-and-secrets"
+      ],
+      "keywords": [
+        "folders",
+        "logs",
+        "application support",
+        "~/.sparkbox",
+        "where"
+      ],
+      "code": [
+        "src-tauri/src/lib.rs",
+        "src-tauri/src/logging.rs",
+        "src-tauri/src/identity.rs",
+        "src-tauri/src/live/sparkjob.py"
+      ]
+    },
+    {
+      "id": "ports-reference",
+      "title": "Ports and addresses",
+      "type": "reference",
+      "area": "reference",
+      "package": "W-REF",
+      "file": "reference/ports-reference.md",
+      "summary": "The network ports and address ranges your cluster and SparkBox use.",
+      "verified": null,
+      "related": [
+        "endpoints-and-apis",
+        "your-cluster"
+      ],
+      "keywords": [
+        "port",
+        "8000",
+        "11434",
+        "11000",
+        "ip address",
+        "192.168"
+      ],
+      "code": [
+        "src/lib/knownPorts.ts",
+        "src-tauri/src/models/plan.rs"
+      ]
+    },
+    {
+      "id": "glossary",
+      "title": "Glossary",
+      "type": "reference",
+      "area": "reference",
+      "package": "W-REF",
+      "file": "reference/glossary.md",
+      "summary": "The technical words you meet in SparkBox, explained in plain language.",
+      "verified": null,
+      "related": [
+        "using-help"
+      ],
+      "keywords": [
+        "definition",
+        "meaning",
+        "what does it mean",
+        "terms"
+      ],
+      "code": [
+        "docs/help/STYLE.md"
+      ]
+    },
+    {
+      "id": "whats-proven",
+      "title": "What's proven on your cluster",
+      "type": "reference",
+      "area": "reference",
+      "package": "W-REF",
+      "file": "reference/whats-proven.md",
+      "summary": "How to distinguish offline checks from verification on your own hardware.",
+      "verified": null,
+      "related": [
+        "whats-coming"
+      ],
+      "keywords": [
+        "proven",
+        "tested",
+        "verified",
+        "not yet"
+      ],
+      "code": [
+        "tools/agents/rounds/p1/r4/report.md",
+        "docs/acceptance/P1-gate-sheet.md"
+      ]
+    },
+    {
+      "id": "whats-coming",
+      "title": "What's coming",
+      "type": "reference",
+      "area": "reference",
+      "package": "W-REF",
+      "file": "reference/whats-coming.md",
+      "summary": "What SparkBox can't do yet and is planned: routing between replicas, choosing a download node, app launchers.",
+      "verified": null,
+      "related": [
+        "whats-proven",
+        "settings-general"
+      ],
+      "keywords": [
+        "planned",
+        "roadmap",
+        "not built",
+        "coming soon",
+        "future",
+        "claude code launcher"
+      ],
+      "code": [
+        "PLAN.md",
+        "src/windows/plannedWindows.ts",
+        "src/windows/Planned.tsx"
+      ]
+    },
+    {
+      "id": "troubleshooting",
+      "title": "Troubleshooting",
+      "type": "troubleshooting",
+      "area": "troubleshooting",
+      "package": "W-REF",
+      "file": "reference/troubleshooting.md",
+      "summary": "Start here when something isn't working. Find your symptom and go to the fix.",
+      "verified": null,
+      "related": [
+        "errors-connection",
+        "errors-models",
+        "collect-diagnostics"
+      ],
+      "keywords": [
+        "problem",
+        "broken",
+        "not working",
+        "fix",
+        "help",
+        "node offline",
+        "node is down",
+        "node down",
+        "node not responding",
+        "node is unreachable",
+        "something is wrong"
+      ],
+      "code": [
+        "src/lib/errors.ts",
+        "src-tauri/src/errors.rs"
+      ]
+    },
+    {
+      "id": "errors-connection",
+      "title": "Connection and login messages",
+      "type": "troubleshooting",
+      "area": "troubleshooting",
+      "package": "W-REF",
+      "file": "reference/errors-connection.md",
+      "summary": "What SSH, password, sudo, host-key and reachability messages mean, and what to do.",
+      "verified": null,
+      "related": [
+        "save-the-cluster-password",
+        "trust-a-host-key"
+      ],
+      "keywords": [
+        "offline",
+        "ssh timeout",
+        "password rejected",
+        "no reply",
+        "can't connect",
+        "cant connect",
+        "cannot connect",
+        "connection failed",
+        "node is down",
+        "node offline",
+        "sudo failed",
+        "sudo not working"
+      ],
+      "code": [
+        "src-tauri/src/live/ssh.rs",
+        "src-tauri/src/live/mod.rs",
+        "src-tauri/src/onboard.rs",
+        "src/lib/nodeStatus.ts"
+      ]
+    },
+    {
+      "id": "errors-admin-and-safety",
+      "title": "Admin, look-only and safety messages",
+      "type": "troubleshooting",
+      "area": "troubleshooting",
+      "package": "W-REF",
+      "file": "reference/errors-admin-and-safety.md",
+      "summary": "Messages about locks, look-only mode, the other SparkBox, node identity and the Fence.",
+      "verified": null,
+      "related": [
+        "admin-mode",
+        "the-fence",
+        "leases-and-identity"
+      ],
+      "keywords": [
+        "admin locked",
+        "look only",
+        "refused",
+        "fence",
+        "controlling"
+      ],
+      "code": [
+        "src-tauri/src/live/exit.rs",
+        "src-tauri/src/admin.rs",
+        "src/lib/errors.ts",
+        "src-tauri/src/live/lease.rs",
+        "src-tauri/src/live/identity_pin.rs"
+      ]
+    },
+    {
+      "id": "errors-models",
+      "title": "Model messages",
+      "type": "troubleshooting",
+      "area": "troubleshooting",
+      "package": "W-REF",
+      "file": "reference/errors-models.md",
+      "summary": "Messages from Hugging Face, downloads, copies, the memory plan, the checks before a load, loads and readiness.",
+      "verified": null,
+      "related": [
+        "fix-a-load-that-failed",
+        "download-a-model"
+      ],
+      "keywords": [
+        "won't start",
+        "out of memory",
+        "gated",
+        "no space left",
+        "garbage",
+        "17+25"
+      ],
+      "code": [
+        "src-tauri/src/models/mod.rs",
+        "src-tauri/src/models/plan.rs",
+        "src-tauri/src/models/readiness.rs",
+        "src-tauri/src/models/postmortem.rs",
+        "src-tauri/src/live/sparkjob.py",
+        "src/windows/models/LoadPage.tsx"
+      ]
+    },
+    {
+      "id": "errors-updates-and-power",
+      "title": "Update and restart messages",
+      "type": "troubleshooting",
+      "area": "troubleshooting",
+      "package": "W-REF",
+      "file": "reference/errors-updates-and-power.md",
+      "summary": "Messages from Updates, the checks before a restart, and shutting down and waking nodes.",
+      "verified": null,
+      "related": [
+        "install-updates",
+        "restart-a-node"
+      ],
+      "keywords": [
+        "gpu stack",
+        "upgrade refused",
+        "can't restart",
+        "wake packet",
+        "dpkg"
+      ],
+      "code": [
+        "src-tauri/src/ops/updates.rs",
+        "src-tauri/src/ops/prereboot.rs",
+        "src-tauri/src/ops/gpu_guard.rs",
+        "src-tauri/src/ops/mod.rs",
+        "src-tauri/src/wol.rs",
+        "src-tauri/src/ops/update_check.rs"
+      ]
+    },
+    {
+      "id": "errors-files-and-terminal",
+      "title": "Files and Terminal messages",
+      "type": "troubleshooting",
+      "area": "troubleshooting",
+      "package": "W-REF",
+      "file": "reference/errors-files-and-terminal.md",
+      "summary": "Messages from copying, editing and deleting files, and from terminal sessions.",
+      "verified": null,
+      "related": [
+        "copy-files",
+        "edit-a-file",
+        "open-a-terminal"
+      ],
+      "keywords": [
+        "permission",
+        "locked shell",
+        "can't write",
+        "won't delete"
+      ],
+      "code": [
+        "src-tauri/src/files/mod.rs",
+        "src-tauri/src/files/paths.rs",
+        "src-tauri/src/files/commands.rs",
+        "src-tauri/src/files/transfer.rs",
+        "src-tauri/src/term/mod.rs"
+      ]
+    },
+    {
+      "id": "errors-ai",
+      "title": "Chat, Providers and Server messages",
+      "type": "troubleshooting",
+      "area": "troubleshooting",
+      "package": "W-REF",
+      "file": "reference/errors-ai.md",
+      "summary": "Messages from chatting with models, saving provider keys, and running the Server.",
+      "verified": null,
+      "related": [
+        "chat",
+        "server",
+        "providers"
+      ],
+      "keywords": [
+        "port in use",
+        "origin refused",
+        "api key",
+        "alias"
+      ],
+      "code": [
+        "src-tauri/src/llm/mod.rs",
+        "src-tauri/src/server/mod.rs",
+        "src-tauri/src/server/translate.rs"
+      ]
+    },
+    {
+      "id": "errors-network",
+      "title": "VPN, fabric and switch messages",
+      "type": "troubleshooting",
+      "area": "troubleshooting",
+      "package": "W-REF",
+      "file": "reference/errors-network.md",
+      "summary": "Messages from the VPN, the fabric tests and the CRS804.",
+      "verified": null,
+      "related": [
+        "connect-the-vpn",
+        "test-the-fabric",
+        "manage-a-switch-port"
+      ],
+      "keywords": [
+        "vpn error",
+        "pfc",
+        "nccl",
+        "rest password",
+        "certificate"
+      ],
+      "code": [
+        "src-tauri/src/vpn/mod.rs",
+        "src-tauri/src/fabric/mod.rs",
+        "src-tauri/src/fabric/doctor.rs",
+        "src-tauri/src/routeros/mod.rs",
+        "src-tauri/src/routeros/safety.rs",
+        "src-tauri/src/health/reach.rs"
+      ]
+    },
+    {
+      "id": "errors-alerts-and-agent",
+      "title": "Alert delivery and agent messages",
+      "type": "troubleshooting",
+      "area": "troubleshooting",
+      "package": "W-REF",
+      "file": "reference/errors-alerts-and-agent.md",
+      "summary": "Messages from notification channels, test pages and the always-on agent.",
+      "verified": null,
+      "related": [
+        "set-up-always-on-monitoring",
+        "get-alerts-on-your-phone"
+      ],
+      "keywords": [
+        "push failed",
+        "test failed",
+        "agent",
+        "email",
+        "tls"
+      ],
+      "code": [
+        "src-tauri/src/delivery/mod.rs",
+        "src-tauri/src/delivery/smtp.rs",
+        "src-tauri/src/delivery/pushover.rs",
+        "src-tauri/src/agent/mod.rs",
+        "src-tauri/src/agent/commands.rs"
+      ]
+    },
+    {
+      "id": "rdp",
+      "title": "RDP",
+      "type": "feature",
+      "area": "tools",
+      "package": "W-OPS",
+      "file": "ops/rdp.md",
+      "summary": "Check encrypted remote desktop access and review repairs to a node's RDP settings.",
+      "verified": false,
+      "related": [
+        "check-and-repair-rdp",
+        "open-a-terminal",
+        "admin-mode"
+      ],
+      "keywords": [
+        "rdp",
+        "xrdp",
+        "remote desktop",
+        "gnome",
+        "xfce"
+      ],
+      "code": [
+        "src/windows/RdpWindow.tsx",
+        "src-tauri/src/ops/rdp.rs",
+        "src-tauri/src/rdp/rdp.py",
+        "src-tauri/src/rdp_probe.rs"
+      ]
+    },
+    {
+      "id": "check-and-repair-rdp",
+      "title": "Check and repair RDP",
+      "type": "howto",
+      "area": "tools",
+      "package": "W-OPS",
+      "file": "ops/check-and-repair-rdp.md",
+      "summary": "Check a node's remote desktop connection, review a repair, then test your desktop login.",
+      "verified": false,
+      "related": [
+        "rdp",
+        "open-a-terminal",
+        "admin-mode"
+      ],
+      "keywords": [
+        "rdp",
+        "xrdp",
+        "remote desktop",
+        "gnome",
+        "xfce"
+      ],
+      "code": [
+        "src/windows/RdpWindow.tsx",
+        "src-tauri/src/ops/rdp.rs",
+        "src-tauri/src/rdp/rdp.py",
+        "src-tauri/src/rdp_probe.rs"
+      ]
+    },
+    {
+      "area": "tools",
+      "package": "W-OPS",
+      "keywords": [
+        "how to",
+        "skills",
+        "playbooks",
+        "nvidia",
+        "ai",
+        "local edition"
+      ],
+      "code": [
+        "src/windows/HowToWindow.tsx",
+        "src/howto/library.ts",
+        "src-tauri/src/howto/mod.rs",
+        "src-tauri/src/howto/commands.rs",
+        "src-tauri/src/howto/source.rs"
+      ],
+      "id": "how-to-library",
+      "title": "How To library",
+      "type": "feature",
+      "file": "ops/how-to-library.md",
+      "summary": "Find NVIDIA playbooks, follow guided steps, and keep your own reviewed instructions on this Mac.",
+      "verified": false,
+      "related": [
+        "use-and-update-a-playbook",
+        "load-a-model-on-one-node",
+        "admin-mode"
+      ]
+    },
+    {
+      "area": "tools",
+      "package": "W-OPS",
+      "keywords": [
+        "how to",
+        "skills",
+        "playbooks",
+        "nvidia",
+        "ai",
+        "local edition"
+      ],
+      "code": [
+        "src/windows/HowToWindow.tsx",
+        "src/howto/library.ts",
+        "src-tauri/src/howto/mod.rs",
+        "src-tauri/src/howto/commands.rs",
+        "src-tauri/src/howto/source.rs"
+      ],
+      "id": "use-and-update-a-playbook",
+      "title": "Use and update a playbook",
+      "type": "howto",
+      "file": "ops/use-and-update-a-playbook.md",
+      "summary": "Read a guide, compare NVIDIA changes, and save a reviewed local edition with optional AI help.",
+      "verified": null,
+      "related": [
+        "how-to-library",
+        "providers",
+        "chat"
+      ]
+    }
+  ]
+}

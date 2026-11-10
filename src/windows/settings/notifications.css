@@ -1,0 +1,102 @@
+/* Settings › Notifications (r3-paging): the paging checklist, one row per channel and
+   per node agent, the channel editor and the test-page matrix. Tokens with fallbacks. */
+
+.ntf-list { display: flex; flex-direction: column; }
+.ntf-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--sp-3, 6px) var(--sp-5, 12px);
+  padding: var(--sp-4, 8px) var(--sp-5, 12px);
+  border-top: 1px solid var(--hairline);
+  min-width: 0;
+}
+.ntf-row:first-child { border-top: 0; }
+.ntf-main { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.ntf-name { display: flex; align-items: center; gap: var(--sp-3, 6px); min-width: 0; font-weight: var(--fw-semibold, 600); color: var(--text); }
+.ntf-name > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ntf-kind { flex: none; font-weight: normal; color: var(--muted); font-size: var(--fs-sm, 11px); }
+.ntf-sub { min-width: 0; color: var(--text-2); font-size: var(--fs-sm, 11px); overflow-wrap: anywhere; }
+.ntf-sub.failed { color: var(--crit-text); }
+.ntf-sub.warn { color: var(--warn-text); }
+.ntf-actions { display: flex; align-items: center; gap: var(--sp-2, 4px); flex-wrap: wrap; justify-content: flex-end; }
+.ntf-add { display: flex; gap: var(--sp-2, 4px); flex-wrap: wrap; padding: var(--sp-3, 6px) var(--sp-4, 8px); border-top: 1px solid var(--hairline); }
+
+/* An agent row takes the tone of its alert: amber edge for warnings, nothing when it's fine. */
+.ntf-agent.warn { box-shadow: inset 2px 0 0 var(--state-warn-edge, var(--warning)); }
+
+/* The editor, inline under its row. */
+.ntf-edit {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(110px, max-content) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--sp-3, 6px) var(--sp-4, 8px);
+  padding: var(--sp-4, 8px) 0 var(--sp-2, 4px);
+}
+.ntf-edit label { color: var(--text-2); font-size: var(--fs-base, 12.5px); }
+.ntf-edit .field { min-width: 0; width: 100%; }
+.ntf-edit-note { grid-column: 1 / -1; margin: 0; color: var(--text-2); font-size: var(--fs-sm, 11px); line-height: 1.45; }
+.ntf-edit-note.warn { color: var(--warn-text); }
+.ntf-edit-actions { grid-column: 1 / -1; display: flex; justify-content: flex-end; gap: var(--sp-3, 6px); }
+
+.ntf-inline { display: flex; align-items: center; gap: var(--sp-3, 6px); }
+.ntf-inline .field { width: 120px; }
+.ntf-zone { padding: 0 var(--sp-5, 12px) var(--sp-4, 8px); }
+
+/* The badge's word beside the section title, quiet unless it's amber. */
+.ntf-badge {
+  display: inline-flex; align-items: center; height: 20px; padding: 0 var(--sp-3, 6px);
+  border: 1px solid var(--hairline); border-radius: var(--r-sm, 4px);
+  font-size: var(--fs-sm, 11px); font-weight: var(--fw-semibold, 600); color: var(--text-2); white-space: nowrap;
+}
+.ntf-badge.tone-warn { border-color: var(--state-warn-edge, var(--warning)); color: var(--warn-text); background: var(--state-warn-band, transparent); }
+
+/* The checklist: what "24/7" rests on. */
+.ntf-checks { list-style: none; margin: 0; padding: var(--sp-2, 4px) 0; }
+.ntf-check {
+  display: grid; grid-template-columns: 14px minmax(0, 1fr) auto; align-items: center;
+  gap: var(--sp-3, 6px); min-height: 28px; padding: 2px var(--sp-5, 12px);
+  color: var(--text);
+}
+.ntf-check .sglyph, .ntf-check-mark { justify-self: center; color: var(--muted); }
+.ntf-check.warn .sglyph { color: var(--warning); }
+.ntf-check-text { min-width: 0; overflow-wrap: anywhere; }
+.ntf-check.warn .ntf-check-text { color: var(--text); }
+.ntf-check-action { display: flex; justify-content: flex-end; }
+.ntf-check-why { margin: 0; padding: var(--sp-3, 6px) var(--sp-5, 12px) var(--sp-4, 8px); border-top: 1px solid var(--hairline); color: var(--warn-text); font-size: var(--fs-sm, 11px); line-height: 1.45; }
+
+.ntf-copies { margin: var(--sp-2, 4px) 0; padding-left: 18px; }
+
+/* The last test page: nodes down, channels across. */
+.ntf-matrix { border-top: 1px solid var(--hairline); padding: var(--sp-3, 6px) var(--sp-5, 12px) var(--sp-4, 8px); min-width: 0; overflow-x: auto; }
+.ntf-matrix-head { color: var(--text-2); font-size: var(--fs-sm, 11px); margin-bottom: var(--sp-2, 4px); }
+.ntf-matrix table { border-collapse: collapse; font-size: var(--fs-sm, 11px); }
+.ntf-matrix th, .ntf-matrix td { text-align: left; padding: 3px var(--sp-5, 12px) 3px 0; white-space: nowrap; font-weight: normal; }
+.ntf-matrix thead th { color: var(--muted); }
+.ntf-matrix tbody th { color: var(--text); font-weight: var(--fw-semibold, 600); }
+.ntf-matrix td { color: var(--text-2); }
+.ntf-cell { display: inline-flex; align-items: center; gap: var(--sp-2, 4px); }
+.ntf-cell .sglyph, .ntf-cell .ntf-check-mark { flex: none; color: var(--muted); }
+.ntf-matrix td.failed { color: var(--warn-text); }
+.ntf-matrix td.failed .ntf-cell .sglyph { color: var(--warning); }
+
+/* Where a channel's secret goes once it leaves this Mac, and what to give the agents instead
+   (r4-agent): a neutral callout, set apart from the hints, never alarm-coloured. */
+.ntf-scoped {
+  grid-column: 1 / -1;
+  margin: var(--sp-2, 4px) 0;
+  padding: var(--sp-3, 6px) var(--sp-4, 8px);
+  border: 1px solid var(--hairline);
+  border-left: 3px solid var(--accent, var(--hairline));
+  border-radius: var(--r-sm, 4px);
+  background: var(--surface-2, transparent);
+  color: var(--text);
+  font-size: var(--fs-sm, 11px);
+  line-height: 1.45;
+}
+.ntf-scoped p { margin: 0; }
+.ntf-scoped p + p { margin-top: var(--sp-2, 4px); }
+.ntf-scoped-title { font-weight: var(--fw-semibold, 600); }
+.ntf-secrets { padding: var(--sp-2, 4px) var(--sp-5, 12px) var(--sp-4, 8px); border-top: 1px solid var(--hairline); }
+.ntf-secrets .ntf-scoped { margin: 0; }

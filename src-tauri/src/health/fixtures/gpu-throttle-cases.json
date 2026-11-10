@@ -1,0 +1,417 @@
+{
+ "comment": [
+  "When a GPU counts as throttled (health/rules.rs throttle_verdict, rule gpu-throttle). The node agent and the UI's throttleVerdict read the same file.",
+  "HW slowdown, HW thermal slowdown and HW power brake slowdown always count. SW power cap, SW thermal slowdown and sync boost (and any reason not listed) count only while the GPU is busy:",
+  "utilPct >= busyUtilPct and smClockMhz < clockBelow x clockMaxMhz (clock check skipped when clockMaxMhz is unknown), or powerW >= powerAt x powerLimitW when a limit is reported.",
+  "GPU idle, Applications clocks setting and Display clock setting never count. An unreadable GPU (readable false) has no verdict.",
+  "verdicts: one reading -> throttled and the message. cases: a reading every second from t=0, segment after segment, each segment cycling its readings;",
+  "the alert is raised at raisedAtS (the condition must hold forS) and resolved at resolvedAtS (gone for clearS), or never (null).",
+  "The idle alternation is real: all four GB10s at P8, 4 W, 208 of 3003 MHz reported [] and [\"SW power cap\"] on alternate readings (Live tour, Oct 29).",
+  "November 7 cell1 Qwen3-0.6B capture: 96% utilization at 2444 of 3003 MHz, with no clock-event reason. A lower clock alone is not throttling. No busy SW-power-cap observation was captured; its existing warning policy stays unchanged."
+ ],
+ "rule": {
+  "forS": 60,
+  "clearS": 120,
+  "busyUtilPct": 50,
+  "clockBelow": 0.9,
+  "powerAt": 0.8,
+  "always": [
+   "HW slowdown",
+   "HW thermal slowdown",
+   "HW power brake slowdown"
+  ],
+  "whenBusy": [
+   "SW power cap",
+   "SW thermal slowdown",
+   "Sync boost"
+  ],
+  "never": [
+   "GPU idle",
+   "Applications clocks setting",
+   "Display clock setting"
+  ]
+ },
+ "verdicts": [
+  {
+   "name": "the real idle GB10 at its power cap",
+   "gpu": {
+    "utilPct": 0,
+    "tempC": 45,
+    "powerW": 4.12,
+    "smClockMhz": 208,
+    "clockMaxMhz": 3003,
+    "powerLimitW": null,
+    "pstate": "P8",
+    "throttle": [
+     "SW power cap"
+    ]
+   },
+   "throttled": false,
+   "text": null
+  },
+  {
+   "name": "the real idle GB10 between those readings",
+   "gpu": {
+    "utilPct": 0,
+    "tempC": 45,
+    "powerW": 4.12,
+    "smClockMhz": 208,
+    "clockMaxMhz": 3003,
+    "powerLimitW": null,
+    "pstate": "P8",
+    "throttle": []
+   },
+   "throttled": false,
+   "text": null
+  },
+  {
+   "name": "busy and held below its clock by the power cap",
+   "gpu": {
+    "utilPct": 98,
+    "tempC": 71,
+    "powerW": 92.4,
+    "smClockMhz": 1905,
+    "clockMaxMhz": 3003,
+    "powerLimitW": null,
+    "pstate": "P0",
+    "throttle": [
+     "SW power cap"
+    ]
+   },
+   "throttled": true,
+   "text": "GPU throttled: SW power cap at 98% busy, 1.9 of 3.0 GHz"
+  },
+  {
+   "name": "busy at its top clock: the cap isn't holding it back",
+   "gpu": {
+    "utilPct": 98,
+    "tempC": 71,
+    "powerW": 92.4,
+    "smClockMhz": 2850,
+    "clockMaxMhz": 3003,
+    "powerLimitW": null,
+    "pstate": "P0",
+    "throttle": [
+     "SW power cap"
+    ]
+   },
+   "throttled": false,
+   "text": null
+  },
+  {
+   "name": "a hardware slowdown counts even idle",
+   "gpu": {
+    "utilPct": 0,
+    "tempC": 45,
+    "powerW": 4.5,
+    "smClockMhz": 208,
+    "clockMaxMhz": 3003,
+    "powerLimitW": null,
+    "pstate": "P8",
+    "throttle": [
+     "HW slowdown"
+    ]
+   },
+   "throttled": true,
+   "text": "GPU throttled: HW slowdown at 0% busy, 0.2 of 3.0 GHz"
+  },
+  {
+   "name": "hot and busy",
+   "gpu": {
+    "utilPct": 96,
+    "tempC": 90,
+    "powerW": 88.0,
+    "smClockMhz": 2010,
+    "clockMaxMhz": 3003,
+    "powerLimitW": null,
+    "pstate": "P0",
+    "throttle": [
+     "HW thermal slowdown",
+     "SW power cap"
+    ]
+   },
+   "throttled": true,
+   "text": "GPU throttled: HW thermal slowdown, SW power cap at 96% busy, 2.0 of 3.0 GHz"
+  },
+  {
+   "name": "idle and application clocks are normal",
+   "gpu": {
+    "utilPct": 98,
+    "tempC": 71,
+    "powerW": 92.4,
+    "smClockMhz": 1905,
+    "clockMaxMhz": 3003,
+    "powerLimitW": null,
+    "pstate": "P0",
+    "throttle": [
+     "GPU idle",
+     "Applications clocks setting"
+    ]
+   },
+   "throttled": false,
+   "text": null
+  },
+  {
+   "name": "at 80% of a reported power limit counts as busy",
+   "gpu": {
+    "utilPct": 20,
+    "tempC": 45,
+    "powerW": 96.0,
+    "smClockMhz": 2900,
+    "clockMaxMhz": 3003,
+    "powerLimitW": 120.0,
+    "pstate": "P8",
+    "throttle": [
+     "SW power cap"
+    ]
+   },
+   "throttled": true,
+   "text": "GPU throttled: SW power cap at 20% busy, 2.9 of 3.0 GHz"
+  },
+  {
+   "name": "no top clock reported: busy is enough",
+   "gpu": {
+    "utilPct": 98,
+    "tempC": 71,
+    "powerW": 92.4,
+    "smClockMhz": 1905,
+    "clockMaxMhz": null,
+    "powerLimitW": null,
+    "pstate": "P0",
+    "throttle": [
+     "SW power cap"
+    ]
+   },
+   "throttled": true,
+   "text": "GPU throttled: SW power cap at 98% busy, 1.9 GHz"
+  },
+  {
+   "name": "an unreadable GPU has no verdict",
+   "gpu": {
+    "utilPct": null,
+    "tempC": null,
+    "powerW": null,
+    "smClockMhz": null,
+    "clockMaxMhz": 3003,
+    "powerLimitW": null,
+    "pstate": "P8",
+    "throttle": [
+     "HW slowdown"
+    ],
+    "readable": false
+   },
+   "throttled": false,
+   "text": null
+  },
+  {
+   "name": "recorded cell1 Qwen generation below maximum clock without a clock-event reason (2026-11-07)",
+   "gpu": {
+    "utilPct": 96.0,
+    "tempC": 66.0,
+    "powerW": 36.51,
+    "smClockMhz": 2444,
+    "clockMaxMhz": 3003,
+    "powerLimitW": null,
+    "pstate": "P0",
+    "throttle": []
+   },
+   "throttled": false,
+   "text": null
+  }
+ ],
+ "cases": [
+  {
+   "name": "30 minutes of the real idle alternation never fires",
+   "segments": [
+    {
+     "secs": 1800,
+     "cycle": [
+      {
+       "utilPct": 0,
+       "tempC": 45,
+       "powerW": 4.12,
+       "smClockMhz": 208,
+       "clockMaxMhz": 3003,
+       "powerLimitW": null,
+       "pstate": "P8",
+       "throttle": []
+      },
+      {
+       "utilPct": 0,
+       "tempC": 45,
+       "powerW": 4.12,
+       "smClockMhz": 208,
+       "clockMaxMhz": 3003,
+       "powerLimitW": null,
+       "pstate": "P8",
+       "throttle": [
+        "SW power cap"
+       ]
+      }
+     ]
+    }
+   ],
+   "raisedAtS": null,
+   "resolvedAtS": null
+  },
+  {
+   "name": "busy and capped fires after 60 s",
+   "segments": [
+    {
+     "secs": 300,
+     "cycle": [
+      {
+       "utilPct": 98,
+       "tempC": 71,
+       "powerW": 92.4,
+       "smClockMhz": 1905,
+       "clockMaxMhz": 3003,
+       "powerLimitW": null,
+       "pstate": "P0",
+       "throttle": [
+        "SW power cap"
+       ]
+      }
+     ]
+    }
+   ],
+   "raisedAtS": 60,
+   "resolvedAtS": null
+  },
+  {
+   "name": "idle with a hardware slowdown fires after 60 s",
+   "segments": [
+    {
+     "secs": 300,
+     "cycle": [
+      {
+       "utilPct": 0,
+       "tempC": 45,
+       "powerW": 4.5,
+       "smClockMhz": 208,
+       "clockMaxMhz": 3003,
+       "powerLimitW": null,
+       "pstate": "P8",
+       "throttle": [
+        "HW slowdown"
+       ]
+      }
+     ]
+    }
+   ],
+   "raisedAtS": 60,
+   "resolvedAtS": null
+  },
+  {
+   "name": "busy for 2 min, then idle: clears 120 s after the last capped reading",
+   "segments": [
+    {
+     "secs": 120,
+     "cycle": [
+      {
+       "utilPct": 98,
+       "tempC": 71,
+       "powerW": 92.4,
+       "smClockMhz": 1905,
+       "clockMaxMhz": 3003,
+       "powerLimitW": null,
+       "pstate": "P0",
+       "throttle": [
+        "SW power cap"
+       ]
+      }
+     ]
+    },
+    {
+     "secs": 600,
+     "cycle": [
+      {
+       "utilPct": 0,
+       "tempC": 45,
+       "powerW": 4.12,
+       "smClockMhz": 208,
+       "clockMaxMhz": 3003,
+       "powerLimitW": null,
+       "pstate": "P8",
+       "throttle": [
+        "SW power cap"
+       ]
+      },
+      {
+       "utilPct": 0,
+       "tempC": 45,
+       "powerW": 4.12,
+       "smClockMhz": 208,
+       "clockMaxMhz": 3003,
+       "powerLimitW": null,
+       "pstate": "P8",
+       "throttle": []
+      }
+     ]
+    }
+   ],
+   "raisedAtS": 60,
+   "resolvedAtS": 240
+  },
+  {
+   "name": "busy at its top clock never fires",
+   "segments": [
+    {
+     "secs": 600,
+     "cycle": [
+      {
+       "utilPct": 98,
+       "tempC": 71,
+       "powerW": 92.4,
+       "smClockMhz": 2850,
+       "clockMaxMhz": 3003,
+       "powerLimitW": null,
+       "pstate": "P0",
+       "throttle": [
+        "SW power cap"
+       ]
+      }
+     ]
+    }
+   ],
+   "raisedAtS": null,
+   "resolvedAtS": null
+  },
+  {
+   "name": "busy, capped only every other reading: the condition never holds 60 s in a row",
+   "segments": [
+    {
+     "secs": 300,
+     "cycle": [
+      {
+       "utilPct": 98,
+       "tempC": 71,
+       "powerW": 92.4,
+       "smClockMhz": 1905,
+       "clockMaxMhz": 3003,
+       "powerLimitW": null,
+       "pstate": "P0",
+       "throttle": [
+        "SW power cap"
+       ]
+      },
+      {
+       "utilPct": 98,
+       "tempC": 71,
+       "powerW": 92.4,
+       "smClockMhz": 2850,
+       "clockMaxMhz": 3003,
+       "powerLimitW": null,
+       "pstate": "P0",
+       "throttle": [
+        "SW power cap"
+       ]
+      }
+     ]
+    }
+   ],
+   "raisedAtS": null,
+   "resolvedAtS": null
+  }
+ ]
+}

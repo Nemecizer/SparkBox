@@ -1,0 +1,10 @@
+{
+  "manufacturer": "MikroTik",
+  "model": "CRS804-4DDQ-hRM",
+  "summary": "Four physical QSFP56-DD sockets, up to 400 Gb/s each. 200 Gb/s links and breakout modes are supported. Two RJ45 management ports.",
+  "sourceUrl": "https://mikrotik.com/product/crs804_ddq",
+  "groups": [
+    { "connector": "QSFP56-DD", "count": 4, "maxGbps": 400, "evidence": "four 400 Gigabit QSFP56-DD ports" },
+    { "connector": "RJ45", "count": 2, "maxGbps": 10, "evidence": "Two 10G Ethernet ports" }
+  ]
+}

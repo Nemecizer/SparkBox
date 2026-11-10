@@ -1,0 +1,70 @@
+{
+  "comment": "Sample streams and the alert events they must raise, run by the app's engine (health/tests.rs) and by the node agent's (agent/agent_test.py), so both page at the same moments. Step n is n seconds in; each segment holds its value for `secs` steps. Expected: [step, event, severity]. A roce case gives per-second counter increments (perS) instead of a value; rates come from fabric::rates (10 s now, a full 60 s for sustained counters). Cases marked macOnly are about this Mac (its path to the cluster, its login to a node): a state segment sets the snapshot's mac_reach state (metric macReach) or the first node's error kind (errorKind, null for online); agent_test.py skips them.",
+  "node": "cell1",
+  "cases": [
+    {
+      "name": "memory warns after a minute at 90%, escalates at 95%, eases above the clear line, clears below 88%",
+      "rule": "mem-high", "metric": "memPct",
+      "segments": [{"secs": 61, "value": 91}, {"secs": 1, "value": 96}, {"secs": 5, "value": 89}, {"secs": 1, "value": 87}],
+      "expect": [[61, "raised", "warn"], [62, "escalated", "crit"], [63, "eased", "warn"], [68, "resolved", "warn"]]
+    },
+    {
+      "name": "a memory spike to 97% is critical within two readings",
+      "rule": "mem-high", "metric": "memPct",
+      "segments": [{"secs": 3, "value": 97}, {"secs": 1, "value": 50}],
+      "expect": [[3, "raised", "crit"], [4, "resolved", "crit"]]
+    },
+    {
+      "name": "a disk at the 85% line warns at once and holds above 83%",
+      "rule": "disk-full", "metric": "diskPct",
+      "segments": [{"secs": 1, "value": 85}, {"secs": 1, "value": 96}, {"secs": 1, "value": 84}, {"secs": 1, "value": 82}],
+      "expect": [[1, "raised", "warn"], [2, "escalated", "crit"], [3, "eased", "warn"], [4, "resolved", "warn"]]
+    },
+    {
+      "name": "a hot GPU warns after two minutes and clears 30 s after it's below 82 °C",
+      "rule": "gpu-hot", "metric": "gpuTemp",
+      "segments": [{"secs": 121, "value": 89}, {"secs": 10, "value": 83}, {"secs": 31, "value": 80}],
+      "expect": [[121, "raised", "warn"], [162, "resolved", "warn"]]
+    },
+    {
+      "name": "a short GPU spike never fires",
+      "rule": "gpu-hot", "metric": "gpuTemp",
+      "segments": [{"secs": 60, "value": 90}, {"secs": 60, "value": 60}],
+      "expect": []
+    },
+    {
+      "name": "clock offset beyond 100 ms either way warns, beyond 1 s is critical",
+      "rule": "ntp-offset", "metric": "clockOffsetMs",
+      "segments": [{"secs": 61, "value": -250}, {"secs": 1, "value": -1500}, {"secs": 61, "value": 20}],
+      "expect": [[61, "raised", "warn"], [62, "escalated", "crit"], [123, "resolved", "crit"]]
+    },
+    {
+      "name": "roce-loss then recovery: CRC errors raise at once, critical; it clears 30 s after the counters stop moving",
+      "rule": "roce-iface", "metric": "roce",
+      "segments": [{"secs": 70, "perS": {"outOfSequence": 150, "packetSeqErr": 12, "rxCrcErrorsPhy": 15, "rxSymbolErrPhy": 6}}, {"secs": 60, "perS": {}}],
+      "expect": [[3, "raised", "crit"], [110, "resolved", "crit"]]
+    },
+    {
+      "name": "out-of-sequence must average past 1/s over a full minute: a one-second burst doesn't raise; 2/s does once the minute's average passes 1/s",
+      "rule": "roce-iface", "metric": "roce",
+      "segments": [{"secs": 60, "perS": {}}, {"secs": 1, "perS": {"outOfSequence": 30}}, {"secs": 30, "perS": {}}, {"secs": 90, "perS": {"outOfSequence": 2}}, {"secs": 60, "perS": {}}],
+      "expect": [[107, "raised", "warn"], [221, "resolved", "warn"]]
+    },
+    {
+      "name": "this Mac losing the LAN is one warning at once, cleared 10 s after it reaches the cluster again",
+      "macOnly": true,
+      "rule": "mac-reach",
+      "metric": "macReach",
+      "segments": [{"secs": 5, "state": "ok"}, {"secs": 60, "state": "lanBetween"}, {"secs": 12, "state": "ok"}],
+      "expect": [[6, "raised", "warn"], [76, "resolved", "warn"]]
+    },
+    {
+      "name": "an untrusted host key is information at once, never an outage, and goes when the key is trusted",
+      "macOnly": true,
+      "rule": "node-needs-you",
+      "metric": "errorKind",
+      "segments": [{"secs": 3, "state": null}, {"secs": 40, "state": "hostKeyUnknown"}, {"secs": 1, "state": null}],
+      "expect": [[4, "raised", "info"], [44, "resolved", "info"]]
+    }
+  ]
+}

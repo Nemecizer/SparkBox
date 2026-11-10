@@ -1,0 +1,21 @@
+node_modules/
+dist/
+src-tauri/target/
+src-tauri/gen/
+src-tauri/binaries/
+.DS_Store
+__pycache__/
+*.pyc
+
+# Claude Code conversation exports
+/20*-*-this-session-*.txt
+
+# Local release material and credentials
+.env
+.env.*
+!.env.example
+*.p12
+*.p8
+*.mobileprovision
+*.keychain-db
+release-output/

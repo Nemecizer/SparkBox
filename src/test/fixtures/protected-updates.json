@@ -1,0 +1,128 @@
+[
+  {
+    "name": "cuda-toolkit-13-config-common",
+    "from": "13.4.92-1",
+    "to": "13.5.37-1",
+    "new": false
+  },
+  {
+    "name": "cuda-toolkit-config-common",
+    "from": "13.4.92-1",
+    "to": "13.5.37-1",
+    "new": false
+  },
+  {
+    "name": "libxnvctrl0",
+    "from": "615.71.10-1ubuntu1",
+    "to": "620.70.06-1ubuntu1",
+    "new": false
+  },
+  {
+    "name": "linux-firmware-amd-graphics",
+    "from": "20240318.git3b128b60-0ubuntu3.3",
+    "to": "20240318.git3b128b60-0ubuntu3.4",
+    "new": false
+  },
+  {
+    "name": "linux-nvidia-7.0-headers-7.0.0-1024",
+    "to": "7.0.0-1024.25~24.04.1",
+    "new": true,
+    "from": null
+  },
+  {
+    "name": "linux-headers-7.0.0-1024-nvidia",
+    "to": "7.0.0-1024.25~24.04.1",
+    "new": true,
+    "from": null
+  },
+  {
+    "name": "linux-modules-7.0.0-1024-nvidia",
+    "to": "7.0.0-1024.25~24.04.1",
+    "new": true,
+    "from": null
+  },
+  {
+    "name": "linux-image-7.0.0-1024-nvidia",
+    "to": "7.0.0-1024.25~24.04.1",
+    "new": true,
+    "from": null
+  },
+  {
+    "name": "linux-modules-nvidia-580-open-7.0.0-1024-nvidia",
+    "to": "7.0.0-1024.25~24.04.1",
+    "new": true,
+    "from": null
+  },
+  {
+    "name": "linux-nvidia-hwe-24.04",
+    "from": "7.0.0-1019.19~24.04.2",
+    "to": "7.0.0-1024.25~24.04.1",
+    "new": false
+  },
+  {
+    "name": "linux-modules-nvidia-580-open-nvidia-hwe-24.04",
+    "from": "7.0.0-1019.19~24.04.2+2",
+    "to": "7.0.0-1024.25~24.04.1",
+    "new": false
+  },
+  {
+    "name": "linux-modules-nvidia-fs-7.0.0-1024-nvidia",
+    "to": "7.0.0-1024.25~24.04.1",
+    "new": true,
+    "from": null
+  },
+  {
+    "name": "linux-image-nvidia-hwe-24.04",
+    "from": "7.0.0-1019.19~24.04.2",
+    "to": "7.0.0-1024.25~24.04.1",
+    "new": false
+  },
+  {
+    "name": "linux-headers-nvidia-hwe-24.04",
+    "from": "7.0.0-1019.19~24.04.2",
+    "to": "7.0.0-1024.25~24.04.1",
+    "new": false
+  },
+  {
+    "name": "linux-modules-nvidia-fs-nvidia-hwe-24.04",
+    "from": "7.0.0-1019.19~24.04.2",
+    "to": "7.0.0-1024.25~24.04.1",
+    "new": false
+  },
+  {
+    "name": "linux-nvidia-7.0-tools-7.0.0-1024",
+    "to": "7.0.0-1024.25~24.04.1",
+    "new": true,
+    "from": null
+  },
+  {
+    "name": "linux-tools-7.0.0-1024-nvidia",
+    "to": "7.0.0-1024.25~24.04.1",
+    "new": true,
+    "from": null
+  },
+  {
+    "name": "linux-tools-nvidia-hwe-24.04",
+    "from": "7.0.0-1019.19~24.04.2",
+    "to": "7.0.0-1024.25~24.04.1",
+    "new": false
+  },
+  {
+    "name": "nvidia-modprobe",
+    "from": "615.71.10-1ubuntu1",
+    "to": "620.70.06-1ubuntu1",
+    "new": false
+  },
+  {
+    "name": "nvidia-settings",
+    "from": "615.71.10-1ubuntu1",
+    "to": "620.70.06-1ubuntu1",
+    "new": false
+  },
+  {
+    "name": "nvidia-spark-initcall-bl",
+    "from": "1.0-1",
+    "to": "1.0-2",
+    "new": false
+  }
+]

@@ -1,0 +1,186 @@
+/* ---- r2-fabric ---- */
+/* The Fabric window, its doctor and the node's RoCE panel. Healthy is quiet (hairlines,
+   neutral text, a low-chroma dot); amber and red only for what's wrong (§2.1). Sizes come
+   from tokens; no literal px font sizes. */
+
+.fab-win { display: flex; flex-direction: column; height: 100%; min-height: 0; }
+.fab-demo { font-size: var(--fs-sm); }
+
+/* Verdict band: one quiet line when healthy, an amber or red band when not. */
+.fab-band {
+  display: flex; align-items: center; gap: var(--sp-4);
+  padding: var(--sp-3) var(--sp-5);
+  border-bottom: 0.0625rem solid var(--hairline);
+  color: var(--text-2);
+  min-height: calc(var(--fs-base) * 2.4);
+}
+.fab-band .fab-band-title { color: var(--text); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fab-band.level-warn { background: var(--state-warn-band); border-bottom: 0.0625rem solid var(--state-warn-edge); }
+.fab-band.level-crit { background: var(--state-crit-band); border-bottom: 0.09375rem solid var(--state-crit-edge); }
+.fab-band.level-warn .fab-band-icon { color: var(--warn-text); flex: none; }
+.fab-band.level-crit .fab-band-icon { color: var(--crit-text); flex: none; }
+.fab-band-text { min-width: 0; display: flex; flex-direction: column; gap: var(--sp-1); }
+.fab-band.level-warn .fab-band-title, .fab-band.level-crit .fab-band-title { font-weight: var(--fw-semibold); white-space: normal; }
+.fab-band.level-crit .fab-band-title { color: var(--crit-text); }
+.fab-band-detail { color: var(--text); overflow-wrap: anywhere; }
+
+.fab-main { flex: 1; min-height: 0; display: flex; }
+.fab-content { flex: 1; min-width: 0; display: flex; flex-direction: column; min-height: 0; }
+.fab-content > .tab-body { flex: 1; min-height: 0; overflow: auto; }
+
+/* Matrix: rows are nodes, columns are the two halves of port 2. */
+.fab-matrix-wrap { padding: var(--sp-5); display: flex; flex-direction: column; gap: var(--sp-6); }
+.fab-matrix { display: grid; grid-template-columns: minmax(7em, 9em) minmax(0, 1fr) minmax(0, 1fr); gap: var(--sp-3); }
+.fab-mh, .fab-mrow { display: contents; }
+.fab-mh > span { display: flex; flex-direction: column; gap: var(--sp-1); font-size: var(--fs-sm); color: var(--text-2); padding: 0 var(--sp-2); }
+.fab-mnode { display: flex; flex-direction: column; justify-content: center; gap: var(--sp-1); padding: var(--sp-3) var(--sp-2); min-width: 0; }
+.fab-mnode > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.fab-cell {
+  display: flex; flex-direction: column; gap: var(--sp-2); align-items: stretch; text-align: left;
+  min-width: 0; padding: var(--sp-4) var(--sp-5);
+  background: var(--surface); color: var(--text); font: inherit;
+  border: 0.0625rem solid var(--hairline); border-radius: var(--r-md); cursor: pointer;
+}
+.fab-cell:hover { background: var(--hover); }
+.fab-cell.on { border-color: var(--accent); box-shadow: 0 0 0 0.0625rem var(--accent) inset; }
+.fab-cell.level-warn { border-color: var(--state-warn-edge); }
+.fab-cell.level-crit { border: 0.09375rem solid var(--state-crit-edge); }
+.fab-cell.level-crit .fab-cell-top { background: var(--state-crit-band); margin: calc(-1 * var(--sp-4)) calc(-1 * var(--sp-5)) 0; padding: var(--sp-3) var(--sp-5); border-radius: var(--r-md) var(--r-md) 0 0; }
+.fab-cell.level-warn .fab-cell-top { background: var(--state-warn-band); margin: calc(-1 * var(--sp-4)) calc(-1 * var(--sp-5)) 0; padding: var(--sp-3) var(--sp-5); border-radius: var(--r-md) var(--r-md) 0 0; }
+.fab-cell.empty { cursor: default; align-items: center; justify-content: center; border-style: dashed; }
+.fab-cell-top { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-4); min-width: 0; }
+.fab-verdict { display: inline-flex; align-items: center; gap: var(--sp-3); min-width: 0; }
+.fab-verdict > span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fab-verdict.tone-crit { color: var(--crit-text); font-weight: var(--fw-semibold); }
+.fab-verdict.tone-warn { color: var(--warn-text); font-weight: var(--fw-semibold); }
+.fab-link { flex: none; font-size: var(--fs-sm); white-space: nowrap; }
+.fab-cell-rates { display: flex; gap: var(--sp-5); font-size: var(--fs-sm); white-space: nowrap; overflow: hidden; }
+.fab-cell-spark { display: block; height: calc(var(--fs-base) * 1.7); overflow: hidden; }
+.fab-cell-spark .spark { width: 100%; }
+.fab-cell-port { display: flex; justify-content: space-between; gap: var(--sp-4); font-size: var(--fs-sm); white-space: nowrap; overflow: hidden; }
+.fab-cell-port > span { overflow: hidden; text-overflow: ellipsis; }
+
+/* Counter chips: neutral until the rate moves. */
+/* One line with a reserved height, never wrapping (§C10): chips only for counters that moved. */
+.fab-chips { display: flex; flex-wrap: nowrap; gap: var(--sp-2); min-width: 0; height: 18px; align-items: center; overflow: hidden; white-space: nowrap; }
+.fab-chips-quiet { color: var(--muted); font-size: var(--fs-sm); text-overflow: ellipsis; display: block; line-height: 18px; }
+.fab-chip {
+  display: inline-flex; gap: var(--sp-2); align-items: baseline;
+  padding: 0 var(--sp-3); border-radius: var(--r-sm);
+  border: 0.0625rem solid var(--hairline); color: var(--text-2); font-size: var(--fs-xs); line-height: 1.6;
+}
+.fab-chip-v { color: var(--text); }
+.fab-chip.tone-crit { border-color: var(--state-crit-edge); background: var(--crit-bg); color: var(--crit-text); }
+.fab-chip.tone-crit .fab-chip-v { color: var(--crit-text); font-weight: var(--fw-semibold); }
+.fab-chip.tone-warn { border-color: var(--state-warn-edge); background: var(--warn-bg); color: var(--warn-text); }
+.fab-chip.tone-warn .fab-chip-v { color: var(--warn-text); }
+.fab-chip.tone-info { border-color: var(--border); color: var(--text); }
+
+/* NCCL transport and cabling under the matrix. */
+.fab-transport { display: flex; flex-direction: column; gap: var(--sp-3); }
+.fab-tr { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--sp-2) var(--sp-4); }
+.fab-tr-issues { flex-basis: 100%; margin: 0; padding-left: calc(var(--sp-6) + var(--sp-4)); color: var(--warn-text); }
+.fab-cabling { margin: 0; padding-left: var(--sp-6); }
+
+/* The counters drawer. */
+.fab-drawer {
+  flex: none; width: min(26em, 44%); min-width: 0; display: flex; flex-direction: column;
+  border-left: 0.0625rem solid var(--hairline); background: var(--surface);
+}
+.fab-drawer-head { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--sp-4); padding: var(--sp-4) var(--sp-5); border-bottom: 0.0625rem solid var(--hairline); }
+.fab-drawer-titles { min-width: 0; display: flex; flex-direction: column; gap: var(--sp-1); }
+.fab-drawer-title { font-weight: var(--fw-semibold); font-size: var(--fs-md); }
+.fab-drawer-titles .truncate { display: block; max-width: 100%; }
+.fab-drawer-body { flex: 1; min-height: 0; overflow: auto; padding: var(--sp-5); display: flex; flex-direction: column; gap: var(--sp-5); }
+.fab-drawer-verdict { padding: var(--sp-4) var(--sp-5); border: 0.0625rem solid var(--hairline); border-radius: var(--r-md); display: flex; flex-direction: column; gap: var(--sp-1); }
+.fab-drawer-verdict.level-warn { border-color: var(--state-warn-edge); background: var(--state-warn-band); }
+.fab-drawer-verdict.level-crit { border: 0.09375rem solid var(--state-crit-edge); background: var(--state-crit-band); }
+.fab-drawer-verdict.level-crit .strong { color: var(--crit-text); }
+.fab-action { margin: 0; }
+.fab-kv { font-size: var(--fs-sm); }
+.fab-counters { width: 100%; table-layout: fixed; }
+.fab-counters .fab-col-name { width: 40%; }
+.fab-counters .fab-col-total { width: 20%; }
+.fab-counters .fab-col-now { width: 19%; }
+.fab-counters .fab-col-hour { width: 21%; }
+.fab-counters th, .fab-counters td { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* A counter's name wraps to a second line rather than losing its end ("Out of seq…"). */
+.fab-counters th[scope="row"] { white-space: normal; }
+.fab-counter-name { display: inline-flex; align-items: center; gap: var(--sp-2); max-width: 100%; font-weight: var(--fw-regular); line-height: 1.25; }
+.fab-counter-name .truncate { min-width: 0; white-space: normal; overflow: visible; text-overflow: clip; }
+
+/* History. */
+.fab-history { padding: var(--sp-5); display: flex; flex-direction: column; gap: var(--sp-5); }
+.fab-history-pick { display: flex; align-items: center; gap: var(--sp-4); }
+.fab-history-pick select { max-width: 100%; }
+.fab-charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(22em, 1fr)); gap: var(--sp-5); }
+
+/* The doctor. */
+.fab-doctor { display: flex; flex-direction: column; min-height: 100%; }
+.fab-doctor-setup { display: flex; flex-wrap: wrap; gap: var(--sp-5) var(--sp-7); padding: var(--sp-5); border-bottom: 0.0625rem solid var(--hairline); }
+.fab-fs { border: 0; margin: 0; padding: 0; display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-3) var(--sp-5); min-width: 0; }
+.fab-fs legend { font-size: var(--fs-sm); font-weight: var(--fw-semibold); color: var(--text-2); padding: 0; margin-bottom: var(--sp-3); }
+.fab-check { display: inline-flex; align-items: center; gap: var(--sp-2); white-space: nowrap; }
+.fab-check label { display: inline-flex; align-items: center; gap: var(--sp-2); }
+.fab-check.off { color: var(--muted); }
+.fab-expected { display: inline-flex; align-items: center; gap: var(--sp-3); }
+.fab-expected input { width: 5em; }
+.fab-doctor-empty { padding: var(--sp-5); margin: 0; }
+.fab-report { padding: var(--sp-5); display: flex; flex-direction: column; gap: var(--sp-4); }
+.fab-report-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--sp-2) var(--sp-4); }
+.fab-findings { margin: 0; padding-left: var(--sp-6); display: flex; flex-direction: column; gap: var(--sp-1); }
+.fab-findings li { color: var(--text); }
+.fab-mtu, .fab-agg { width: 100%; }
+.fab-pairs-wrap { overflow-x: auto; }
+.fab-pairs { min-width: 100%; }
+.fab-pair { vertical-align: top; }
+.fab-pair > span { display: block; white-space: nowrap; }
+.fab-pair.self { color: var(--muted); }
+.fab-pair.tone-crit { background: var(--state-crit-band); }
+.fab-pair.tone-warn { background: var(--state-warn-band); }
+.fab-pair-bw { font-size: var(--fs-sm); }
+.fab-nccl { margin: 0; }
+
+/* The RoCE panel in a node's Network tab. */
+.roce-panel { display: flex; flex-direction: column; gap: var(--sp-2); }
+.roce-panel-empty { margin: 0; }
+.roce-row {
+  display: grid; grid-template-columns: minmax(8em, 11em) minmax(8em, 1fr) auto; grid-template-areas: "half verdict rate" "half chips port";
+  align-items: center; gap: var(--sp-2) var(--sp-5);
+  padding: var(--sp-4) var(--sp-5); border: 0.0625rem solid var(--hairline); border-radius: var(--r-md);
+  position: relative;
+}
+.roce-row.level-warn { border-color: var(--state-warn-edge); }
+.roce-row.level-crit { border: 0.09375rem solid var(--state-crit-edge); background: var(--state-crit-band); }
+.roce-half { grid-area: half; display: flex; flex-direction: column; gap: var(--sp-1); min-width: 0; }
+.roce-half > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.roce-row .fab-verdict { grid-area: verdict; }
+.roce-rate { grid-area: rate; font-size: var(--fs-sm); white-space: nowrap; justify-self: end; padding-right: calc(var(--sp-6) + var(--sp-2)); }
+.roce-row .fab-chips { grid-area: chips; }
+.roce-port { grid-area: port; font-size: var(--fs-sm); white-space: nowrap; justify-self: end; padding-right: calc(var(--sp-6) + var(--sp-2)); }
+.roce-open { position: absolute; top: var(--sp-4); right: var(--sp-4); color: var(--muted); display: inline-flex; }
+.roce-open:hover { color: var(--accent); }
+.roce-transport { margin: var(--sp-2) 0 0; font-size: var(--fs-sm); }
+.fab-doctor-bar { display: flex; align-items: center; gap: var(--sp-2); padding: var(--sp-3) var(--sp-5); border-bottom: 0.0625rem solid var(--hairline); }
+
+/* ---- r3-charts ---- */
+/* A counter that moved earlier in the hour: grey, "CRC +412 · 12 min ago". */
+.fab-chip.past { border-color: var(--hairline); background: none; color: var(--muted); }
+.fab-chip.past .fab-chip-v { color: var(--muted); }
+
+/* ---- r4-alerts ---- */
+/* The PFC-off advisory: neutral, the grey ⓘ, the whole sentence (it wraps rather than cuts). */
+.fab-band.fab-advisory { align-items: flex-start; background: var(--surface-2, transparent); border-bottom: 1px solid var(--hairline); }
+.fab-band.fab-advisory .sglyph-advisory { flex: none; margin-top: 2px; color: var(--muted); }
+.fab-band.fab-advisory .fab-band-title { white-space: normal; color: var(--text-2); line-height: 1.45; }
+.fab-band.fab-advisory .fab-band-title b { color: var(--text); font-weight: var(--fw-semibold, 600); }
+
+/* ---- black ---- */
+/* On true black a hairline card edge (1.5:1) all but vanishes; Black lifts the matrix cards, counter
+   chips and the drawer verdict to the border step, as Topology's boxes do (--topo-edge). Amber and
+   red edges are untouched. */
+:root[data-theme="black"] .fab-cell, :root[data-theme="black"] .fab-chip, :root[data-theme="black"] .fab-drawer-verdict { border-color: var(--border); }
+:root[data-theme="black"] .fab-cell.level-warn, :root[data-theme="black"] .fab-chip.tone-warn, :root[data-theme="black"] .fab-drawer-verdict.level-warn { border-color: var(--state-warn-edge); }
+:root[data-theme="black"] .fab-cell.level-crit, :root[data-theme="black"] .fab-chip.tone-crit, :root[data-theme="black"] .fab-drawer-verdict.level-crit { border-color: var(--state-crit-edge); }
+:root[data-theme="black"] .fab-cell.on { border-color: var(--accent); }

@@ -1,0 +1,7 @@
+{ "id": "gemma-3-27b-it", "title": "Gemma 3 27B",
+  "match": ["gemma-3-27b-it"], "image": "vllm/vllm-openai:glm53-flash-arm64-cu130",
+  "backend": "native", "topologies": ["single", "tp2", "pp3", "tp4", "replicas"],
+  "env": {}, "args": [], "mounts": ["vllm", "flashinfer", "triton"],
+  "defaults": { "share": null, "context": 32768, "seqs": null },
+  "toolParser": null, "reasoningParser": null,
+  "multiNodeDocker": "privileged", "note": null }

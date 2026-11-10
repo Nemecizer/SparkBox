@@ -1,0 +1,75 @@
+[
+  {
+    "address": "192.168.50.51",
+    "ports": [
+      22
+    ],
+    "hint": "SSH answers; hardware unidentified",
+    "status": "unidentified",
+    "message": "Demo survey: verify to see fixture identity evidence.",
+    "fingerprint": null,
+    "changedKey": false,
+    "facts": null
+  },
+  {
+    "address": "192.168.50.154",
+    "ports": [
+      22
+    ],
+    "hint": "SSH answers; hardware unidentified",
+    "status": "unidentified",
+    "message": "Demo survey: verify to see fixture identity evidence.",
+    "fingerprint": null,
+    "changedKey": false,
+    "facts": null
+  },
+  {
+    "address": "192.168.50.98",
+    "ports": [
+      22
+    ],
+    "hint": "SSH answers; hardware unidentified",
+    "status": "unidentified",
+    "message": "Demo survey: verify to see fixture identity evidence.",
+    "fingerprint": null,
+    "changedKey": false,
+    "facts": null
+  },
+  {
+    "address": "192.168.50.181",
+    "ports": [
+      22
+    ],
+    "hint": "SSH answers; hardware unidentified",
+    "status": "unidentified",
+    "message": "Demo survey: verify to see fixture identity evidence.",
+    "fingerprint": null,
+    "changedKey": false,
+    "facts": null
+  },
+  {
+    "address": "192.168.50.2",
+    "ports": [
+      80,
+      443
+    ],
+    "hint": "RouterOS page reported; device identity unverified",
+    "status": "unidentified",
+    "message": "Demo survey: verify to see fixture identity evidence.",
+    "fingerprint": null,
+    "changedKey": false,
+    "facts": null
+  },
+  {
+    "address": "192.168.50.70",
+    "ports": [
+      22
+    ],
+    "hint": "SSH answers; hardware unidentified",
+    "status": "unidentified",
+    "message": "Demo survey: verify to see fixture identity evidence.",
+    "fingerprint": null,
+    "changedKey": false,
+    "facts": null
+  }
+]

@@ -1,0 +1,13 @@
+{
+  "about": "Each Spark's root disk as `df -B1 /` printed it in the Live tour (rounds/r4/live-capture/doctor.txt lines 181, 445, 708 and 976), and the statvfs numbers behind it (4 KiB fragments): total = f_blocks x f_frsize, used = (f_blocks - f_bfree) x f_frsize, avail = f_bavail x f_frsize. collector_test.py, health/tests and the TS free-space tests read it.",
+  "disks": [
+    { "node": "cell1", "mount": "/", "df": { "total": 4030802149376, "used": 1212624900096, "avail": 2613347155968, "usePct": 32 },
+      "statvfs": { "f_frsize": 4096, "f_blocks": 984082556, "f_bfree": 688031555, "f_bavail": 638024208 } },
+    { "node": "cell2", "mount": "/", "df": { "total": 4030802149376, "used": 961689878528, "avail": 2864282177536, "usePct": 26 },
+      "statvfs": { "f_frsize": 4096, "f_blocks": 984082556, "f_bfree": 749294988, "f_bavail": 699287641 } },
+    { "node": "cell3", "mount": "/", "df": { "total": 4030802149376, "used": 1054891507712, "avail": 2771080548352, "usePct": 28 },
+      "statvfs": { "f_frsize": 4096, "f_blocks": 984082556, "f_bfree": 726540684, "f_bavail": 676533337 } },
+    { "node": "gx10-0000", "mount": "/", "df": { "total": 982819848192, "used": 373903474688, "avail": 558916337664, "usePct": 41 },
+      "statvfs": { "f_frsize": 4096, "f_blocks": 239946252, "f_bfree": 148661224, "f_bavail": 136454184 } }
+  ]
+}

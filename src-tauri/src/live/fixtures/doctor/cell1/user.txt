@@ -1,0 +1,1 @@
+uid=1000(sparkuser) gid=1000(sparkuser) groups=1000(sparkuser),4(adm),27(sudo),29(audio),30(dip),46(plugdev),100(users),122(lpadmin),983(ollama),988(docker)

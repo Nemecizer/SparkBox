@@ -1,0 +1,12 @@
+{
+ "metadata": {
+  "total_size": 19338405888
+ },
+ "weight_map": {
+  "model.embed_tokens.weight": "model-00001-of-00004.safetensors",
+  "model.layers.13.input_layernorm.weight": "model-00002-of-00004.safetensors",
+  "model.layers.33.input_layernorm.weight": "model-00003-of-00004.safetensors",
+  "lm_head.weight": "model-00004-of-00004.safetensors"
+ },
+ "_note": "Trimmed by SparkBox: one tensor per shard (served_files reads only the shard names)."
+}

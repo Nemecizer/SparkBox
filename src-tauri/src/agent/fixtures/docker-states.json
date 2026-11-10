@@ -1,0 +1,70 @@
+{
+ "comment": [
+  "Crash loops as Docker shows them, for the crash-loop rule. health/tests.rs (the Mac) and agent_test.py (the agent) run every case.",
+  "Runner: one sample of the container every sampleS seconds from t = 0 while t < the phases' total length. 'phases' play in",
+  "order; {repeat: n, phases: [...]} plays its phases n times. A sample's state is its phase's state. restartCount starts at 0",
+  "and rises by 1 at the first sample of each 'restarting' phase, and at the first sample of a phase marked restarted (Docker",
+  "restarted it between two samples). While 'running', startedAt is startS + the t its phase began; otherwise 0. With",
+  "endpoint.answering the model the container serves answers on every sample (endpoint health ready, the container a member).",
+  "Feed each sample to the rule set's crash-loop rule (default-rules.json: warn above 0 restarts, critical above 1, in a",
+  "600 s window; restarting is critical) and the alert engine at startS + t, then every event through the gate (default",
+  "settings: resolves on, repeats every 60 min, no quiet hours) with a tick at every sample, and flush every sample.",
+  "Settled: running for at least crashRecentS, or the model answering. Last restart: the last sample of a restarting phase,",
+  "or the first sample of a restarted phase. Expected: exactly the raises listed (severity and t) and no other raise,",
+  "escalation or easing; one resolve, at a t within resolvedBetween (never before crashRecentS after the last restart, never",
+  "later than crashWindowS after it plus one sample), or none when resolvedBetween is null; at most messagesAtMost messages",
+  "out of the gate over the whole run."
+ ],
+ "crashRecentS": 60,
+ "crashWindowS": 600,
+ "sampleS": 2,
+ "startS": 1800000000,
+ "cases": [
+  {
+   "name": "D1 an 8 s running, 12 s restarting loop for 5 minutes, then up: one raise, one resolve",
+   "container": "vllm-worker",
+   "phases": [
+    {"repeat": 15, "phases": [{"state": "running", "forS": 8}, {"state": "restarting", "forS": 12}]},
+    {"state": "running", "forS": 1300}
+   ],
+   "expect": {"raised": [{"t": 8, "severity": "crit"}], "resolvedBetween": [358, 900], "messagesAtMost": 2}
+  },
+  {
+   "name": "D2 one crash, restarted once, then up: one raise, one resolve",
+   "container": "vllm-worker",
+   "phases": [{"state": "running", "forS": 30}, {"state": "restarting", "forS": 12}, {"state": "running", "forS": 1300}],
+   "expect": {"raised": [{"t": 30, "severity": "crit"}], "resolvedBetween": [100, 642], "messagesAtMost": 2}
+  },
+  {
+   "name": "D3 a slow loop, 90 s up and 10 s restarting, stays one alert",
+   "container": "vllm-worker",
+   "phases": [
+    {"repeat": 5, "phases": [{"state": "running", "forS": 90}, {"state": "restarting", "forS": 10}]},
+    {"state": "running", "forS": 1300}
+   ],
+   "expect": {"raised": [{"t": 90, "severity": "crit"}], "resolvedBetween": [558, 1100], "messagesAtMost": 2}
+  },
+  {
+   "name": "D4 restarted between two samples while its model answers: nothing to page",
+   "container": "vllm-head",
+   "endpoint": {"answering": true},
+   "phases": [{"state": "running", "forS": 100}, {"state": "running", "forS": 1300, "restarted": true}],
+   "expect": {"raised": [], "resolvedBetween": null, "messagesAtMost": 0}
+  },
+  {
+   "name": "D5 the same restart with no model to vouch for it is a warning, raised once",
+   "container": "vllm-head",
+   "phases": [{"state": "running", "forS": 100}, {"state": "running", "forS": 1300, "restarted": true}],
+   "expect": {"raised": [{"t": 100, "severity": "warn"}], "resolvedBetween": [160, 702], "messagesAtMost": 2}
+  },
+  {
+   "name": "D6 a loop every 30 s for 10 minutes stays critical and pages once",
+   "container": "vllm-worker",
+   "phases": [
+    {"repeat": 20, "phases": [{"state": "running", "forS": 18}, {"state": "restarting", "forS": 12}]},
+    {"state": "running", "forS": 1300}
+   ],
+   "expect": {"raised": [{"t": 18, "severity": "crit"}], "resolvedBetween": [658, 1200], "messagesAtMost": 2}
+  }
+ ]
+}

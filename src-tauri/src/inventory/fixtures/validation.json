@@ -1,0 +1,216 @@
+[
+  {
+    "name": "older inventory has no links",
+    "fabric": {
+      "links": [],
+      "headCandidate": null
+    },
+    "valid": true
+  },
+  {
+    "name": "reported pair",
+    "fabric": {
+      "links": [
+        {
+          "iface": "enp1s0f1np1",
+          "ip": "192.168.100.51",
+          "rdma": "rocep1s0f1"
+        },
+        {
+          "iface": "enP2p1s0f1np1",
+          "ip": "192.168.101.51",
+          "rdma": "roceP2p1s0f1"
+        }
+      ],
+      "headCandidate": null
+    },
+    "valid": true
+  },
+  {
+    "name": "RDMA not recorded",
+    "fabric": {
+      "links": [
+        {
+          "iface": "enp1s0f1np1",
+          "ip": "192.168.100.51",
+          "rdma": ""
+        }
+      ],
+      "headCandidate": null
+    },
+    "valid": true
+  },
+  {
+    "name": "iface rejects ",
+    "fabric": {
+      "links": [
+        {
+          "iface": "",
+          "ip": "192.168.100.51",
+          "rdma": "rocep1s0f1"
+        }
+      ],
+      "headCandidate": null
+    },
+    "valid": false
+  },
+  {
+    "name": "iface rejects eth 0",
+    "fabric": {
+      "links": [
+        {
+          "iface": "eth 0",
+          "ip": "192.168.100.51",
+          "rdma": "rocep1s0f1"
+        }
+      ],
+      "headCandidate": null
+    },
+    "valid": false
+  },
+  {
+    "name": "iface rejects $(id)",
+    "fabric": {
+      "links": [
+        {
+          "iface": "$(id)",
+          "ip": "192.168.100.51",
+          "rdma": "rocep1s0f1"
+        }
+      ],
+      "headCandidate": null
+    },
+    "valid": false
+  },
+  {
+    "name": "iface rejects xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "fabric": {
+      "links": [
+        {
+          "iface": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "ip": "192.168.100.51",
+          "rdma": "rocep1s0f1"
+        }
+      ],
+      "headCandidate": null
+    },
+    "valid": false
+  },
+  {
+    "name": "ip rejects 192.168.100.256",
+    "fabric": {
+      "links": [
+        {
+          "iface": "enp1s0f1np1",
+          "ip": "192.168.100.256",
+          "rdma": "rocep1s0f1"
+        }
+      ],
+      "headCandidate": null
+    },
+    "valid": false
+  },
+  {
+    "name": "ip rejects 192.168.100.01",
+    "fabric": {
+      "links": [
+        {
+          "iface": "enp1s0f1np1",
+          "ip": "192.168.100.01",
+          "rdma": "rocep1s0f1"
+        }
+      ],
+      "headCandidate": null
+    },
+    "valid": false
+  },
+  {
+    "name": "ip rejects 2001:db8::1",
+    "fabric": {
+      "links": [
+        {
+          "iface": "enp1s0f1np1",
+          "ip": "2001:db8::1",
+          "rdma": "rocep1s0f1"
+        }
+      ],
+      "headCandidate": null
+    },
+    "valid": false
+  },
+  {
+    "name": "ip rejects ",
+    "fabric": {
+      "links": [
+        {
+          "iface": "enp1s0f1np1",
+          "ip": "",
+          "rdma": "rocep1s0f1"
+        }
+      ],
+      "headCandidate": null
+    },
+    "valid": false
+  },
+  {
+    "name": "rdma rejects a;b",
+    "fabric": {
+      "links": [
+        {
+          "iface": "enp1s0f1np1",
+          "ip": "192.168.100.51",
+          "rdma": "a;b"
+        }
+      ],
+      "headCandidate": null
+    },
+    "valid": false
+  },
+  {
+    "name": "rdma rejects a b",
+    "fabric": {
+      "links": [
+        {
+          "iface": "enp1s0f1np1",
+          "ip": "192.168.100.51",
+          "rdma": "a b"
+        }
+      ],
+      "headCandidate": null
+    },
+    "valid": false
+  },
+  {
+    "name": "duplicate interface",
+    "fabric": {
+      "links": [
+        {
+          "iface": "enp1s0f1np1",
+          "ip": "192.168.100.51",
+          "rdma": "rocep1s0f1"
+        },
+        {
+          "iface": "enp1s0f1np1",
+          "ip": "192.168.100.51",
+          "rdma": "rocep1s0f1"
+        }
+      ],
+      "headCandidate": null
+    },
+    "valid": false
+  },
+  {
+    "name": "different subnet is owner choice",
+    "fabric": {
+      "links": [
+        {
+          "iface": "eth_0.1-2",
+          "ip": "10.0.0.2",
+          "rdma": "rocep1s0f1"
+        }
+      ],
+      "headCandidate": null
+    },
+    "valid": true
+  }
+]

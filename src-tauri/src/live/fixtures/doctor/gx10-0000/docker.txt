@@ -1,0 +1,7 @@
+srw-rw---- 1 root docker 0 Oct 25 13:47 /var/run/docker.sock
+29.6.2
+9eadeae9efaf0cdd942d04cb364cb0c5b9da08bf4623338d6b17b4dffbb13705 glm53 vllm/vllm-openai:glm53-flash-arm64-cu130 exited Exited (1) 2 days ago
+22e0f93fdd264d70dec7b4a081e0103fdac73bb71ed522b42b42dbccc89dd154 vigilant_hofstadter nvcr.io/nvidia/vllm:26.03.post1-py3 exited Exited (0) 6 months ago
+be055f9ffc733ec0bb64780848c06e4793f0bfb13a4a0d9cc21d647cd6446127 adoring_northcutt nvcr.io/nvidia/cuda:13.0.1-devel-ubuntu24.04 exited Exited (0) 6 months ago
+0f42a56925ba44b8af5620cc3e86395a5238d63083d84c2d212a02419948961c jovial_elgamal nvcr.io/nvidia/cuda:13.0.1-devel-ubuntu24.04 exited Exited (0) 6 months ago
+40a05cea602d1cc22da438caba1985c1d5ff3f89a85f8076940c4ded2bb67e3f gracious_babbage nvcr.io/nvidia/cuda:13.0.1-devel-ubuntu24.04 exited Exited (0) 6 months ago

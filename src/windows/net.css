@@ -1,0 +1,1255 @@
+/* Network windows: Demo scenarios, switches, the VPN console and the Connect wizard.
+   Uses the design tokens from styles.css, with fallbacks; every rule is scoped. */
+
+/* ---- Settings › Demo scenarios */
+
+.scenarios {
+  display: flex;
+  flex-direction: column;
+}
+.scenarios-loading {
+  padding: var(--sp-5);
+  font-size: var(--fs-sm);
+}
+.scenario {
+  display: flex;
+  gap: var(--sp-4);
+  align-items: flex-start;
+  width: 100%;
+  padding: var(--sp-4) var(--sp-5);
+  border: 0;
+  border-top: 0.0625rem solid var(--hairline, #d2d6db);
+  background: transparent;
+  color: var(--text, #13161b);
+  font: inherit;
+  text-align: left;
+  cursor: default;
+}
+.scenario:first-child {
+  border-top: 0;
+}
+.scenario:hover:not(:disabled) {
+  background: var(--hover, #e3e6eb);
+}
+.scenario:focus-visible {
+  outline: 0.125rem solid var(--focus-ring, #2a80e2);
+  outline-offset: -0.125rem;
+}
+.scenario.on {
+  background: var(--sel-inactive, #dce0e5);
+}
+.scenario-radio {
+  flex: none;
+  width: 0.875rem;
+  height: 0.875rem;
+  margin-top: 0.0625rem;
+  border-radius: 50%;
+  border: 0.0625rem solid var(--field-border, #868b92);
+  background: var(--surface, #fff);
+}
+.scenario.on .scenario-radio {
+  border: 0.25rem solid var(--accent-fill, #1467c2);
+}
+.scenario-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  min-width: 0;
+}
+.scenario-head {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+.scenario-title {
+  font-size: var(--fs-md);
+  font-weight: var(--fw-medium, 500);
+}
+.scenario-meta {
+  margin-left: auto;
+  color: var(--muted, #646970);
+  font-size: var(--fs-xs);
+  font-variant-numeric: tabular-nums;
+}
+.scenario-body {
+  color: var(--text-2, #41454c);
+  font-size: var(--fs-sm);
+  line-height: 1.45;
+}
+.scenario-affects {
+  display: flex;
+  gap: var(--sp-2);
+  margin-top: var(--sp-1);
+}
+.scenario-affects .chip {
+  font-size: var(--fs-2xs);
+}
+.scenarios-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--sp-4);
+}
+
+/* ---- Switch windows */
+
+.switch-win {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+.switch-strip {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  padding: var(--sp-3) var(--sp-5);
+  border-bottom: 0.0625rem solid var(--hairline, #d2d6db);
+  font-size: var(--fs-sm);
+  white-space: nowrap;
+  overflow: hidden;
+}
+.switch-strip .strip-sep {
+  width: 0.0625rem;
+  height: 0.75rem;
+  background: var(--hairline, #d2d6db);
+}
+.switch-main {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+.switch-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+}
+.switch-content > .tab-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.switch-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: var(--sp-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+.switch-overview {
+  padding: var(--sp-5);
+}
+
+/* The Switch X's front. A port with a link glows in its speed's color; the word under it says
+   the same, so color is never the only cue. It borrows the CRS804 panel's chassis and labels. */
+.sx-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+.sx-panel {
+  padding: 0;
+}
+.sx-l10g { --port-lit: var(--speed-10g); }
+.sx-l5g { --port-lit: var(--speed-5g); }
+.sx-l25g { --port-lit: var(--speed-2g5); }
+.sx-l1g { --port-lit: var(--speed-1g); }
+.sx-l100m { --port-lit: var(--speed-100m); }
+.sx-lunknown { --port-lit: var(--speed-unknown); }
+.sx-panel .sx-bezel {
+  fill: none;
+  stroke: var(--hairline, #d2d6db);
+}
+.sx-panel .sx-brand {
+  font-size: 1.1875rem;
+  font-weight: 700;
+  fill: var(--text, #13161b);
+}
+.sx-panel .sx-tag {
+  fill: none;
+  stroke: var(--text-2, #41454c);
+}
+.sx-panel .sx-tag-text {
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-semibold, 600);
+  fill: var(--text-2, #41454c);
+  letter-spacing: 0.04em;
+}
+.sx-panel .sx-blank {
+  fill: var(--surface-2, #edf0f4);
+  stroke: var(--field-border, #868b92);
+}
+.sx-panel .sx-dot {
+  fill: var(--field-border, #868b92);
+}
+.sx-panel .sx-bracket {
+  fill: none;
+  stroke: var(--muted, #646970);
+}
+.sx-panel .sx-port {
+  cursor: pointer;
+  outline: none;
+}
+.sx-panel .sx-socket {
+  fill: #121418;
+  stroke: var(--field-border, #868b92);
+}
+.sx-panel .sx-face {
+  fill: #2b2f35;
+}
+.sx-panel .sx-halo {
+  fill: var(--port-lit);
+  opacity: 0.85;
+}
+.sx-panel .sx-port:not(.sx-loff) .sx-socket {
+  stroke: var(--port-lit);
+  stroke-width: 1.5;
+}
+.sx-panel .sx-port:not(.sx-loff) .sx-face {
+  fill: var(--port-lit);
+}
+.sx-panel .sx-port:hover .sx-socket {
+  filter: brightness(1.3);
+}
+.sx-panel .sx-port:focus-visible .sx-socket {
+  stroke: var(--focus-ring, #2a80e2);
+  stroke-width: 2.5;
+}
+/* Larger than the text scale's sizes: the drawing shrinks when the details open. */
+.sx-panel .sx-speed {
+  font-size: 0.9375rem;
+  font-weight: var(--fw-semibold, 600);
+  fill: var(--text, #13161b);
+}
+.sx-panel .sx-what {
+  font-size: 0.78125rem;
+  fill: var(--text-2, #41454c);
+}
+.sx-panel .sx-what.heard {
+  fill: var(--muted, #646970);
+}
+.sx-panel .sx-num {
+  font-size: 0.78125rem;
+  fill: var(--text-2, #41454c);
+}
+.sx-legend {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+}
+.sx-legend ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2) var(--sp-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--fs-sm);
+}
+.sx-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+.sx-swatch {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 0.1875rem;
+  background: var(--port-lit);
+  box-shadow: 0 0 0.25rem var(--port-lit);
+}
+.sx-swatch.sx-loff {
+  background: #121418;
+  box-shadow: none;
+  outline: 0.0625rem solid var(--field-border, #868b92);
+}
+.sx-sources {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2) var(--sp-3);
+  margin: 0;
+  font-size: var(--fs-sm);
+}
+.sx-sources .link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--accent-text);
+  font: inherit;
+  cursor: pointer;
+}
+.sx-drawer:focus {
+  outline: none;
+}
+.sx-drawer .sx-facts {
+  grid-template-columns: 6.5rem 1fr;
+  gap: var(--sp-3) var(--sp-4);
+  font-size: var(--fs-sm);
+}
+.sx-drawer .sx-facts dd {
+  overflow-wrap: anywhere;
+}
+.sx-src {
+  display: block;
+  color: var(--muted, #646970);
+  font-size: var(--fs-2xs);
+}
+.sx-drawer .sx-plain {
+  margin: 0;
+  font-size: var(--fs-sm);
+}
+.sx-drawer .sx-heard {
+  width: 100%;
+  font-size: var(--fs-sm);
+}
+.sx-drawer .sx-heard td {
+  overflow-wrap: anywhere;
+}
+.sx-editor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  font-size: var(--fs-sm);
+}
+.sx-editor .btn {
+  align-self: flex-start;
+}
+
+/* Front panel: the CRS804 DDQ drawn to scale (svg units are half-millimetres). */
+.port-panel {
+  position: relative;
+  padding: var(--sp-5) var(--sp-5) var(--sp-2);
+}
+.port-panel svg {
+  display: block;
+  width: 100%;
+  max-width: 72rem;
+  height: auto;
+  margin: 0 auto;
+  overflow: visible;
+}
+.port-panel .pp-chassis {
+  fill: var(--surface-3, #e3e6eb);
+  stroke: var(--border, #b9bec4);
+}
+.port-panel .pp-ear {
+  fill: var(--surface-2, #edf0f4);
+  stroke: var(--border, #b9bec4);
+}
+.port-panel .pp-slot {
+  fill: var(--desk, #f6f7f9);
+  stroke: var(--border, #b9bec4);
+}
+.port-panel .pp-plate {
+  fill: var(--surface, #fff);
+  stroke: var(--hairline, #d2d6db);
+}
+.port-panel .pp-brand {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-semibold, 600);
+  fill: var(--text, #13161b);
+  letter-spacing: 0.02em;
+}
+.port-panel .pp-model {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium, 500);
+  fill: var(--text-2, #41454c);
+  letter-spacing: 0.04em;
+}
+.port-panel .pp-tiny {
+  font-size: var(--fs-2xs);
+  fill: var(--muted, #646970);
+  letter-spacing: 0.03em;
+}
+.port-panel .pp-caption {
+  fill: var(--muted, #646970);
+}
+.port-panel .pp-cage {
+  fill: var(--surface-2, #edf0f4);
+  stroke: var(--field-border, #868b92);
+}
+/* Openings are dark metal in either theme, so these are fixed colours, not the gray ramp. */
+.port-panel .pp-opening {
+  fill: #2b2f35;
+}
+.port-panel .pp-split {
+  stroke: #5b6168;
+  stroke-width: 1;
+}
+.port-panel .pp-port {
+  cursor: default;
+  outline: none;
+}
+.port-panel .pp-half {
+  fill: #121418;
+  stroke: none;
+}
+.port-panel .pp-module {
+  fill: #8a9099;
+}
+.port-panel .pp-errors .pp-half {
+  stroke: var(--critical, #cc3336);
+  stroke-width: 2;
+}
+.port-panel .pp-disabled .pp-half {
+  stroke: var(--muted, #646970);
+}
+.port-panel .pp-hatch-bg {
+  fill: #4a5058;
+}
+.port-panel .pp-hatch {
+  stroke: #121418;
+}
+.port-panel .pp-rj45 {
+  fill: #121418;
+  stroke: var(--field-border, #868b92);
+}
+.port-panel .pp-port:hover .pp-half,
+.port-panel .pp-port:hover .pp-rj45 {
+  filter: brightness(1.25);
+}
+.port-panel .pp-port:focus-visible .pp-half,
+.port-panel .pp-port:focus-visible .pp-rj45 {
+  stroke: var(--focus-ring, #2a80e2);
+  stroke-width: 2.5;
+}
+.port-panel .pp-sel {
+  fill: none;
+  stroke: var(--accent, #186bc5);
+  stroke-width: 1.5;
+}
+.port-panel .pp-mark {
+  fill: var(--on-accent, #fff);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  pointer-events: none;
+}
+.port-panel .pp-load {
+  fill: var(--m-tx, #43c1b8);
+}
+/* Link lights: healthy is a quiet low-chroma dot; amber and red only for problems. */
+.port-panel .pp-led,
+.port-panel .pp-led-sq {
+  stroke: #5b6168;
+  stroke-width: 0.6;
+}
+.port-panel .led-ok {
+  fill: var(--dot-ok, #7fa388);
+}
+.port-panel .led-warn {
+  fill: var(--warning, #efa810);
+}
+.port-panel .led-crit {
+  fill: var(--critical, #cc3336);
+}
+.port-panel .led-off,
+.port-panel .led-absent {
+  fill: #3a3f46;
+}
+.port-panel .led-disabled {
+  fill: none;
+}
+.port-panel .pp-leader {
+  stroke: var(--hairline, #d2d6db);
+  stroke-width: 1;
+}
+.port-panel .pp-label {
+  fill: var(--text-2);
+  font-size: var(--fs-xs);
+  pointer-events: none;
+}
+.port-panel .pp-label-port {
+  font-weight: var(--fw-semibold, 600);
+  fill: var(--text-2, #41454c);
+  font-variant-numeric: tabular-nums;
+}
+.port-panel .pp-label-node {
+  fill: var(--text, #13161b);
+}
+.port-panel .pp-label-node.none {
+  fill: var(--muted, #646970);
+}
+.pp-tip {
+  position: absolute;
+  z-index: 20;
+  width: 18rem;
+  padding: var(--sp-4) var(--sp-5);
+  border-radius: var(--r-lg, 0.5rem);
+  background: var(--surface, #fff);
+  color: var(--text, #13161b);
+  box-shadow: var(--shadow-pop);
+  font-size: var(--fs-sm);
+  pointer-events: none;
+}
+.pp-tip-head {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-3);
+}
+.pp-tip-state.errors {
+  color: var(--crit-text, #b32228);
+}
+.pp-tip-state.down,
+.pp-tip-state.disabled {
+  color: var(--muted, #646970);
+}
+.pp-tip dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--sp-1) var(--sp-5);
+  margin: 0;
+}
+.pp-tip dt {
+  color: var(--muted, #646970);
+}
+.pp-tip dd {
+  margin: 0;
+  text-align: right;
+}
+.pp-tip-note {
+  margin: var(--sp-3) 0 0;
+  color: var(--text-2, #41454c);
+}
+
+/* Ports and optics */
+.switch-win .load-bar {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+  width: 100%;
+}
+.switch-win .load-track {
+  flex: 1;
+  height: 0.375rem;
+  border-radius: 0.1875rem;
+  background: var(--track, #d2d6db);
+  overflow: hidden;
+}
+.switch-win .load-fill {
+  display: block;
+  height: 100%;
+  border-radius: 0.1875rem;
+  background: var(--m-rx, #007b76);
+}
+.switch-win .load-fill.tone-warn {
+  background: var(--warning, #efa810);
+}
+.switch-win .load-fill.tone-crit {
+  background: var(--critical, #cc3336);
+}
+.switch-win .load-text {
+  width: 1.875rem;
+  text-align: right;
+  font-size: var(--fs-xs);
+  color: var(--text-2, #41454c);
+}
+.switch-win .optic.tone-warn,
+.switch-win .lane-value.tone-warn {
+  color: var(--warn-text, #8a5600);
+}
+.switch-win .optic.tone-crit,
+.switch-win .lane-value.tone-crit,
+.switch-win .crit-text {
+  color: var(--crit-text, #b32228);
+  font-weight: var(--fw-medium, 500);
+}
+.optics-wrap {
+  padding: var(--sp-5);
+  overflow: auto;
+}
+.switch-win table.optics {
+  width: 100%;
+}
+.switch-win table.optics tr.sel td {
+  background: var(--sel-inactive, #dce0e5);
+}
+.switch-win table.optics td.optic-cell.tone-warn {
+  background: var(--warn-bg, #fcefd2);
+  color: var(--warn-text, #8a5600);
+}
+.switch-win table.optics td.optic-cell.tone-crit {
+  background: var(--crit-bg, #f8e0e0);
+  color: var(--crit-text, #b32228);
+  font-weight: var(--fw-semibold, 600);
+}
+.switch-win .footnote {
+  margin: var(--sp-4) 0 0;
+  color: var(--muted, #646970);
+  font-size: var(--fs-xs);
+}
+.impact-list {
+  margin: 0;
+  padding-left: 1.125rem;
+}
+.switch-win code.fingerprint,
+code.fingerprint {
+  display: block;
+  font-family: var(--mono, ui-monospace, monospace);
+  font-size: var(--fs-xs);
+  word-break: break-all;
+}
+
+/* Port drawer */
+.port-drawer {
+  display: flex;
+  flex-direction: column;
+  width: 22.5rem;
+  flex: none;
+  border-left: 0.0625rem solid var(--hairline, #d2d6db);
+  background: var(--surface, #fff);
+  min-height: 0;
+}
+.port-drawer-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: var(--sp-4) var(--sp-5);
+  border-bottom: 0.0625rem solid var(--hairline, #d2d6db);
+}
+.port-drawer-title {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-semibold, 600);
+}
+.port-drawer-head .muted {
+  font-size: var(--fs-sm);
+}
+.port-drawer-body {
+  flex: 1;
+  overflow: auto;
+  padding: var(--sp-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+.port-drawer .section-title {
+  margin: var(--sp-4) 0 0;
+}
+.port-drawer table.port-compare {
+  width: 100%;
+  font-size: var(--fs-sm);
+}
+.port-drawer table.port-compare th[scope="row"] {
+  color: var(--muted, #646970);
+  font-weight: var(--fw-regular, 400);
+  text-align: left;
+}
+.port-drawer .port-counters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-2) var(--sp-5);
+  margin: 0;
+}
+.port-drawer .port-counters div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  font-size: var(--fs-sm);
+}
+.port-drawer .port-counters dt {
+  color: var(--muted, #646970);
+}
+.port-drawer .port-counters dd {
+  margin: 0;
+}
+.lane-bars {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+.lane-bar {
+  display: grid;
+  grid-template-columns: 2.875rem 1fr 4.375rem;
+  align-items: center;
+  gap: var(--sp-4);
+  font-size: var(--fs-sm);
+}
+.lane-name {
+  color: var(--muted, #646970);
+}
+.lane-track {
+  position: relative;
+  height: 0.5rem;
+  border-radius: 0.25rem;
+  background: var(--track, #d2d6db);
+}
+.lane-fill {
+  display: block;
+  height: 100%;
+  border-radius: 0.25rem;
+  background: var(--gray-8, #868b92);
+}
+.lane-fill.tone-warn {
+  background: var(--warning, #efa810);
+}
+.lane-fill.tone-crit {
+  background: var(--critical, #cc3336);
+}
+.lane-mark {
+  position: absolute;
+  top: -0.125rem;
+  width: 0.0625rem;
+  height: 0.75rem;
+}
+.lane-mark.warn {
+  background: var(--warning-border, #c08000);
+}
+.lane-mark.crit {
+  background: var(--critical, #cc3336);
+}
+.lane-value {
+  text-align: right;
+}
+
+/* The Firewalla devices */
+.managed-panel {
+  margin: 0;
+  opacity: 0.55;
+}
+/* Black: the figure is drawn in muted ink instead of faded (0.55 over #000 put its words under 3:1). */
+:root[data-theme="black"] .managed-panel { opacity: 1; }
+:root[data-theme="black"] .managed-panel .mp-brand { fill: var(--muted); }
+:root[data-theme="black"] .managed-panel figcaption { color: var(--muted); }
+.managed-panel svg {
+  display: block;
+  width: 100%;
+  max-width: 35rem;
+  height: auto;
+}
+.managed-panel .mp-chassis {
+  fill: var(--surface-2, #edf0f4);
+  stroke: var(--border, #b9bec4);
+}
+.managed-panel .mp-brand {
+  font-size: var(--fs-md);
+  font-weight: var(--fw-semibold, 600);
+  fill: var(--text-2, #41454c);
+}
+.managed-panel .mp-port {
+  fill: var(--surface-3, #e3e6eb);
+  stroke: var(--field-border, #868b92);
+}
+.managed-panel .mp-port-tab {
+  fill: var(--field-border, #868b92);
+}
+.managed-panel .mp-port-label {
+  font-size: var(--fs-2xs);
+  fill: var(--muted, #646970);
+}
+.managed-panel figcaption {
+  display: flex; align-items: center; gap: var(--sp-2);
+  margin-top: var(--sp-2);
+  color: var(--text-2, #41454c);
+  font-size: var(--fs-sm);
+}
+
+/* ---- VPN console */
+
+.vpn-win .vpn-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: var(--sp-5) var(--sp-6) var(--sp-7);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+}
+.vpn-card {
+  display: grid;
+  grid-template-columns: minmax(15rem, 1.3fr) minmax(13.75rem, 1fr);
+  gap: var(--sp-5) var(--sp-7);
+  padding: var(--sp-6);
+  border: 0.0625rem solid var(--hairline, #d2d6db);
+  border-radius: var(--r-xl, 0.75rem);
+  background: var(--surface-2, #edf0f4);
+}
+@container (max-width: 38.75rem) {
+  .vpn-card {
+    grid-template-columns: 1fr;
+  }
+}
+/* Healthy is quiet: a connected or direct VPN keeps the hairline; a problem gets the red edge and band. */
+.vpn-card.state-error {
+  border: 0.09375rem solid var(--state-crit-edge, #cc3336);
+  background: var(--state-crit-band);
+}
+.vpn-state {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+}
+.vpn-state-word {
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-semibold, 600);
+  letter-spacing: -0.01em;
+}
+.vpn-path {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  margin-top: var(--sp-2);
+  font-size: var(--fs-md);
+  color: var(--text-2, #41454c);
+  font-variant-numeric: tabular-nums;
+}
+.vpn-path .vpn-eye {
+  padding: 0.125rem 0.25rem;
+}
+.vpn-message {
+  margin: var(--sp-4) 0 0;
+  font-size: var(--fs-sm);
+  color: var(--text-2, #41454c);
+}
+.vpn-network {
+  margin: var(--sp-2) 0 0;
+  font-size: var(--fs-sm);
+}
+.vpn-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-3) var(--sp-6);
+  margin: 0;
+  align-content: start;
+}
+.vpn-facts div {
+  display: flex;
+  flex-direction: column;
+}
+.vpn-facts dt {
+  font-size: var(--fs-xs);
+  color: var(--muted, #646970);
+}
+.vpn-facts dd {
+  margin: 0;
+  font-size: var(--fs-base);
+}
+.vpn-rates {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-7);
+}
+.vpn-rate {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  font-size: var(--fs-sm);
+}
+.vpn-rate .num {
+  min-width: 4.5rem;
+}
+.vpn-win table.vpn-reach,
+.vpn-win table.vpn-forwards {
+  width: 100%;
+}
+.vpn-section-head {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+.vpn-section-head .section-title {
+  margin: 0;
+}
+.vpn-forward-status .vpn-listening {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-4);
+}
+.vpn-forward-status .warn-text {
+  color: var(--warn-text, #8a5600);
+  font-size: var(--fs-xs);
+  margin-top: var(--sp-1);
+}
+.vpn-log {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 13.75rem;
+  overflow: auto;
+  border: 0.0625rem solid var(--hairline, #d2d6db);
+  border-radius: var(--r-md, 0.375rem);
+}
+.vpn-log li {
+  display: grid;
+  grid-template-columns: 4.75rem 4rem 1fr;
+  gap: var(--sp-4);
+  padding: var(--sp-2) var(--sp-4);
+  font-size: var(--fs-sm);
+  border-top: 0.0625rem solid var(--hairline, #d2d6db);
+}
+.vpn-log li:first-child {
+  border-top: 0;
+}
+.vpn-log-kind {
+  color: var(--muted, #646970);
+}
+.vpn-log-state .vpn-log-text {
+  font-weight: var(--fw-medium, 500);
+}
+.vpn-log-helper .vpn-log-text {
+  font-family: var(--mono, ui-monospace, monospace);
+  font-size: var(--fs-xs);
+  color: var(--text-2, #41454c);
+}
+.vpn-profile {
+  border: 0.0625rem solid var(--hairline, #d2d6db);
+  border-radius: var(--r-lg, 0.5rem);
+  padding: var(--sp-4) var(--sp-5);
+}
+.vpn-profile summary {
+  cursor: default;
+  font-weight: var(--fw-medium, 500);
+}
+.vpn-profile[open] summary {
+  margin-bottom: var(--sp-4);
+}
+.switch-win .port-name {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.port-drawer table.port-compare {
+  table-layout: fixed;
+}
+.port-drawer table.port-compare th:first-child {
+  width: 42%;
+}
+.port-drawer table.port-compare td,
+.port-drawer table.port-compare th {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.port-drawer .port-compare-note {
+  margin: 0;
+  font-size: var(--fs-xs);
+}
+.switch-scroll > * {
+  flex: none;
+}
+.switch-scroll .fw-chart {
+  height: 13.125rem;
+  display: flex;
+  flex-direction: column;
+}
+.switch-scroll .fw-lan {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* ---- Connect wizard */
+
+.wizard {
+  display: flex;
+  height: 100%;
+  min-height: 0;
+}
+.wizard-rail {
+  flex: none;
+  width: 10.5rem;
+  padding: var(--sp-6) var(--sp-4);
+  border-right: 0.0625rem solid var(--hairline, #d2d6db);
+  background: var(--surface-2, #edf0f4);
+}
+.wizard-rail ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+.wizard-step {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  width: 100%;
+  padding: var(--sp-3) var(--sp-4);
+  border: 0;
+  border-radius: var(--r-md, 0.375rem);
+  background: transparent;
+  color: var(--text-2, #41454c);
+  font: inherit;
+  text-align: left;
+}
+.wizard-step:hover {
+  background: var(--hover, #e3e6eb);
+}
+.wizard-step.on {
+  background: var(--sel, #cee3ff);
+  color: var(--text, #13161b);
+  font-weight: var(--fw-medium, 500);
+}
+.wizard-step:focus-visible {
+  outline: 0.125rem solid var(--focus-ring, #2a80e2);
+  outline-offset: -0.125rem;
+}
+.wizard-num {
+  display: inline-grid;
+  place-items: center;
+  width: 1.125rem;
+  height: 1.125rem;
+  border-radius: 50%;
+  border: 0.0625rem solid var(--field-border, #868b92);
+  font-size: var(--fs-2xs);
+  font-variant-numeric: tabular-nums;
+}
+.wizard-step.on .wizard-num {
+  border-color: var(--accent-fill, #1467c2);
+  background: var(--accent-fill, #1467c2);
+  color: var(--on-accent, #fff);
+}
+.wizard-step.done .wizard-num {
+  border-color: var(--border, #b9bec4);
+  color: var(--text-2, #41454c);
+}
+.wizard-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.wizard-body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: var(--sp-6) var(--sp-7);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+.wizard-title {
+  margin: 0;
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-semibold, 600);
+}
+.wizard-lede {
+  margin: 0;
+  color: var(--text-2, #41454c);
+  line-height: 1.5;
+  max-width: 62ch;
+}
+.wizard-inline {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+}
+.wizard-foot {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-5);
+  padding: var(--sp-4) var(--sp-6);
+  border-top: 0.0625rem solid var(--hairline, #d2d6db);
+}
+.wizard-nodes {
+  width: 100%;
+}
+.wizard-checks {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+  gap: var(--sp-5);
+}
+.wizard-node {
+  border: 0.0625rem solid var(--hairline, #d2d6db);
+  border-radius: var(--r-lg, 0.5rem);
+  padding: var(--sp-4) var(--sp-5);
+}
+.wizard-node header {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-3);
+}
+.check-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+.check-list li {
+  display: grid;
+  grid-template-columns: 1rem 6.5rem 1fr;
+  gap: var(--sp-3);
+  font-size: var(--fs-sm);
+  align-items: start;
+}
+.check-icon {
+  margin-top: 0.0625rem;
+}
+.check-ok .check-icon {
+  color: var(--good-text, #137738);
+}
+.check-warn .check-icon {
+  color: var(--warn-text, #8a5600);
+}
+.check-fail .check-icon {
+  color: var(--crit-text, #b32228);
+}
+.check-skip {
+  color: var(--muted, #646970);
+}
+.check-label {
+  font-weight: var(--fw-medium, 500);
+}
+.check-detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.check-hint {
+  color: var(--text-2, #41454c);
+}
+.check-trust {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--sp-2);
+  margin-top: var(--sp-2);
+}
+.check-idle {
+  margin: 0;
+  font-size: var(--fs-sm);
+}
+.wizard .spin {
+  animation: wizard-spin 1s linear infinite;
+  vertical-align: -0.125rem;
+}
+@keyframes wizard-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wizard .spin {
+    animation: none;
+  }
+}
+
+
+/* ---- r2-fabric ---- */
+.port-drawer-titles {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+.port-drawer-titles .truncate,
+.port-drawer .port-compare-note {
+  display: block;
+  max-width: 100%;
+}
+.port-drawer .kv dd {
+  min-width: 0;
+}
+.port-drawer .kv dd .truncate {
+  display: block;
+  max-width: 100%;
+}
+.port-mgmt {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  max-width: 100%;
+}
+.mgmt-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  color: var(--text-2, #41454c);
+}
+.optics-legend {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-top: var(--sp-3);
+  font-size: var(--fs-sm);
+}
+.neighbors {
+  padding: var(--sp-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+.neighbors-note {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-sm);
+}
+.vpn-mode-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-3) var(--sp-5);
+}
+.vpn-mode-row > .muted {
+  min-width: 0;
+  flex: 1 1 18em;
+}
+.vpn-unset {
+  display: inline-flex;
+}
+.vpn-profile-help {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-sm);
+}
+.vpn-section-head .section-head {
+  margin: 0;
+}
+.scenarios-title {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+.switch-win td .spark {
+  vertical-align: middle;
+}
+
+/* ---- r3-charts: VPN ---- */
+/* Demo changes the cluster, not the VPN: said once, as a quiet chip (the detail is its tooltip). */
+.vpn-real-chip {
+  align-self: flex-start; display: inline-flex; align-items: center;
+  padding: 1px 8px; border: 1px solid var(--hairline); border-radius: 10px;
+  color: var(--text-2); font-size: var(--fs-sm, 11px); white-space: nowrap;
+}
+.vpn-no-traffic { margin: 0; padding-top: var(--sp-3, 6px); border-top: 1px solid var(--hairline); font-size: var(--fs-sm, 11px); }
+.vpn-path .infotip { margin-left: 2px; }
+.switch-state.tone-offline, .switch-state.tone-crit { color: var(--crit-text); font-weight: var(--fw-semibold, 600); }
+.switch-state.tone-warn { color: var(--warn-text); }
+
+.pp-note, .hardware-source { font-size: var(--fs-sm); margin: var(--sp-2) var(--sp-5); }
+.hardware-profile { padding: var(--sp-3) 0; border-top: 1px solid var(--hairline); }
+.hardware-profile p { margin: var(--sp-2) 0; }
+
+.hardware-details { padding: 0 var(--sp-3) var(--sp-3); }
+
+/* Local discovery stays in the Connect draft until its existing Save flow. */
+.network-discovery { border: 1px solid var(--hairline); padding: var(--sp-4, 8px); margin-block: var(--sp-4, 8px); }
+.network-discovery > * + * { margin-top: var(--sp-4, 8px); }
+.network-discovery select { min-width: 0; flex: 1; }
+.discovery-candidates { width: 100%; }
+.network-discovery table.discovery-candidates td { vertical-align: top; }
+.discovery-candidates small, .discovery-proposal small { display: block; color: var(--muted); }
+.discovery-proposal { border-top: 1px solid var(--hairline); padding-top: var(--sp-4, 8px); }
+.discovery-proposal h3, .discovery-proposal h4 { margin-block: var(--sp-4, 8px); }
+.discovery-proposal ul { padding-left: var(--sp-8, 16px); }
+.discovery-warning { color: var(--muted); }
+
+.discovery-candidates { table-layout: fixed; }
+.discovery-candidates th:first-child { width: 2.5rem; }
+.discovery-candidates th:nth-child(2) { width: 8rem; }
+.discovery-candidates th:last-child { width: 6.5rem; }
+.network-discovery table.discovery-candidates td { white-space: normal; overflow-wrap: anywhere; }

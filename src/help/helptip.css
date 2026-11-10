@@ -1,0 +1,21 @@
+/* What a Help tip adds to the ⓘ popover (src/components/ui.tsx). */
+
+.infotip-pop { max-height: calc(100vh - 16px); overflow: auto; }
+.infotip-pop:focus { outline: none; }
+/* Inside a dialog or a panel such as Keyboard shortcuts: a popover sits below them otherwise. */
+.infotip-pop.over-panel { z-index: calc(var(--z-dialog) + 10); }
+.helptip-title { margin: 0 0 var(--sp-2); font-weight: var(--fw-semibold); }
+.helptip-links { margin: var(--sp-3) 0 0; padding: var(--sp-3) 0 0; border-top: 1px solid var(--hairline); list-style: none; }
+.helptip-links li { margin: 0; }
+.helptip-link {
+  display: block; width: 100%; padding: 2px 0; border: 0; background: none; color: var(--accent-text); font: inherit; text-align: left; cursor: pointer;
+}
+.helptip-link:hover { text-decoration: underline; }
+.helptip-more { margin-top: var(--sp-2); font-weight: var(--fw-medium); }
+.helptip-links + .helptip-more { margin-top: var(--sp-1); }
+
+/* A column header's icon sits beside the sort button, which fills the cell. */
+table.grid th.has-help > .th-sort, table.grid th.has-help > .th-label { padding-right: 24px; }
+table.grid th.has-help > .infotip { position: absolute; top: 3px; right: 3px; margin: 0; }
+.win-title .infotip, .popout-bar .infotip { margin: 0; }
+.settings-pane-head .infotip { margin-left: 0; }

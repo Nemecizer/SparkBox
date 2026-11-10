@@ -1,0 +1,33 @@
+# SparkBox agent: keeps watching this node while SparkBox is closed.
+# Installed by SparkBox (Settings › Notifications › Always-on monitoring), byte for byte as shipped.
+# It runs as its own system user, sparkbox-agent. The channels' secrets (/etc/sparkbox-agent/notify.json,
+# root 0600) reach it only as a systemd credential: this service and root can read it. So can anyone
+# in the docker group, which includes the login user, because Docker is root-equivalent. The group
+# is here because the container rules read `docker ps` and `docker inspect`.
+[Unit]
+Description=SparkBox always-on monitoring agent
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=notify
+NotifyAccess=main
+WatchdogSec=30
+User=sparkbox-agent
+Group=sparkbox-agent
+SupplementaryGroups=systemd-journal docker
+StateDirectory=sparkbox-agent
+StateDirectoryMode=0755
+ReadWritePaths=/var/lib/sparkbox-agent
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+NoNewPrivileges=yes
+LoadCredential=notify:/etc/sparkbox-agent/notify.json
+ExecStart=/usr/bin/python3 -I /opt/sparkbox-agent/sparkbox_agent.py run
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

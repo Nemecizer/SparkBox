@@ -1,0 +1,16 @@
+/* ---- r2-live: Settings › Cluster login ---- */
+.login-title { display: inline-flex; align-items: center; gap: var(--sp-2, 4px); }
+.login-node .fg-label { min-width: 0; }
+.login-method { display: flex; align-items: center; gap: var(--sp-3, 6px); min-width: 0; }
+.login-method .mono { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--fs-sm, 11px); }
+.login-warn { color: var(--warn-text, var(--warning)); flex: none; }
+.login-save { justify-content: flex-end; gap: var(--sp-4, 8px); }
+.login-save .muted { margin-right: auto; font-size: var(--fs-xs, 10.5px); }
+.login-nodes { display: flex; flex-wrap: wrap; gap: var(--sp-2, 4px) var(--sp-5, 12px); }
+.login-caution { display: flex; align-items: flex-start; gap: var(--sp-3, 6px); color: var(--text-2); font-size: var(--fs-xs, 10.5px); line-height: 1.4; }
+.login-caution svg { color: var(--warn-text, var(--warning)); flex: none; margin-top: var(--sp-1, 2px); }
+.login-results { margin: 0; padding: var(--sp-3, 6px) var(--sp-5, 12px); list-style: none; font-size: var(--fs-sm, 11px); }
+.login-setup-link { display: flex; justify-content: flex-end; }
+/* ---- r4-nodes: the shared password is a choice, said once and plainly ---- */
+.login-foot { color: var(--text-2); }
+.login-foot button.link { font: inherit; }

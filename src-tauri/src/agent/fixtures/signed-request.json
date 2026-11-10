@@ -1,0 +1,7 @@
+{
+ "comment": "A maintenance request as agent/mod.rs signed_request writes it and sparkbox_agent.py verify_request checks it: mac = HMAC-SHA256(key, kind + newline + body), hex. tests.rs and agent_test.py both check this signature.",
+ "key": "3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f",
+ "kind": "maintenance",
+ "body": "{\"nodes\":[\"cell3\"],\"untilMs\":1800000600000,\"reason\":\"restarting\",\"by\":\"SparkBox\",\"startedMs\":1800000000000,\"op\":\"t-42\"}",
+ "mac": "a687a26b1c69bf260bae2504f2febd038bf155381d25347a0e65abe354eb8257"
+}

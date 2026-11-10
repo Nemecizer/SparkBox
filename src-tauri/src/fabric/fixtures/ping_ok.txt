@@ -1,0 +1,8 @@
+PING 192.168.100.2 (192.168.100.2) from 192.168.100.1 enp1s0f1np1: 8972(9000) bytes of data.
+8980 bytes from 192.168.100.2: icmp_seq=1 ttl=64 time=0.112 ms
+8980 bytes from 192.168.100.2: icmp_seq=2 ttl=64 time=0.098 ms
+8980 bytes from 192.168.100.2: icmp_seq=3 ttl=64 time=0.121 ms
+
+--- 192.168.100.2 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2003ms
+rtt min/avg/max/mdev = 0.098/0.110/0.121/0.009 ms

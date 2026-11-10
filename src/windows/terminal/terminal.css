@@ -1,0 +1,214 @@
+/* ---- p6-term-files: Terminal window ---- */
+
+.sb-term { position: relative; background: var(--surface); }
+
+/* "+" split button: New shell, and a menu of nodes. */
+.sb-term-split { display: inline-flex; align-items: stretch; }
+.sb-term-split > .tool:first-child { border-top-right-radius: 0; border-bottom-right-radius: 0; }
+.sb-term-split-more { padding-left: 3px !important; padding-right: 3px !important; border-top-left-radius: 0 !important; border-bottom-left-radius: 0 !important; margin-left: -1px; }
+
+.sb-term-chip {
+  display: inline-flex; align-items: center; gap: 4px; margin-left: 2px;
+  padding: 2px 8px; border-radius: 999px; font-size: var(--fs-xs, 10.5px); font-weight: var(--fw-semibold, 600);
+  color: var(--serious-text, #ad4216); background: color-mix(in srgb, var(--serious, #e67339) 16%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--serious, #e67339) 55%, transparent); white-space: nowrap;
+}
+
+/* Tabs */
+.sb-term-tabs {
+  flex: none; position: relative; display: flex; align-items: stretch; height: 30px;
+  overflow-x: auto; overflow-y: hidden; scrollbar-width: none;
+  background: var(--chrome); border-bottom: 1px solid var(--hairline);
+}
+.sb-term-tabs::-webkit-scrollbar { display: none; }
+.sb-term-tab {
+  position: relative; flex: 0 1 200px; min-width: 112px; max-width: 240px;
+  display: flex; align-items: center; gap: 6px; padding: 0 6px 0 10px;
+  border-right: 1px solid var(--hairline); color: var(--text-2); font-size: var(--fs-sm, 11px);
+  cursor: default; user-select: none; transition: background var(--dur-1, 120ms) var(--ease, ease);
+}
+.sb-term-tab:hover { background: color-mix(in srgb, var(--text) 4%, transparent); }
+.sb-term-tab.on { background: var(--surface); color: var(--text); box-shadow: inset 0 2px 0 var(--accent); }
+.sb-term-tab.receiving { box-shadow: inset 0 2px 0 var(--serious, #e67339); }
+.sb-term-tab.on.receiving { box-shadow: inset 0 2px 0 var(--serious, #e67339), inset 0 -1px 0 color-mix(in srgb, var(--serious, #e67339) 40%, transparent); }
+.sb-term-tab.dragging { opacity: 0.55; }
+.sb-term-tab.down .sb-term-tab-title { color: var(--muted); }
+.sb-term-tab-icon { flex: none; color: var(--muted); }
+.sb-term-tab.on .sb-term-tab-icon { color: var(--text-2); }
+.sb-term-tab .dot { width: 7px; height: 7px; }
+.sb-term-tab-title { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sb-term-tab-rename { flex: 1; min-width: 0; font: inherit; padding: 1px 4px; border: 1px solid var(--accent); border-radius: var(--r-sm, 4px); background: var(--surface); color: var(--text); }
+.sb-term-tab-check { margin: 0; accent-color: var(--serious, #e67339); }
+.sb-term-tab-activity { flex: none; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+.sb-term-tab-bell { flex: none; color: var(--warn-text, #8a5a00); }
+.sb-term-tab-close {
+  flex: none; display: grid; place-items: center; width: 18px; height: 18px; padding: 0;
+  border: 0; border-radius: var(--r-sm, 4px); background: none; color: inherit; cursor: pointer; opacity: 0;
+}
+.sb-term-tab:hover .sb-term-tab-close, .sb-term-tab.on .sb-term-tab-close, .sb-term-tab-close:focus-visible { opacity: 0.7; }
+.sb-term-tab-close:hover { opacity: 1; background: color-mix(in srgb, var(--text) 10%, transparent); }
+.sb-term-tab-marker { position: absolute; top: 4px; bottom: 4px; width: 2px; margin-left: -1px; background: var(--accent); border-radius: 1px; pointer-events: none; }
+
+/* Log tabs */
+.sb-term-logbar {
+  flex: none; display: flex; align-items: center; gap: 6px; padding: 4px 8px;
+  background: var(--surface-2); border-bottom: 1px solid var(--hairline); font-size: var(--fs-sm, 11px);
+}
+.sb-term-logbar .btn { display: inline-flex; align-items: center; gap: 4px; }
+.sb-term-logbar .btn.on { background: var(--sel); border-color: transparent; }
+.sb-term-logbar-state { color: var(--text-2); font-size: var(--fs-xs, 10.5px); font-variant-numeric: tabular-nums; }
+
+/* The terminal itself: padding inside .xterm, so the fit addon measures what's left. */
+.sb-term-area { flex: 1; min-height: 0; position: relative; overflow: hidden; background: var(--surface); }
+.sb-term-host { position: absolute; inset: 0; }
+.sb-term-host .xterm { height: 100%; padding: 10px 12px 8px 14px; }
+.sb-term-host.nowrap { overflow-x: auto; overflow-y: hidden; }
+.sb-term-host.nowrap .xterm { height: 100%; width: max-content; }
+.sb-term-host .xterm-viewport { scrollbar-width: thin; }
+.sb-term-area.broadcasting::after {
+  content: ""; position: absolute; inset: 0; z-index: 3; pointer-events: none;
+  box-shadow: inset 0 0 0 2px var(--serious, #e67339);
+}
+
+/* Find */
+.sb-term-find {
+  position: absolute; top: 8px; right: 18px; z-index: 6; display: flex; align-items: center; gap: 3px;
+  padding: 4px 4px 4px 6px; background: var(--surface); color: var(--text);
+  border: 1px solid var(--border); border-radius: var(--r-md, 6px); box-shadow: var(--shadow-pop);
+}
+.sb-term-find input {
+  width: 200px; font: inherit; font-size: var(--fs-sm, 11px); padding: 3px 6px;
+  border: 1px solid var(--field-border, var(--border)); border-radius: var(--r-sm, 4px); background: var(--surface); color: var(--text);
+}
+.sb-term-find input:focus { outline: var(--focus-width, 2px) solid var(--focus-ring, var(--accent)); outline-offset: -1px; }
+.sb-term-find-count { min-width: 70px; padding: 0 4px; font-size: var(--fs-xs, 10.5px); color: var(--text-2); text-align: center; font-variant-numeric: tabular-nums; }
+.sb-term-find-count.none { color: var(--crit-text); }
+.sb-term-find-opt, .sb-term-find-btn {
+  display: grid; place-items: center; min-width: 24px; height: 22px; padding: 0 4px;
+  border: 1px solid transparent; border-radius: var(--r-sm, 4px); background: none; color: var(--text-2);
+  font-size: var(--fs-xs, 10.5px); cursor: pointer;
+}
+.sb-term-find-opt:hover, .sb-term-find-btn:hover { background: var(--hover); color: var(--text); }
+.sb-term-find-opt.on { background: var(--sel); color: var(--text); border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
+
+/* Locked and reconnecting */
+.sb-term-overlay {
+  position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%); z-index: 5;
+  display: flex; align-items: center; gap: 8px; padding: 6px 8px 6px 12px;
+  background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: 999px;
+  box-shadow: var(--shadow-pop); font-size: var(--fs-sm, 11px); white-space: nowrap;
+}
+.sb-term-overlay > svg { color: var(--crit-text); }
+.sb-term-banner {
+  position: absolute; left: 0; right: 0; top: 0; z-index: 5; display: flex; align-items: center; gap: 8px;
+  padding: 5px 10px; background: var(--warn-bg); color: var(--text); border-bottom: 1px solid var(--warning-border, var(--warning));
+  font-size: var(--fs-sm, 11px);
+}
+.sb-term-banner > svg { color: var(--warn-text); }
+
+.sb-term-hint {
+  flex: none; padding: 3px 12px; border-top: 1px solid var(--hairline); background: var(--chrome);
+  color: var(--muted); font-size: var(--fs-2xs, 10px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+/* Quick connect: the empty state, and the ⌘T picker. */
+.sb-qc {
+  position: absolute; inset: 0; display: flex; flex-direction: column; gap: 8px;
+  width: min(620px, calc(100% - 32px)); max-height: calc(100% - 32px); margin: auto; padding: 14px 0 0;
+}
+.sb-qc.floating {
+  position: absolute; inset: auto; top: 64px; left: 50%; transform: translateX(-50%); margin: 0;
+  width: min(560px, calc(100% - 40px)); max-height: min(440px, calc(100% - 90px)); padding: 0;
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-xl, 12px); box-shadow: var(--shadow-pop);
+  overflow: hidden; animation: sb-qc-in var(--dur-2, 180ms) var(--ease, ease-out);
+}
+@keyframes sb-qc-in { from { opacity: 0; transform: translate(-50%, -6px); } to { opacity: 1; transform: translate(-50%, 0); } }
+.sb-qc-backdrop { position: absolute; inset: 0; z-index: 30; background: color-mix(in srgb, var(--overlay, rgba(0,0,0,.3)) 50%, transparent); }
+.sb-qc-filter {
+  flex: none; width: 100%; padding: 12px 14px; border: 0; border-bottom: 1px solid var(--hairline);
+  background: transparent; color: var(--text); font: inherit; font-size: var(--fs-lg, 15px); outline: none;
+}
+.sb-qc-restore {
+  display: flex; align-items: center; gap: 8px; padding: 8px 10px; border: 1px solid var(--hairline); border-radius: var(--r-lg, 8px);
+  background: var(--info-bg, var(--surface-2)); font-size: var(--fs-sm, 11px);
+}
+.sb-qc-restore > span:first-child { flex: 1; }
+.sb-qc-list { flex: 1; min-height: 0; overflow-y: auto; padding: 4px 6px 6px; outline: none; }
+.sb-qc:not(.floating) .sb-qc-list { border: 1px solid var(--hairline); border-radius: var(--r-lg, 8px); background: var(--surface); padding: 4px; }
+.sb-qc-head { padding: 8px 8px 3px; color: var(--muted); font-size: var(--fs-2xs, 10px); font-weight: var(--fw-semibold, 600); text-transform: uppercase; letter-spacing: 0.04em; }
+.sb-qc-row {
+  width: 100%; display: grid; grid-template-columns: 20px minmax(80px, auto) auto 1fr auto; align-items: center; gap: 8px;
+  padding: 6px 8px; border: 0; border-radius: var(--r-md, 6px); background: none; color: var(--text);
+  font: inherit; font-size: var(--fs-base, 12.5px); text-align: left; cursor: pointer;
+}
+.sb-qc-row.on { background: var(--sel); }
+.sb-qc-icon { color: var(--text-2); }
+.sb-qc-title { font-weight: var(--fw-medium, 500); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sb-qc-sub { color: var(--text-2); font-size: var(--fs-sm, 11px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums; }
+.sb-qc-lock { font-size: var(--fs-2xs, 10px); }
+.sb-qc-empty { padding: 18px; text-align: center; }
+.sb-qc-foot { flex: none; padding: 6px 12px 10px; font-size: var(--fs-2xs, 10px); text-align: center; }
+.sb-qc.floating .sb-qc-foot { border-top: 1px solid var(--hairline); padding: 6px 12px; text-align: left; }
+
+/* Settings › Terminal */
+.sb-term-preview {
+  margin-bottom: var(--sp-6, 16px); padding: 10px 12px 8px 14px; border: 1px solid var(--hairline); border-radius: var(--r-lg, 8px);
+  white-space: pre; overflow: hidden; box-shadow: var(--shadow-inactive);
+}
+.sb-term-preview-cursor { display: inline-block; width: 0.62em; height: 1.15em; vertical-align: text-bottom; background: var(--cur); }
+.sb-term-preview-cursor.bar { width: 2px; }
+.sb-term-preview-cursor.underline { height: 2px; vertical-align: baseline; }
+.sb-term-preview-cursor.blink { animation: sb-term-blink 1.1s steps(1) infinite; }
+@keyframes sb-term-blink { 50% { opacity: 0; } }
+.sb-term-preview-swatches { display: flex; gap: 4px; margin-top: 8px; }
+.sb-term-preview-swatches span { width: 18px; height: 10px; border-radius: 2px; }
+.sb-term-stepper { display: inline-flex; align-items: center; gap: 6px; }
+.sb-term-stepper input { width: 52px; text-align: right; }
+.sb-qc:not(.floating) { justify-content: center; }
+.sb-qc:not(.floating) .sb-qc-list { flex: 0 1 auto; }
+.sb-qc-intro { text-align: center; padding: 0 24px 6px; font-size: var(--fs-sm, 11px); }
+.sb-qc-intro-title { font-size: var(--fs-lg, 15px); font-weight: var(--fw-semibold, 600); color: var(--text); margin-bottom: 4px; }
+.sb-term-since { display: inline-flex; align-items: center; gap: 4px; color: var(--text-2); font-size: var(--fs-xs, 10.5px); margin-left: 4px; }
+.sb-term-logfilter { display: inline-flex; align-items: center; gap: 6px; font-size: var(--fs-xs, 10.5px); }
+.sb-term-logfilter input { width: 130px; font: inherit; font-size: var(--fs-sm, 11px); padding: 2px 6px; border: 1px solid var(--field-border, var(--border)); border-radius: var(--r-sm, 4px); background: var(--surface); color: var(--text); }
+
+/* ---- r2-live ---- */
+.sb-term-group-title { display: inline-flex; align-items: center; gap: var(--sp-2, 4px); }
+
+/* A locked shell: the banner says why, and flashes when a keystroke wasn't sent. */
+.sb-term-overlay-text { display: flex; flex-direction: column; gap: 1px; white-space: normal; }
+.sb-term-overlay-why { color: var(--muted); font-size: var(--fs-2xs, 10px); }
+.sb-term-overlay { border-radius: var(--radius-lg, 10px); max-width: calc(100% - 32px); }
+.sb-term-overlay.refused { animation: sb-term-refused 0.6s ease-out; border-color: var(--crit-text); }
+@keyframes sb-term-refused {
+  0%, 40% { box-shadow: 0 0 0 3px color-mix(in srgb, var(--crit-text) 35%, transparent), var(--shadow-pop); }
+  100% { box-shadow: var(--shadow-pop); }
+}
+.sb-term-tab-lock { flex: none; color: var(--muted); }
+.sb-term-tab-lock.flash { animation: sb-term-tab-flash 0.6s ease-out; }
+@keyframes sb-term-tab-flash {
+  0%, 50% { color: var(--crit-text); transform: scale(1.25); }
+  100% { color: var(--muted); transform: none; }
+}
+.sb-term-banner.idle { background: var(--surface); border-bottom-color: var(--border); }
+.sb-term-banner.idle > svg { color: var(--muted); }
+@media (prefers-reduced-motion: reduce) {
+  .sb-term-overlay.refused, .sb-term-tab-lock.flash { animation: none; }
+}
+
+/* ---- r4-demo ---- */
+/* A Terminal tiled smaller than the quick-connect list keeps its nodes: one row of buttons. */
+.sb-term-area { container: sbterm / size; }
+.sb-qc-compact { display: none; align-items: center; gap: 6px; flex-wrap: nowrap; overflow-x: auto; padding: 2px 2px 4px; }
+.sb-qc-compact-label { flex: none; font-size: var(--fs-sm, 11px); }
+.sb-qc-chip { flex: none; display: inline-flex; align-items: center; gap: 6px; }
+@container sbterm (max-height: 300px) {
+  .sb-qc:not(.floating) { justify-content: flex-start; padding-top: 8px; gap: 6px; }
+  .sb-qc:not(.floating) .sb-qc-intro, .sb-qc:not(.floating) .sb-qc-list, .sb-qc:not(.floating) .sb-qc-foot { display: none; }
+  .sb-qc:not(.floating) .sb-qc-compact { display: flex; }
+}
+@container sbterm (max-width: 420px) {
+  .sb-qc:not(.floating) .sb-qc-intro, .sb-qc:not(.floating) .sb-qc-foot { display: none; }
+  .sb-qc:not(.floating) .sb-qc-row { grid-template-columns: 20px minmax(60px, auto) auto 1fr; }
+  .sb-qc:not(.floating) .sb-qc-lock { display: none; }
+}

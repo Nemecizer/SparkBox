@@ -1,0 +1,105 @@
+{
+  "about": "Why an inference server didn't start, read from its log (models/postmortem.rs). Cases are tried in order against the decisive lines, then the whole log; every pattern in `all` must match (case-insensitive regexes). Titles are at most 60 characters and hedged; {placeholders} are filled from the log and the deployment. `flag` names the launch option to quote from a host-mounted script. `sample` is a log excerpt the case must match, with `expect` its title once filled (tests).",
+  "cases": [
+    {
+      "id": "sparse-mla-kv-dtype",
+      "all": ["No valid attention backend found", "use_mla=True", "use_sparse=True|MLA_SPARSE", "kv_cache_dtype not supported"],
+      "title": "No attention kernel for a {kv} KV cache on {gpu}",
+      "explanation": "{model} uses sparse MLA attention. On {gpu} (compute {cc}) {vllm_build} has one kernel for it, FlashInfer's SM120 sparse MLA, and that kernel doesn't accept a {kv_long} KV cache; Triton MLA has no sparse support.",
+      "fix": "Check the model's recipe for a compatible checkpoint, image and KV cache type. Changing the KV cache type alone may not fix this. SparkBox doesn't change your launch script.",
+      "flag": "--kv-cache-dtype",
+      "sample": "(Worker_TP0 pid=251) ERROR 10-26 22:21:14 [multiproc_executor.py:944] ValueError: No valid attention backend found for cuda with AttentionSelectorConfig(head_size=512, dtype=torch.bfloat16, kv_cache_dtype=bfloat16, block_size=None, use_mla=True, has_sink=False, use_sparse=True, use_mm_prefix=False). Reasons: {TRITON_MLA: [sparse not supported], FLASHINFER_MLA_SPARSE_SM120: [kv_cache_dtype not supported, kv_cache_dtype not supported]}.",
+      "expect": "No attention kernel for a bf16 KV cache on GB10"
+    },
+    {
+      "id": "cuda-oom",
+      "all": ["CUDA out of memory|OutOfMemoryError|cudaErrorMemoryAllocation|out of memory while"],
+      "title": "Likely ran out of GPU memory while starting",
+      "explanation": "The engine asked CUDA for more memory than was free. On {gpu} the GPU shares the node's memory with everything else, so other processes and the page cache count against it.",
+      "fix": "Likely fix: lower --gpu-memory-utilization or --max-model-len, or free memory on the node first. SparkBox doesn't change your launch script.",
+      "flag": "--gpu-memory-utilization",
+      "sample": "(EngineCore_DP0 pid=212) ERROR 10-27 09:14:02 [core.py:708] torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 3.50 GiB. GPU 0 has a total capacity of 119.70 GiB of which 1.12 GiB is free.",
+      "expect": "Likely ran out of GPU memory while starting"
+    },
+    {
+      "id": "nccl",
+      "all": ["NCCL.*(timeout|timed out|unhandled system error|remote process exited)|Watchdog caught collective operation timeout|DistNetworkError|(Connection refused|ECONNREFUSED).*(MASTER|:29[0-9]{3}|TCPStore)|TCPStore.*(Connection refused|timed out)"],
+      "title": "The nodes likely couldn't reach each other (NCCL)",
+      "explanation": "The ranks didn't finish setting up their collective links: one timed out or was refused while connecting to the head at its master address and port. A rank that started late, a wrong interface in NCCL_SOCKET_IFNAME, or a fabric link that's down does this.",
+      "fix": "Likely fix: check that every rank uses the same master address and port, that the fabric links are up, and start the ranks together. SparkBox doesn't change your launch script.",
+      "flag": "--master-addr",
+      "sample": "(Worker_TP1 pid=240) ERROR 10-27 11:02:44 [multiproc_executor.py:944] torch.distributed.DistBackendError: NCCL error in: ProcessGroupNCCL.cpp:3356, unhandled system error (run with NCCL_DEBUG=INFO for details), NCCL version 2.28.3",
+      "expect": "The nodes likely couldn't reach each other (NCCL)"
+    },
+    {
+      "id": "port-in-use",
+      "all": ["Address already in use|EADDRINUSE"],
+      "title": "Its port was likely already taken",
+      "explanation": "Another program was already listening on the port the server asked for, so it couldn't open its own.",
+      "fix": "Likely fix: stop what holds the port (Workloads › Listening ports shows it) or start it on another --port. SparkBox doesn't change your launch script.",
+      "flag": "--port",
+      "sample": "(APIServer pid=1) ERROR 10-27 12:00:01 [api_server.py:1210] OSError: [Errno 98] error while attempting to bind on address ('0.0.0.0', 8000): address already in use",
+      "expect": "Its port was likely already taken"
+    },
+    {
+      "id": "hf-gated",
+      "all": ["GatedRepoError|Cannot access gated repo|Access to model .* is restricted|401 Client Error|403 Client Error|Repository Not Found .* (401|403)"],
+      "title": "Hugging Face likely refused the download (gated or no token)",
+      "explanation": "Hugging Face answered 401 or 403: the repo is gated and the node's token hasn't been granted access, or no token was given.",
+      "fix": "Likely fix: accept the model's terms on huggingface.co with the account whose token the node uses, or download it once in Models. SparkBox doesn't change your launch script.",
+      "flag": "",
+      "sample": "huggingface_hub.errors.GatedRepoError: 401 Client Error. Cannot access gated repo for url https://huggingface.co/meta-llama/Llama-3.3-70B-Instruct/resolve/main/config.json.",
+      "expect": "Hugging Face likely refused the download (gated or no token)"
+    },
+    {
+      "id": "disk-full",
+      "all": ["No space left on device|ENOSPC"],
+      "title": "The disk likely filled up",
+      "explanation": "A write failed with no space left on the device: the weights, the compile cache or the container's own layer didn't fit.",
+      "fix": "Likely fix: free space on the node (Files › Disk usage) and start it again. SparkBox doesn't change your launch script.",
+      "flag": "",
+      "sample": "OSError: [Errno 28] No space left on device: '/root/.cache/vllm/torch_compile_cache/3f1a/rank_0_0'",
+      "expect": "The disk likely filled up"
+    },
+    {
+      "id": "hf-offline-missing",
+      "all": ["HF_HUB_OFFLINE|offline mode is enabled|LocalEntryNotFoundError|Cannot find the requested files in the (disk|local) cache"],
+      "title": "Weights likely missing while offline (HF_HUB_OFFLINE)",
+      "explanation": "Hugging Face's offline mode was on, so nothing could be downloaded, and a file the model needs wasn't in the folder or the cache.",
+      "fix": "Likely fix: copy the full model folder to every node (Models › Library), or turn offline mode off for the first start. SparkBox doesn't change your launch script.",
+      "flag": "",
+      "sample": "huggingface_hub.errors.LocalEntryNotFoundError: Cannot find the requested files in the disk cache and outgoing traffic has been disabled. To enable hf.co look-ups and downloads online, set 'HF_HUB_OFFLINE=0' as environment variable.",
+      "expect": "Weights likely missing while offline (HF_HUB_OFFLINE)"
+    },
+    {
+      "id": "ray-join",
+      "all": ["(placement group|Ray cluster|ray\\.init|GetTimeoutError|wait_for_nodes).*(timed out|timeout|Timeout)|Timed out .*(Ray|placement group)|Current node has no GPU available"],
+      "title": "The Ray cluster likely didn't form in time",
+      "explanation": "The head waited for the other nodes to join Ray and gave up: a worker didn't start, started late, or couldn't reach the head's Ray port.",
+      "fix": "Likely fix: start the workers first (ray start --address), check they show in ray status, then start the head. SparkBox doesn't change your launch script.",
+      "flag": "",
+      "sample": "ValueError: Timed out waiting for the placement group to be ready: the Ray cluster has 1 GPU, 3 are needed. Is every node in the Ray cluster?",
+      "expect": "The Ray cluster likely didn't form in time"
+    },
+    {
+      "id": "quant-unsupported",
+      "all": ["(quantization|quant_method|scheme|kernel).*(is not supported|isn't supported|not supported (on|for) (this|the current) (GPU|device|platform))|Unsupported quantization|requires (a GPU with )?compute capability|minimum capability"],
+      "title": "Its quantization likely isn't supported on this GPU",
+      "explanation": "The weights' quantization needs a kernel this vLLM build doesn't have for {gpu} (compute {cc}).",
+      "fix": "Likely fix: use a variant made for Blackwell (NVFP4 or FP8), or a newer engine image. SparkBox doesn't change your launch script.",
+      "flag": "--quantization",
+      "sample": "ValueError: The quantization method awq_marlin is not supported for the current GPU. Minimum capability: 80. Current capability: 121.",
+      "expect": "Its quantization likely isn't supported on this GPU"
+    },
+    {
+      "id": "engine-init",
+      "all": ["Engine core initialization failed|EngineCore failed to start"],
+      "title": "vLLM's engine didn't start; the first error is quoted",
+      "explanation": "vLLM's engine stopped while starting and its log names no known cause. The first error it printed is quoted below.",
+      "fix": "Read the quoted lines and the log around them. SparkBox doesn't change your launch script.",
+      "flag": "",
+      "sample": "(APIServer pid=1) RuntimeError: Engine core initialization failed. See root cause above. Failed core proc(s): {}",
+      "expect": "vLLM's engine didn't start; the first error is quoted"
+    }
+  ]
+}

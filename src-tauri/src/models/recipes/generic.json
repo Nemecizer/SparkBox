@@ -1,0 +1,7 @@
+{ "id": "generic", "title": "Generic vLLM",
+  "match": [], "image": "vllm/vllm-openai:glm53-flash-arm64-cu130",
+  "backend": "native", "topologies": ["single", "tp2", "tp3", "tp4", "pp2", "pp3", "pp4", "tp2pp2", "replicas"],
+  "env": {}, "args": [], "mounts": ["vllm", "flashinfer", "triton"],
+  "defaults": { "share": null, "context": null, "seqs": null },
+  "toolParser": null, "reasoningParser": null,
+  "multiNodeDocker": "privileged", "note": null }

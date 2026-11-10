@@ -1,0 +1,7 @@
+{ "id": "qwen3.8-27b-fp8", "title": "Qwen3.8 27B FP8",
+  "match": ["qwen3.8-27b-fp8"], "image": "vllm/vllm-openai:glm53-flash-arm64-cu130",
+  "backend": "native", "topologies": ["single", "replicas"],
+  "env": {}, "args": [], "mounts": ["vllm", "flashinfer", "triton"],
+  "defaults": { "share": null, "context": 32768, "seqs": null },
+  "toolParser": null, "reasoningParser": "qwen3",
+  "multiNodeDocker": "standard", "note": null }

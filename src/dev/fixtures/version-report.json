@@ -1,0 +1,397 @@
+{
+  "state": "unknown",
+  "rows": [
+    {
+      "key": "dgxOta",
+      "label": "DGX OS (OTA)",
+      "state": "unknown",
+      "values": [
+        {
+          "node": "cell1",
+          "value": null,
+          "reason": "Not reported"
+        },
+        {
+          "node": "cell2",
+          "value": null,
+          "reason": "Not reported"
+        },
+        {
+          "node": "cell3",
+          "value": null,
+          "reason": "Not reported"
+        },
+        {
+          "node": "gx10-0000",
+          "value": null,
+          "reason": "Not reported"
+        }
+      ],
+      "note": null
+    },
+    {
+      "key": "kernel",
+      "label": "Kernel",
+      "state": "matching",
+      "values": [
+        {
+          "node": "cell1",
+          "value": "7.0.0-1019-nvidia",
+          "reason": null
+        },
+        {
+          "node": "cell2",
+          "value": "7.0.0-1019-nvidia",
+          "reason": null
+        },
+        {
+          "node": "cell3",
+          "value": "7.0.0-1019-nvidia",
+          "reason": null
+        },
+        {
+          "node": "gx10-0000",
+          "value": "7.0.0-1019-nvidia",
+          "reason": null
+        }
+      ],
+      "note": null
+    },
+    {
+      "key": "driver",
+      "label": "NVIDIA driver",
+      "state": "matching",
+      "values": [
+        {
+          "node": "cell1",
+          "value": "580.178.04",
+          "reason": null
+        },
+        {
+          "node": "cell2",
+          "value": "580.178.04",
+          "reason": null
+        },
+        {
+          "node": "cell3",
+          "value": "580.178.04",
+          "reason": null
+        },
+        {
+          "node": "gx10-0000",
+          "value": "580.178.04",
+          "reason": null
+        }
+      ],
+      "note": null
+    },
+    {
+      "key": "cuda",
+      "label": "CUDA (driver maximum)",
+      "state": "matching",
+      "values": [
+        {
+          "node": "cell1",
+          "value": "13.0",
+          "reason": null
+        },
+        {
+          "node": "cell2",
+          "value": "13.0",
+          "reason": null
+        },
+        {
+          "node": "cell3",
+          "value": "13.0",
+          "reason": null
+        },
+        {
+          "node": "gx10-0000",
+          "value": "13.0",
+          "reason": null
+        }
+      ],
+      "note": null
+    },
+    {
+      "key": "toolkit",
+      "label": "NVIDIA container toolkit",
+      "state": "unknown",
+      "values": [
+        {
+          "node": "cell1",
+          "value": null,
+          "reason": "Not reported"
+        },
+        {
+          "node": "cell2",
+          "value": null,
+          "reason": "Not reported"
+        },
+        {
+          "node": "cell3",
+          "value": null,
+          "reason": "Not reported"
+        },
+        {
+          "node": "gx10-0000",
+          "value": null,
+          "reason": "Not reported"
+        }
+      ],
+      "note": null
+    },
+    {
+      "key": "collector",
+      "label": "Collector build",
+      "state": "unknown",
+      "values": [
+        {
+          "node": "cell1",
+          "value": null,
+          "reason": "Not reported"
+        },
+        {
+          "node": "cell2",
+          "value": null,
+          "reason": "Not reported"
+        },
+        {
+          "node": "cell3",
+          "value": null,
+          "reason": "Not reported"
+        },
+        {
+          "node": "gx10-0000",
+          "value": null,
+          "reason": "Not reported"
+        }
+      ],
+      "note": null
+    },
+    {
+      "key": "store",
+      "label": "Docker image store",
+      "state": "unknown",
+      "values": [
+        {
+          "node": "cell1",
+          "value": null,
+          "reason": "Not reported"
+        },
+        {
+          "node": "cell2",
+          "value": null,
+          "reason": "Not reported"
+        },
+        {
+          "node": "cell3",
+          "value": null,
+          "reason": "Not reported"
+        },
+        {
+          "node": "gx10-0000",
+          "value": null,
+          "reason": "Not reported"
+        }
+      ],
+      "note": null
+    },
+    {
+      "key": "imageId",
+      "label": "Serving image ID",
+      "state": "unknown",
+      "values": [
+        {
+          "node": "cell1",
+          "value": null,
+          "reason": "Not reported"
+        },
+        {
+          "node": "cell2",
+          "value": null,
+          "reason": "Not reported"
+        },
+        {
+          "node": "cell3",
+          "value": null,
+          "reason": "Not reported"
+        },
+        {
+          "node": "gx10-0000",
+          "value": null,
+          "reason": "Not reported"
+        }
+      ],
+      "note": "Image IDs need the same known Docker image store on at least two nodes before they can be compared."
+    },
+    {
+      "key": "nccl",
+      "label": "NCCL (declared)",
+      "state": "unknown",
+      "values": [
+        {
+          "node": "cell1",
+          "value": null,
+          "reason": "Not reported"
+        },
+        {
+          "node": "cell2",
+          "value": null,
+          "reason": "Not reported"
+        },
+        {
+          "node": "cell3",
+          "value": null,
+          "reason": "Not reported"
+        },
+        {
+          "node": "gx10-0000",
+          "value": null,
+          "reason": "Not reported"
+        }
+      ],
+      "note": null
+    },
+    {
+      "key": "os",
+      "label": "OS",
+      "state": "matching",
+      "values": [
+        {
+          "node": "cell1",
+          "value": "NVIDIA DGX Spark (Ubuntu 24.04.5 LTS)",
+          "reason": null
+        },
+        {
+          "node": "cell2",
+          "value": "NVIDIA DGX Spark (Ubuntu 24.04.5 LTS)",
+          "reason": null
+        },
+        {
+          "node": "cell3",
+          "value": "NVIDIA DGX Spark (Ubuntu 24.04.5 LTS)",
+          "reason": null
+        },
+        {
+          "node": "gx10-0000",
+          "value": "NVIDIA DGX Spark (Ubuntu 24.04.5 LTS)",
+          "reason": null
+        }
+      ],
+      "note": null
+    },
+    {
+      "key": "bios",
+      "label": "BIOS",
+      "state": "unknown",
+      "values": [
+        {
+          "node": "cell1",
+          "value": "5.36_1.8.0",
+          "reason": null
+        },
+        {
+          "node": "cell2",
+          "value": "5.36_1.8.0",
+          "reason": null
+        },
+        {
+          "node": "cell3",
+          "value": "5.36_1.8.0",
+          "reason": null
+        },
+        {
+          "node": "gx10-0000",
+          "value": "GX10DGX.0106.2026.0707.0731",
+          "reason": null
+        }
+      ],
+      "note": "Compared only within the same hardware model; a model with one node has no peer to compare."
+    },
+    {
+      "key": "cx7",
+      "label": "ConnectX-7 firmware",
+      "state": "matching",
+      "values": [
+        {
+          "node": "cell1",
+          "value": "28.50.1002",
+          "reason": null
+        },
+        {
+          "node": "cell2",
+          "value": "28.50.1002",
+          "reason": null
+        },
+        {
+          "node": "cell3",
+          "value": "28.50.1002",
+          "reason": null
+        },
+        {
+          "node": "gx10-0000",
+          "value": "28.50.1002",
+          "reason": null
+        }
+      ],
+      "note": null
+    },
+    {
+      "key": "docker",
+      "label": "Docker",
+      "state": "matching",
+      "values": [
+        {
+          "node": "cell1",
+          "value": "29.6.2",
+          "reason": null
+        },
+        {
+          "node": "cell2",
+          "value": "29.6.2",
+          "reason": null
+        },
+        {
+          "node": "cell3",
+          "value": "29.6.2",
+          "reason": null
+        },
+        {
+          "node": "gx10-0000",
+          "value": "29.6.2",
+          "reason": null
+        }
+      ],
+      "note": null
+    },
+    {
+      "key": "ntp",
+      "label": "Clock synced",
+      "state": "matching",
+      "values": [
+        {
+          "node": "cell1",
+          "value": "yes",
+          "reason": null
+        },
+        {
+          "node": "cell2",
+          "value": "yes",
+          "reason": null
+        },
+        {
+          "node": "cell3",
+          "value": "yes",
+          "reason": null
+        },
+        {
+          "node": "gx10-0000",
+          "value": "yes",
+          "reason": null
+        }
+      ],
+      "note": null
+    }
+  ]
+}

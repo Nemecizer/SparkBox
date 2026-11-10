@@ -1,0 +1,250 @@
+{
+ "one": [
+  {
+   "node": "cell2",
+   "container": {
+    "id": "0a0000000001",
+    "name": "sparkbox-m1one",
+    "image": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "state": "running",
+    "startedAt": 1799996400,
+    "finishedAt": 0,
+    "exitCode": 0,
+    "cpuPct": 12.5,
+    "mem": 4000000000,
+    "gpuMem": 0,
+    "ports": [],
+    "project": null,
+    "command": "python3 /run/sparkbox/launch.py --key",
+    "restartCount": 0,
+    "oomKilled": false,
+    "restartPolicy": "no",
+    "labels": {
+     "sparkbox.deployment": "m1one",
+     "sparkbox.group": "m1one",
+     "sparkbox.image": "vllm/vllm-openai:glm53-flash-arm64-cu130",
+     "sparkbox.instance": "dev",
+     "sparkbox.listen": "192.168.50.52",
+     "sparkbox.maxlen": "32768",
+     "sparkbox.model": "gemma-3-27b-it",
+     "sparkbox.parallel": "1x1", "sparkbox.gpu-share": "0.75",
+     "sparkbox.path": "/home/sparkuser/models/google/gemma-3-27b-it",
+     "sparkbox.port": "8000",
+     "sparkbox.rank": "0",
+     "sparkbox.recipe": "gemma-3-27b-it",
+     "sparkbox.role": "single"
+    }
+   }
+  }
+ ],
+ "tp2": [
+  {
+   "node": "cell1",
+   "container": {
+    "id": "0b0000000000",
+    "name": "sparkbox-m2tp2-r0",
+    "image": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "state": "running",
+    "startedAt": 1799996404,
+    "finishedAt": 0,
+    "exitCode": 0,
+    "cpuPct": 12.5,
+    "mem": 4000000000,
+    "gpuMem": 0,
+    "ports": [],
+    "project": null,
+    "command": "python3 /run/sparkbox/launch.py --key",
+    "restartCount": 0,
+    "oomKilled": false,
+    "restartPolicy": "no",
+    "labels": {
+     "sparkbox.deployment": "m2tp2",
+     "sparkbox.group": "m2tp2",
+     "sparkbox.image": "vllm/vllm-openai:glm53-flash-arm64-cu130",
+     "sparkbox.instance": "dev",
+     "sparkbox.listen": "192.168.50.51",
+     "sparkbox.model": "gemma-3-27b-it",
+     "sparkbox.parallel": "2x1", "sparkbox.gpu-share": "0.75",
+     "sparkbox.path": "/home/sparkuser/models/google/gemma-3-27b-it",
+     "sparkbox.port": "8000",
+     "sparkbox.rank": "0",
+     "sparkbox.recipe": "gemma-3-27b-it",
+     "sparkbox.role": "head"
+    }
+   }
+  },
+  {
+   "node": "cell3",
+   "container": {
+    "id": "0b0000000001",
+    "name": "sparkbox-m2tp2-r1",
+    "image": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "state": "running",
+    "startedAt": 1799996400,
+    "finishedAt": 0,
+    "exitCode": 0,
+    "cpuPct": 12.5,
+    "mem": 4000000000,
+    "gpuMem": 0,
+    "ports": [],
+    "project": null,
+    "command": "python3 /run/sparkbox/launch.py",
+    "restartCount": 0,
+    "oomKilled": false,
+    "restartPolicy": "no",
+    "labels": {
+     "sparkbox.deployment": "m2tp2",
+     "sparkbox.group": "m2tp2",
+     "sparkbox.image": "vllm/vllm-openai:glm53-flash-arm64-cu130",
+     "sparkbox.instance": "dev",
+     "sparkbox.model": "gemma-3-27b-it",
+     "sparkbox.parallel": "2x1", "sparkbox.gpu-share": "0.75",
+     "sparkbox.path": "/home/sparkuser/models/google/gemma-3-27b-it",
+     "sparkbox.rank": "1",
+     "sparkbox.recipe": "gemma-3-27b-it",
+     "sparkbox.role": "worker"
+    }
+   }
+  }
+ ],
+ "tp4": [
+  {
+   "node": "cell3",
+   "container": {
+    "id": "0c0000000000",
+    "name": "sparkbox-m4tp4-r0",
+    "image": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "state": "running",
+    "startedAt": 1799996406,
+    "finishedAt": 0,
+    "exitCode": 0,
+    "cpuPct": 12.5,
+    "mem": 4000000000,
+    "gpuMem": 0,
+    "ports": [],
+    "project": null,
+    "command": "python3 /run/sparkbox/launch.py",
+    "restartCount": 0,
+    "oomKilled": false,
+    "restartPolicy": "no",
+    "labels": {
+     "sparkbox.deployment": "m4tp4",
+     "sparkbox.group": "m4tp4",
+     "sparkbox.image": "vllm/vllm-openai:glm53-flash-arm64-cu130",
+     "sparkbox.instance": "dev",
+     "sparkbox.listen": "0.0.0.0",
+     "sparkbox.maxlen": "32768",
+     "sparkbox.model": "gemma-3-27b-it",
+     "sparkbox.parallel": "4x1", "sparkbox.gpu-share": "0.75",
+     "sparkbox.path": "/home/sparkuser/models/google/gemma-3-27b-it",
+     "sparkbox.port": "8000",
+     "sparkbox.rank": "0",
+     "sparkbox.recipe": "gemma-3-27b-it",
+     "sparkbox.role": "head"
+    }
+   }
+  },
+  {
+   "node": "cell1",
+   "container": {
+    "id": "0c0000000001",
+    "name": "sparkbox-m4tp4-r1",
+    "image": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "state": "running",
+    "startedAt": 1799996400,
+    "finishedAt": 0,
+    "exitCode": 0,
+    "cpuPct": 12.5,
+    "mem": 4000000000,
+    "gpuMem": 0,
+    "ports": [],
+    "project": null,
+    "command": "python3 /run/sparkbox/launch.py",
+    "restartCount": 0,
+    "oomKilled": false,
+    "restartPolicy": "no",
+    "labels": {
+     "sparkbox.deployment": "m4tp4",
+     "sparkbox.group": "m4tp4",
+     "sparkbox.image": "vllm/vllm-openai:glm53-flash-arm64-cu130",
+     "sparkbox.instance": "dev",
+     "sparkbox.maxlen": "32768",
+     "sparkbox.model": "gemma-3-27b-it",
+     "sparkbox.parallel": "4x1", "sparkbox.gpu-share": "0.75",
+     "sparkbox.path": "/home/sparkuser/models/google/gemma-3-27b-it",
+     "sparkbox.rank": "1",
+     "sparkbox.recipe": "gemma-3-27b-it",
+     "sparkbox.role": "worker"
+    }
+   }
+  },
+  {
+   "node": "gx10-0000",
+   "container": {
+    "id": "0c0000000002",
+    "name": "sparkbox-m4tp4-r2",
+    "image": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "state": "running",
+    "startedAt": 1799996400,
+    "finishedAt": 0,
+    "exitCode": 0,
+    "cpuPct": 12.5,
+    "mem": 4000000000,
+    "gpuMem": 0,
+    "ports": [],
+    "project": null,
+    "command": "python3 /run/sparkbox/launch.py",
+    "restartCount": 0,
+    "oomKilled": false,
+    "restartPolicy": "no",
+    "labels": {
+     "sparkbox.deployment": "m4tp4",
+     "sparkbox.group": "m4tp4",
+     "sparkbox.image": "vllm/vllm-openai:glm53-flash-arm64-cu130",
+     "sparkbox.instance": "dev",
+     "sparkbox.maxlen": "32768",
+     "sparkbox.model": "gemma-3-27b-it",
+     "sparkbox.parallel": "4x1", "sparkbox.gpu-share": "0.75",
+     "sparkbox.path": "/home/sparkuser/models/google/gemma-3-27b-it",
+     "sparkbox.rank": "2",
+     "sparkbox.recipe": "gemma-3-27b-it",
+     "sparkbox.role": "worker"
+    }
+   }
+  },
+  {
+   "node": "cell2",
+   "container": {
+    "id": "0c0000000003",
+    "name": "sparkbox-m4tp4-r3",
+    "image": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "state": "running",
+    "startedAt": 1799996400,
+    "finishedAt": 0,
+    "exitCode": 0,
+    "cpuPct": 12.5,
+    "mem": 4000000000,
+    "gpuMem": 0,
+    "ports": [],
+    "project": null,
+    "command": "python3 /run/sparkbox/launch.py",
+    "restartCount": 0,
+    "oomKilled": false,
+    "restartPolicy": "no",
+    "labels": {
+     "sparkbox.deployment": "m4tp4",
+     "sparkbox.group": "m4tp4",
+     "sparkbox.image": "vllm/vllm-openai:glm53-flash-arm64-cu130",
+     "sparkbox.instance": "dev",
+     "sparkbox.maxlen": "32768",
+     "sparkbox.model": "gemma-3-27b-it",
+     "sparkbox.parallel": "4x1", "sparkbox.gpu-share": "0.75",
+     "sparkbox.path": "/home/sparkuser/models/google/gemma-3-27b-it",
+     "sparkbox.rank": "3",
+     "sparkbox.recipe": "gemma-3-27b-it",
+     "sparkbox.role": "worker"
+    }
+   }
+  }
+ ]
+}

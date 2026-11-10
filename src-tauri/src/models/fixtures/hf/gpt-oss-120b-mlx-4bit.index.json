@@ -1,0 +1,22 @@
+{
+ "metadata": {
+  "total_size": 65774358144,
+  "total_parameters": 116829154368
+ },
+ "weight_map": {
+  "model.embed_tokens.biases": "model-00001-of-00013.safetensors",
+  "model.layers.2.input_layernorm.weight": "model-00002-of-00013.safetensors",
+  "model.layers.5.input_layernorm.weight": "model-00003-of-00013.safetensors",
+  "model.layers.10.input_layernorm.weight": "model-00004-of-00013.safetensors",
+  "model.layers.11.input_layernorm.weight": "model-00005-of-00013.safetensors",
+  "model.layers.14.input_layernorm.weight": "model-00006-of-00013.safetensors",
+  "model.layers.16.input_layernorm.weight": "model-00007-of-00013.safetensors",
+  "model.layers.19.input_layernorm.weight": "model-00008-of-00013.safetensors",
+  "model.layers.22.input_layernorm.weight": "model-00009-of-00013.safetensors",
+  "model.layers.25.input_layernorm.weight": "model-00010-of-00013.safetensors",
+  "model.layers.28.input_layernorm.weight": "model-00011-of-00013.safetensors",
+  "model.layers.31.input_layernorm.weight": "model-00012-of-00013.safetensors",
+  "lm_head.biases": "model-00013-of-00013.safetensors"
+ },
+ "_note": "Trimmed by SparkBox: one tensor per shard (served_files reads only the shard names)."
+}
