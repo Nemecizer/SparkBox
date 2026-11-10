@@ -762,6 +762,21 @@ async fn job_resume_download(app: AppHandle, state: State<'_, AppState>, node: S
 }
 
 #[tauri::command]
+async fn model_chain_review(state: State<'_, AppState>, selection: models::hf::DownloadSelection, source: String, targets: Vec<String>) -> Result<models::chain::ChainReview, String> {
+    state.models.chain_review(&models_ctx(&state), &selection, &source, &targets).await
+}
+#[tauri::command]
+async fn model_chain_start(app: AppHandle, state: State<'_, AppState>, expected: models::chain::ChainReview, tool: models::DownloadToolReview) -> Result<Vec<Job>, String> {
+    admin::require(&app)?;
+    state.models.chain_start(&models_ctx(&state), &expected, &tool).await
+}
+#[tauri::command]
+async fn model_chain_cancel(app: AppHandle, state: State<'_, AppState>, node: String, id: String) -> Result<Vec<models::chain::ChainCancel>, String> {
+    admin::require(&app)?;
+    state.models.chain_cancel(&models_ctx(&state), &node, &id).await
+}
+
+#[tauri::command]
 async fn model_download_capacity(state: State<'_, AppState>, selection: models::hf::DownloadSelection, nodes: Vec<String>) -> Result<models::DownloadCapacity, String> {
     state.models.download_capacity(&models_ctx(&state), &selection, &nodes).await
 }
@@ -1782,6 +1797,9 @@ pub fn run() {
             model_download_tools,
             model_disk_preflight,
             model_download_capacity,
+            model_chain_review,
+            model_chain_start,
+            model_chain_cancel,
             model_share,
             model_delete,
             cluster_check,

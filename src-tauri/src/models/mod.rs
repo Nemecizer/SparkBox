@@ -19,6 +19,7 @@ mod download_recovery;
 mod download_tools;
 mod disk;
 mod capacity;
+pub mod chain;
 pub use disk::{DiskCheck, DiskRequest};
 pub use capacity::DownloadCapacity;
 pub use download_tools::{DownloadTool, DownloadToolReview, DownloadTools};
@@ -214,6 +215,7 @@ pub struct Job {
     /// The folder a download or a pull writes, as an absolute path on its node.
     pub dest: String,
     pub resume: Option<DownloadResume>,
+    pub chain: Option<chain::DownloadChain>,
     pub tool_used: String,
     pub tool_version: String,
 }

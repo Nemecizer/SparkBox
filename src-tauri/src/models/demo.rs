@@ -251,6 +251,10 @@ impl DemoModels {
                 continue;
             }
             let p = (j.started.elapsed().as_secs_f64() / j.seconds).min(1.0);
+            if j.job.chain.is_some() {
+                j.job.step = if j.job.kind == "download" { if p < 0.5 { "downloading" } else if p < 0.6 { "verifying" } else { "serving" } }
+                    else if p < 0.6 { "waiting" } else { "copying" }.into();
+            }
             // gated-401: Hugging Face refuses the first file; copy-disk-full: the target fills at 92%.
             let failure = match j.job.kind.as_str() {
                 "download" if gated && j.started.elapsed().as_secs_f64() > 2.0 => {
@@ -279,10 +283,16 @@ impl DemoModels {
                 j.job.step = "done".into();
             }
         }
+        let failed_chains: Vec<_> = self.jobs.iter().filter(|j| j.job.state == "failed" || j.job.state == "cancelled").filter_map(|j|j.job.chain.as_ref().map(|c|c.id.clone())).collect();
+        for j in &mut self.jobs {
+            if j.job.chain.as_ref().is_some_and(|c|failed_chains.contains(&c.id)) && j.job.state == "running" {
+                j.job.state = "failed".into(); j.job.message = "Demo chain stopped after a participant failed".into(); j.job.rate_bps = 0.0;
+            }
+        }
         let finished: Vec<_> = self
             .jobs
             .iter_mut()
-            .filter(|j| j.job.state == "done" && !j.applied)
+            .filter(|j| !j.applied && (j.job.state == "done" || (j.job.chain.is_some() && j.job.kind == "download" && j.job.state == "running" && j.started.elapsed().as_secs_f64() / j.seconds >= 0.6)))
             .filter_map(|j| {
                 j.applied = true;
                 j.adds_copy.clone().map(|(key, node)| (key, node, if j.job.kind == "pull" { "source-sha256" } else { "sha256" }))
@@ -349,6 +359,27 @@ impl DemoModels {
         job.resume = Some(DownloadResume { repo: model.id.clone(), revision: model.revision.clone(), dest: dest.into(), plan_hash: format!("demo-{}", job.id) });
         self.jobs.last_mut().unwrap().job = job.clone();
         job
+    }
+
+    pub fn chain(&mut self, model: &HfModel, chain: &super::chain::DownloadChain, tool: &DownloadTool) -> Vec<Job> {
+        let first = self.jobs.len();
+        let mut source = self.download(&chain.source, model, &chain.members[0].dest);
+        self.note_download_tool(&mut source, tool);
+        for member in &chain.members[1..] {
+            self.add_job(&member.node, "pull", format!("Wait, then copy {}", model.id), model.download_bytes, 30.0,
+                Some((chain.members[0].dest.clone(),member.node.clone())), Some(chain.source.clone()));
+        }
+        for (job, member) in self.jobs[first..].iter_mut().zip(&chain.members) {
+            job.job.id = member.id.clone(); job.job.dest = member.dest.clone(); job.job.chain = Some(chain.clone());
+            job.job.resume = None; job.seconds = 30.0;
+            job.job.step = if job.job.kind == "pull" { "waiting" } else { "downloading" }.into();
+            job.job.message = "Demo: simulated chain; no network access".into();
+        }
+        self.jobs[first..].iter().map(|j|j.job.clone()).collect()
+    }
+    pub fn cancel_chain(&mut self, node: &str, id: &str) -> Result<Vec<super::chain::ChainCancel>,String> {
+        let chain = self.jobs.iter().find(|j|j.job.node == node && j.job.id == id).and_then(|j|j.job.chain.clone()).ok_or("Refresh Jobs; the Demo chain was not found.")?;
+        Ok(chain.members.iter().map(|m| { self.cancel(&m.id); super::chain::ChainCancel {node:m.node.clone(),id:m.id.clone(),error:None} }).collect())
     }
 
     pub fn resume_download(&mut self, node: &str, id: &str, expected: &DownloadResume) -> Result<Job, String> {

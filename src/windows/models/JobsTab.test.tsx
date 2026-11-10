@@ -183,3 +183,28 @@ describe("the Library follows the jobs", () => {
     expect(runningChanged(set(), set("a")), "a new job's folder reads downloading or copying").toBe(true);
   });
 });
+
+describe("download-copy chain records", () => {
+  const chained = (): Job => ({ ...job("download", "failed"), id: "dc-fixture-0", chain: {
+    id: "dc-fixture", source: "cell1", repo: "fixture/model", revision: "a".repeat(40), expiresAt: 2000000000,
+    members: [{ node: "cell1", id: "dc-fixture-0", dest: "/models/fixture" }, { node: "cell2", id: "dc-fixture-1", dest: "/models/fixture" }],
+  }, resume: { repo: "fixture/model", revision: "a".repeat(40), dest: "/models/fixture", planHash: "c".repeat(64) } });
+  it("reopening records dispatches nothing and ordinary Resume cannot drop the copy plan", async () => {
+    await show([chained()]);
+    await act(async () => { fireEvent.mouseDown(screen.getByText("A download")); });
+    expect((screen.getByRole("button", { name: /^Resume download/ }) as HTMLButtonElement).disabled).toBe(true);
+    expect(screen.getByText(/Reopening Jobs follows existing records/)).toBeTruthy();
+    expect(mockCalls.some((c) => c.cmd === "model_chain_start" || c.cmd === "job_resume_download")).toBe(false);
+  });
+  it("cancels the whole selected chain, reports unreachable members and keeps the rows", async () => {
+    vi.spyOn(session, "confirmAction").mockResolvedValue(true);
+    const toast = vi.spyOn(toasts, "toast").mockReturnValue("t");
+    await show([chained()], undefined, { model_chain_cancel: () => [{ node: "cell1", id: "dc-fixture-0", error: null }, { node: "cell2", id: "dc-fixture-1", error: "Disconnected; cancel after reconnecting" }] });
+    await act(async () => { fireEvent.mouseDown(screen.getByText("A download")); });
+    await act(async () => { fireEvent.click(screen.getByRole("button", { name: "Cancel chain…" })); });
+    expect(mockCalls.find((c) => c.cmd === "model_chain_cancel")?.args).toEqual({ node: "cell1", id: "dc-fixture-0" });
+    expect(mockCalls.some((c) => c.cmd === "job_cancel")).toBe(false);
+    expect(toast).toHaveBeenCalledWith(expect.objectContaining({ body: "cell2: Disconnected; cancel after reconnecting" }));
+    expect(screen.getByText("A download")).toBeTruthy();
+  });
+});

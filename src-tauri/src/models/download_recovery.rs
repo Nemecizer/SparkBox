@@ -3,7 +3,7 @@
 use super::*;
 
 pub(super) fn summary(job: &Value, instance: &str) -> Option<DownloadResume> {
-    if job["kind"] != "download" || !matches!(job["state"].as_str(), Some("failed" | "cancelled")) || job["instance"] != instance {
+    if !job["chain"].is_null() || job["kind"] != "download" || !matches!(job["state"].as_str(), Some("failed" | "cancelled")) || job["instance"] != instance {
         return None;
     }
     let plan = &job["downloadPlan"];
@@ -72,6 +72,15 @@ mod tests {
             "planHash":"c".repeat(64),"downloadPlan":{"repo":"org/model","revision":"a".repeat(40),"dest":"/home/test/models/org/model",
             "image":"vllm:test","files":[{"path":"model.safetensors","size":123,"sha256":"b".repeat(64)}],"include":[],"token":"must-not-replay","password":"must-not-replay"}})
     }
+    #[test]
+    fn chain_rows_cannot_fall_back_to_download_only_resume() {
+        let row = json!({"kind":"download","state":"failed","instance":"mine","chain":{"id":"dc-fixture"},
+            "dest":"/models/a","planHash":"c".repeat(64),"downloadPlan":{"repo":"fixture/model","revision":"a".repeat(40),"dest":"/models/a","files":[{"path":"a","size":1}],"image":"fixture"}});
+        assert!(summary(&row,"mine").is_none());
+        let mut ordinary=row;ordinary.as_object_mut().unwrap().remove("chain");
+        assert!(summary(&ordinary,"mine").is_some());
+    }
+
     #[test]
     fn resume_pins_the_original_plan_without_replaying_secrets() {
         let job = saved();

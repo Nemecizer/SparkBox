@@ -838,15 +838,91 @@ def claim_folder(dest, job_id, kind, instance, resume=None, disk_check=None):
         mark_partial(dest, job_id, kind)
 
 
+def chain_empty(dest):
+    """Read-only fresh-folder admission, repeated while holding the writer lock."""
+    dest = os.path.expanduser(dest)
+    if (not os.path.isabs(dest) or os.path.normpath(dest) != dest or dest in ("/", HOME)
+            or os.path.realpath(dest) != dest):
+        raise RuntimeError("A chain needs an absolute destination without symlinks or parent traversal.")
+    if os.path.lexists(dest) and (not os.path.isdir(dest) or os.listdir(dest)):
+        raise RuntimeError("A chain needs an empty destination: " + dest + ". Keep existing files; use the Library or a separately reviewed download to recover.")
+    return dest
+
+
+def chain_preflight(spec):
+    dest = chain_empty(spec["dest"])
+    check = destination_disk(dest, spec["bytes"], spec.get("node", "this node"))
+    return {"dest": dest, "disk": check, "rsync": shutil.which("rsync") is not None, "fabric": fabric()}
+
+
+def checked_chain(job_id, spec, kind):
+    """Persist only this non-secret exact participant list; never replay it on startup."""
+    chain = spec.get("chain")
+    if not isinstance(chain, dict) or set(chain) != {"id", "source", "repo", "revision", "expiresAt", "members"}:
+        raise RuntimeError("Invalid chain plan.")
+    members = chain["members"]
+    if (not isinstance(chain["id"], str) or not re.fullmatch(r"dc-[A-Za-z0-9-]{1,37}", chain["id"])
+            or type(chain["expiresAt"]) is not int or not now() < chain["expiresAt"] <= now() + 86400
+            or not isinstance(members, list) or not 2 <= len(members) <= 17 or not instance_ok(spec.get("instance", ""))):
+        raise RuntimeError("The chain plan is invalid or expired. Review a new attempt.")
+    nodes = set()
+    for index, member in enumerate(members):
+        if (not isinstance(member, dict) or set(member) != {"node", "id", "dest"}
+                or not isinstance(member["node"], str) or not member["node"] or member["node"] in nodes
+                or member["id"] != "%s-%d" % (chain["id"], index)
+                or not isinstance(member["dest"], str) or not member["dest"].startswith("/")
+                or any(ord(c) < 32 for c in member["dest"])):
+            raise RuntimeError("Invalid or repeated chain participant.")
+        nodes.add(member["node"])
+    own = next((m for m in members if m["id"] == job_id and m["node"] == spec.get("node")), None)
+    if (not own or own["dest"] != os.path.expanduser(spec.get("dest", "")) or chain["source"] != members[0]["node"]
+            or (kind == "download") != (own == members[0]) or chain["repo"] != spec.get("repo") or chain["revision"] != spec.get("revision")
+            or not download_plan(spec) or spec.get("resumeOf") or not shutil.which("rsync")
+            or not re.fullmatch(r"[A-Za-z0-9]{32,128}", str(spec.get("password", "")))):
+        raise RuntimeError("The chain participant, files, tool prerequisites or secret are invalid.")
+    transfer_bytes(spec["files"])
+    if any(part.startswith(".") for f in spec["files"] for part in f["path"].split("/")):
+        raise RuntimeError("A chain cannot copy hidden paths.")
+    if kind == "download":
+        import ipaddress
+        try:
+            source = ipaddress.IPv4Address(spec["address"])
+            allowed = [ipaddress.IPv4Address(ip) for ip in spec["allow"].split(" ")]
+            if source.is_loopback or source.is_unspecified or len(allowed) != len(members)-1 or len(set(allowed)) != len(allowed) or source in allowed:
+                raise ValueError()
+            if type(spec["port"]) is not int or not 8730 <= spec["port"] < 8930:
+                raise ValueError()
+        except (KeyError, ValueError):
+            raise RuntimeError("Invalid chain fabric listener or target allow list.") from None
+    return chain
+
+
+def chain_manifest(spec, manifest):
+    """Fresh source hashes must still name exactly the inspected publisher files."""
+    chain = spec["chain"]
+    files = validate_copy_manifest(manifest)
+    if (manifest.get("chainId") != chain["id"] or manifest.get("repo") != chain["repo"] or manifest.get("revision") != chain["revision"]):
+        raise RuntimeError("The copy source belongs to another chain or revision.")
+    expected = {f["path"]: f for f in spec["files"]}
+    if {f["path"] for f in files} != set(expected) or any(f["size"] != expected[f["path"]]["size"]
+            or (expected[f["path"]].get("sha256") and f["sha256"] != expected[f["path"]]["sha256"]) for f in files):
+        raise RuntimeError("The source file list or publisher checksum changed. Nothing was copied.")
+    return files
+
+
 def job_download(job_id, spec):
     dest = os.path.expanduser(spec["dest"])
+    if spec.get("chain"):
+        checked_chain(job_id, spec, "download")
     instance = spec.get("instance", "")
     if not instance_ok(instance):
         raise RuntimeError("A download needs its SparkBox's instance name.")
     check_download_tool(spec)
     files = served_files(dict(spec, exclude=[]))
     total = transfer_bytes(files)
-    disk_check = lambda: require_destination_disk(dest, total, spec.get("node", "this node"))
+    def disk_check():
+        if spec.get("chain"): chain_empty(dest)
+        return require_destination_disk(dest, total, spec.get("node", "this node"))
     disk_check()
     claim_folder(dest, job_id, "download", instance, spec if spec.get("resumeOf") else None, disk_check)
     tool = prepare_download_tool(job_id, spec)
@@ -870,6 +946,13 @@ def job_download(job_id, spec):
         raise RuntimeError("Download incomplete: " + "; ".join(problems[:5]))
     write_manifest(dest, spec["repo"], spec["revision"], files)
     finish_partial(dest)
+    if spec.get("chain"):
+        # The Hub token is no longer needed while copies run. Never persist it in the plan.
+        shutil.rmtree(os.path.join(SECRETS, job_id), ignore_errors=True)
+        spec.pop("token", None)
+        if now() >= spec["chain"]["expiresAt"]:
+            raise RuntimeError("Download verified, but the chain expired before sharing. Use the Library to copy it after review.")
+        return job_serve_v2(job_id, dict(spec, path=dest, protocol=2, expected=[m["id"] for m in spec["chain"]["members"][1:]]))
     return {"path": dest}
 
 
@@ -1139,8 +1222,12 @@ def _job_serve_v2(job_id, spec):
     os.makedirs(meta, mode=0o700, exist_ok=True)
     os.makedirs(done_dir, mode=0o700, exist_ok=True)
     files = copy_manifest(path, spec.get("exclude") or [], job_id)
+    manifest = {"files": files, "repo": spec.get("repo", ""), "revision": spec.get("revision", ""), "image": spec.get("imageMetadata")}
+    if spec.get("chain"):
+        manifest["chainId"] = spec["chain"]["id"]
+        chain_manifest(spec, manifest)
     with open(os.path.join(meta, "manifest.json"), "w") as f:
-        json.dump({"files": files, "repo": spec.get("repo", ""), "revision": spec.get("revision", ""), "image": spec.get("imageMetadata")}, f)
+        json.dump(manifest, f)
     secret = os.path.join(base, "secrets")
     fd = os.open(secret, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
     with os.fdopen(fd, "w") as f:
@@ -1173,21 +1260,28 @@ def _job_serve_v2(job_id, spec):
                 if time.monotonic() - began > 10:
                     raise RuntimeError("The copy server did not become ready.")
                 time.sleep(.1)
-        write_status(job_id, step="serving", message="Sharing verified files; waiting for %d copies. %s" % (len(expected), firewall_hint(spec["port"])))
+        write_status(job_id, step="serving", rateBps=0, message="Sharing verified files; waiting for %d copies. %s" % (len(expected), firewall_hint(spec["port"])))
         last_stamp = None
         completed = set()
+        failed = set()
         while proc.poll() is None:
+            if spec.get("chain") and now() >= spec["chain"]["expiresAt"]:
+                raise RuntimeError("The chain expired before all copies acknowledged verification.")
             for name in expected:
                 marker = os.path.join(done_dir, name)
                 try:
                     fd = os.open(marker, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
                     with os.fdopen(fd) as f:
                         st = os.fstat(f.fileno())
-                        if stat.S_ISREG(st.st_mode) and st.st_size <= 16 and f.read(17) in ("done\n", "failed\n"):
+                        content = f.read(17)
+                        if stat.S_ISREG(st.st_mode) and st.st_size <= 16 and content in ("done\n", "failed\n"):
                             completed.add(name)
+                            if content == "failed\n": failed.add(name)
                 except OSError:
                     pass
             if len(completed) == len(expected):
+                if spec.get("chain") and failed:
+                    raise RuntimeError("Some chain copies failed. Keep verified copies; review Jobs before recovery.")
                 return {"copiesFinished": len(completed)}
             try:
                 stamp = os.stat(log).st_mtime_ns
@@ -1196,6 +1290,8 @@ def _job_serve_v2(job_id, spec):
             except OSError:
                 pass
             if time.monotonic() - last_activity >= min(max(spec.get("idleSeconds", 1800), 1), 1800):
+                if spec.get("chain"):
+                    raise RuntimeError("The chain file server expired while waiting for copy acknowledgments. Review each target in Jobs.")
                 return {"idleExpired": True, "copiesFinished": len(completed)}
             time.sleep(.5)
         raise RuntimeError("The copy server stopped before its copies finished.")
@@ -1207,6 +1303,23 @@ def _job_serve_v2(job_id, spec):
 def job_pull_v2(job_id, spec):
     try:
         return _job_pull_v2(job_id, spec)
+    except BaseException:
+        # Admission/manifest failures happen before the ordinary copy's acknowledgment block.
+        # Best effort only; an unreachable source still has its idle/deadline cleanup.
+        if spec.get("chain"):
+            try:
+                from urllib.parse import urlsplit
+                src = urlsplit(spec["src"])
+                if src.scheme == "rsync" and src.username == "sparkbox" and src.hostname and src.path == "/model":
+                    base = os.path.join(SECRETS, job_id)
+                    os.makedirs(base, mode=0o700, exist_ok=True)
+                    ack = os.path.join(base, "failed")
+                    with open(ack, "w") as f: f.write("failed\n")
+                    subprocess.run(["rsync", "--timeout=2", ack, "rsync://sparkbox@%s:%d/done/%s" % (src.hostname, src.port or 873, job_id)],
+                                   env=dict(os.environ, RSYNC_PASSWORD=spec["password"]), capture_output=True, timeout=3)
+            except Exception:
+                pass
+        raise
     finally:
         shutil.rmtree(os.path.join(SECRETS, job_id), ignore_errors=True)
 
@@ -1229,6 +1342,9 @@ def _job_pull_v2(job_id, spec):
     write_status(job_id, step="waiting", message="Waiting for the source's verified file list")
     # Hashing is node-side and can outlast an SSH session. Wait up to 30 minutes for readiness.
     deadline = time.monotonic() + 1800
+    if spec.get("chain"):
+        checked_chain(job_id, spec, "pull")
+        deadline = time.monotonic() + max(0, spec["chain"]["expiresAt"] - now())
     while True:
         try:
             with socket.create_connection((src.hostname, src.port or 873), timeout=3):
@@ -1239,13 +1355,15 @@ def _job_pull_v2(job_id, spec):
         except (OSError, subprocess.TimeoutExpired):
             pass
         if time.monotonic() >= deadline:
+            if spec.get("chain"):
+                raise RuntimeError("The chain expired while waiting for the verified source. Reconnect and review Jobs; no replacement was started.")
             raise RuntimeError("The source did not become ready in 30 minutes. Check its job, fabric address and firewall, then retry.")
         time.sleep(2)
     if os.path.getsize(manifest_path) > 16 * 1024**2:
         raise RuntimeError("The source manifest is too large.")
     with open(manifest_path) as f:
         manifest = json.load(f)
-    files = validate_copy_manifest(manifest)
+    files = chain_manifest(spec, manifest) if spec.get("chain") else validate_copy_manifest(manifest)
     dest = os.path.expanduser(spec["dest"])
     total = sum(f["size"] for f in files)
     if spec.get("imageTransfer"):
@@ -1262,7 +1380,11 @@ def _job_pull_v2(job_id, spec):
             raise RuntimeError("The image manifest has no valid image size.")
         copy_disk_check(dest, 2 * max(size, total))
         copy_disk_check(target_info["DockerRootDir"], 2 * max(size, total))
-    disk_check = lambda: require_destination_disk(dest, total, spec.get("node", "this node"))
+    def disk_check():
+        if spec.get("chain"):
+            if now() >= spec["chain"]["expiresAt"]: raise RuntimeError("The chain expired before copying.")
+            chain_empty(dest)
+        return require_destination_disk(dest, total, spec.get("node", "this node"))
     disk_check()
     claim_folder(dest, job_id, "pull", spec.get("instance", ""), disk_check=disk_check)
     try:
@@ -1509,11 +1631,18 @@ def check_download_resume(spec):
         raise RuntimeError("This folder no longer belongs to the stopped attempt. Refresh Jobs and the Library.")
 
 
+def on_chain_expiry(_signum, _frame):
+    raise RuntimeError("The chain reached its 24-hour deadline. Keep verified copies and review Jobs before recovery.")
+
+
 def start(kind, job_id, spec):
     if kind not in JOB_KINDS or not valid_id(job_id):
         raise SystemExit("bad job")
     dest = {"dest": os.path.expanduser(spec["dest"])} if spec.get("dest") else {}
     recovery = {}
+    if spec.get("chain"):
+        recovery["chain"] = checked_chain(job_id, spec, kind)
+        chain_empty(spec["dest"])
     if kind == "download":
         check_download_tool(spec)
         plan = download_plan(spec)
@@ -1547,6 +1676,9 @@ def start(kind, job_id, spec):
         os.dup2(devnull, fd)
     try:
         write_status(job_id, pid=os.getpid(), pidStart=start_of(os.getpid()))
+        if spec.get("chain"):
+            signal.signal(signal.SIGALRM, on_chain_expiry)
+            signal.alarm(max(1, spec["chain"]["expiresAt"] - now()))
         result = JOB_KINDS[kind](job_id, spec)
         finish_job(job_id, state="done", step="done", message="", result=result)
     except Stopped:
@@ -1554,6 +1686,7 @@ def start(kind, job_id, spec):
     except Exception as e:  # report every failure in the status file
         finish_job(job_id, state="failed", message=disk_failure(spec, e)[:600])
     finally:
+        if spec.get("chain"): signal.alarm(0)
         drop_secrets(job_id)  # a SIGTERM may have landed in finish_job
     os._exit(0)
 
@@ -3040,6 +3173,8 @@ def main(argv):
         out(start(argv[2], argv[3], json.load(sys.stdin)))
     elif cmd == "download-tools" and len(argv) == 2:
         out(download_tools())
+    elif cmd == "chain-preflight" and len(argv) == 2:
+        out(chain_preflight(json.load(sys.stdin)))
     elif cmd == "disk-preflight" and len(argv) == 2:
         spec = json.load(sys.stdin)
         out(destination_disk(spec["dest"], spec["bytes"], spec.get("node", "this node")))

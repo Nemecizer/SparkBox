@@ -1,3 +1,4 @@
+import { reviewDemoChain, startDemoChain, cancelDemoChain, demoChainJobs, demoChainLibrary } from "./chains";
 // AI backend for the browser preview: the Demo world's endpoints (Llama 3.3 70B
 // pipeline-parallel over cell1–cell3, Ollama on gx10-0000) with metrics that
 // move like the Rust simulator's, the model library, the fit table and memory
@@ -521,9 +522,9 @@ export const handlers: MockHandlers = {
   endpoint_stop: () => null,
   endpoint_restart: () => "task-demo-restart",
   endpoint_forget: () => null,
-  library_list: () => structuredClone(library),
+  library_list: () => structuredClone([...library, ...demoChainLibrary()]),
   jobs_list: () => [
-    ...preparedImageJobs, ...downloadRecoveryJobs(),
+    ...preparedImageJobs, ...downloadRecoveryJobs(), ...demoChainJobs(),
     { id: "share-a1-gx10-0000", node: "gx10-0000", kind: "pull", state: "done", step: "done", message: "", label: "Copy Qwen/Qwen3.8-27B-FP8 to gx10-0000", bytesDone: 30_923_764_531, bytesTotal: 30_923_764_531, rateBps: 2.4e9, startedAt: nowS() - 1900, updatedAt: nowS() - 1887 },
   ].sort((a, b) => b.startedAt - a.startedAt),
   job_cancel: ({ id }: { id: string }) => cancelDemoDownload(id),
@@ -532,6 +533,12 @@ export const handlers: MockHandlers = {
   model_download_capacity: ({ selection, nodes }: { selection: DownloadSelection; nodes: string[] }) => demoDownloadCapacity(selection, nodes),
   model_disk_preflight: ({ request }: { request: DiskRequest }) => demoDiskPreflight(request, request.kind === "download" ? details(request.selection.repo).model.downloadBytes : undefined),
   model_download: startDemoDownload,
+  model_chain_review: ({ selection, source, targets }) => {
+    if (library.some((e) => e.repo === selection.repo && [source,...targets].some((n) => e.copies[n]))) throw new Error("A chain needs empty destinations. Keep existing Library copies.");
+    return reviewDemoChain(selection, source, targets);
+  },
+  model_chain_start: ({ expected, tool }) => startDemoChain(expected, tool),
+  model_chain_cancel: ({ node, id }) => cancelDemoChain(node, id),
   deployment_history_list: () => demoHistory(),
   deployment_history_file: () => { throw new Error("Demo shows samples only. Choose Live to view a local report file."); },
   deployments_list: () => structuredClone(deployments),

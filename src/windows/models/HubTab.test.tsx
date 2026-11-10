@@ -450,3 +450,54 @@ describe("capacity suggestions", () => {
     expect(picker().value).toBe(head());
   });
 });
+
+
+describe("download then copy consent", () => {
+  const plan = { selection, source: "cell1", targets: ["cell2"], nodes: [{ node: "cell1", dest: KEY, address: "192.0.2.1" }, { node: "cell2", dest: KEY, address: "192.0.2.2" }], checks: demoDiskPreflight({ kind: "download", node: "cell1", selection }), port: 8730 };
+  it("reviews the exact selection and targets, then starts only the confirmed chain", async () => {
+    const confirm = vi.spyOn(session, "confirmAction").mockResolvedValue(true);
+    await show([], vi.fn(), { model_chain_review: () => plan, model_chain_start: () => [] });
+    await act(async () => { fireEvent.click(screen.getByLabelText("Then copy to cell2")); });
+    expect(mockCalls.some((c) => c.cmd === "model_chain_start")).toBe(false);
+    await act(async () => { fireEvent.click(button(`Download to ${head()}`)!); });
+    expect(mockCalls.find((c) => c.cmd === "model_chain_review")?.args).toEqual({ selection, source: "cell1", targets: ["cell2"] });
+    expect(confirm.mock.calls.at(-1)?.[0]).toMatchObject({ confirmLabel: "Start download and copies" });
+    expect(mockCalls.find((c) => c.cmd === "model_chain_start")?.args).toMatchObject({ expected: plan, tool: { node: "cell1", installConsent: false } });
+    expect(mockCalls.some((c) => c.cmd === "model_download")).toBe(false);
+  });
+  it("a canceled chain review starts nothing", async () => {
+    vi.spyOn(session, "confirmAction").mockResolvedValue(false);
+    await show([], vi.fn(), { model_chain_review: () => plan });
+    await act(async () => { fireEvent.click(screen.getByLabelText("Then copy to cell2")); fireEvent.click(button(`Download to ${head()}`)!); });
+    expect(mockCalls.some((c) => c.cmd === "model_chain_start" || c.cmd === "model_download")).toBe(false);
+  });
+  it("an empty-folder or route refusal starts nothing and retains the target choice", async () => {
+    vi.spyOn(session, "confirmAction").mockResolvedValue(true);
+    await show([], vi.fn(), { model_chain_review: () => { throw new Error("A chain needs empty destinations."); } });
+    await act(async () => { fireEvent.click(screen.getByLabelText("Then copy to cell2")); });
+    await act(async () => { fireEvent.click(button(`Download to ${head()}`)!); });
+    expect(screen.getByText("A chain needs empty destinations.")).toBeTruthy();
+    expect((screen.getByLabelText("Then copy to cell2") as HTMLInputElement).checked).toBe(true);
+    expect(mockCalls.some((c) => c.cmd === "model_chain_start" || c.cmd === "model_download")).toBe(false);
+  });
+  it("keeps a disconnected target selected until the user explicitly removes it", async () => {
+    await show([]);
+    await act(async () => { fireEvent.click(screen.getByLabelText("Then copy to cell2")); });
+    const snap = structuredClone(baseSnapshot) as ClusterSnapshot;
+    snap.demo = false; snap.tsMs = Date.now() + 1000;
+    snap.nodes.find((n) => n.id === "cell2")!.status = "offline";
+    await act(async () => { await emitMock("cluster://snapshot", snap); });
+    const check = screen.getByLabelText("Then copy to cell2") as HTMLInputElement;
+    expect(check.checked).toBe(true); expect(check.disabled).toBe(false);
+    await act(async () => { fireEvent.click(check); });
+    expect(check.checked).toBe(false); expect(check.disabled).toBe(true);
+    expect(mockCalls.some((c) => c.cmd === "model_chain_start" || c.cmd === "model_download")).toBe(false);
+  });
+  it("existing copies cannot be selected, and changing the source clears the copy plan", async () => {
+    await show([entry({ cell2: copy() })]);
+    expect((screen.getByLabelText("Then copy to cell2") as HTMLInputElement).disabled).toBe(true);
+    await act(async () => { fireEvent.click(screen.getByLabelText("Then copy to cell3")); });
+    await act(async () => { fireEvent.change(screen.getByLabelText("Download node"), { target: { value: "cell2" } }); });
+    expect((screen.getByLabelText("Then copy to cell3") as HTMLInputElement).checked).toBe(false);
+  });
+});

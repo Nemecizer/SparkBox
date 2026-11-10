@@ -29,7 +29,8 @@ Jobs are built to keep going if SparkBox quits or the VPN drops. That hasn't bee
 ### Toolbar
 
 - **Refresh** reads the jobs again. The tab also refreshes by itself every few seconds.
-- **Resume download…** starts a new attempt from a stopped download’s saved plan. It keeps the original node, folder, revision and file list. It is dimmed for running jobs, finished downloads, copies and older jobs without a saved plan.
+- **Resume download…** starts a new attempt from a stopped download’s saved plan. It keeps the original node, folder, revision and file list. It is dimmed for running jobs, finished downloads, copies, chain rows and older jobs without a saved plan.
+- **Cancel chain…** appears for a chain row. It stops this SparkBox’s remaining members, including the file server, after confirmation. Finished files, records and earlier failure messages remain. Disconnected or changed-ownership members show an error and need review. Reported leftover processes also need recovery review; cancellation does not claim they were cleaned.
 - **Cancel** stops the selected job. It's dimmed unless a running job is selected.
 
 ### Job table
@@ -39,6 +40,7 @@ The table lists jobs from every online node, newest first.
 | Column | What it shows |
 |---|---|
 | **Job** | What it is, such as `Download Qwen/Qwen3.8-27B-FP8` |
+| **Chain** | The chain ID, source and copy targets; **—** for separate jobs |
 | **Node** | The node doing the work |
 | **State** | The step while it runs, then **done**, **failed** or **canceled** |
 | **Progress** | A bar with the size so far |
@@ -58,7 +60,11 @@ In a narrow window, some columns hide. If a node is offline, its jobs don't appe
 | `Copy … to cell2` | One node's copy over the fabric | **copying**, **verifying** |
 | `Share … from cell1` | The temporary file server for a copy. It has no progress bar | **serving** |
 
-A `Share` row ends as **canceled**. That's normal: SparkBox stops the server when the copies end. Don't cancel it yourself while a copy is running, because the copy would fail.
+A temporary share closes after its copies report completion. Older shares can end as **canceled** when SparkBox stops them. Do not stop a file server while a copy still needs it.
+
+A chain source moves through **downloading**, **verifying** and **serving**. Its target rows move through **waiting**, **copying** and **verifying**. The source reports **done** only after every target reports successful verification. Select a chain row to see its fixed commit, deadline and recovery guidance. Read every target result too.
+
+Reopening Jobs follows existing records and starts no replacement chain. Chains expire within 24 hours; the file server also stops after 30 minutes without activity. A node reboot does not restart its work. Cancel remaining jobs before recovering an incomplete source with a new reviewed download, then copy unfinished targets from the Library. See [Download, then copy to other nodes](help:download-a-model#download-then-copy-to-other-nodes).
 
 Finished jobs stay on the list, and there's no way to clear them here.
 

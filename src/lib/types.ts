@@ -743,6 +743,7 @@ export interface DownloadResume {
 }
 
 export interface Job {
+  chain?: DownloadChain | null;
   id: string;
   node: string;
   kind: "download" | "serve" | "pull";
@@ -1326,3 +1327,11 @@ export interface DownloadCapacity {
   readings: { node: string; check: DiskCheck | null; error: string | null }[];
   suggested: string | null;
 }
+
+export interface ChainMember { node: string; id: string; dest: string }
+export interface DownloadChain { id: string; source: string; repo: string; revision: string; expiresAt: number; members: ChainMember[] }
+export interface ChainReview {
+  selection: DownloadSelection; source: string; targets: string[];
+  nodes: { node: string; dest: string; address: string }[]; checks: DiskCheck[]; port: number;
+}
+export interface ChainCancel { node: string; id: string; error: string | null }

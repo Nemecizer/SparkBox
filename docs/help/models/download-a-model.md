@@ -21,7 +21,7 @@ An earlier public `Qwen/Qwen3-0.6B` download passed on `cell1`: seven files, a p
 - If this is your first download, you've run [Prepare the cluster for models](help:prepare-the-cluster), which checks Docker and free disk on every node.
 - Use **Live** data with look-only mode off, and be ready to unlock Admin mode. With **Demo** data, the download is simulated and nothing reaches a node. [Unlock Admin mode](help:unlock-admin-mode) shows how.
 - For a gated model, you've saved a Hugging Face access token and accepted its license. See [Get a Hugging Face token](help:get-a-hugging-face-token).
-- **Choose a connected node in Download node.** The first connected node is selected initially. Use **Suggest a download node** to compare disks before choosing. To put the model on other nodes, [copy it](help:copy-a-model-to-other-nodes) afterward.
+- **Choose a connected node in Download node.** The first connected node is selected initially. Use **Suggest a download node** to compare disks before choosing. Choose **Then copy to** to include empty destination nodes in this download, or [copy it](help:copy-a-model-to-other-nodes) afterward.
 - **The destination needs room for the full download plus 5% and 20 GiB.** SparkBox reads that filesystem before asking you to approve the download.
 - **You have time.** How long it takes depends on your internet speed and the model's size. Models can be more than 100 [GiB](help:glossary#gib). This uses your internet allowance, if you have one.
 - **Admin mode may lock while you wait.** That doesn't stop the download.
@@ -55,6 +55,22 @@ This comparison reads only and needs no Admin unlock. It never changes your choi
 10. If there is enough room, review the tool and file details. Click **Download** for an existing tool, or **Install tool and download** for the displayed installation. **Cancel** changes nothing. A refusal shows the problem and offers no start button.
 11. Follow the new row on **Jobs**. **Download tool** shows the tool and version after its check.
 
+
+### Download, then copy to other nodes
+
+Before clicking **Download to cell2**, expand **Then copy to** and select the other nodes. A **chain** is this one approved sequence: download, verify, then copy. Changing the download node or inspected version clears the copy choices. If a selected target disconnects, remove its checkmark or reconnect it; SparkBox never drops it from the plan by itself.
+
+Every chosen node needs an empty destination folder, enough space and an installed `rsync` copy tool. Existing or incomplete copies are refused without deleting them. All nodes need distinct IPv4 addresses on the same fabric subnet, the network used between nodes. SparkBox does not install `rsync`, use a different network or change firewall rules.
+
+After choosing a download tool, review every destination and disk result. Check the source, copy targets, fixed commit and temporary source port. Click **Start download and copies**, or **Install tool and start chain** if you approved tool installation. Canceling starts nothing. SparkBox rechecks the files, tool, paths, fabric and disks at start.
+
+Keep SparkBox open until every job appears in **Jobs**. The targets wait on their nodes. The source downloads and checks publisher sizes and any available publisher checksums. Only then does it share the files. Each target checks fresh source SHA-256 hashes, fingerprints that detect changed file contents. A fresh source hash is not a publisher checksum when none was supplied.
+
+The approved jobs can then continue without the Mac. Each has a deadline of at most 24 hours from setup. The temporary file server closes after all targets report completion, cancellation, expiry or 30 minutes without activity. A failed copy or missing completion report makes the source chain fail too. This sequence stores files; it does not load the model.
+
+Read every member's result in **Jobs**. Select any chain row for its deadline, fixed commit and recovery instructions. **Cancel chain…** stops this SparkBox's remaining jobs and file server; it keeps files and records. An unreachable node needs cancellation after reconnection, or its deadline must expire.
+
+If the source fails before sharing, targets keep waiting until canceled or expired. If setup is interrupted, reconnect and inspect every selected node's jobs. Some targets may be waiting even if the source never started. Reopening SparkBox follows records; it never starts replacement work. A rebooted node needs explicit recovery. Cancel remaining chain jobs first. Recover an incomplete source with a separately reviewed download, then use Library → **Copy to nodes…** for unfinished targets. Ordinary **Resume download…** is disabled for chain rows so it cannot discard the approved copy plan.
 
 ### Destination disk
 

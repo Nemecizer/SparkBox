@@ -35,10 +35,11 @@ export function JobsTab({ jobs, refresh }: { jobs: Job[]; refresh: () => void })
   const [selected, setSelected] = useState<string | null>(null);
   const [resuming, setResuming] = useState(false);
   const job = jobs.find((j) => `${j.node}/${j.id}` === selected) ?? null;
-  const canResume = job?.kind === "download" && !!job.resume && (job.state === "failed" || job.state === "cancelled");
+  const canResume = job?.kind === "download" && !!job.resume && !job.chain && (job.state === "failed" || job.state === "cancelled");
 
   const columns: Column<Job>[] = [
     { key: "label", label: "Job", sort: (j) => j.label, priority: 1, render: (j) => <span className="strong">{j.label || j.id}</span> },
+    { key: "chain", label: "Chain", priority: 3, render: (j) => j.chain ? `${j.chain.id} · ${j.chain.source} → ${j.chain.members.slice(1).map((m) => m.node).join(", ")}` : "—" },
     { key: "node", label: "Node", sort: (j) => j.node, render: (j) => j.node },
     {
       key: "state", label: "State", sort: (j) => j.state,
@@ -74,10 +75,14 @@ export function JobsTab({ jobs, refresh }: { jobs: Job[]; refresh: () => void })
 
   const cancel = async () => {
     if (!job) return;
-    const ok = await confirmAction({ title: `Cancel “${job.label || job.id}”?`, body: CANCEL_WORDS[job.kind], confirmLabel: "Cancel job", cancelLabel: "Keep going", danger: true });
+    const ok = await confirmAction({ title: job.chain ? `Cancel chain ${job.chain.id}?` : `Cancel “${job.label || job.id}”?`, body: job.chain ? `Stop the owned jobs on ${job.chain.members.map((m) => m.node).join(", ")}, including the temporary file server. Verified files and partial files remain. Disconnected nodes need cancellation after reconnection; waiting jobs expire within the chain's 24-hour deadline. Reopening Jobs never starts a replacement chain.` : CANCEL_WORDS[job.kind], confirmLabel: job.chain ? "Cancel chain" : "Cancel job", cancelLabel: "Keep going", danger: true });
     if (!ok) return;
     try {
-      await api.jobCancel(job.node, job.id);
+      if (job.chain) {
+        const results = await api.modelChainCancel(job.node, job.id);
+        const failed = results.filter((r) => r.error);
+        if (failed.length) throw new Error(failed.map((r) => `${r.node}: ${r.error}`).join("; "));
+      } else await api.jobCancel(job.node, job.id);
     } catch (e) {
       // The job has ended, but docker didn't say its container stopped: the words say which.
       const words = errText(e);
@@ -116,8 +121,9 @@ export function JobsTab({ jobs, refresh }: { jobs: Job[]; refresh: () => void })
         <ToolButton icon={RefreshCw} label="Refresh" onClick={refresh} />
         <ToolButton icon={Play} label={resuming ? "Starting…" : "Resume download…"} locked={!admin} disabled={!canResume || resuming}
           title={!admin ? locked(admin) : canResume ? "Reuse this download's original revision and files" : "Select a stopped download with a saved plan from this SparkBox"} onClick={resume} />
-        <ToolButton icon={Ban} label="Cancel" locked={!admin} disabled={job?.state !== "running"} title={locked(admin)} onClick={cancel} />
+        <ToolButton icon={Ban} label={job?.chain ? "Cancel chain…" : "Cancel"} locked={!admin} disabled={!job?.chain && job?.state !== "running"} title={locked(admin)} onClick={cancel} />
       </Toolbar>
+      {job?.chain && <div className="col gap-sm pad"><span className="strong">{job.chain.repo} · chain {job.chain.id}</span><span className="mono ai-capacity-path">Commit {job.chain.revision}</span><span>Deadline: {new Date(job.chain.expiresAt * 1000).toLocaleString()}. Each row reports one node; verify every target is done.</span><span>Reopening Jobs follows existing records. After failure, cancel the remaining chain jobs. Use a separately reviewed download to recover an incomplete source, then Library → Copy to nodes… for unfinished targets. Finished copies remain intact.</span></div>}
       <Table columns={columns} rows={jobs} rowKey={(j) => `${j.node}/${j.id}`} selected={selected} onSelect={setSelected}
         tableId="models.jobs" itemNoun={["job", "jobs"]} empty="No downloads or copies yet."
         footer={<HelpTip topic="models.jobs.about" label="About jobs" />} />

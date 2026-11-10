@@ -1504,7 +1504,9 @@
     "title": "Model revision",
     "body": "A revision is one version of the model. Choose a branch or tag, or enter a full commit. SparkBox shows the resolved commit and files, then refuses any mismatch before downloading.",
     "article": "models-hugging-face#revision-and-files",
-    "howto": ["download-a-model"]
+    "howto": [
+      "download-a-model"
+    ]
   },
   "models.hub.weights": {
     "title": "Weights",
@@ -1614,7 +1616,7 @@
   },
   "models.jobs.about": {
     "title": "Jobs",
-    "body": "Jobs run on the nodes themselves and are built to keep going if SparkBox quits or the VPN drops. That hasn't been proven on your cluster, so keep SparkBox open and this Mac awake. Partial files stay: Resume download in Jobs reuses the saved revision and files; older jobs need a newly reviewed download.",
+    "body": "Jobs run on the nodes; chain rows share a source, targets and deadline. Select a row for recovery guidance; Cancel chain\u2026 stops owned members and keeps files and records. Reopening follows existing jobs without starting replacements.",
     "article": "models-jobs",
     "howto": [
       "follow-a-download",

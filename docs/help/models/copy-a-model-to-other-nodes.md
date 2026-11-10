@@ -15,6 +15,8 @@ To use a model on another node, copy it there over the fabric from a node that a
 
 The **fabric** is the fast 200G network between your nodes. Each node you load a model on needs its own copy.
 
+For a **Then copy to** chain, inspect every node’s row in Jobs. Use **Cancel chain…** before recovery; ordinary Resume is disabled for these rows. [Download, then copy to other nodes](help:download-a-model#download-then-copy-to-other-nodes) explains the empty-folder requirement, deadline and recovery steps.
+
 ## Before you start
 
 - The model is in your **Library** on at least one node, in your model folder. A model in the Hugging Face cache can't be copied yet.

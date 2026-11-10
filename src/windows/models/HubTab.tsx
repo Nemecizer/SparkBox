@@ -116,6 +116,9 @@ export function HubTab({ library, onLoad, onDownloading }: {
   const [split, setSplit] = useWinState("hub.split", 480);
   const [targetId, setTargetId] = useWinState<string | null>("hub.downloadNode", null);
   const target = nodes.find((n) => n.id === targetId);
+  const [copyTargets, setCopyTargets] = useState<string[]>([]);
+  // A change of source or inspected model requires a new explicit copy choice.
+  useEffect(() => { setCopyTargets([]); }, [targetId, details?.model.id, details?.model.revision]);
   // Choose once, then keep the stable ID even if the list reorders or the node disappears.
   useEffect(() => {
     if (targetId === null && nodes.some((n) => n.online)) setTargetId(nodes.find((n) => n.online)!.id);
@@ -207,18 +210,20 @@ export function HubTab({ library, onLoad, onDownloading }: {
     try {
       const review = await chooseDownloadTool(target.id);
       if (!review) return;
-      const checks = await checkTransferDisk({ kind: "download", node: target.id, selection });
+      const chain = copyTargets.length ? await api.modelChainReview(selection, target.id, [...copyTargets]) : null;
+      const checks = chain ? chain.checks : await checkTransferDisk({ kind: "download", node: target.id, selection });
       if (!checks) return;
       const installing = review.tool.kind === "install";
       const ok = await confirmAction({
-        title: installing ? `Install the tool and download ${repo} to ${head}?` : resume ? `Download ${repo} again to ${head}?` : `Download ${repo} to ${head}?`,
-        body: <div className="col gap-md"><DiskPreflight checks={checks} /><p>{`${downloadToolConsent(review)} ${resume ? "For the original revision and files, use Resume download… in Jobs. Download again uses the revision inspected here. " : ""}${fmtBytes(details.model.downloadBytes)} in ${selection.files.length} files: the weights vLLM serves and their config${details.model.skipped.length ? ` (not ${details.model.skipped.map((x) => x.what).join(" or ")})` : ""}. SparkBox rechecks this exact commit and file list before starting. Any mismatch stops the download for a new review. The downloaded files are verified. Keep SparkBox open and this Mac awake; unattended recovery is not proven on your cluster.`}</p><span className="mono wrap">Commit {selection.revision}</span></div>,
-        confirmLabel: installing ? "Install tool and download" : resume ? "Download again" : "Download",
+        title: chain ? `Download ${repo} to ${head}, then copy to ${chain.targets.join(", ")}?` : installing ? `Install the tool and download ${repo} to ${head}?` : resume ? `Download ${repo} again to ${head}?` : `Download ${repo} to ${head}?`,
+        body: <div className="col gap-md"><DiskPreflight checks={checks} />{chain && <div className="col gap-sm"><p>The chain needs empty destination folders. It arms the targets, downloads and verifies on the source, then copies and checks every target against fresh SHA-256 hashes. No copy starts before source verification.</p><p>Keep SparkBox open until all jobs appear. The nodes then continue on their own, for at most 24 hours. The temporary file server stops after acknowledgments, 30 minutes without activity, cancellation or expiry. This does not load the model. If the source fails before sharing, targets wait until canceled or expired. A failed or rebooted chain needs explicit recovery; reopening Jobs starts no replacement work.</p>{chain.nodes.map((n) => <span className="mono ai-capacity-path" key={n.node}>{n.node}: {n.dest} · fabric {n.address}</span>)}<span>Temporary source port: {chain.port}. No firewall rule is changed.</span></div>}<p>{`${downloadToolConsent(review)} ${resume ? "For the original revision and files, use Resume download… in Jobs. Download again uses the revision inspected here. " : ""}${fmtBytes(details.model.downloadBytes)} in ${selection.files.length} files: the weights vLLM serves and their config${details.model.skipped.length ? ` (not ${details.model.skipped.map((x) => x.what).join(" or ")})` : ""}. SparkBox rechecks this exact commit and file list before starting. Any mismatch stops the download for a new review. The downloaded files are verified. ${chain ? "Keep SparkBox open until setup finishes; this chain still needs separate live acceptance on your cluster." : "Keep SparkBox open and this Mac awake; unattended recovery is not proven on your cluster."}`}</p><span className="mono wrap">Commit {selection.revision}</span></div>,
+        confirmLabel: chain ? installing ? "Install tool and start chain" : "Start download and copies" : installing ? "Install tool and download" : resume ? "Download again" : "Download",
         danger: installing,
       });
       if (!ok) return;
       review.installConsent = installing;
-      await api.modelDownload(selection, review);
+      if (chain) await api.modelChainStart(chain, review);
+      else await api.modelDownload(selection, review);
       toast({ kind: "info", title: `Downloading ${repo}`, body: `To ${head}. Follow it in Jobs.` });
       onDownloading();
     } catch (e) {
@@ -347,6 +352,16 @@ export function HubTab({ library, onLoad, onDownloading }: {
                       {nodes.map((n) => <option key={n.id} value={n.id} disabled={!n.online}>{n.name}{n.online ? "" : " — not connected"}</option>)}
                     </select>
                   </label>
+                  <details><summary>Then copy to</summary>
+                    <div className="col gap-sm"><p>Choose copy targets for a node-side download → verify → copy chain. All destinations must be empty. Existing copies stay in the Library.</p>
+                      <div className="ai-capacity-row" role="group" aria-label="Then copy to">{nodes.filter((n) => n.id !== targetId).map((n) => {
+                        const existing = hubPresence(libraryMatch(library, details.model.id, n.id), n.id).kind !== "none";
+                        return <label className="ai-capacity-check" key={n.id}><input type="checkbox" aria-label={`Then copy to ${n.name}`} checked={copyTargets.includes(n.id)} disabled={busy !== null || ((!n.online || existing) && !copyTargets.includes(n.id))}
+                          onChange={(e) => setCopyTargets((old) => e.target.checked ? [...old,n.id] : old.filter((id) => id !== n.id))} />{n.name}{!n.online ? " — not connected" : existing ? " — files already present" : ""}</label>;
+                      })}</div>
+                      {copyTargets.length > 0 && <span>Copy targets: {copyTargets.join(", ")}. Final review checks every destination and fabric route.</span>}
+                    </div>
+                  </details>
                   <DownloadCapacity key={`${details.model.id}:${details.model.revision}`} selection={{ repo: details.model.id, revision: details.model.revision, files: details.model.files }}
                     nodes={nodes.map((node) => {
                       const state = hubPresence(libraryMatch(library, details.model.id, node.id), node.id);

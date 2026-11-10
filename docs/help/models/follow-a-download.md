@@ -15,6 +15,8 @@ To see how a download is going, watch its row on the **Jobs** tab, where you can
 
 A **job** is long work that runs by itself on a node. Downloads and copies are both jobs.
 
+For a **Then copy to** chain, inspect every node’s row in Jobs. Use **Cancel chain…** before recovery; ordinary Resume is disabled for these rows. [Download, then copy to other nodes](help:download-a-model#download-then-copy-to-other-nodes) explains the empty-folder requirement, deadline and recovery steps.
+
 ## Before you start
 
 - You've started a download or a copy. See [Download a model](help:download-a-model).

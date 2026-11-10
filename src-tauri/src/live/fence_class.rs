@@ -1278,7 +1278,7 @@ fn sparkjob_shape(args: &str, ctx: &Ctx) -> Shape {
     // (`list > ~/.bashrc`), whatever the verb.
     let Some(words) = plain_words(words) else { return Shape::change(FenceClass::Other) };
     let Some(&verb) = words.first() else { return Shape::change(FenceClass::Other) };
-    if words.as_slice() == ["download-tools"] || words.as_slice() == ["disk-preflight"] {
+    if words.as_slice() == ["download-tools"] || words.as_slice() == ["disk-preflight"] || words.as_slice() == ["chain-preflight"] {
         return Shape::Read;
     }
     if verb == "lease" {
@@ -2049,6 +2049,8 @@ mod tests {
         let ctx = Ctx::default();
         assert_eq!(class_of(ExecKind::Sparkjob, "download-tools", &ctx), Shape::Read);
         assert_eq!(class_of(ExecKind::Sparkjob, "disk-preflight", &ctx), Shape::Read);
+        assert_eq!(class_of(ExecKind::Sparkjob, "chain-preflight", &ctx), Shape::Read);
+        assert_ne!(class_of(ExecKind::Sparkjob, "chain-preflight extra", &ctx), Shape::Read);
         for args in ["disk-preflight extra", "disk-preflight > /tmp/out", "disk-preflight; touch /tmp/out"] {
             assert_ne!(class_of(ExecKind::Sparkjob, args, &ctx), Shape::Read);
         }
