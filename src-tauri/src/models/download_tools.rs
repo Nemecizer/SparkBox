@@ -111,12 +111,27 @@ mod tests {
         assert!(node.ran("sparkjob.py start").is_empty());
         review.install_consent = true;
         let model = hf::parse_model(&json!({"id":"org/model","sha":"a".repeat(40),"siblings":[{"rfilename":"model.safetensors","size":100}]}),json!({}),None,"");
-        let job = models.download_model(&ctx, &model, &review).await.unwrap();
+        let selection = hf::DownloadSelection { repo: model.id.clone(), revision: model.revision.clone(), files: model.files.clone() };
+        for mutation in 0..4 {
+            let mut changed = model.clone();
+            match mutation {
+                0 => changed.revision = "b".repeat(40),
+                1 => changed.files[0].size = Some(101),
+                2 => changed.files.clear(),
+                _ => changed.config_error = Some("config.json (HTTP 401)".into()),
+            }
+            assert!(models.download_reviewed_model(&ctx, &selection, &changed, &review).await.is_err());
+            assert!(node.ran("sparkjob.py start").is_empty(), "no job or installation after changed review");
+        }
+        let job = models.download_reviewed_model(&ctx, &selection, &model, &review).await.unwrap();
         assert_eq!(job.node, "cell1");
         let inputs = node.stdin.lock().unwrap().clone();
         let spec: Value = serde_json::from_slice(&inputs.iter().find(|(cmd, _)| cmd.contains("sparkjob.py start download")).unwrap().1).unwrap();
         assert_eq!(spec["tool"], json!(review.tool));
         assert_eq!(spec["installConsent"], true);
+        assert_eq!(spec["revision"], selection.revision);
+        assert_eq!(spec["files"], json!(selection.files));
+        assert_eq!(spec["include"], json!([]));
         live.enforce_writes(Enforce { instance: crate::identity::instance_name().into(), fence_dir: base.join("Fence"), config_dir: Some(base.join("config")), noauth: false, tag: "tool-review-test".into(), mac: Some("test Mac".into()) });
         assert!(models.download_model(&ctx, &model, &review).await.unwrap_err().contains("fence"));
         live.set_write_policy(Arc::new(LookOnly));

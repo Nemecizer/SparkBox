@@ -13,7 +13,7 @@ related: [follow-a-download, copy-a-model-to-other-nodes, find-a-model-that-fits
 
 To put a model on your cluster, download it from Hugging Face to the node you choose.
 
-An earlier public `Qwen/Qwen3-0.6B` download passed on `cell1`: seven files, a pinned revision and publisher checksums. Target selection, tool choice, disk checks, installation and recovery have passed offline tests only.
+An earlier public `Qwen/Qwen3-0.6B` download passed on `cell1`: seven files, a pinned revision and publisher checksums. Target selection, tool choice, disk checks, revision review, installation and recovery have passed offline tests only.
 
 ## Before you start
 
@@ -36,16 +36,18 @@ An earlier public `Qwen/Qwen3-0.6B` download passed on `cell1`: seven files, a p
 1. In the sidebar, under **Workloads**, click **Models**. [Open Models](open:models?tab=hf) The **Models** window opens.
 2. Click the **Hugging Face** tab.
 3. Click a model under **Recommended for GB10**, or search for one and click its row. The right side shows the model's facts. In **Download node**, choose the node that will receive it, such as `cell2`.
-4. Read the line that starts with **Downloads**, such as "Downloads 60.8 GiB of the repo's 182 GiB". This is what the node needs to store. SparkBox leaves out copies the engine doesn't serve.
+4. In **Branch or tag**, select the version you want, or leave `main`. You can also type a branch, tag or full commit in **Revision**, then click **Inspect revision**.
+5. Read **Commit** and expand **Files to download**. A commit names one fixed version. Check the file names and sizes.
+6. Read the line that starts with **Downloads**, such as "Downloads 60.8 GiB of the repo's 182 GiB". This is what the node needs to store. SparkBox leaves out copies the engine doesn't serve.
 
 
 ### Check the disk and start
 
-5. Click **Download to cell2**, the hard drive with a down arrow. If Admin mode is locked, click **Unlock…**, then confirm with Touch ID or your Mac password.
-6. In **Choose a download tool on cell2**, select a tool and read its location or image ID. Click **Continue**. This does not install or download.
-7. Read **Destination disk** in the final dialog. It names the node, destination, available space and required space. SparkBox reads the filesystem containing that folder, or its nearest existing parent if the folder does not exist yet. It does not rely on the Dashboard's `/` disk reading.
-8. If there is enough room, review the tool and file details. Click **Download** for an existing tool, or **Install tool and download** for the displayed installation. **Cancel** changes nothing. A refusal shows the problem and offers no start button.
-9. Follow the new row on **Jobs**. **Download tool** shows the tool and version after its check.
+7. Click **Download to cell2**, the hard drive with a down arrow. If Admin mode is locked, click **Unlock…**, then confirm with Touch ID or your Mac password.
+8. In **Choose a download tool on cell2**, select a tool and read its location or image ID. Click **Continue**. This does not install or download.
+9. Read **Destination disk** in the final dialog. It names the node, destination, available space and required space. SparkBox reads the filesystem containing that folder, or its nearest existing parent if the folder does not exist yet. It does not rely on the Dashboard's `/` disk reading.
+10. If there is enough room, review the tool and file details. Click **Download** for an existing tool, or **Install tool and download** for the displayed installation. **Cancel** changes nothing. A refusal shows the problem and offers no start button.
+11. Follow the new row on **Jobs**. **Download tool** shows the tool and version after its check.
 
 
 ### Destination disk
@@ -73,9 +75,11 @@ On the **Jobs** tab, the row's **State** goes from "starting" through "downloadi
 
 ## Why it works
 
-SparkBox reads the repository details again when you start a new download, so they may have changed since you opened the model. Once the job starts, its revision and file list stay fixed. It fetches only the files the engine serves, the same list the size came from. At the end, it checks each file's size, and each large file's **checksum**, a fingerprint of its contents, against the one Hugging Face publishes. The files land in `~/models/<org>/<name>` on the node, and a record of the check gives the **✓ verified** mark.
+SparkBox pins the download to the full commit and file list you inspected. Before starting, it checks that version again and refuses a different repository, commit, file name, size or checksum. It fetches only the files the engine serves, the same list the size came from. At the end, it checks each file's size, and each large file's **checksum**, a fingerprint of its contents, against the one Hugging Face publishes. The files land in `~/models/<org>/<name>` on the node, and a record of the check gives the **✓ verified** mark.
 
 ## Limits
+
+Choosing a revision here affects new downloads. It does not replace a finished Library copy. **Load…** uses that saved copy and leaves out AI advice for a different revision.
 
 - Jobs **Resume download…** stays on its original node. Choosing a different download node does not move partial files.
 - The disk check covers the model destination. It does not reserve space, predict quotas or inode limits, or guarantee space on separate tool/cache filesystems.
@@ -84,6 +88,11 @@ SparkBox reads the repository details again when you start a new download, so th
 ## If something goes wrong
 
 The **Details** column on the **Jobs** tab shows why a job failed.
+
+- **The reviewed revision or file list no longer matches.** Click **Inspect revision** and review the refreshed commit and files. Start again only if you agree. SparkBox does not switch to a newer version by itself.
+- **config.json shows HTTP 401 or 403.** Hugging Face refused access. Accept the model license and check your token in **Settings › Models**, then inspect again. The fit table, download and AI advice stay unavailable until SparkBox can read the configuration.
+- **config.json shows HTTP 404.** That configuration file is missing at this commit. Check the selected revision. A missing or unreadable shard index also stops inspection; SparkBox does not guess which files to fetch.
+- **Branches and tags cannot be read.** Click **Refresh branches** after checking access. You can still enter a known branch, tag or full commit in **Revision** and inspect it.
 
 - **"Not enough disk space on …"** Free space on the named destination or choose another download node, then review again. Existing jobs and partial files stay intact.
 - **"Cannot check destination disk …"** Reconnect the node and check that the destination folder or its parent is accessible. SparkBox will not guess the free space.

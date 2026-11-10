@@ -26,13 +26,15 @@ const entry = (copies: Copies, key = KEY): LibraryEntry => ({ key, inUse: null, 
 
 const details = {
   model: {
-    id: REPO, revision: "abcdef0123456789", gated: false, license: null, pipeline: null, library: null, params: null, dtypes: {}, weightBytes: 30e9, downloadBytes: 30.9e9, repoBytes: 30.9e9,
-    skipped: [], weightsFormat: "safetensors", quantization: null, architectures: [], modelType: null, config: {}, visionConfig: null, files: [], readmeExcerpt: "", mlx: false,
+    id: REPO, revision: "a".repeat(40), gated: false, license: null, pipeline: null, library: null, params: null, dtypes: {}, weightBytes: 30e9, downloadBytes: 30.9e9, repoBytes: 30.9e9,
+    skipped: [], weightsFormat: "safetensors", quantization: null, architectures: [], modelType: null, config: {}, visionConfig: null, files: [{ path: "model.safetensors", size: 30.9e9, sha256: "c".repeat(64) }], readmeExcerpt: "", mlx: false,
   },
   arch: {}, kvBytesPerToken: null, fit: [], fitFp8: [], nodeMemory: 128e9, nodesAvailable: 4,
 } as unknown as ModelDetails;
 
-async function show(library: LibraryEntry[], onLoad = vi.fn(), extra: Record<string, () => unknown> = {}, state = UNLOCKED) {
+const selection = { repo: REPO, revision: details.model.revision, files: details.model.files };
+
+async function show(library: LibraryEntry[], onLoad = vi.fn(), extra: Record<string, (...args: any[]) => unknown> = {}, state = UNLOCKED) {
   resetStore();
   mockTauri(Object.assign({}, defaultHandlers(), ...MOCKS, {
     get_snapshot: () => ({ ...(structuredClone(baseSnapshot) as ClusterSnapshot), tsMs: Date.now(), demo: false }),
@@ -60,6 +62,96 @@ const button = (name: string | RegExp) => screen.queryByRole("button", { name })
 const head = () => (baseSnapshot as ClusterSnapshot).nodes[0].id;
 
 afterEach(() => vi.restoreAllMocks());
+
+describe("reviewed revision and files", () => {
+  it("passes the same full commit and manifest to disk review and start", async () => {
+    const confirm = vi.spyOn(session, "confirmAction").mockResolvedValue(true);
+    await show([]);
+    expect(screen.getByText(`Commit ${selection.revision}`)).toBeTruthy();
+    expect(screen.getByText("Files to download (1)")).toBeTruthy();
+    await act(async () => { fireEvent.click(button(`Download to ${head()}`) as HTMLElement); });
+    expect(mockCalls.find((c) => c.cmd === "model_disk_preflight")?.args).toEqual({ request: { kind: "download", node: head(), selection } });
+    expect(mockCalls.find((c) => c.cmd === "model_download")?.args).toMatchObject({ selection });
+    const text = render(<>{confirm.mock.calls[1][0].body}</>).container.textContent;
+    expect(text).toContain(selection.revision);
+    expect(text).toContain("Any mismatch stops the download");
+  });
+
+  it("selects a branch snapshot by full commit and does not use main for the new download", async () => {
+    vi.spyOn(session, "confirmAction").mockResolvedValue(true);
+    const commit = "b".repeat(40);
+    const changed = { ...details, model: { ...details.model, revision: commit, files: [{ path: "new.safetensors", size: 123, sha256: null }] } };
+    await show([], vi.fn(), {
+      hf_refs: () => [{ name: "release/test", kind: "branch", revision: commit }],
+      hf_model: ({ revision }) => revision === commit ? changed : details,
+    });
+    await act(async () => { fireEvent.change(screen.getByLabelText("Branch or tag"), { target: { value: "0" } }); });
+    expect(mockCalls.filter((c) => c.cmd === "hf_model").at(-1)?.args).toEqual({ repo: REPO, revision: commit });
+    expect(screen.getByText(`Commit ${commit}`)).toBeTruthy();
+    await act(async () => { fireEvent.click(button(`Download to ${head()}`) as HTMLElement); });
+    expect(mockCalls.find((c) => c.cmd === "model_download")?.args).toMatchObject({ selection: { repo: REPO, revision: commit, files: changed.model.files } });
+  });
+
+  it("a typed revision needs inspection and a failed inspection cannot leave an old download available", async () => {
+    await show([], vi.fn(), { hf_model: ({ revision }) => { if (revision) throw new Error("Revision missing (HTTP 404)"); return details; } });
+    await act(async () => { fireEvent.change(screen.getByLabelText("Revision"), { target: { value: "missing" } }); });
+    expect((button(`Download to ${head()}`) as HTMLButtonElement).disabled).toBe(true);
+    await act(async () => { fireEvent.click(button("Inspect revision") as HTMLElement); });
+    expect(screen.getByText("Revision missing (HTTP 404)")).toBeTruthy();
+    expect(button(`Download to ${head()}`)).toBeNull();
+    expect(screen.queryByText(`Commit ${selection.revision}`)).toBeNull();
+  });
+
+  it.each([401, 403, 404])("shows config HTTP %s instead of a blank fit table and blocks download and AI", async (status) => {
+    const configError = `config.json (HTTP ${status}): review access to this revision.`;
+    await show([], vi.fn(), { hf_model: () => ({ ...details, model: { ...details.model, configError } }) });
+    expect(screen.getByText(configError)).toBeTruthy();
+    expect(screen.queryByText(/Fit on 4/)).toBeNull();
+    expect((button(`Download to ${head()}`) as HTMLButtonElement).disabled).toBe(true);
+    expect((button("Check with AI") as HTMLButtonElement).disabled).toBe(true);
+    expect(mockCalls.some((c) => c.cmd === "model_download_tools")).toBe(false);
+  });
+
+  it("reports a branch-list failure but still allows an exact revision inspection", async () => {
+    await show([], vi.fn(), { hf_refs: () => { throw new Error("Access refused"); } });
+    expect(screen.getByText(/Branches and tags: Access refused/)).toBeTruthy();
+    await act(async () => { fireEvent.change(screen.getByLabelText("Revision"), { target: { value: selection.revision } }); });
+    await act(async () => { fireEvent.click(button("Inspect revision") as HTMLElement); });
+    expect(mockCalls.filter((c) => c.cmd === "hf_model").at(-1)?.args).toEqual({ repo: REPO, revision: selection.revision });
+  });
+
+  it("ignores a late response for a previously selected repository", async () => {
+    let finish: (value: ModelDetails) => void = () => {};
+    let first = true;
+    await show([], vi.fn(), { hf_model: ({ repo }) => {
+      if (first) { first = false; return new Promise<ModelDetails>((resolve) => { finish = resolve; }); }
+      return { ...details, model: { ...details.model, id: repo, revision: "b".repeat(40) } };
+    } });
+    await act(async () => { fireEvent.click(screen.getByText("openai/gpt-oss-120b")); });
+    await act(async () => { finish(details); });
+    expect(screen.getByText(`Commit ${"b".repeat(40)}`)).toBeTruthy();
+    expect(screen.queryByText(`Commit ${selection.revision}`)).toBeNull();
+  });
+
+  it("a rejected manifest starts nothing and retains the reviewed details for a deliberate refresh", async () => {
+    vi.spyOn(session, "confirmAction").mockResolvedValue(true);
+    await show([], vi.fn(), { model_disk_preflight: () => { throw new Error("The reviewed revision or file list no longer matches Hugging Face."); } });
+    await act(async () => { fireEvent.click(button(`Download to ${head()}`) as HTMLElement); });
+    expect(screen.getByText(/no longer matches Hugging Face/)).toBeTruthy();
+    expect(mockCalls.some((c) => c.cmd === "model_download")).toBe(false);
+    expect(screen.getByText(`Commit ${selection.revision}`)).toBeTruthy();
+  });
+
+  it("does not apply advice for the inspected revision to a different saved Library copy", async () => {
+    const advice = { analysis: { recommended: { nodes: 1, maxModelLen: 8192, gpuMemoryUtilization: 0.75 }, verdict: "good", summary: "Fixture", engineSupport: {}, alternatives: [], risks: [], betterVariant: {} }, notApplied: [], allowedArgs: [] };
+    const onLoad = await show([entry({ cell1: copy() })], vi.fn(), { models_analyze: () => advice });
+    await act(async () => { fireEvent.click(button("Check with AI") as HTMLElement); });
+    expect(mockCalls.find((c) => c.cmd === "models_analyze")?.args).toEqual({ repo: REPO, revision: selection.revision });
+    expect(screen.getByText(/Load uses the saved Library copy at revision abc/)).toBeTruthy();
+    await act(async () => { fireEvent.click(button("Load…") as HTMLElement); });
+    expect(onLoad).toHaveBeenCalledWith(expect.objectContaining({ key: KEY, rec: undefined, allowed: undefined }));
+  });
+});
 
 describe("hubPresence", () => {
   it("reads only the selected download node", () => {
@@ -100,7 +192,7 @@ describe("download target", () => {
     await choose(fourth.id);
     await act(async () => { fireEvent.click(button("Download to Office Spark") as HTMLElement); });
     expect(mockCalls.find((c) => c.cmd === "model_download_tools")?.args).toEqual({ node: fourth.id });
-    expect(mockCalls.find((c) => c.cmd === "model_download")?.args).toMatchObject({ repo: REPO, review: { node: fourth.id, installConsent: false } });
+    expect(mockCalls.find((c) => c.cmd === "model_download")?.args).toMatchObject({ selection, review: { node: fourth.id, installConsent: false } });
     expect(confirm.mock.calls[1][0].title).toBe(`Download ${REPO} to Office Spark?`);
   });
 
@@ -184,7 +276,7 @@ describe("the Hugging Face tab", () => {
     });
     expect(confirm).toHaveBeenCalledWith(expect.objectContaining({ title: `Download ${REPO} again to ${head()}?`, confirmLabel: "Download again" }));
     expect(render(<>{confirm.mock.calls[1][0].body}</>).container.textContent).toContain("For the original revision and files, use Resume download… in Jobs.");
-    expect(mockCalls.find((c) => c.cmd === "model_download")?.args).toMatchObject({ repo: REPO });
+    expect(mockCalls.find((c) => c.cmd === "model_download")?.args).toMatchObject({ selection });
   });
 
   it("says a running download is running, with no button to start another", async () => {
@@ -212,7 +304,7 @@ it.each([true, false])("managed installation needs a second concrete consent: %s
   expect(confirm.mock.calls[1][0]).toMatchObject({ confirmLabel: "Install tool and download", danger: true });
   expect(render(<>{confirm.mock.calls[1][0].body}</>).container.textContent).toContain("Existing tool folders are not replaced");
   const start = mockCalls.find((c) => c.cmd === "model_download");
-  if (accept) expect(start?.args).toEqual({ repo: REPO, review: { node: head(), tool: inventory.options[0], installConsent: true } });
+  if (accept) expect(start?.args).toEqual({ selection, review: { node: head(), tool: inventory.options[0], installConsent: true } });
   else expect(start).toBeUndefined();
 });
 
@@ -229,7 +321,7 @@ it("continues to tool review after the normal Admin unlock without another click
 it.each(["low", "unknown", "changed"])("refuses a %s destination without retrying or choosing another node", async (mode) => {
   const confirm = vi.spyOn(session, "confirmAction").mockResolvedValue(true);
   const alert = vi.spyOn(session, "alertInfo").mockResolvedValue(undefined);
-  const checks = demoDiskPreflight({ kind: "download", node: head(), repo: REPO });
+  const checks = demoDiskPreflight({ kind: "download", node: head(), selection });
   if (mode === "low") checks[0] = { ...checks[0], availableBytes: 1, ok: false };
   await show([], vi.fn(), {
     model_disk_preflight: () => { if (mode === "unknown") throw new Error("Cannot read destination disk"); return checks; },
@@ -237,14 +329,14 @@ it.each(["low", "unknown", "changed"])("refuses a %s destination without retryin
   });
   await act(async () => { fireEvent.click(button(`Download to ${head()}`) as HTMLElement); });
   expect(mockCalls.filter((c) => c.cmd === "model_download")).toHaveLength(mode === "changed" ? 1 : 0);
-  expect(mockCalls.find((c) => c.cmd === "model_disk_preflight")?.args).toEqual({ request: { kind: "download", node: head(), repo: REPO } });
+  expect(mockCalls.find((c) => c.cmd === "model_disk_preflight")?.args).toEqual({ request: { kind: "download", node: head(), selection } });
   expect(confirm).toHaveBeenCalledTimes(mode === "changed" ? 2 : 1);
   if (mode === "low") expect(alert).toHaveBeenCalledWith(expect.objectContaining({ title: "Not enough destination space" }));
   else expect(screen.getByText(mode === "unknown" ? "Cannot read destination disk" : "Not enough disk space now")).toBeTruthy();
 });
 
 it("shows the full disk warning and reserve before a download can be approved", async () => {
-  const checks = demoDiskPreflight({ kind: "download", node: head(), repo: REPO });
+  const checks = demoDiskPreflight({ kind: "download", node: head(), selection });
   checks[0].warning = "This disk could be 88% full after the transfer.";
   const confirm = vi.spyOn(session, "confirmAction").mockResolvedValueOnce(true).mockResolvedValueOnce(false);
   await show([], vi.fn(), { model_disk_preflight: () => checks });

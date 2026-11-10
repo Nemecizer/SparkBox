@@ -70,7 +70,7 @@ If the disk check refuses, no new attempt starts and the old record and partial 
 
 New downloads save a plan without your token. Resume obtains the current token from Keychain and checks the saved plan and folder before starting. It refuses a changed plan, another SparkBox’s job or a folder now owned by a newer attempt. If refused, refresh Jobs and the Library and read the latest row’s details.
 
-An older job without a saved plan cannot use this button. Open the model on **Hugging Face**, review its details and select that job's original node in **Download node** and choose **Download again**. That action checks the repository anew and may select a newer revision; it does not promise the original file list. Recovery and node-restart detection have been tested offline only.
+An older job without a saved plan cannot use this button. Open the model on **Hugging Face**, review its details and select that job's original node in **Download node** and choose **Download again**. That action uses the commit and file list you inspect now; it does not recover the old plan. Check **Commit** and **Files to download** before approving. Recovery and node-restart detection have been tested offline only.
 
 To start from the beginning instead, delete the folder first. On the **Library** tab, select the model, click **Delete…**, select the node and click **Delete…** again. [Delete a model from a node](help:delete-a-model) has the details.
 

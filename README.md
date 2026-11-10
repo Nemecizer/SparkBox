@@ -6,6 +6,7 @@ This is a **prerelease** prepared for public distribution. It targets Apple Sili
 
 ## Start here
 
+- [Current offline development checkpoint](docs/START_HERE.md)
 - [Build from source](docs/BUILDING.md)
 - [Prepare a signed, notarized release](docs/RELEASING.md)
 - [What is tested and what remains](docs/RELEASE-NOTES.md)
@@ -32,4 +33,4 @@ This export starts a new history. It includes application sources, Rust/Python/G
 
 The application identifier `com.nemecj.sparkbox` is retained for signing, Keychain and saved-data compatibility. It is a public application identifier, not a credential. Fixture hostnames, user accounts, addresses and captured device-specific MAC bytes are substituted consistently; measurements and validation assertions remain.
 
-Original SparkBox code is available under the MIT license selected by its copyright owner. See [license status](docs/LICENSE-STATUS.md). Third-party components retain their own licenses. No GitHub repository, tag or release has been published by this preparation.
+Original SparkBox code is available under the MIT license selected by its copyright owner. See [license status](docs/LICENSE-STATUS.md). Third-party components retain their own licenses. The public v0.1.0 baseline is `3121d96`. Later development candidates are not published automatically.

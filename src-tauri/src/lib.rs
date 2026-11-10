@@ -719,15 +719,20 @@ async fn hf_search(state: State<'_, AppState>, query: String) -> Result<Vec<Sear
 }
 
 #[tauri::command]
-async fn hf_model(state: State<'_, AppState>, repo: String) -> Result<ModelDetails, String> {
+async fn hf_model(state: State<'_, AppState>, repo: String, revision: Option<String>) -> Result<ModelDetails, String> {
     let ctx = models_ctx(&state);
-    state.models.details(&ctx, &repo).await
+    state.models.details(&ctx, &repo, revision.as_deref()).await
 }
 
 #[tauri::command]
-async fn models_analyze(state: State<'_, AppState>, repo: String) -> Result<AnalysisResult, String> {
+async fn hf_refs(state: State<'_, AppState>, repo: String) -> Result<Vec<models::hf::HfRef>, String> {
+    state.models.hf_refs(&repo).await
+}
+
+#[tauri::command]
+async fn models_analyze(state: State<'_, AppState>, repo: String, revision: Option<String>) -> Result<AnalysisResult, String> {
     let ctx = models_ctx(&state);
-    state.models.analyze(&ctx, &repo).await
+    state.models.analyze(&ctx, &repo, revision.as_deref()).await
 }
 
 #[tauri::command]
@@ -767,10 +772,10 @@ async fn model_download_tools(state: State<'_, AppState>, node: String) -> Resul
 }
 
 #[tauri::command]
-async fn model_download(app: AppHandle, state: State<'_, AppState>, repo: String, review: models::DownloadToolReview) -> Result<Job, String> {
+async fn model_download(app: AppHandle, state: State<'_, AppState>, selection: models::hf::DownloadSelection, review: models::DownloadToolReview) -> Result<Job, String> {
     admin::require(&app)?;
     let ctx = models_ctx(&state);
-    state.models.download(&ctx, &repo, &review).await
+    state.models.download(&ctx, &selection, &review).await
 }
 
 #[tauri::command]
@@ -1762,6 +1767,7 @@ pub fn run() {
             known_hosts_forget,
             hf_search,
             hf_model,
+            hf_refs,
             models_analyze,
             library_list,
             jobs_list,

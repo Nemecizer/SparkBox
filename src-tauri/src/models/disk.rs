@@ -26,7 +26,7 @@ pub struct DiskCheck {
 #[derive(Debug, Deserialize)]
 #[serde(tag = "kind", rename_all = "camelCase", deny_unknown_fields)]
 pub enum DiskRequest {
-    Download { node: String, repo: String },
+    Download { node: String, selection: hf::DownloadSelection },
     Resume { node: String, id: String, expected: DownloadResume },
     Copy { key: String, targets: Vec<String> },
 }
@@ -75,17 +75,17 @@ impl Models {
         Ok(check)
     }
 
-    /// A review reads only; every start repeats admission with its own fresh file list.
+    /// A review reads only; every start repeats admission against the same reviewed file list.
     pub async fn disk_preflight(&self, ctx: &Ctx, request: &DiskRequest) -> Result<Vec<DiskCheck>, String> {
         match request {
-            DiskRequest::Download { node, repo } => {
+            DiskRequest::Download { node, selection } => {
                 // Check identity/connection before any Hugging Face request.
                 if !ctx.node_ids().contains(node) || (ctx.live && !ctx.online().contains(node)) { return Err("Choose a connected inventory node.".into()); }
                 // Native Demo already reads Hugging Face metadata for details/downloads;
                 // simulate storage capacity, not the model's transfer size.
-                let model = hf::model(&self.http, Self::hf_token().as_deref(), repo).await?;
+                let model = self.reviewed_model(selection).await?;
                 let bytes = file_bytes(&json!(model.files))?;
-                Ok(vec![self.destination_disk(ctx, node, &format!("{}/{}", ctx.settings.model_root.trim_end_matches('/'), repo), bytes).await?])
+                Ok(vec![self.destination_disk(ctx, node, &format!("{}/{}", ctx.settings.model_root.trim_end_matches('/'), model.id), bytes).await?])
             }
             DiskRequest::Resume { node, id, expected } => {
                 if !ctx.node_ids().contains(node) || (ctx.live && !ctx.online().contains(node)) { return Err("Choose a connected inventory node.".into()); }

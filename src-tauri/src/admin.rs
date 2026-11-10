@@ -360,6 +360,7 @@ pub const READ_ONLY: &[(&str, &str)] = &[
     // ── r2-ai ──
     ("hf_search", "searches Hugging Face from this Mac"),
     ("hf_model", "reads a model's files, config and fit from Hugging Face"),
+    ("hf_refs", "reads branch and tag names and commits from Hugging Face; no node or repository writes"),
     ("models_analyze", "asks the advisor model about a Hugging Face model; changes nothing"),
     ("library_list", "lists the model folders on the nodes"),
     ("model_download_tools", "reads executable fingerprints, managed-tool receipts and local image IDs; executes no hf command and installs nothing"),

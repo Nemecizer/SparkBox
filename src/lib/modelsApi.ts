@@ -522,10 +522,11 @@ export const modelsApi = {
   deploymentHistory: () => invoke<DeploymentHistoryView>("deployment_history_list"),
   deploymentHistoryFile: (name: string, bytes: number[]) => invoke<DeploymentHistorySource>("deployment_history_file", { name, bytes }),
   deploymentsList: () => invoke<Deployment[]>("deployments_list"),
-  hfModel: (repo: string) => invoke<ModelDetails>("hf_model", { repo }),
+  hfModel: (repo: string, revision?: string) => invoke<ModelDetails>("hf_model", { repo, revision }),
+  hfRefs: (repo: string) => invoke<import("./types").HfRef[]>("hf_refs", { repo }),
   /** A search row's size from its files (the detail's own reading), kept a day. */
   hfSize: (repo: string) => invoke<HfSizing>("hf_size", { repo }),
-  modelsAnalyze: (repo: string) => invoke<AnalysisResult>("models_analyze", { repo }),
+  modelsAnalyze: (repo: string, revision?: string) => invoke<AnalysisResult>("models_analyze", { repo, revision }),
   libraryList: () => invoke<LibraryEntry[]>("library_list"),
   /** A folder's config summary for the Library's detail pane (reads config.json once). */
   libraryDetail: (key: string) => invoke<LibraryDetail>("library_detail", { key }),

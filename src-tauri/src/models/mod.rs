@@ -1223,8 +1223,19 @@ impl Models {
         Ok(s)
     }
 
-    pub async fn details(&self, ctx: &Ctx, repo: &str) -> Result<ModelDetails, String> {
-        let model = hf::model(&self.http, Self::hf_token().as_deref(), repo).await?;
+    pub async fn hf_refs(&self, repo: &str) -> Result<Vec<hf::HfRef>, String> {
+        hf::refs(&self.http, Self::hf_token().as_deref(), repo).await
+    }
+
+    pub async fn reviewed_model(&self, selection: &hf::DownloadSelection) -> Result<HfModel, String> {
+        selection.validate()?;
+        let model = hf::model_at(&self.http, Self::hf_token().as_deref(), &selection.repo, Some(&selection.revision)).await?;
+        selection.check(&model)?;
+        Ok(model)
+    }
+
+    pub async fn details(&self, ctx: &Ctx, repo: &str, revision: Option<&str>) -> Result<ModelDetails, String> {
+        let model = hf::model_at(&self.http, Self::hf_token().as_deref(), repo, revision).await?;
         // The list sizes this repo the same way from now on.
         let sizing = hf::Sizing {
             id: model.id.clone(),
@@ -1234,7 +1245,7 @@ impl Models {
             mlx: model.mlx,
             gguf: model.skipped.iter().any(|x| x.what == "GGUF files"),
         };
-        self.hf_sizes.lock().unwrap().insert(model.id.clone(), (Instant::now(), sizing));
+        if revision.is_none() { self.hf_sizes.lock().unwrap().insert(model.id.clone(), (Instant::now(), sizing)); }
         let mut arch = fit::arch_facts(&model.config);
         arch.vision_bytes = fit::vision_bytes(&model.vision_config);
         arch.sparse_mla = fit::sparse_mla(&model.config, &model.architectures);
@@ -1249,7 +1260,7 @@ impl Models {
         let table = |kv: Option<&str>| {
             // Every Spark is a GB10 (compute 12.1).
             let opts = fit::FitOptions { kv_dtype: kv.map(String::from), free_now: free_now.clone(), gb10: true, blocked: recipe::view_for(&model.id, None).note.filter(|_| recipe::view_for(&model.id, None).placeholder) };
-            if model.mlx { Vec::new() } else { fit::fit_table_with(model.weight_bytes, &arch, node_memory, nodes_available, &opts) }
+            if model.mlx || model.config_error.is_some() { Vec::new() } else { fit::fit_table_with(model.weight_bytes, &arch, node_memory, nodes_available, &opts) }
         };
         Ok(ModelDetails {
             kv_bytes_per_token: fit::kv_bytes_per_token(&arch),
@@ -1262,9 +1273,10 @@ impl Models {
         })
     }
 
-    pub async fn analyze(&self, ctx: &Ctx, repo: &str) -> Result<AnalysisResult, String> {
-        let d = self.details(ctx, repo).await?;
+    pub async fn analyze(&self, ctx: &Ctx, repo: &str, revision: Option<&str>) -> Result<AnalysisResult, String> {
+        let d = self.details(ctx, repo, revision).await?;
         let m = &d.model;
+        if let Some(error) = &m.config_error { return Err(error.clone()); }
         let checks = self.checks.lock().unwrap().clone();
         let nodes = ctx
             .snapshot
@@ -1433,10 +1445,16 @@ impl Models {
     }
 
     /// Downloads to the explicitly reviewed inventory node; never falls back to another node.
-    pub async fn download(self: &Arc<Self>, ctx: &Ctx, repo: &str, review: &DownloadToolReview) -> Result<Job, String> {
+    pub async fn download(self: &Arc<Self>, ctx: &Ctx, selection: &hf::DownloadSelection, review: &DownloadToolReview) -> Result<Job, String> {
+        selection.validate()?;
         self.check_download_tool(ctx, &review.node, review).await?;
-        let model = hf::model(&self.http, Self::hf_token().as_deref(), repo).await?;
-        self.download_model(ctx, &model, review).await
+        let model = self.reviewed_model(selection).await?;
+        self.download_reviewed_model(ctx, selection, &model, review).await
+    }
+
+    async fn download_reviewed_model(self: &Arc<Self>, ctx: &Ctx, selection: &hf::DownloadSelection, model: &HfModel, review: &DownloadToolReview) -> Result<Job, String> {
+        selection.check(model)?;
+        self.download_model(ctx, model, review).await
     }
 
     /// `download`, once the model is read from Hugging Face.

@@ -529,7 +529,7 @@ export const handlers: MockHandlers = {
   job_cancel: ({ id }: { id: string }) => cancelDemoDownload(id),
   job_resume_download: resumeDemoDownload,
   model_download_tools: ({ node }: { node: string }) => demoDownloadTools(node),
-  model_disk_preflight: ({ request }: { request: DiskRequest }) => demoDiskPreflight(request, request.kind === "download" ? details(request.repo).model.downloadBytes : undefined),
+  model_disk_preflight: ({ request }: { request: DiskRequest }) => demoDiskPreflight(request, request.kind === "download" ? details(request.selection.repo).model.downloadBytes : undefined),
   model_download: startDemoDownload,
   deployment_history_list: () => demoHistory(),
   deployment_history_file: () => { throw new Error("Demo shows samples only. Choose Live to view a local report file."); },
@@ -577,7 +577,19 @@ export const handlers: MockHandlers = {
     { id: "Qwen/Qwen3.8-235B-A22B-FP8", downloads: 19_022, likes: 640, pipeline: "text-generation", tags: [], lastModified: new Date(Date.now() - 12 * 86400_000).toISOString(), params: 235_000_000_000, weightBytes: 236_000_000_000, minNodes: 3 },
     { id: "Qwen/Qwen3-Embedding-8B", downloads: 230_118, likes: 401, pipeline: "feature-extraction", tags: [], lastModified: new Date(Date.now() - 140 * 86400_000).toISOString(), params: 7_600_000_000, weightBytes: 15_200_000_000, minNodes: 1 },
   ],
-  hf_model: ({ repo }: { repo: string }) => ({ ...details(repo), model: { ...details(repo).model, id: repo, mlx: MLX.test(repo) } }),
+  hf_refs: ({ repo }: { repo: string }) => [
+    { name: "main", kind: "branch", revision: details(repo).model.revision },
+    { name: "example-release", kind: "tag", revision: "b".repeat(40) },
+  ],
+  hf_model: ({ repo, revision }: { repo: string; revision?: string }) => {
+    const d = details(repo);
+    return { ...d, model: { ...d.model, id: repo, mlx: MLX.test(repo),
+      revision: revision && /^[a-f0-9]{40}$/.test(revision) ? revision : d.model.revision,
+      files: [{ path: "model.safetensors", size: d.model.weightBytes, sha256: "c".repeat(64) },
+        { path: "config.json", size: d.model.downloadBytes - d.model.weightBytes, sha256: null }],
+      configError: new URLSearchParams(location.search).get("hf") === "config-error" ? "config.json (HTTP 403): Demo access refused. Fit estimates and download are unavailable." : null,
+    } };
+  },
   // Rust hf::sizing: the served weights from each repo's files (the numbers are those repos' real ones).
   hf_size: ({ repo }: { repo: string }) =>
     new Promise((resolve) => window.setTimeout(() => resolve({ id: repo, minNodes: 1, gguf: /GGUF/.test(repo), mlx: MLX.test(repo), weightsFormat: /GGUF/.test(repo) ? "none" : "safetensors", weightBytes: SIZES[repo] ?? 30_923_764_531, ...(SIZES[repo] && SIZES[repo] > 105 * GiB ? { minNodes: 2 } : {}) }), 300 + Math.random() * 700)),

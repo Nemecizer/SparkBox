@@ -50,7 +50,7 @@ export function FitTable({ details }: { details: ModelDetails }) {
   const [kv, setKv] = useState<"bf16" | "fp8">("bf16");
   useEffect(() => {
     setKv(details.fit.some((r) => r.noKernel) && details.fitFp8.some((r) => !r.noKernel) ? "fp8" : "bf16");
-  }, [details.model.id]);
+  }, [details.model.id, details.model.revision]);
   const seen = seenRun(useDeployments(), details.model.id);
   const rows = kv === "fp8" ? details.fitFp8 : details.fit;
   const noKernel = rows.find((r) => r.noKernel)?.noKernel;

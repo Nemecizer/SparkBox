@@ -10,7 +10,7 @@ import { fmtBytes } from "../../lib/format";
 import { finishedCopy, finishedNodes, MLX_NOTE, modelsApi, type AnalysisResult, type HfHit, type LibraryEntry, type ModelDetails } from "../../lib/modelsApi";
 import { confirmAction } from "../../lib/session";
 import { toast } from "../../lib/toasts";
-import type { Analysis } from "../../lib/types";
+import type { Analysis, DownloadSelection, HfRef } from "../../lib/types";
 import { useWinState } from "../../wm/WindowManager";
 import { chooseDownloadTool, downloadToolConsent } from "./DownloadToolChoice";
 import { checkTransferDisk, DiskPreflight } from "./DiskPreflight";
@@ -105,6 +105,10 @@ export function HubTab({ library, onLoad, onDownloading }: {
   const [searching, setSearching] = useState(false);
   const [repo, setRepo] = useState<string | null>(null);
   const [details, setDetails] = useState<ModelDetails | null>(null);
+  const [revisionInput, setRevisionInput] = useState("main");
+  const [inspectedRevision, setInspectedRevision] = useState("main");
+  const inspection = useRef(0);
+  useEffect(() => () => { inspection.current++; }, []);
   const [analysis, setAnalysis] = useState<AnalysisResult | null>(null);
   const [busy, setBusy] = useState<"details" | "analysis" | "download" | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -131,41 +135,47 @@ export function HubTab({ library, onLoad, onDownloading }: {
     window.addEventListener("pointerup", up);
   };
 
-  const inspect = async (id: string) => {
+  const inspect = async (id: string, revision = "main") => {
+    if (busy === "download" || busy === "analysis") return;
+    const request = ++inspection.current;
+    revision = revision.trim();
+    setRevisionInput(revision);
+    setInspectedRevision(revision);
     setRepo(id);
     setDetails(null);
     setAnalysis(null);
     setError(null);
     setBusy("details");
     try {
-      const d = await modelsApi.hfModel(id);
+      const d = await modelsApi.hfModel(id, revision === "main" ? undefined : revision);
+      if (request !== inspection.current) return;
       setDetails(d);
       setRepo(d.model.id);
       // The row says what the detail says. With no bf16 kernel on GB10 (sparse MLA), the fewest
       // Sparks are the FP8 table's, not "more than 4".
       const bf16 = d.fit.find((r) => r.fits)?.nodes ?? null;
       const fp8 = bf16 == null && d.fit.some((r) => r.noKernel) ? (d.fitFp8?.find((r) => r.fits)?.nodes ?? null) : null;
-      noteSize({
+      if (revision === "main") noteSize({
         id: d.model.id, weightBytes: d.model.weightBytes, weightsFormat: d.model.weightsFormat, mlx: !!d.model.mlx,
         minNodes: bf16 ?? fp8, kvFp8: fp8 != null, gguf: d.model.skipped.some((x) => /GGUF/.test(x.what)),
       });
     } catch (e) {
-      setError(errText(e));
+      if (request === inspection.current) setError(errText(e));
     } finally {
-      setBusy(null);
+      if (request === inspection.current) setBusy(null);
     }
   };
 
   const search = async () => {
     const q = query.trim();
     if (!q) return;
+    setError(null);
     // A pasted repo id or huggingface.co link goes straight to its details.
     if (/^https?:\/\/huggingface\.co\//.test(q) || /^[\w.-]+\/[\w.-]+$/.test(q)) inspect(q);
     setSearching(true);
     try {
       setHits((await api.hfSearch(q.replace(/^https?:\/\/huggingface\.co\//, ""))) as Hit[]);
       setTask(null);
-      setError(null);
     } catch (e) {
       setError(errText(e));
     } finally {
@@ -178,7 +188,7 @@ export function HubTab({ library, onLoad, onDownloading }: {
     setBusy("analysis");
     setError(null);
     try {
-      setAnalysis(await modelsApi.modelsAnalyze(repo));
+      setAnalysis(await modelsApi.modelsAnalyze(repo, details?.model.revision));
     } catch (e) {
       setError(errText(e));
     } finally {
@@ -187,7 +197,8 @@ export function HubTab({ library, onLoad, onDownloading }: {
   };
 
   const download = async () => {
-    if (!repo || !details || !target?.online || !isAdminUnlocked() || busy === "download") return;
+    if (!repo || !details || details.model.configError || revisionInput.trim() !== inspectedRevision || !target?.online || !isAdminUnlocked() || busy === "download") return;
+    const selection: DownloadSelection = { repo: details.model.id, revision: details.model.revision, files: structuredClone(details.model.files) };
     const head = target.name;
     const resume = presence.kind === "incomplete";
     setBusy("download");
@@ -195,18 +206,18 @@ export function HubTab({ library, onLoad, onDownloading }: {
     try {
       const review = await chooseDownloadTool(target.id);
       if (!review) return;
-      const checks = await checkTransferDisk({ kind: "download", node: target.id, repo });
+      const checks = await checkTransferDisk({ kind: "download", node: target.id, selection });
       if (!checks) return;
       const installing = review.tool.kind === "install";
       const ok = await confirmAction({
         title: installing ? `Install the tool and download ${repo} to ${head}?` : resume ? `Download ${repo} again to ${head}?` : `Download ${repo} to ${head}?`,
-        body: <div className="col gap-md"><DiskPreflight checks={checks} /><p>{`${downloadToolConsent(review)} ${resume ? "For the original revision and files, use Resume download… in Jobs. Download again checks Hugging Face anew and may use a newer revision. " : ""}${fmtBytes(details.model.downloadBytes)}: the weights vLLM serves and their config, shown at revision ${details.model.revision.slice(0, 12)}${details.model.skipped.length ? ` (not ${details.model.skipped.map((x) => x.what).join(" or ")})` : ""}. The current repository details are checked again when it starts. The downloaded files are verified. Keep SparkBox open and this Mac awake; unattended recovery is not proven on your cluster.`}</p></div>,
+        body: <div className="col gap-md"><DiskPreflight checks={checks} /><p>{`${downloadToolConsent(review)} ${resume ? "For the original revision and files, use Resume download… in Jobs. Download again uses the revision inspected here. " : ""}${fmtBytes(details.model.downloadBytes)} in ${selection.files.length} files: the weights vLLM serves and their config${details.model.skipped.length ? ` (not ${details.model.skipped.map((x) => x.what).join(" or ")})` : ""}. SparkBox rechecks this exact commit and file list before starting. Any mismatch stops the download for a new review. The downloaded files are verified. Keep SparkBox open and this Mac awake; unattended recovery is not proven on your cluster.`}</p><span className="mono wrap">Commit {selection.revision}</span></div>,
         confirmLabel: installing ? "Install tool and download" : resume ? "Download again" : "Download",
         danger: installing,
       });
       if (!ok) return;
       review.installConsent = installing;
-      await api.modelDownload(repo, review);
+      await api.modelDownload(selection, review);
       toast({ kind: "info", title: `Downloading ${repo}`, body: `To ${head}. Follow it in Jobs.` });
       onDownloading();
     } catch (e) {
@@ -324,6 +335,8 @@ export function HubTab({ library, onLoad, onDownloading }: {
               body="Search for a model, or pick one on the left, to see how much memory it needs and how many Sparks it takes." />
           )}
           {repo && busy === "details" && <LoadingState label={`Reading ${repo} from Hugging Face…`} />}
+          {repo && <RevisionPicker repo={repo} value={revisionInput} onChange={setRevisionInput} onInspect={(revision) => inspect(repo, revision)} busy={busy !== null} />}
+          {details && revisionInput.trim() !== inspectedRevision && <Notice tone="info">Click Inspect revision to review this choice before downloading.</Notice>}
           {details && (
             <ModelFacts details={details} downloadTarget={!details.model.mlx && <>
                   <label className="row wrap gap-sm">Download node <HelpTip topic="models.hub.download-target" />
@@ -338,7 +351,7 @@ export function HubTab({ library, onLoad, onDownloading }: {
               {/* MLX weights don't run on a GB10: nothing to analyze, download or load. */}
               {!details.model.mlx && (
                 <>
-                  <ToolButton icon={Sparkles} label={busy === "analysis" ? "Analyzing…" : "Check with AI"} onClick={analyze} disabled={busy !== null}
+                  <ToolButton icon={Sparkles} label={busy === "analysis" ? "Analyzing…" : "Check with AI"} onClick={analyze} disabled={busy !== null || !!details.model.configError || revisionInput.trim() !== inspectedRevision}
                     title="Ask your Anthropic or OpenAI model (Settings › Models) whether this serves well on the cluster, and how to split it" />
                   <HelpTip topic="models.hub.check-with-ai" />
                   {ready && (
@@ -352,21 +365,61 @@ export function HubTab({ library, onLoad, onDownloading }: {
                     <>
                       {presence.kind === "incomplete" && <span className="ai-hub-have">Incomplete on {target?.name ?? presence.node}</span>}
                       <ToolButton icon={HardDriveDownload} label={busy === "download" ? "Starting…" : `${presence.kind === "incomplete" ? "Download again" : "Download"} to ${target?.name ?? "selected node"}`}
-                        onClick={download} locked={!admin} disabled={!target?.online || busy !== null || details.model.weightsFormat === "none"} title={locked(admin)} />
+                        onClick={download} locked={!admin} disabled={!target?.online || busy !== null || details.model.weightsFormat === "none" || !!details.model.configError || !details.model.files.length || revisionInput.trim() !== inspectedRevision} title={locked(admin)} />
                     </>
                   )}
                   <ToolButton icon={Play} label="Load…" disabled={!ready} locked={!!ready && !admin}
-                    onClick={() => ready && onLoad({ key: ready.key, rec: analysis?.analysis.recommended, allowed: analysis?.allowedArgs, notApplied: analysis?.notApplied, repo: details.model.id })}
-                    title={ready ? (admin ? `Load ${ready.key}` : locked(admin)) : "Download it first"} />
+                    onClick={() => {
+                      if (!ready) return;
+                      const matchingAdvice = ready.revision === details.model.revision ? analysis : null;
+                      onLoad({ key: ready.key, rec: matchingAdvice?.analysis.recommended, allowed: matchingAdvice?.allowedArgs, notApplied: matchingAdvice?.notApplied, repo: details.model.id });
+                    }}
+                    title={ready ? (admin ? `Load the saved copy at ${ready.key}, revision ${ready.revision || "unknown"}` : locked(admin)) : "Download it first"} />
                 </>
               )}
             </ModelFacts>
           )}
+          {details && ready && ready.revision !== details.model.revision && <p className="muted pad">Load uses the saved Library copy at revision {ready.revision || "unknown"}. Choosing a revision here changes new downloads; it does not replace a finished copy or apply advice for a different revision.</p>}
           {analysis && <AnalysisCard result={analysis} />}
         </div>
       </div>
     </div>
   );
+}
+
+function RevisionPicker({ repo, value, onChange, onInspect, busy }: {
+  repo: string; value: string; onChange: (value: string) => void; onInspect: (revision: string) => void; busy: boolean;
+}) {
+  const [refs, setRefs] = useState<HfRef[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [refresh, setRefresh] = useState(0);
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    let active = true;
+    setRefs([]); setError(null); setLoading(true);
+    modelsApi.hfRefs(repo).then((result) => { if (active) setRefs(result); })
+      .catch((e) => { if (active) setError(errText(e)); })
+      .finally(() => { if (active) setLoading(false); });
+    return () => { active = false; };
+  }, [repo, refresh]);
+  return <div className="col gap-sm pad">
+    <div className="row wrap gap-sm"><span>Branch or tag <HelpTip topic="models.hub.revision" /></span>
+      <select aria-label="Branch or tag" value="" disabled={busy || loading} onChange={(e) => {
+        if (!e.target.value) return;
+        const ref = refs[Number(e.target.value)];
+        if (ref) onInspect(ref.revision);
+      }}>
+        <option value="">{loading ? "Reading branches and tags…" : "Choose a branch or tag"}</option>
+        {refs.map((ref, index) => <option key={`${ref.kind}:${ref.name}`} value={index}>{ref.name} ({ref.kind}) · {ref.revision.slice(0, 12)}</option>)}
+      </select>
+      <button type="button" className="btn small" disabled={busy || loading} onClick={() => setRefresh((n) => n + 1)}>Refresh branches</button>
+    </div>
+    {error && <Notice tone="warn">Branches and tags: {error} You can still enter an exact revision below.</Notice>}
+    <form className="row wrap gap-sm" onSubmit={(e) => { e.preventDefault(); if (!busy && value.trim()) onInspect(value.trim()); }}>
+      <label className="row gap-sm">Revision <input aria-label="Revision" value={value} disabled={busy} onChange={(e) => onChange(e.target.value)} placeholder="Branch, tag or full commit" /></label>
+      <button type="submit" className="btn small" disabled={busy || !value.trim()}>Inspect revision</button>
+    </form>
+  </div>;
 }
 
 function ModelFacts({ details, children, downloadTarget }: { details: ModelDetails; children: React.ReactNode; downloadTarget?: React.ReactNode }) {
@@ -394,6 +447,10 @@ function ModelFacts({ details, children, downloadTarget }: { details: ModelDetai
           </div>
         )}
       </div>
+      <span className="mono wrap">Commit {m.revision}</span>
+      <details><summary>Files to download ({m.files.length})</summary>
+        <ul className="tight">{m.files.map((f) => <li key={f.path}><span className="mono wrap">{f.path}</span> · {f.size == null ? "size unknown" : fmtBytes(f.size)}{f.sha256 && <div className="mono wrap">SHA-256 {f.sha256}</div>}</li>)}</ul>
+      </details>
       {downloadTarget}
       {!m.mlx && <Toolbar label="Model">{children}</Toolbar>}
       {/* Without weights there's nothing to size: a table of "0 B per node, fits" would be a made-up answer. */}
@@ -403,7 +460,7 @@ function ModelFacts({ details, children, downloadTarget }: { details: ModelDetai
         <Notice tone="info">
           This repo has no safetensors or .bin weights for vLLM to serve{m.skipped.some((x) => /GGUF/i.test(x.what)) ? " (its GGUF files are for Ollama or llama.cpp)" : ""}, so SparkBox can't size it or download it.
         </Notice>
-      ) : <FitTable details={details} />}
+      ) : m.configError ? <Notice tone="warn">{m.configError}</Notice> : <FitTable details={details} />}
     </div>
   );
 }

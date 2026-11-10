@@ -1,4 +1,4 @@
-import type { DownloadToolReview, DownloadTools, Job } from "../../lib/types";
+import type { DownloadSelection, DownloadToolReview, DownloadTools, Job } from "../../lib/types";
 import type { DownloadResume } from "../../lib/types";
 import { snapshotAt } from "../mockBackend";
 import { requireDemoDisk } from "./disk";
@@ -55,13 +55,15 @@ function checkDemoTool(review: DownloadToolReview, node: string): void {
     || (review.tool.kind === "install" && !review.installConsent)) throw new Error("Review the Demo tool and confirm any installation for this attempt.");
 }
 
-export function startDemoDownload({ repo, review }: { repo: string; review: DownloadToolReview }): Job {
+export function startDemoDownload({ selection, review }: { selection: DownloadSelection; review: DownloadToolReview }): Job {
   checkDemoTool(review, review?.node ?? "");
-  requireDemoDisk({ kind: "download", node: review.node, repo });
+  const { repo, revision, files } = selection;
+  if (!/^[a-f0-9]{40}$/.test(revision) || !files.length) throw new Error("Review the Demo revision and files again.");
+  requireDemoDisk({ kind: "download", node: review.node, selection });
   const now = Math.floor(Date.now() / 1000);
   const job: Job = { id: `demo-dl-${recoveryJobs.length}`, node: review.node, kind: "download", state: "running", step: "downloading", message: "Demo: approved tool and download are simulated", label: `Download ${repo}`,
-    bytesDone: 0, bytesTotal: 1_200_000_000, rateBps: 100_000_000, startedAt: now, updatedAt: now,
-    toolUsed: review.tool.label, toolVersion: "Demo", resume: { repo, revision: "a".repeat(40), dest: `/home/demo/models/${repo}`, planHash: `demo-${now}` } };
+    bytesDone: 0, bytesTotal: files.reduce((sum, file) => sum + (file.size ?? 0), 0), rateBps: 100_000_000, startedAt: now, updatedAt: now,
+    toolUsed: review.tool.label, toolVersion: "Demo", resume: { repo, revision, dest: `/home/demo/models/${repo}`, planHash: `demo-${now}` } };
   recoveryJobs.push(job);
   return structuredClone(job);
 }

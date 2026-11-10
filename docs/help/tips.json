@@ -1500,6 +1500,12 @@
       "copy-a-model-to-other-nodes"
     ]
   },
+  "models.hub.revision": {
+    "title": "Model revision",
+    "body": "A revision is one version of the model. Choose a branch or tag, or enter a full commit. SparkBox shows the resolved commit and files, then refuses any mismatch before downloading.",
+    "article": "models-hugging-face#revision-and-files",
+    "howto": ["download-a-model"]
+  },
   "models.hub.weights": {
     "title": "Weights",
     "body": "The size of the files the engine serves, read from the repository. \u2248 marks an estimate, used when the file sizes couldn't be read. GGUF means the repository has only files for Ollama or llama.cpp.",

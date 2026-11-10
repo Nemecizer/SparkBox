@@ -17,7 +17,7 @@
 use std::collections::BTreeMap;
 use std::time::Duration;
 
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 pub const HUB: &str = "https://huggingface.co";
@@ -107,12 +107,87 @@ pub fn min_nodes(weight_bytes: u64, nodes: u64) -> Option<u64> {
     (1..=nodes.max(1)).find(|n| weight_bytes as f64 / *n as f64 <= room)
 }
 
-#[derive(Clone, Debug, Serialize, PartialEq)]
-#[serde(rename_all = "camelCase")]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct HfFile {
     pub path: String,
     pub size: Option<u64>,
     pub sha256: Option<String>,
+}
+
+/// Non-secret consent: every new download and its disk review carry this exact snapshot.
+/// No omitted revision, moving branch, wildcard or newly discovered file is admitted.
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct DownloadSelection {
+    pub repo: String,
+    pub revision: String,
+    pub files: Vec<HfFile>,
+}
+
+pub fn is_commit(revision: &str) -> bool {
+    revision.len() == 40 && revision.bytes().all(|c| c.is_ascii_digit() || (b'a'..=b'f').contains(&c))
+}
+
+impl DownloadSelection {
+    pub fn validate(&self) -> Result<(), String> {
+        if repo_id(&self.repo)? != self.repo || !is_commit(&self.revision) || self.files.is_empty() || self.files.len() > 100_000 {
+            return Err("Review the model again: a full commit and an exact file list are required.".into());
+        }
+        let mut paths = std::collections::HashSet::new();
+        for file in &self.files {
+            if file.path.split('/').any(|p| matches!(p, "" | "." | ".."))
+                || file.path.chars().any(|c| c.is_control() || "\\*?[]".contains(c))
+                || !paths.insert(&file.path)
+                || file.sha256.as_ref().is_some_and(|s| s.len() != 64 || !s.bytes().all(|c| c.is_ascii_digit() || (b'a'..=b'f').contains(&c))) {
+                return Err("Review the model again: its file list is invalid or contains download patterns.".into());
+            }
+        }
+        super::disk::file_bytes(&serde_json::json!(self.files))?;
+        Ok(())
+    }
+
+    pub fn check(&self, model: &HfModel) -> Result<(), String> {
+        self.validate()?;
+        let mut expected = self.files.clone();
+        let mut actual = model.files.clone();
+        expected.sort_by(|a, b| a.path.cmp(&b.path));
+        actual.sort_by(|a, b| a.path.cmp(&b.path));
+        if model.id != self.repo || model.revision != self.revision || actual != expected {
+            return Err("The reviewed revision or file list no longer matches Hugging Face. Review the model again; nothing was started.".into());
+        }
+        if let Some(error) = &model.config_error { return Err(error.clone()); }
+        Ok(())
+    }
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct HfRef {
+    pub name: String,
+    pub kind: String,
+    pub revision: String,
+}
+
+fn parse_refs(value: &Value) -> Result<Vec<HfRef>, String> {
+    let mut refs = Vec::new();
+    for (key, kind) in [("branches", "branch"), ("tags", "tag")] {
+        let rows = value[key].as_array().ok_or("Hugging Face returned an invalid branch and tag list.")?;
+        for row in rows {
+            let name = row["name"].as_str().filter(|s| !s.is_empty()).ok_or("A Hugging Face revision has no name.")?;
+            let revision = row["targetCommit"].as_str().filter(|s| is_commit(s)).ok_or("A Hugging Face revision has no full commit.")?;
+            refs.push(HfRef { name: name.into(), kind: kind.into(), revision: revision.into() });
+        }
+    }
+    Ok(refs)
+}
+
+pub async fn refs(client: &reqwest::Client, token: Option<&str>, input: &str) -> Result<Vec<HfRef>, String> {
+    let repo = repo_id(input)?;
+    let resp = with_token(client.get(format!("{HUB}/api/models/{repo}/refs")).timeout(Duration::from_secs(20)), token)
+        .send().await.map_err(|_| "Couldn't read Hugging Face branches and tags. Try again.".to_string())?;
+    if !resp.status().is_success() { return Err(explain(resp.status().as_u16(), &repo)); }
+    parse_refs(&resp.json().await.map_err(|_| "Hugging Face returned an unreadable branch and tag list.")?)
 }
 
 /// Files in the repo that aren't downloaded, grouped the way the UI names them.
@@ -223,6 +298,8 @@ pub struct HfModel {
     pub model_type: Option<String>,
     /// config.json (the text model's part for multimodal models).
     pub config: Value,
+    /// A failed config fetch is not an architecture with an empty KV estimate.
+    pub config_error: Option<String>,
     /// The vision tower's config, when the model has one (for the fit table's allowance).
     pub vision_config: Value,
     /// The files SparkBox downloads (served_files).
@@ -391,8 +468,10 @@ pub fn repo_id(input: &str) -> Result<String, String> {
     let s = input.trim().trim_end_matches('/');
     let s = s.strip_prefix("https://huggingface.co/").or_else(|| s.strip_prefix("huggingface.co/")).unwrap_or(s);
     let parts: Vec<&str> = s.split('/').collect();
+    let valid = |s: &str| !s.is_empty() && !s.starts_with(['.', '-'])
+        && !s.contains("..") && s.bytes().all(|c| c.is_ascii_alphanumeric() || b"_.-".contains(&c));
     match parts.as_slice() {
-        [org, name, ..] if !org.is_empty() && !name.is_empty() && !["tree", "blob"].contains(org) => Ok(format!("{org}/{name}")),
+        [org, name, ..] if valid(org) && valid(name) && !["tree", "blob"].contains(org) => Ok(format!("{org}/{name}")),
         _ => Err(format!("“{input}” isn't a Hugging Face model id like org/name.")),
     }
 }
@@ -444,6 +523,7 @@ pub fn parse_model(info: &Value, config: Value, index: Option<&Value>, readme: &
             .unwrap_or_default(),
         model_type: config["model_type"].as_str().or_else(|| info["config"]["model_type"].as_str()).map(String::from),
         config: text_config,
+        config_error: None,
         vision_config: config["vision_config"].clone(),
         files,
         readme_excerpt,
@@ -459,31 +539,75 @@ fn strip_front_matter(readme: &str) -> &str {
     readme
 }
 
-pub async fn model(client: &reqwest::Client, token: Option<&str>, input: &str) -> Result<HfModel, String> {
-    let repo = repo_id(input)?;
-    let req = client.get(format!("{HUB}/api/models/{repo}?blobs=true")).timeout(Duration::from_secs(30));
-    let resp = with_token(req, token).send().await.map_err(|e| format!("Couldn't reach Hugging Face: {e}"))?;
-    if !resp.status().is_success() {
-        return Err(explain(resp.status().as_u16(), &repo));
+fn model_url(hub: &str, repo: &str, revision: &str) -> Result<url::Url, String> {
+    if revision.is_empty() || revision.len() > 256 || matches!(revision, "." | "..") || revision.chars().any(char::is_control) {
+        return Err("Enter a branch, tag or commit to inspect.".into());
     }
-    let info: Value = resp.json().await.map_err(|e| e.to_string())?;
-    let rev = info["sha"].as_str().unwrap_or("main").to_string();
+    let mut url = url::Url::parse(&format!("{hub}/api/models/{repo}/revision/")).map_err(|e| e.to_string())?;
+    url.path_segments_mut().map_err(|_| "Invalid Hugging Face URL")?.pop_if_empty().push(revision);
+    url.query_pairs_mut().append_pair("blobs", "true");
+    Ok(url)
+}
+
+pub async fn model_at(client: &reqwest::Client, token: Option<&str>, input: &str, revision: Option<&str>) -> Result<HfModel, String> {
+    model_from_hub(client, token, input, revision.unwrap_or("main"), HUB).await
+}
+
+// The endpoint parameter is private: tests use a loopback fixture; production always uses HUB.
+async fn model_from_hub(client: &reqwest::Client, token: Option<&str>, input: &str, revision: &str, hub: &str) -> Result<HfModel, String> {
+    let repo = repo_id(input)?;
+    let req = client.get(model_url(hub, &repo, revision)?).timeout(Duration::from_secs(30));
+    let resp = with_token(req, token).send().await.map_err(|_| "Couldn't reach Hugging Face. Review the model again when the connection returns.".to_string())?;
+    if !resp.status().is_success() {
+        return Err(format!("Revision {revision}: {}", explain(resp.status().as_u16(), &repo)));
+    }
+    let info: Value = resp.json().await.map_err(|_| "Hugging Face returned unreadable model details.")?;
+    let rev = info["sha"].as_str().filter(|s| is_commit(s)).ok_or("Hugging Face did not return a full commit. Review the model again.")?;
+    if is_commit(revision) && rev != revision {
+        return Err("Hugging Face returned a different commit. Review the model again; nothing was started.".into());
+    }
+    if info["id"].as_str() != Some(&repo) || !info["siblings"].is_array() {
+        return Err("Hugging Face returned a different repository or no file list. Review the model again.".into());
+    }
 
     let get_text = |name: &str| {
-        let url = format!("{HUB}/{repo}/resolve/{rev}/{name}");
+        let url = format!("{hub}/{repo}/resolve/{rev}/{name}");
         with_token(client.get(url).timeout(Duration::from_secs(30)), token).send()
     };
-    let config = match get_text("config.json").await {
-        Ok(r) if r.status().is_success() => r.json().await.unwrap_or(Value::Null),
-        _ => Value::Null,
+    let config: Result<Value, String> = match get_text("config.json").await {
+        Ok(r) if r.status().is_success() => r.json::<Value>().await.ok().filter(Value::is_object).ok_or("config.json is not a JSON object. Fit estimates and download are unavailable.".into()),
+        Ok(r) => {
+            let status = r.status().as_u16();
+            let reason = if status == 404 { "The configuration file wasn't found at this commit.".into() } else { explain(status, &repo) };
+            Err(format!("config.json (HTTP {status}): {reason} Fit estimates and download are unavailable."))
+        },
+        Err(_) => Err("Couldn't read config.json. Check the connection and inspect this revision again; fit estimates and download are unavailable.".into()),
     };
-    let index = fetch_index(client, token, &repo, &info).await;
+    let index = if info["siblings"].as_array().unwrap().iter().any(|f| f["rfilename"] == "model.safetensors.index.json") {
+        let r = get_text("model.safetensors.index.json").await.map_err(|_| "Couldn't read the shard index. Review the model again; no fallback file list is used.")?;
+        if !r.status().is_success() { return Err(format!("Shard index: {}", explain(r.status().as_u16(), &repo))); }
+        let index: Value = r.json().await.map_err(|_| "Hugging Face returned an unreadable shard index.")?;
+        let map = index["weight_map"].as_object().filter(|m| !m.is_empty()).ok_or("The shard index has no weight map. Review the model again.")?;
+        if map.values().any(|v| v.as_str().is_none_or(|name| !info["siblings"].as_array().unwrap().iter().any(|f| f["rfilename"] == name))) {
+            return Err("The shard index does not match the file list. Review the model again.".into());
+        }
+        Some(index)
+    } else {
+        None
+    };
     let readme = match get_text("README.md").await {
         Ok(r) if r.status().is_success() => r.text().await.unwrap_or_default(),
         _ => String::new(),
     };
-    Ok(parse_model(&info, config, index.as_ref(), &readme))
+    let config_error = config.as_ref().err().cloned();
+    let mut model = parse_model(&info, config.unwrap_or(Value::Null), index.as_ref(), &readme);
+    model.config_error = config_error;
+    Ok(model)
 }
+
+#[cfg(test)]
+#[path = "hf_review_tests.rs"]
+mod review_tests;
 
 #[cfg(test)]
 mod tests {

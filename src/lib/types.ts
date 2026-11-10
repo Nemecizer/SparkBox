@@ -617,7 +617,15 @@ export interface HfSearchHit {
   lastModified: string | null;
 }
 
+export interface DownloadSelection {
+  repo: string;
+  revision: string;
+  files: HfModel["files"];
+}
+export interface HfRef { name: string; kind: "branch" | "tag"; revision: string }
+
 export interface HfModel {
+  configError?: string | null;
   id: string;
   revision: string;
   gated: boolean;
@@ -1309,6 +1317,6 @@ export interface DiskCheck {
   ok: boolean; warning: string | null;
 }
 export type DiskRequest =
-  | { kind: "download"; node: string; repo: string }
+  | { kind: "download"; node: string; selection: DownloadSelection }
   | { kind: "resume"; node: string; id: string; expected: DownloadResume }
   | { kind: "copy"; key: string; targets: string[] };

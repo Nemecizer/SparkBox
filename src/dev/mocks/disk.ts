@@ -4,10 +4,11 @@ import { snapshotAt } from "../mockBackend";
 const GiB = 1024 ** 3;
 /** Browser-only scenarios: ?disk=low, warning, unknown, or changed (space lost after review). */
 export function demoDiskPreflight(request: DiskRequest, bytes = 1_200_000_000, starting = false): DiskCheck[] {
+  if (request.kind === "download") bytes = request.selection.files.reduce((sum, file) => sum + (file.size ?? 0), 0);
   const mode = typeof location === "undefined" ? null : new URLSearchParams(location.search).get("disk");
   if (mode === "unknown") throw new Error("Cannot read destination disk space on the selected Demo node. Nothing was started.");
   const nodes = request.kind === "copy" ? request.targets : [request.node];
-  const dest = request.kind === "copy" ? request.key : request.kind === "resume" ? request.expected.dest : `/home/demo/models/${request.repo}`;
+  const dest = request.kind === "copy" ? request.key : request.kind === "resume" ? request.expected.dest : `/home/demo/models/${request.selection.repo}`;
   return nodes.map((node) => {
     if (!snapshotAt(0).nodes.some((n) => n.id === node && n.status === "online")) throw new Error(`${node} is not connected. Reconnect it before checking disk space.`);
     const availableBytes = (mode === "low" || (mode === "changed" && starting) ? 10 : mode === "warning" ? 500 : 2000) * GiB;

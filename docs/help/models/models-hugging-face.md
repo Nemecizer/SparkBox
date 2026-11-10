@@ -60,14 +60,26 @@ Click a row, and the right side shows:
 - **A facts line**, such as "28B parameters · 28.7 GiB of safetensors weights · fp8". **MoE** marks a mixture of experts, and "sparse MLA attention" marks a model whose GPU kernel support needs checking for the selected image and KV type. Choosing fp8 alone does not establish compatibility.
 - **A download line**, such as "Downloads 60.8 GiB of the repo's 182 GiB: leaves out original/ (…)". This is what the node will store.
 
+### Revision and files
+
+**Branch or tag** lists the versions Hugging Face reports. Each choice shows its type and the start of its commit, the fixed version it points to. Selecting one inspects that commit. **Refresh branches** reads the list again without changing the inspected model.
+
+**Revision** also accepts a branch name, tag or full commit. Click **Inspect revision** after typing. Download and AI advice stay dimmed while your typed choice is unreviewed. A failed inspection removes the old details so they cannot be used by mistake.
+
+**Commit** shows the full version that was read. Expand **Files to download** to see every name, size and available SHA-256 checksum. Disk checks and new downloads use this same commit and list. SparkBox refuses if the rechecked repository, commit, names, sizes or checksums differ; inspect again to make a new choice. A branch moving later does not change an already inspected commit.
+
+If **config.json** cannot be read, the message replaces the fit table. HTTP 401 or 403 means access was refused; check the license and token. HTTP 404 means the configuration is missing at that revision. Retry with **Inspect revision** after fixing access or choosing another version. Download and AI advice stay unavailable while the configuration is unreadable.
+
 ### Model actions
 
 - **Check with AI** asks your AI provider for an opinion. See [Ask the AI advisor](#ask-the-ai-advisor).
 - **Download node** selects where the next download goes. See [Download node](#download-node).
-- **Download to cell1**, the hard drive with a down arrow, names the selected node. These buttons often show as icons without names: move the pointer over one to read its name. A finished copy on that node hides its Download button. If that node has an incomplete copy, you see **Download again to cell1**, which checks the repository anew and may use a newer revision. Use **Resume download…** on **Jobs** for the saved revision and file list. While that node's folder is being filled, you see "Downloading on cell1" or "Copying on cell1" and no Download button. A finished copy on a different node still lets you use **Load…**.
+- **Download to cell1**, the hard drive with a down arrow, names the selected node. These buttons often show as icons without names: move the pointer over one to read its name. A finished copy on that node hides its Download button. If that node has an incomplete copy, you see **Download again to cell1**, which uses the commit and files you inspected here. Use **Resume download…** on **Jobs** for the saved revision and file list. While that node's folder is being filled, you see "Downloading on cell1" or "Copying on cell1" and no Download button. A finished copy on a different node still lets you use **Load…**.
 - **Load…** opens the [Load page](help:models-load-page). It's dimmed until a finished copy of the model is on a node. If Admin mode is locked, the **Unlock Admin mode?** dialog opens. Click **Unlock…**, then confirm with Touch ID or your Mac password. In look-only mode this button is dimmed: use **Load…** on the **Library** tab.
 
 MLX repositories have none of these. A repository with no weights SparkBox can serve keeps these buttons, with **Download to cell1** and **Load…** dimmed. In both cases a note explains why.
+
+Choosing a revision here affects new downloads. It does not replace a finished Library copy. **Load…** uses that saved copy and leaves out AI advice for a different revision.
 
 ### Download node
 
