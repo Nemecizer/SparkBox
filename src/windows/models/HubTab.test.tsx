@@ -346,3 +346,107 @@ it("shows the full disk warning and reserve before a download can be approved", 
   expect(review).toContain(checks[0].dest); expect(review).toContain("available"); expect(review).toContain("required");
   expect(mockCalls.some((c) => c.cmd === "model_download")).toBe(false);
 });
+
+describe("capacity suggestions", () => {
+  const picker = () => screen.getByLabelText("Download node") as HTMLSelectElement;
+  const compare = async () => {
+    (screen.getByText("Suggest a download node").parentElement as HTMLDetailsElement).open = true;
+    await act(async () => { fireEvent.click(screen.getByRole("button", { name: "Compare destination capacity" })); });
+  };
+  const report = () => ({ suggested: "cell2", readings: [
+    { node: "cell1", check: { ...demoDiskPreflight({ kind: "download", node: "cell1", selection })[0], availableBytes: 10, ok: false }, error: null },
+    { node: "cell2", check: demoDiskPreflight({ kind: "download", node: "cell2", selection })[0], error: null },
+    { node: "cell3", check: null, error: "Destination is read-only" },
+  ] });
+
+  it("compares the reviewed selection in Read-only and applies only on explicit Use, without tool or job calls", async () => {
+    await show([], vi.fn(), { model_download_capacity: report }, { ...UNLOCKED, unlocked: false, lookOnly: true });
+    await compare();
+    expect(picker().value).toBe(head());
+    expect(screen.getByText("cell1 · Not enough space")).toBeTruthy();
+    expect(screen.getByText("Destination is read-only")).toBeTruthy();
+    expect(mockCalls.find((c) => c.cmd === "model_download_capacity")?.args).toEqual({ selection, nodes: (baseSnapshot as ClusterSnapshot).nodes.map((n) => n.id).sort() });
+    await act(async () => { fireEvent.click(button("Use cell2") as HTMLElement); });
+    expect(picker().value).toBe("cell2");
+    expect(mockCalls.some((c) => ["model_download", "model_download_tools", "model_share"].includes(c.cmd))).toBe(false);
+  });
+
+  it("only compares the chosen potential load members and excludes finished/running copies", async () => {
+    await show([entry({ cell1: copy(), cell3: copy({ partial: "downloading" }) })], vi.fn(), { model_download_capacity: report });
+    (screen.getByText("Suggest a download node").parentElement as HTMLDetailsElement).open = true;
+    expect((screen.getByLabelText("Compare cell1") as HTMLInputElement).disabled).toBe(true);
+    expect((screen.getByLabelText("Compare cell3") as HTMLInputElement).disabled).toBe(true);
+    const fourth = (baseSnapshot as ClusterSnapshot).nodes[3];
+    await act(async () => { fireEvent.click(screen.getByLabelText(`Compare ${fourth.name}`)); });
+    await compare();
+    expect(mockCalls.find((c) => c.cmd === "model_download_capacity")?.args).toEqual({ selection, nodes: ["cell2"] });
+    expect(picker().value).toBe(head());
+  });
+
+  it("ignores a late comparison after the scope changes and preserves a manual target", async () => {
+    let finish!: (value: ReturnType<typeof report>) => void;
+    await show([], vi.fn(), { model_download_capacity: () => new Promise((resolve) => { finish = resolve; }) });
+    await compare();
+    await act(async () => { fireEvent.change(picker(), { target: { value: "cell3" } }); fireEvent.click(screen.getByLabelText("Compare cell2")); });
+    await act(async () => { finish(report()); });
+    expect(button("Use cell2")).toBeNull();
+    expect(picker().value).toBe("cell3");
+  });
+
+  it("invalidates results on disconnection and revision edits, without changing the target", async () => {
+    await show([], vi.fn(), { model_download_capacity: report });
+    await compare();
+    const snap = { ...structuredClone(baseSnapshot), tsMs: Date.now() + 1000, demo: false } as ClusterSnapshot;
+    snap.nodes.find((n) => n.id === "cell2")!.status = "offline";
+    await act(async () => { await emitMock("cluster://snapshot", snap); });
+    expect(button("Use cell2")).toBeNull();
+    expect(picker().value).toBe(head());
+    snap.nodes.find((n) => n.id === "cell2")!.status = "online"; snap.tsMs++;
+    await act(async () => { await emitMock("cluster://snapshot", structuredClone(snap)); });
+    await compare();
+    await act(async () => { fireEvent.change(screen.getByLabelText("Revision"), { target: { value: "changed" } }); });
+    expect(button("Use cell2")).toBeNull();
+    expect((button("Compare destination capacity") as HTMLButtonElement).disabled).toBe(true);
+  });
+
+  it("expires a comparison and requires a fresh one before applying it", async () => {
+    await show([], vi.fn(), { model_download_capacity: report });
+    vi.useFakeTimers();
+    try {
+      await compare();
+      await act(async () => { vi.advanceTimersByTime(61_000); });
+      expect(button("Use cell2")).toBeNull();
+      expect(screen.getByText(/Capacity readings expired/)).toBeTruthy();
+      expect(picker().value).toBe(head());
+      await compare();
+      expect(button("Use cell2")).toBeTruthy();
+    } finally { vi.useRealTimers(); }
+  });
+
+  it("rechecks disk after applying a suggestion and refuses space lost since comparison", async () => {
+    vi.spyOn(session, "confirmAction").mockResolvedValue(true);
+    const alert = vi.spyOn(session, "alertInfo").mockResolvedValue();
+    await show([], vi.fn(), { model_download_capacity: report,
+      model_disk_preflight: () => [{ ...report().readings[1].check!, availableBytes: 1, ok: false }],
+    });
+    await compare();
+    await act(async () => { fireEvent.click(button("Use cell2") as HTMLElement); });
+    await act(async () => { fireEvent.click(button("Download to cell2") as HTMLElement); });
+    expect(mockCalls.find((c) => c.cmd === "model_disk_preflight")?.args).toEqual({ request: { kind: "download", node: "cell2", selection } });
+    expect(alert).toHaveBeenCalledWith(expect.objectContaining({ title: "Not enough destination space" }));
+    expect(mockCalls.some((c) => c.cmd === "model_download")).toBe(false);
+    expect(picker().value).toBe("cell2");
+  });
+
+  it("does not pick a fallback when no disk qualifies or metadata comparison fails", async () => {
+    let failed = false;
+    await show([], vi.fn(), { model_download_capacity: () => { if (failed) throw new Error("Reviewed manifest changed"); return { readings: report().readings.slice(0, 1), suggested: null }; } });
+    await compare();
+    expect(screen.getByText(/No checked node has enough known destination space/)).toBeTruthy();
+    expect(picker().value).toBe(head());
+    failed = true; await compare();
+    expect(screen.getByText("Reviewed manifest changed")).toBeTruthy();
+    expect(button("Use cell2")).toBeNull();
+    expect(picker().value).toBe(head());
+  });
+});

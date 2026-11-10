@@ -2,6 +2,12 @@
 
 This local development candidate starts from published v0.1.0, commit `3121d96`. The changes below are not published or notarized. Use only the exact reviewed artifact for any separately authorized testing. See [developer handoff](HANDOFF.md) and [quick start](START_HERE.md).
 
+## Capacity-based download-node suggestions (P3.2)
+
+In Models → Hugging Face, expand **Suggest a download node**, choose the potential load nodes to compare, and read their destination capacity. SparkBox suggests the qualifying node with the most space after the full inspected transfer plus 5% and 20 GiB; stable node ID breaks ties. **Use** explicitly applies the suggestion. The existing selected target never changes because of a probe or failed connection.
+
+Readings use the pinned inspected manifest, expire after one minute and are discarded on revision, scope or connection changes. Individual disk failures remain visible. Finished and running copies are excluded from the UI comparison. The comparison requires no Admin unlock and starts no jobs. Download still requires tool consent, its own disk review and the existing safeguards. The node-side start repeats admission. No automatic download-to-copy chain is added; real node acceptance remains pending.
+
 ## Inspected downloads (P3.8)
 
 New downloads and destination-disk reviews require the repository, full commit and complete inspected file list. SparkBox re-fetches that immutable commit and compares names, sizes and available publisher checksums before starting; any mismatch refuses instead of switching revisions. A moved branch does not change an existing review.

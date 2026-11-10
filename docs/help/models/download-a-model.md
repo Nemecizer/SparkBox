@@ -13,7 +13,7 @@ related: [follow-a-download, copy-a-model-to-other-nodes, find-a-model-that-fits
 
 To put a model on your cluster, download it from Hugging Face to the node you choose.
 
-An earlier public `Qwen/Qwen3-0.6B` download passed on `cell1`: seven files, a pinned revision and publisher checksums. Target selection, tool choice, disk checks, revision review, installation and recovery have passed offline tests only.
+An earlier public `Qwen/Qwen3-0.6B` download passed on `cell1`: seven files, a pinned revision and publisher checksums. Target selection, capacity suggestions, tool choice, disk checks, revision review, installation and recovery have passed offline tests only.
 
 ## Before you start
 
@@ -21,7 +21,7 @@ An earlier public `Qwen/Qwen3-0.6B` download passed on `cell1`: seven files, a p
 - If this is your first download, you've run [Prepare the cluster for models](help:prepare-the-cluster), which checks Docker and free disk on every node.
 - Use **Live** data with look-only mode off, and be ready to unlock Admin mode. With **Demo** data, the download is simulated and nothing reaches a node. [Unlock Admin mode](help:unlock-admin-mode) shows how.
 - For a gated model, you've saved a Hugging Face access token and accepted its license. See [Get a Hugging Face token](help:get-a-hugging-face-token).
-- **Choose a connected node in Download node.** The first connected node is selected initially; check it before starting. To put the model on other nodes, [copy it](help:copy-a-model-to-other-nodes) afterward.
+- **Choose a connected node in Download node.** The first connected node is selected initially. Use **Suggest a download node** to compare disks before choosing. To put the model on other nodes, [copy it](help:copy-a-model-to-other-nodes) afterward.
 - **The destination needs room for the full download plus 5% and 20 GiB.** SparkBox reads that filesystem before asking you to approve the download.
 - **You have time.** How long it takes depends on your internet speed and the model's size. Models can be more than 100 [GiB](help:glossary#gib). This uses your internet allowance, if you have one.
 - **Admin mode may lock while you wait.** That doesn't stop the download.
@@ -40,6 +40,12 @@ An earlier public `Qwen/Qwen3-0.6B` download passed on `cell1`: seven files, a p
 5. Read **Commit** and expand **Files to download**. A commit names one fixed version. Check the file names and sizes.
 6. Read the line that starts with **Downloads**, such as "Downloads 60.8 GiB of the repo's 182 GiB". This is what the node needs to store. SparkBox leaves out copies the engine doesn't serve.
 
+
+### Compare nodes, if needed
+
+To compare before downloading, expand **Suggest a download node**. Select the nodes you are considering for the load, then click **Compare destination capacity**. Read each result. The suggestion has the most space left after the required reserve. Click **Use cell2**, or the name shown, to change **Download node**.
+
+This comparison reads only and needs no Admin unlock. It never changes your choice by itself. Finished or running copies are excluded. Failed checks remain visible; if no node qualifies, choose nothing and resolve the space or connection problem. Results expire after one minute. Comparing does not reserve space or set load members.
 
 ### Check the disk and start
 

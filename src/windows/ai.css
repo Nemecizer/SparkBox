@@ -605,3 +605,8 @@ input.ai-filled::after, select.ai-filled::after { content: none; }
 .history-record { border: 1px solid var(--hairline, #ddd); border-radius: 4px; padding: var(--sp-6, 12px); margin-bottom: var(--sp-6, 12px); }
 .history-record h3 { margin-top: 0; }
 .history-node { border-top: 1px solid var(--hairline, #ddd); margin-top: var(--sp-4, 8px); padding-top: var(--sp-4, 8px); }
+
+/* Capacity comparison uses the same controls and semantic colors as the Hub. */
+.ai-capacity-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.ai-capacity-check { display: inline-flex; align-items: center; gap: 6px; }
+.ai-capacity-path { overflow-wrap: anywhere; }

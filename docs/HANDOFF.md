@@ -1,47 +1,44 @@
-# P3.8 inspected-download handoff
+# P3.2 download-capacity handoff
 
-Base: public v0.1.0, `3121d964b7fdfe87b8b0219011c3e4ebedd2ccaa`. Branch: `codex/p3.8-reviewed-download`. This is one offline coding round; the published release and private development history remain separate. No node, native app, VPN or paid AI operation is part of this round.
+Base: completed P3.8, `a4ebb2a9bfeeadb5497c67776b35f5f00fbacd6d`, following public v0.1.0 `3121d96`. Branch: `codex/p3.2-capacity-suggestions`. This is one offline coding round. The published release, private repository, existing settings and older builds remain unchanged. Previous implementation and validation history: [P3.8 handoff](P3.8-HANDOFF.md).
 
 ## Implemented
 
-- New download and disk-preflight IPC require a `DownloadSelection`: canonical repository, full lowercase 40-character commit, and the complete reviewed names/sizes/available SHA-256 values. Missing fields, moving references, unsafe paths, glob patterns, duplicate files and unknown/invalid sizes refuse.
-- Details resolve a selected branch/tag/revision once. Config, shard index and card use the returned immutable commit. A missing/substituted commit, different repository, or inconsistent/unreadable shard index refuses without fallback.
-- Disk review and start re-read that exact commit and compare the manifest as a set. Order alone is immaterial; additions, removals, renames, size/hash changes or a different commit refuse before job or installation start. The accepted manifest drives disk admission and the existing pinned node job. Branch movement does not silently update a reviewed download.
-- The Hugging Face tab offers a branch/tag list, Refresh branches, a Revision field and Inspect revision, full Commit text and Files to download. Typed changes disable download/advice until inspected; a failed inspection clears old details; delayed earlier responses are ignored. Branch-list failure leaves manual inspection available.
-- `configError` preserves access/status, connection and invalid-JSON failures. Config HTTP 401/403/404 is visible instead of blank KV estimates. Download and AI advice refuse unreadable config. AI advice requests the inspected commit too; no AI call was made in this round.
-- Help and its revision tip describe actual controls, mismatch refusal, access errors and retries. Browser Demo uses synthetic metadata and preserves the selected revision in its simulated job. Load still uses the existing Library copy; advice from a different inspected revision is not applied to it.
+- Models → Hugging Face adds **Suggest a download node**. The user chooses the potential load members to compare; connected nodes without finished or running copies are initially included. This comparison scope does not change the Load draft or create a copy plan.
+- The new read-only `model_download_capacity` command validates distinct inventory IDs, re-fetches the inspected immutable revision once and checks its full file manifest. It probes the actual destination filesystems, with at most four probes in flight. It does not use cached Dashboard disk readings or send node capacity to an AI provider.
+- Each node returns either a disk result or its own failure. Unknown, disconnected and insufficient disks cannot win. Among qualifying nodes, maximum available bytes minus the full transfer × 1.05 (rounded up) plus 20 GiB wins. Stable node ID breaks ties. Fullness warnings remain visible and do not silently disqualify a disk with sufficient space.
+- Comparison alone never changes the persisted download target. **Use <node>** applies the suggestion explicitly. Manual choices survive comparison, failures, node reordering, disconnection and removal. Jobs Resume retains its original node and plan.
+- Results are ephemeral, expire one minute from request start and are invalidated by model/revision, comparison scope, connection or relevant copy-state changes. Late superseded results are ignored. Typing an uninspected revision blocks comparison as well as download. Expired results cannot be applied even if a timer is delayed.
+- Download still performs its own tool choice, destination review, final confirmation and node-side disk admission. No capacity result is an authorization, reservation, tool install, model folder creation or job start.
+- Help and the target tip explain comparison, explicit application, expiry and limits. Synthetic browser Demo adds `disk=capacity`; `low` and `unknown` retain refusal cases.
 
-## Safeguards and compatibility
+## Safeguards and privacy
 
-Admin/Touch ID, Look only, stable node identity, SSH verification, controller leases, ownership, tool fingerprint and installation consent, disk rechecks and debug fences are retained. Jobs Resume continues using its original saved plan and fresh Keychain token; no existing jobs, records or settings are migrated or removed. Node helper commands and secret delivery paths are unchanged.
-
-Fresh installations still have empty native inventory, no VPN profile/forwards, locked Admin and no enabled automatic connections. Public privacy fixtures and ephemeral test keys are retained. Raw test/build evidence and private identifier deny lists stay outside this tree. Public Help examples remain synthetic.
+Admin/Touch ID, Look only, verified SSH identity, controller leases, instance ownership, exact tool/install consent, immutable file review, protected updates and debug fences are unchanged. Read-only classification is explicit and subject to the existing command audit. Native fresh installs still have empty inventory, no VPN profile/forwards and locked Admin. No saved records, private credentials or live endpoints are added, migrated or removed. Raw evidence and the private identifier deny list stay outside public source.
 
 ## Verification
 
-- TypeScript passed; final UI suite: 3,722 passed. Release Help and affected UI tests: 2,009 passed in the combined targeted run. Light/Dark browser Demo inspection passed and its temporary server/profile were cleaned up.
-- Native library: 1,873 executed tests passed across the full run and unchanged isolated retries; 36 explicit fixture/hardware cases remain ignored. The first full run found the missing read-only classification for `hf_refs`; that was added with its metadata-only reason and the audit passed. A second overlapping full run had two existing fake-node timing failures (cleanup observation and PID startup); both passed alone, unchanged. This is not a claim that one final full run was entirely green.
-- All 30 release-compiled safeguard tests passed. Binary and documentation targets completed with no test cases.
-- New local HTTP/manifest tests and fake-node no-start checks passed, including changed files/commits, HTTP 401/403/404, malformed index, unsafe patterns, tool consent, fence/Look-only refusal and fresh-install preservation.
-- Python node helpers: 515 passed, 3 platform-specific skips (518 total). Go passed. Clippy: 46 existing warnings, unchanged. Distribution/release-tool tests: 13 passed. Source distribution audit with the external private-identifier deny list found zero issues in 2,462 tracked files. Published v0.1.0 source/app ZIP hashes and both baseline checkouts remained unchanged.
+- TypeScript and all 3,733 UI tests passed (127 files). Release Help plus affected Hub tests: 1,980 passed. Light/Dark browser Demo confirmed capacity ranking, explicit application, low/unreadable refusal and cleanup of its temporary browser/server.
+- New native ranking and fake-node tests passed, including stable tie ordering, subset isolation, offline/unreadable nodes, changed-manifest refusal, invalid identities and no tool/job starts.
+- Clippy completed with the existing 46 warnings, unchanged; none point to the new capacity module.
+- Source distribution audit with the external private-identifier deny list: 2,466 tracked files, zero findings.
+- Full native suite: 1,875 passed, zero failures, 36 explicitly ignored hardware/fixture cases. Binary and documentation targets completed with no test cases. The final full invocation passed without retries.
+- All 30 release-compiled safeguard tests passed. Python helpers: 515 passed, 3 platform-specific skips (518 total). Go passed. Distribution and public-release-tool tests: 13 passed. The complete `scripts/check.sh` invocation passed.
 
-Linux/systemd and real Hub/node acceptance are separate. Raw logs stay outside this public tree.
+No native app, real node, VPN, model download, paid AI call or publication is part of this work. Raw logs remain outside public source.
 
-The candidate is built only after a clean commit with `scripts/public-release.py build`, which invokes `scripts/build-candidate.sh`. Output: `../SparkBox-builds/2026-11-10-p3.8-reviewed-download/` relative to the checkout. Its `PROVENANCE.json` gives the source commit, signing identity, file manifest and ZIP hash. This round does not submit for notarization, launch or publish.
+## Candidate
+
+After a clean commit, `scripts/public-release.py build` invokes `scripts/build-candidate.sh` and creates `../SparkBox-builds/2026-11-10-p3.2-capacity-suggestions/` relative to the source checkout. The app is Developer ID signed; provenance records its exact source and ZIP hash. This round does not launch, notarize or publish it.
 
 ## Owner inspection
 
-1. Use the offline browser steps in [START_HERE.md](START_HERE.md). Check Light and Dark, the full commit and file list, and the synthetic tag selection.
-2. Type a different revision without inspecting: download/advice must be dimmed. Inspect it, and confirm the new resolved commit. The `hf=config-error` scenario must show a readable refusal and no fit table.
-3. In Demo select a node without a finished copy, review its tool, disk, commit and file count, then cancel. No job should be created. Demo confirmation can create only a simulated job. Cancel that job before it finishes, select **Resume download…**, choose its tool, and read the saved commit in the confirmation; cancel that confirmation. It must match the inspected commit. Jobs Resume retains the original plan.
-4. A separately authorized native/live round should choose a small public model not already installed at the selected destination, inspect and record its full commit/files, cancel once, then approve the exact download. Verify the job and final manifest match, all files verify, and no unexpected tool, replacement node or copy begins. Review cleanup through normal ownership safeguards. Repeat gated-denial behavior without changing credentials for convenience. Do not infer real download success from browser Demo.
+Use the browser-only procedure in [START_HERE.md](START_HERE.md). Compare the synthetic disks, verify that the current Download node remains unchanged until **Use cell2**, then check low/unknown disk cases. Exclude cell2 and compare again to confirm it cannot be suggested. Change Revision without inspecting to confirm comparison is dimmed. Wait one minute to confirm results expire. Repeat in Dark.
+
+Any native acceptance needs separate authorization. With configured connected nodes, inspect a small public model and compare only the intended potential load members. Check destination paths, reserve arithmetic and warnings. Confirm the selected target does not change until **Use**, then cancel tool/download review and verify no job starts. A separate approved download can verify disk rechecks and final files. Do not infer live acceptance from Demo.
 
 ## Limits and next round
 
-Selecting a revision does not overwrite a finished Library copy. This adds no automatic copy chain, capacity-based default node, cache deletion, throughput tuning or unattended acceptance. Disk readings are not reservations and do not guarantee separate cache/tool space. The stored manifest compares publisher metadata; actual downloaded bytes still use the existing size and available publisher-checksum verification. No missing publisher checksum is invented.
+This implements capacity-based suggestions, with explicit application instead of silently replacing a default. It does not prove GPU fit, bandwidth, fabric suitability, cache/tool capacity, quotas or inode headroom. Disk readings reserve no space. Comparison candidates come from the user's selection here; no pre-download Load draft is inferred. Existing finished copies should be used or copied through Library. P3.2's durable **Then copy to** download → verify → serve → pulls chain remains unfinished.
 
-Recommended next offline round: the remaining P3.2 capacity-based default download-node suggestion using destination-disk preflight, while preserving an explicit user selection and excluding durable copy chaining from that round. Native acceptance of P3.1/P3.3/P3.5/P3.8 and the full P1.38 24-hour monitoring soak remain separately authorized live work. Stop after the signed candidate is verified.
-
-## API reference
-
-The revision and refs request shapes were checked against the official [Hugging Face Hub client](https://github.com/huggingface/huggingface_hub/blob/main/src/huggingface_hub/hf_api.py) and [repository revision documentation](https://huggingface.co/docs/huggingface_hub/guides/repository). Only documentation was consulted online; no live model, node, credential or inference validation was performed.
+Recommended next offline round: design and implement that bounded durable copy chain with exact saved destinations, ownership checks, explicit consent, cancellation and restart recovery. Native acceptance of the download changes and the full P1.38 monitoring soak remain separate live work. Stop after this round's candidate verification.

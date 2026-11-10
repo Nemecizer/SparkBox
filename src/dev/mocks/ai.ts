@@ -10,8 +10,8 @@ import { channelEnd, channelSend, emitMock, type MockHandlers } from "../../test
 import { preparedImageJobs, downloadRecoveryJobs, resumeDemoDownload, cancelDemoDownload, demoDownloadTools, startDemoDownload } from "./jobs";
 
 import { demoHistory } from "./deploymentHistory";
-import { demoDiskPreflight } from "./disk";
-import type { DiskRequest } from "../../lib/types";
+import { demoDiskPreflight, demoDownloadCapacity } from "./disk";
+import type { DiskRequest, DownloadSelection } from "../../lib/types";
 
 const GiB = 1024 ** 3;
 const TOTAL = 128_530_000_000;
@@ -529,6 +529,7 @@ export const handlers: MockHandlers = {
   job_cancel: ({ id }: { id: string }) => cancelDemoDownload(id),
   job_resume_download: resumeDemoDownload,
   model_download_tools: ({ node }: { node: string }) => demoDownloadTools(node),
+  model_download_capacity: ({ selection, nodes }: { selection: DownloadSelection; nodes: string[] }) => demoDownloadCapacity(selection, nodes),
   model_disk_preflight: ({ request }: { request: DiskRequest }) => demoDiskPreflight(request, request.kind === "download" ? details(request.selection.repo).model.downloadBytes : undefined),
   model_download: startDemoDownload,
   deployment_history_list: () => demoHistory(),

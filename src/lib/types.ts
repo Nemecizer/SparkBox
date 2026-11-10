@@ -1320,3 +1320,9 @@ export type DiskRequest =
   | { kind: "download"; node: string; selection: DownloadSelection }
   | { kind: "resume"; node: string; id: string; expected: DownloadResume }
   | { kind: "copy"; key: string; targets: string[] };
+
+/** Ephemeral, read-only comparison; never permission to start or a space reservation. */
+export interface DownloadCapacity {
+  readings: { node: string; check: DiskCheck | null; error: string | null }[];
+  suggested: string | null;
+}

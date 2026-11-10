@@ -364,6 +364,7 @@ pub const READ_ONLY: &[(&str, &str)] = &[
     ("models_analyze", "asks the advisor model about a Hugging Face model; changes nothing"),
     ("library_list", "lists the model folders on the nodes"),
     ("model_download_tools", "reads executable fingerprints, managed-tool receipts and local image IDs; executes no hf command and installs nothing"),
+    ("model_download_capacity", "compares reviewed file sizes with destination filesystem capacity on chosen inventory nodes; creates no model folder, installs no tool and starts no job"),
     ("model_disk_preflight", "reads file sizes and destination filesystem capacity; starts no job, creates no model folder and installs no download tool"),
     ("jobs_list", "lists download and copy jobs and their progress"),
     ("deploy_preview", "shows the commands a load would run, without running them"),

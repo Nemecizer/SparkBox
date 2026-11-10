@@ -762,6 +762,11 @@ async fn job_resume_download(app: AppHandle, state: State<'_, AppState>, node: S
 }
 
 #[tauri::command]
+async fn model_download_capacity(state: State<'_, AppState>, selection: models::hf::DownloadSelection, nodes: Vec<String>) -> Result<models::DownloadCapacity, String> {
+    state.models.download_capacity(&models_ctx(&state), &selection, &nodes).await
+}
+
+#[tauri::command]
 async fn model_disk_preflight(state: State<'_, AppState>, request: models::DiskRequest) -> Result<Vec<models::DiskCheck>, String> {
     state.models.disk_preflight(&models_ctx(&state), &request).await
 }
@@ -1776,6 +1781,7 @@ pub fn run() {
             model_download,
             model_download_tools,
             model_disk_preflight,
+            model_download_capacity,
             model_share,
             model_delete,
             cluster_check,

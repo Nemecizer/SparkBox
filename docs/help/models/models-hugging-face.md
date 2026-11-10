@@ -83,7 +83,13 @@ Choosing a revision here affects new downloads. It does not replace a finished L
 
 ### Download node
 
-Choose a connected node from **Download node** before starting. The first connected node is selected initially; this is not a free-disk recommendation. The button and final review name your choice. Changing the selection starts no download or tool check.
+Choose a connected node from **Download node** before starting. The first connected node is selected initially; use **Suggest a download node** to compare capacity. The button and final review name your choice. Changing the selection starts no download or tool check.
+
+Expand **Suggest a download node**. Select the nodes you are considering for the load, then click **Compare destination capacity**. Connected nodes without finished or running copies start selected. These choices limit the comparison; they do not set load members or copy files.
+
+Each result names the destination, available space and required reserve. The suggested node has the most space left after the full transfer plus 5% and 20 GiB. Equal results use node ID order. Unknown, disconnected or short disks cannot win. Fullness warnings remain visible; a warning does not erase sufficient capacity.
+
+To change **Download node**, click **Use cell2**, or the name shown. Reading capacity never changes your selection by itself. Results expire after one minute; changing the revision, comparison nodes or connections requires another comparison. This reads only, works in look-only mode and needs no Admin unlock. It does not install a tool, create a model folder or start a job.
 
 SparkBox remembers the selected node for this window. Reordering or renaming nodes does not change the target. If it disconnects or is removed from inventory, downloading is dimmed until you reconnect it or choose another node. SparkBox never sends the download to a replacement by itself.
 

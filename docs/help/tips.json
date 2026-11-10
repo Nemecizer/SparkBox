@@ -1542,7 +1542,7 @@
   },
   "models.hub.download-target": {
     "title": "Download node",
-    "body": "Choose the connected node that will receive the files, then review its destination space. Changing this choice starts nothing; SparkBox keeps it if the node disconnects. Jobs Resume stays on its original node.",
+    "body": "Choose the connected node that will receive the files, or expand Suggest a download node to compare destination capacity. Apply a suggestion yourself; reading space never changes your choice or starts a job. Jobs Resume stays on its original node.",
     "article": "models-hugging-face#download-node",
     "howto": [
       "download-a-model"

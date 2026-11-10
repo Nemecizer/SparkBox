@@ -14,6 +14,7 @@ import type { Analysis, DownloadSelection, HfRef } from "../../lib/types";
 import { useWinState } from "../../wm/WindowManager";
 import { chooseDownloadTool, downloadToolConsent } from "./DownloadToolChoice";
 import { checkTransferDisk, DiskPreflight } from "./DiskPreflight";
+import { DownloadCapacity } from "./DownloadCapacity";
 import { FitTable } from "./FitTable";
 import { forgetQueued, noteSize, requestSize, sizeOf, useSizes } from "./hfSizes";
 import { Ago, errText, locked, useNodes } from "./shared";
@@ -346,6 +347,12 @@ export function HubTab({ library, onLoad, onDownloading }: {
                       {nodes.map((n) => <option key={n.id} value={n.id} disabled={!n.online}>{n.name}{n.online ? "" : " — not connected"}</option>)}
                     </select>
                   </label>
+                  <DownloadCapacity key={`${details.model.id}:${details.model.revision}`} selection={{ repo: details.model.id, revision: details.model.revision, files: details.model.files }}
+                    nodes={nodes.map((node) => {
+                      const state = hubPresence(libraryMatch(library, details.model.id, node.id), node.id);
+                      return { ...node, unavailable: state.kind === "finished" ? "copy already finished" : state.kind === "running" ? "transfer running" : undefined };
+                    })} target={targetId} onSelect={setTargetId}
+                    disabled={busy !== null || !!details.model.configError || details.model.weightsFormat === "none" || !details.model.files.length || revisionInput.trim() !== inspectedRevision} />
                   {!target?.online && <span className="muted">Choose a connected download node. The target is never changed automatically.</span>}
                 </>}>
               {/* MLX weights don't run on a GB10: nothing to analyze, download or load. */}
