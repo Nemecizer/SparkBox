@@ -1,0 +1,89 @@
+# SparkBox — development candidate after v0.1.0
+
+## Copy source records and bounded live inspection
+
+New ordinary Library copy source records now retain the initiating SparkBox instance, matching their target records. The live inspection found that the earlier source spec omitted this metadata. This change preserves existing records and leaves authentication, controller leases, SSH identity, Look only, process identity checks and debug fences unchanged. It does not add a new cancellation authorization rule.
+
+Two bounded 28.8 GiB ordinary copies completed before cancellation could be confirmed. Their finished copies and records were retained; no target cancellation was dispatched. The first private UI observation caught a transition; the second watcher did not recognize the normal selected-row count wording. Both refused before cancellation, and neither establishes a product cancellation defect. Active-copy cancellation remains unproven. Help now explains how to stop one target and how to distinguish normal source cleanup from a canceled target. See [the current handoff](HANDOFF.md) for verification and limits.
+
+## Bounded chain cancellation and application reconnection
+
+An initial eight-file chain completed before cancellation was confirmed; it was kept and does not count as cancellation acceptance. All 86 independent checks passed, including matching all eight payload hashes between the nodes, cleanup and preservation of earlier models and records.
+
+A separate chain was canceled while its source checked the selected download tool and its target waited. Both jobs ended canceled, and all 94 independent checks passed. The waiting target never claimed its model folder. Its missing child record was not treated as proof of cleanup: the inspection used the recorded boot and parent identity, absence of that process group, and the other resource checks. Earlier completed models and job records stayed unchanged. This does not establish cancellation during active file sharing.
+
+Another chain was active when SparkBox quit normally. Reopening the same candidate reconnected all four nodes, relocked Admin, and followed the same chain IDs without replacement work. The existing and new records remained visible, including the task marked picked up again. Both chain rows reported done. All 120 final node checks passed, including eight matching payload hashes, cleanup and preservation of preceding copies, canceled artifacts and records. See [the preserved chain handoff](CHAIN-RECOVERY-HANDOFF.md) for evidence and limits.
+
+This round preserves normal authentication, ownership, exact plans, disk checks and credentials. Network loss, Mac sleep, node reboot, managed tool installation, ordinary Resume and large-transfer acceptance remain separate work.
+
+## Connection diagnostics and chain recovery records
+
+Failed SSH connection attempts now record elapsed time. Normally ending control connections record their authenticated duration. Error categories, retries and encryption checks are unchanged; diagnostics do not claim to repair the network.
+
+Download → verify → copy sources retain their chain metadata beside the pinned download plan. Source and target records stay associated after completion and reopening. Older chain sources with missing participant metadata cannot fall back to ordinary Resume. The UI explains the missing plan; no existing records or model files are rewritten. See [the handoff](HANDOFF.md) for the bounded live outcome and verification.
+
+## Live Library cache inspection increment
+
+Missing backing files in a Hugging Face cache snapshot now appear as an incomplete copy with a per-node missing-file count. Other models on that node remain visible. Present-byte totals are labeled, incomplete snapshots cannot be Load/copy sources, and permission failures retain their strict behavior. Scanning repairs or deletes nothing. See [the handoff](HANDOFF.md) for validation and limits.
+
+This local development candidate starts from published v0.1.0, commit `3121d96`. The changes below are not published or notarized. Use only the exact reviewed artifact for any separately authorized testing. See [developer handoff](HANDOFF.md) and [quick start](START_HERE.md).
+
+## Library reliability (bounded P3.4 round)
+
+Library now reports each node's scan independently. A failed or offline node no longer discards successful results. Folders from its last successful scan stay visible as **last known**, with the time and any error; nodes without a successful scan show **unknown**. A successful empty scan clears old copies. Observations are memory-only and bound to the model root and node connection configuration; they do not add saved inventory or credentials.
+
+Live transfer markers supply percentages and separate waiting/verification phases. Transferred bytes alone never mark a model finished. Stale observations cannot enable Load, Copy or Delete. Copy and Delete retain fresh strict backend scans; Load retains fresh prerequisite checks. Scan errors and malformed replies fail closed, and delayed refreshes cannot replace newer results.
+
+Offline fixtures cover partial failures, unavailable nodes, recovery, changed configuration, race ordering, progress and action refusal. Bounded live acceptance now covers repeated scans on four nodes, incomplete cache copies, last-known observations during connection loss and automatic recovery. A small two-node chain now also passed waiting/copy progress, verified completion and persistence after an app restart. The later bounded round also covers early chain cancellation and following existing jobs after normal app quit/reopen. Large transfers, network loss, Mac sleep, node-reboot recovery and other model actions remain separate acceptance. HF cache revision grouping, destination free-space columns and reuse of scans within 60 seconds remain separate P3.4 follow-ups.
+
+## Reviewed download → verify → copy chains (P3.2)
+
+**Then copy to** adds explicit targets to a new download. The final review shows exact destinations, fabric addresses, disks, source tool and immutable files. Targets are armed first; the source downloads, verifies and shares only the reviewed file set. Copies verify fresh source hashes and retain individual records. No model is loaded.
+
+Every destination must be empty. Installed rsync, sufficient disk and a common IPv4 fabric subnet are required. Paths, route, tool and immutable files are rechecked at start. Jobs persist on the nodes, continue after application disconnection and expire within 24 hours. Reopening follows records without dispatching replacement work. Node reboot recovery is explicit; chain rows cannot use ordinary Resume. **Cancel chain…** verifies ownership and the saved participant plan before each cancellation, retaining files and records.
+
+Offline detached-worker, real loopback rsync and failure tests cover this round. A bounded live ARM64 test passed: seven files totaling 6,477,074 bytes downloaded to one node using an already installed image, then copied over the fabric to one empty target. All 53 independent file/plan/cleanup checks passed, and the two completed chain records plus eight older records remained after an app restart and Refresh. That initial test did not establish cancellation or active-job reconnection; the later bounded results are recorded above. Managed installation, node-reboot recovery and large-transfer acceptance remain separate. No credentials, saved network state or native defaults are added.
+
+## Capacity-based download-node suggestions (P3.2)
+
+In Models → Hugging Face, expand **Suggest a download node**, choose the potential load nodes to compare, and read their destination capacity. SparkBox suggests the qualifying node with the most space after the full inspected transfer plus 5% and 20 GiB; stable node ID breaks ties. **Use** explicitly applies the suggestion. The existing selected target never changes because of a probe or failed connection.
+
+Readings use the pinned inspected manifest, expire after one minute and are discarded on revision, scope or connection changes. Individual disk failures remain visible. Finished and running copies are excluded from the UI comparison. The comparison requires no Admin unlock and starts no jobs. Download still requires tool consent, its own disk review and the existing safeguards. The node-side start repeats admission. Read-only capacity comparison passed on two live nodes for one small public model; transfer-start disk admission and one small two-node chain also passed in this round.
+
+## Inspected downloads (P3.8)
+
+New downloads and destination-disk reviews require the repository, full commit and complete inspected file list. SparkBox re-fetches that immutable commit and compares names, sizes and available publisher checksums before starting; any mismatch refuses instead of switching revisions. A moved branch does not change an existing review.
+
+The Hugging Face tab adds branch/tag selection, an explicit revision field, the full resolved commit and an expandable file list. Failed inspections discard old details; late responses cannot replace a newer selection. Configuration access, missing-file and parsing errors are visible, and prevent download/AI advice and misleading fit estimates. An unreadable or inconsistent shard index refuses without a fallback manifest.
+
+Admin, Touch ID, Look only, SSH identity, leases, ownership, exact tool consent, disk checks, saved-plan Resume and debug fences are retained. No credentials, saved connections or node defaults are added. All new behavior is tested offline. Live immutable Hub inspection, read-only node capacity review and the bounded ARM64 download/copy described above passed. The later early-cancellation and normal app quit/reopen observations are recorded above. Larger downloads, network loss, Mac sleep and node reboot still need their own live acceptance.
+
+## Included
+
+- macOS desktop monitoring, alerts, node history, topology and local /24 discovery.
+- Model library, explicit download-tool and target selection, saved-plan resume, destination-disk checks, copy review, serving, Chat and deployment history.
+- Admin-gated routine updates, narrowly pinned protected-update checkpoints, explicit restarts and reconnection checks.
+- Terminal, files, RDP inspection/repair, VPN helper, and bundled NVIDIA How To documentation.
+- Offline Demo, unit/fake-node tests, build scripts, lockfiles and dependency notices.
+
+## Public-source preparation changes
+
+New installations have an empty inventory and no guessed SSH account. A missing or corrupt inventory cannot restore sample endpoints. Existing saved inventories retain their normal load/preservation behavior. The browser Demo uses a synthetic four-node example; native Demo uses the nodes you explicitly configure.
+
+Owner-specific account names, LAN addresses, hostnames, captured device-specific MAC bytes, physical serial numbers, IPv6 interface identifiers, SSH host-key fingerprints and captured boot identifiers are substituted in examples and fixtures. The public application identifier is retained for compatibility. Private Git history, handoffs, maintenance records, saved state, credential profiles, native test orchestration and old builds are excluded. Public Help uses general onboarding instead of the maintainer's acceptance chronology. Fake SSH servers generate fresh in-memory keys per test process; no private-key fixtures are distributed.
+
+The old raster Help pictures are omitted. A packaging guard and an isolated native startup regression check protect the empty-install contract. Required guide pictures are generated from the sanitized browser Demo in Light and Dark. Public Help does not claim native acceptance of this export. Original assertions for authentication, identity, ownership, plan integrity, cancellation and cleanup remain; fixture encodings/checksums are updated when their synthetic content changes.
+
+## Limits
+
+This is not general hardware certification or approval for unattended changes. The maintainer previously tested specific GB10 configurations; those results do not cover this public export on another person's Mac or cluster. A full 24-hour monitoring acceptance and several Linux/systemd, serving, recovery and download paths remain outstanding. Platform-specific test skips are reported with the preparation evidence.
+
+Disk-space checks are not reservations. Parallel jobs, quotas, inode limits and separate tool/cache filesystems can still cause a later failure. Inspected revision/file-list pinning passed bounded live existing-image chains. That does not establish tool installation, large-transfer throughput or other interruption paths.
+
+Protected update plans match exact historical package versions and prerequisites. They are not a general way to bypass routine kernel/driver protection. Discovery proposes an inventory for review; it does not silently enroll machines or establish cabling from hostnames.
+
+Apple Silicon is the current build target. An Intel/universal binary is not provided. Public installation from a fresh downloaded, quarantined, notarized artifact is a separately authorized acceptance step. The original public-source preparation did not launch SparkBox or operate a cluster. Subsequent bounded live development acceptance is recorded above and in the handoff.
+
+## Before publication
+
+Install a valid Developer ID Application identity, configure a Keychain notarization profile, build from the exact reviewed source commit, submit explicitly, staple and verify. Then perform the owner installation review. Publish only after that review and an explicit publishing request. See RELEASING.md.

@@ -1,5 +1,9 @@
 # SparkBox development quick start
 
+## v0.1.1 release packaging
+
+The owner authorized a new Developer ID-signed, notarized GitHub release without launching the app. Application/package manifests are aligned at **0.1.1**; dependencies and runtime behavior are unchanged from the preceding checkpoint. [Release notes](RELEASE-NOTES.md) distinguish tested paths from unfinished acceptance. Build and notarization use new output directories; prior releases, saved settings and private evidence remain preserved. Release provenance and the GitHub tag identify the exact final build commit. Earlier no-publication statements below describe their original rounds.
+
 Continue on `codex/p3-active-copy-cancel`, following runtime commit `92dfacf`. Read [the current handoff](HANDOFF.md), [building instructions](BUILDING.md) and [security safeguards](../SECURITY.md). The [preceding source-identity fix](ACTIVE-COPY-HANDOFF.md) and [earlier chain recovery handoff](CHAIN-RECOVERY-HANDOFF.md) remain historical records.
 
 Ordinary Library active-copy cancellation and partial-copy continuation passed subsequent bounded live tests with the signed `92dfacf` candidate. Active download-chain cancellation remains unproven: its separate attempt completed before an eligible cancellation window. Both completed new copies and all older copies/history remain preserved.

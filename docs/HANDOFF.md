@@ -1,5 +1,9 @@
 # Cancellation acceptance and offline replay checkpoint
 
+## v0.1.1 release packaging
+
+The owner authorized a new Developer ID-signed, notarized GitHub release without launching the app. Application/package manifests are aligned at **0.1.1**; dependencies and runtime behavior are unchanged from the preceding checkpoint. [Release notes](RELEASE-NOTES.md) distinguish tested paths from unfinished acceptance. Build and notarization use new output directories; prior releases, saved settings and private evidence remain preserved. Release provenance and the GitHub tag identify the exact final build commit. Earlier no-publication statements below describe their original rounds.
+
 This checkpoint follows application commit `92dfacf` on `codex/p3-active-copy-cancel`. It commits the portable offline replay controller, synthetic regression fixtures and the results of subsequent bounded acceptance rounds. Application runtime and safeguards are unchanged. The [preceding source-identity fix and original test report](ACTIVE-COPY-HANDOFF.md) and [earlier chain recovery report](CHAIN-RECOVERY-HANDOFF.md) are preserved as historical records.
 
 ## Established results
