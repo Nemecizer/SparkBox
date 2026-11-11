@@ -27,6 +27,7 @@ step() {
 
 step "distribution audit tests" python3 -m unittest discover -s scripts -p distribution_audit_test.py
 step "public release tools" python3 -m unittest discover -s scripts -p public_release_test.py
+step "offline cancellation replay" python3 -m unittest discover -s scripts -p cancel_replay_test.py
 step "typescript" npx tsc --noEmit
 step "vitest" npx vitest run
 step "vpn helper build" npm run build:tunnel
