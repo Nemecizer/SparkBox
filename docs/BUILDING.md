@@ -4,6 +4,8 @@
 
 Use an Apple Silicon Mac with Xcode and its command-line developer tools, Node/npm, Rust/Cargo, Go and Python 3.12 or newer. Ensure those tools are on PATH. The maintainer's observed toolchain is Node 26.13.0, npm 11.20.0, Rust/Cargo 1.99.1, Go 1.27.3 and Python 3.15.2; these are recorded versions, not a promise that every older combination works. The Go module declares its required toolchain in tunnel/go.mod. The system /usr/bin/python3 may be too old.
 
+Offline TLS fixtures also need an OpenSSL installation that generates X.509 v3 certificates; the verified toolchain used Homebrew OpenSSL 4.1.0. The system LibreSSL 3.3.6 generated a v1 certificate for that fixture and was rejected correctly. On a Homebrew Apple Silicon setup, use `PATH=/opt/homebrew/bin:$PATH` for every check, including direct test-binary runners, and confirm `python3 --version` and `openssl version` first. This selects existing tools; it does not change the system installations.
+
 Locked dependency manifests are package-lock.json, src-tauri/Cargo.lock and tunnel/go.mod/go.sum. Initial dependency installation needs internet access to the package registries. No cluster or paid AI service is needed to compile.
 
 ## Compile without launching

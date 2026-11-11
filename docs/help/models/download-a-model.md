@@ -13,7 +13,7 @@ related: [follow-a-download, copy-a-model-to-other-nodes, find-a-model-that-fits
 
 To put a model on your cluster, download it from Hugging Face to the node you choose.
 
-An earlier public `Qwen/Qwen3-0.6B` download passed on `cell1`: seven files, a pinned revision and publisher checksums. Target selection, capacity suggestions, tool choice, disk checks, revision review, installation and recovery have passed offline tests only.
+Small public-model downloads have passed on one node and in a two-node download → verify → copy chain. The chain test used seven files (6.2 MiB), a fixed commit and an already installed image. Tool choice, destination disk checks, file verification, temporary file-server cleanup and reopening finished Jobs passed live. Tool installation, interrupted-chain recovery and large transfers still need live testing.
 
 ## Before you start
 

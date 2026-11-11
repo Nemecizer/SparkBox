@@ -18,7 +18,7 @@ Library now reports each node's scan independently. A failed or offline node no 
 
 Live transfer markers supply percentages and separate waiting/verification phases. Transferred bytes alone never mark a model finished. Stale observations cannot enable Load, Copy or Delete. Copy and Delete retain fresh strict backend scans; Load retains fresh prerequisite checks. Scan errors and malformed replies fail closed, and delayed refreshes cannot replace newer results.
 
-Offline fixtures cover partial failures, unavailable nodes, recovery, changed configuration, race ordering, progress and action refusal. Bounded live acceptance now covers repeated scans on four nodes, incomplete cache copies, last-known observations during connection loss and automatic recovery. Live transfer-progress and model-action acceptance remain pending. HF cache revision grouping, destination free-space columns and reuse of scans within 60 seconds remain separate P3.4 follow-ups.
+Offline fixtures cover partial failures, unavailable nodes, recovery, changed configuration, race ordering, progress and action refusal. Bounded live acceptance now covers repeated scans on four nodes, incomplete cache copies, last-known observations during connection loss and automatic recovery. A small two-node chain now also passed waiting/copy progress, verified completion and persistence after an app restart. Large transfers, interrupted-chain recovery and other model actions remain separate acceptance. HF cache revision grouping, destination free-space columns and reuse of scans within 60 seconds remain separate P3.4 follow-ups.
 
 ## Reviewed download → verify → copy chains (P3.2)
 
@@ -26,13 +26,13 @@ Offline fixtures cover partial failures, unavailable nodes, recovery, changed co
 
 Every destination must be empty. Installed rsync, sufficient disk and a common IPv4 fabric subnet are required. Paths, route, tool and immutable files are rechecked at start. Jobs persist on the nodes, continue after application disconnection and expire within 24 hours. Reopening follows records without dispatching replacement work. Node reboot recovery is explicit; chain rows cannot use ordinary Resume. **Cancel chain…** verifies ownership and the saved participant plan before each cancellation, retaining files and records.
 
-Offline detached-worker, real loopback rsync and failure tests cover this round. Real ARM64 download/copy, app restart and fabric acceptance remain pending. No credentials, saved network state or native defaults are added.
+Offline detached-worker, real loopback rsync and failure tests cover this round. A bounded live ARM64 test passed: seven files totaling 6,477,074 bytes downloaded to one node using an already installed image, then copied over the fabric to one empty target. All 53 independent file/plan/cleanup checks passed, and the two completed chain records plus eight older records remained after an app restart and Refresh. This does not establish managed installation, cancellation, node-reboot recovery or large-transfer acceptance. No credentials, saved network state or native defaults are added.
 
 ## Capacity-based download-node suggestions (P3.2)
 
 In Models → Hugging Face, expand **Suggest a download node**, choose the potential load nodes to compare, and read their destination capacity. SparkBox suggests the qualifying node with the most space after the full inspected transfer plus 5% and 20 GiB; stable node ID breaks ties. **Use** explicitly applies the suggestion. The existing selected target never changes because of a probe or failed connection.
 
-Readings use the pinned inspected manifest, expire after one minute and are discarded on revision, scope or connection changes. Individual disk failures remain visible. Finished and running copies are excluded from the UI comparison. The comparison requires no Admin unlock and starts no jobs. Download still requires tool consent, its own disk review and the existing safeguards. The node-side start repeats admission. Read-only capacity comparison passed on two live nodes for one small public model; transfer-start admission and chain acceptance remain pending.
+Readings use the pinned inspected manifest, expire after one minute and are discarded on revision, scope or connection changes. Individual disk failures remain visible. Finished and running copies are excluded from the UI comparison. The comparison requires no Admin unlock and starts no jobs. Download still requires tool consent, its own disk review and the existing safeguards. The node-side start repeats admission. Read-only capacity comparison passed on two live nodes for one small public model; transfer-start disk admission and one small two-node chain also passed in this round.
 
 ## Inspected downloads (P3.8)
 
@@ -40,7 +40,7 @@ New downloads and destination-disk reviews require the repository, full commit a
 
 The Hugging Face tab adds branch/tag selection, an explicit revision field, the full resolved commit and an expandable file list. Failed inspections discard old details; late responses cannot replace a newer selection. Configuration access, missing-file and parsing errors are visible, and prevent download/AI advice and misleading fit estimates. An unreadable or inconsistent shard index refuses without a fallback manifest.
 
-Admin, Touch ID, Look only, SSH identity, leases, ownership, exact tool consent, disk checks, saved-plan Resume and debug fences are retained. No credentials, saved connections or node defaults are added. All new behavior is tested offline. A live immutable Hub inspection and read-only node capacity review passed; ARM64-node download acceptance remains separate.
+Admin, Touch ID, Look only, SSH identity, leases, ownership, exact tool consent, disk checks, saved-plan Resume and debug fences are retained. No credentials, saved connections or node defaults are added. All new behavior is tested offline. Live immutable Hub inspection, read-only node capacity review and the bounded ARM64 download/copy described above passed. Larger or interrupted downloads still need their own live acceptance.
 
 ## Included
 

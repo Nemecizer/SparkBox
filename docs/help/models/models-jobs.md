@@ -28,7 +28,7 @@ Jobs are built to keep going if SparkBox quits or the VPN drops. That hasn't bee
 
 ### Toolbar
 
-- **Refresh** reads the jobs again. The tab also refreshes by itself every few seconds.
+- **Refresh** reads the jobs again. The tab also refreshes by itself every few seconds. After reopening SparkBox, wait for the nodes to connect and click **Refresh** before treating an empty list as no saved jobs.
 - **Resume download…** starts a new attempt from a stopped download’s saved plan. It keeps the original node, folder, revision and file list. It is dimmed for running jobs, finished downloads, copies, chain rows and older jobs without a saved plan.
 - **Cancel chain…** appears for a chain row. It stops this SparkBox’s remaining members, including the file server, after confirmation. Finished files, records and earlier failure messages remain. Disconnected or changed-ownership members show an error and need review. Reported leftover processes also need recovery review; cancellation does not claim they were cleaned.
 - **Cancel** stops the selected job. It's dimmed unless a running job is selected.
