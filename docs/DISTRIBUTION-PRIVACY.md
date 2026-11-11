@@ -21,3 +21,7 @@ Run `python3 scripts/audit-distribution.py` on a clean source checkout. The cand
 This guard is not a complete secret detector. Also scan the tracked source, reachable Git history, generated web assets, the final extracted app and archive contents. Review Help pictures and fixture data. Keep raw audit logs and private deny lists outside the publishing directory. Do not upload the entire workspace: publish only the reviewed repository history and the selected release files.
 
 The application is not launched as part of packaging. Build, signature and notarization checks do not replace an independently authorized install test or validation on a user's cluster.
+
+## Build-path privacy
+
+The public release builder remaps the local home directory in Rust compiler output to `/build/home` and the checkout directory to `/build/sparkbox`, including dependency paths, while preserving existing compiler flags. Go already uses `-trimpath`. Candidate validation refuses a bundle that still contains the current local home-directory prefix before notarization submission. Keep the independent private-identifier and secret scans: path remapping does not replace them.

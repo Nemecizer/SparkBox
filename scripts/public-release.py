@@ -7,6 +7,7 @@ import os
 from pathlib import Path
 import plistlib
 import re
+import shlex
 import subprocess
 import tempfile
 
@@ -42,11 +43,26 @@ def preflight():
     return identity
 
 
+def private_path_safe_env(original):
+    """Preserve compiler flags while removing local home paths from Rust output."""
+    env = original.copy()
+    if 'CARGO_ENCODED_RUSTFLAGS' in env:
+        flags = [flag for flag in env['CARGO_ENCODED_RUSTFLAGS'].split('\x1f') if flag]
+    else:
+        flags = shlex.split(env.get('RUSTFLAGS', ''))
+    # Cargo's encoded form keeps paths containing spaces in one argument.
+    flags.append(f'--remap-path-prefix={Path.home()}=/build/home')
+    flags.append(f'--remap-path-prefix={ROOT.resolve()}=/build/sparkbox')
+    env['CARGO_ENCODED_RUSTFLAGS'] = '\x1f'.join(flags)
+    env.pop('RUSTFLAGS', None)
+    return env
+
+
 def build(folder):
     identity = preflight()
     if not (ROOT/'LICENSE').is_file():
         raise ValueError('Select and commit the project LICENSE before preparing a public binary.')
-    env = os.environ.copy()
+    env = private_path_safe_env(os.environ)
     for key in NOTARY_ENV:
         env.pop(key, None)
     env['SPARKBOX_SIGN_IDENTITY'] = identity
@@ -81,6 +97,9 @@ def checked_candidate(candidate):
     actual = {p for p in (candidate/'SparkBox.app').rglob('*') if p.is_file()}
     if actual != expected:
         raise ValueError('Candidate file inventory changed since packaging')
+    private_prefix = (str(Path.home()) + '/').encode()
+    if any(private_prefix in path.read_bytes() for path in actual):
+        raise ValueError('Candidate contains local build-machine paths; rebuild with path remapping before submission')
     return meta, archive
 
 

@@ -58,3 +58,7 @@ The final notarized ZIP, checksum and provenance must correspond to the exact so
 After approval, create the public repository in your account, push only this reviewed history, and create a version tag at the tested source commit. In **Releases → Draft a new release**, attach the final notarized ZIP, SHA256SUMS and release notes; mark the first release as a prerelease. GitHub supplies source archives for the tag. Never put a signing certificate private key or notarization password in the repository.
 
 Primary references: [Apple Developer ID](https://developer.apple.com/developer-id/), [Apple notarization workflow](https://developer.apple.com/documentation/security/customizing-the-notarization-workflow), [GitHub licensing](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/licensing-a-repository), [GitHub releases](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository).
+
+## Build-path privacy
+
+The public release builder remaps the local home directory in Rust compiler output to `/build/home` and the checkout directory to `/build/sparkbox`, including dependency paths, while preserving existing compiler flags. Go already uses `-trimpath`. Candidate validation refuses a bundle that still contains the current local home-directory prefix before notarization submission. Keep the independent private-identifier and secret scans: path remapping does not replace them.

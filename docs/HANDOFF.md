@@ -1,5 +1,7 @@
 # Cancellation acceptance and offline replay checkpoint
 
+The first v0.1.1 packaging attempt was withheld because the independent privacy audit found local Rust build-machine paths in its executable. No notarization or publication occurred for that candidate. Public release builds now remap those paths automatically while preserving existing compiler flags, and candidate validation refuses remaining local home paths before submission. Regression tests cover flag precedence, paths containing spaces and refusal before external commands. The replacement is built in a separate directory; prior candidates remain intact.
+
 ## v0.1.1 release packaging
 
 The owner authorized a new Developer ID-signed, notarized GitHub release without launching the app. Application/package manifests are aligned at **0.1.1**; dependencies and runtime behavior are unchanged from the preceding checkpoint. [Release notes](RELEASE-NOTES.md) distinguish tested paths from unfinished acceptance. Build and notarization use new output directories; prior releases, saved settings and private evidence remain preserved. Release provenance and the GitHub tag identify the exact final build commit. Earlier no-publication statements below describe their original rounds.

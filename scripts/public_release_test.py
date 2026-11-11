@@ -23,6 +23,39 @@ class ReleaseTests(unittest.TestCase):
                 release.select_identity(name, LISTING)
         with self.assertRaises(ValueError): release.select_identity(IDENTITY, '')
 
+    def test_path_remapping_preserves_flags_and_space_containing_home(self):
+        with patch.object(release.Path, 'home', return_value=Path('/Users/Example Person')):
+            original = {'RUSTFLAGS': '-C opt-level=2 --cfg "feature=example"', 'KEEP': 'unchanged'}
+            env = release.private_path_safe_env(original)
+            self.assertEqual(env['CARGO_ENCODED_RUSTFLAGS'].split('\x1f'),
+                             ['-C', 'opt-level=2', '--cfg', 'feature=example',
+                              '--remap-path-prefix=/Users/Example Person=/build/home',
+                              f'--remap-path-prefix={release.ROOT.resolve()}=/build/sparkbox'])
+            self.assertNotIn('RUSTFLAGS', env)
+            self.assertEqual(env['KEEP'], 'unchanged')
+            self.assertIn('RUSTFLAGS', original)
+
+    def test_encoded_flags_keep_cargo_precedence(self):
+        for encoded in ['', '-C\x1fopt-level=2']:
+            env = release.private_path_safe_env({'CARGO_ENCODED_RUSTFLAGS': encoded, 'RUSTFLAGS': 'ignored'})
+            self.assertNotIn('ignored', env['CARGO_ENCODED_RUSTFLAGS'])
+            self.assertEqual(env['CARGO_ENCODED_RUSTFLAGS'].split('\x1f')[:-2], encoded.split('\x1f') if encoded else [])
+
+    def test_matching_provenance_cannot_hide_private_build_paths(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp); meta = self.make_candidate(root)
+            binary = root/'SparkBox.app/binary'; binary.write_bytes(b'/Users/Fixture Owner/.cargo/source.rs')
+            meta['files'][0]['sha256'] = release.digest(binary)
+            (root/'PROVENANCE.json').write_text(json.dumps(meta))
+            with patch.object(release.Path, 'home', return_value=Path('/Users/Fixture Owner')):
+                with self.assertRaisesRegex(ValueError, 'build-machine paths'):
+                    release.checked_candidate(root)
+                with patch.object(release, 'run') as run:
+                    with self.assertRaisesRegex(ValueError, 'build-machine paths'):
+                        release.notarize(root, root/'notarized', 'profile', True)
+                    run.assert_not_called()
+                    self.assertFalse((root/'notarized').exists())
+
     def test_no_submit_means_no_external_command_or_output(self):
         with tempfile.TemporaryDirectory() as temp, patch.object(release, 'run') as run:
             out = Path(temp)/'out'
@@ -125,6 +158,8 @@ class ReleaseTests(unittest.TestCase):
                 env=run.call_args.kwargs['env']
                 self.assertTrue(all(k not in env for k in release.NOTARY_ENV))
                 self.assertEqual(env['APPLE_SIGNING_IDENTITY'],IDENTITY)
+                self.assertIn(f'--remap-path-prefix={Path.home()}=/build/home', env['CARGO_ENCODED_RUSTFLAGS'].split('\x1f'))
+                self.assertTrue(env['CARGO_ENCODED_RUSTFLAGS'].endswith(f'--remap-path-prefix={root.resolve()}=/build/sparkbox'))
 
 
 if __name__ == '__main__': unittest.main()
