@@ -77,6 +77,19 @@ describe("finishedCopy", () => {
 });
 
 describe("a Library row", () => {
+  it("explains missing cache files and blocks Load and use as a copy source", async () => {
+    const onLoad = vi.fn();
+    await show([entry({ cell2: copy({ path: CACHE, partial: "stopped", missingCacheFiles: 2 }) }, CACHE, "example/cache")], undefined, {}, { onLoad });
+    expect(cell("◐ incomplete (2 missing)").title).toContain("Size counts only files still present");
+    await select("example/cache");
+    expect(screen.getByText(/2 missing cache files\. Size counts/)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Load…" })).toBeDisabled();
+    await act(async () => { fireEvent.doubleClick(screen.getAllByText("example/cache")[0]); });
+    expect(onLoad).not.toHaveBeenCalled();
+    await press("Copy to nodes…");
+    expect(screen.getByRole("button", { name: "Copy over the fabric" })).toBeDisabled();
+    expect(mockCalls.some((c) => c.cmd === "model_share")).toBe(false);
+  });
   it("says what each copy is, with C-P's tooltips", async () => {
     await show([
       entry({

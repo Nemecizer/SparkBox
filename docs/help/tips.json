@@ -1493,7 +1493,7 @@
   },
   "models.library.verified-found": {
     "title": "What each mark means",
-    "body": "Verified means a completed hash check; sizes match means only sizes were compared, and found has no SparkBox verification record. Transfers and verification remain unfinished. Last known and unknown require another successful scan; a dash means that node answered and no copy was found.",
+    "body": "Verified means a completed hash check; sizes match means only sizes were compared, and found has no SparkBox verification record. Transfers, verification and missing cache files remain unfinished. Last known and unknown require another successful scan; a dash means that node answered and no copy was found.",
     "article": "models-library#the-model-table",
     "howto": [
       "download-a-model",

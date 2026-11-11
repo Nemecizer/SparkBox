@@ -27,5 +27,10 @@ export function demoLibraryReport(entries: LibraryEntry[], scenario = new URLSea
         cell3: { path: key, sizeBytes: 60, verified: false, partial: "stopped" },
       } });
   }
+  if (scenario === "missing-cache") {
+    const key = "/home/demo/.cache/huggingface/hub/models--example--damaged/snapshots/" + "a".repeat(40);
+    report.entries.push({ key, root: "/home/demo/.cache/huggingface/hub", repo: "example/damaged", revision: "", format: "safetensors", sizeBytes: 1024, inUse: null,
+      copies: { cell2: { path: key, sizeBytes: 1024, verified: false, partial: "stopped", missingCacheFiles: 2 } } });
+  }
   return report;
 }

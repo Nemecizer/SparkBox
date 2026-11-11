@@ -358,7 +358,7 @@ export interface LibraryReport { entries: LibraryEntry[]; nodes: LibraryNodeStat
 /** `node`'s copy, when it's finished: one left partway, or still being written, doesn't count. */
 export function finishedCopy(e: Pick<LibraryEntry, "copies">, node: string): LibraryEntry["copies"][string] | undefined {
   const c = e.copies[node];
-  return c && !c.partial && !c.stale ? c : undefined;
+  return c && !c.partial && !c.stale && !c.missingCacheFiles ? c : undefined;
 }
 
 /** The nodes that hold a finished copy. */

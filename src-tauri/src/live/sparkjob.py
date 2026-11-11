@@ -1910,6 +1910,28 @@ def repo_from_path(path, root):
     return rel if rel.count("/") == 1 else os.path.basename(path)
 
 
+def scan_model_size(path):
+    """A dangling link in an HF snapshot is known incomplete data, not a failed node scan.
+    Count present bytes only; never hide permission errors or vanished regular files.
+    Ordinary folders and the search roots keep their strict failure behavior."""
+    parent = os.path.dirname(path)
+    cache_snapshot = (os.path.basename(parent) == "snapshots"
+                      and os.path.basename(os.path.dirname(parent)).startswith("models--"))
+    total, missing = 0, 0
+    for dirpath, _, names in os.walk(path, onerror=scan_error):
+        for name in names:
+            full = os.path.join(dirpath, name)
+            try:
+                total += os.stat(full).st_size
+            except FileNotFoundError:
+                # lstat must still see a symlink; a concurrent removal isn't evidence
+                # of a missing cache blob. Other errors deliberately propagate.
+                if not cache_snapshot or not stat.S_ISLNK(os.lstat(full).st_mode):
+                    raise
+                missing += 1
+    return total, missing
+
+
 def scan(roots, max_depth=5):
     found, seen = [], set()
     for root in roots:
@@ -1939,13 +1961,19 @@ def scan(roots, max_depth=5):
                 seen.add(real)
                 manifest = read_manifest(dirpath) or {}
                 partial = partial_state(dirpath, names, manifest)
+                size, missing = scan_model_size(dirpath)
+                if missing:
+                    # Keep an active writer's state so Delete/Copy cannot treat its
+                    # incomplete snapshot as an idle target. Never promote its manifest.
+                    partial = partial or "stopped"
                 verified = bool(manifest.get("verifiedAt")) and partial is None
                 found.append({
                     "path": dirpath,
                     "root": root,
                     "repo": manifest.get("repo") or repo_from_path(dirpath, root),
                     "revision": manifest.get("revision", ""),
-                    "sizeBytes": folder_size(dirpath, strict=True),
+                    "sizeBytes": size,
+                    "missingCacheFiles": missing,
                     "verified": verified,
                     "partial": partial,
                     "progress": scan_progress(dirpath, partial),

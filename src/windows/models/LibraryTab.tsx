@@ -2,7 +2,7 @@
 // being served right now, and copying or deleting them. Selecting one shows what it is
 // (its config, where each copy lives, whether it's in memory and what last ran it); the
 // Ollama tags on each node are listed too, read-only.
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { Play, RefreshCw, Share2, Trash2 } from "lucide-react";
 import { Table, type Column } from "../../components/Table";
 import { Badge, HelpTip, MiddleEllipsis, Notice, Spacer, Toolbar, ToolButton } from "../../components/ui";
@@ -23,6 +23,7 @@ function CopyCell({ copy, status }: { copy: LibraryEntry["copies"][string] | und
   if (copy?.stale) return <span className="muted" title="Last-known copy. Reconnect and press Find models before using it.">◷ last known</span>;
   if (status && status.state !== "ready") return <span className="muted" title="This node has no successful current scan. Its copies are unknown.">unknown</span>;
   if (!copy) return <span className="muted" title="No copy">—</span>;
+  if (copy.missingCacheFiles && copy.partial === "stopped") return <span className="copy-found" title="Some Hugging Face cache links point to missing files. This copy cannot be loaded or used as a copy source. Size counts only files still present; no files were changed.">◐ incomplete ({copy.missingCacheFiles} missing)</span>;
   if (copy.partial === "stopped") return <span className="copy-found" title="A download or copy stopped partway. Copy to nodes… picks up where it stopped, and a new download should too.">◐ incomplete</span>;
   if (copy.partial) {
     const p = copy.progress;
@@ -308,6 +309,10 @@ function LibraryDetailPane({ entry, nodes, onShowLoaded }: { entry: LibraryEntry
             </div>
           ))}
         </dd>
+        {Object.entries(entry.copies).filter(([, c]) => c.missingCacheFiles).map(([id, c]) => <Fragment key={id}>
+          <dt>{name(id)}{c.stale ? " (last known)" : ""}</dt>
+          <dd>{c.missingCacheFiles} missing cache {c.missingCacheFiles === 1 ? "file" : "files"}. Size counts only files still present. Find models again after restoring the missing files; SparkBox does not repair or remove them.</dd>
+        </Fragment>)}
         <dt>Format</dt><dd>{entry.format}</dd>
         <dt>Quantization</dt><dd>{quantOf(entry, detail)}</dd>
         <dt>Config</dt>

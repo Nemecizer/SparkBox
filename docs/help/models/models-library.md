@@ -60,6 +60,7 @@ Each node's column shows one of these marks. Move the pointer over a mark to rea
 | **✓ verified** | Checked against Hugging Face's checksums or a source copy's SHA-256 manifest; the tip names which |
 | **✓ sizes match** | Copied over the fabric. Every file's size matches the source. Checksums weren't compared |
 | **◐ incomplete** | A download or copy stopped partway. **Copy to nodes…** picks up where it stopped, and a new download should too. You can't load it until then |
+| **◐ incomplete (2 missing)** | Two links in a Hugging Face cache snapshot point to missing files. Other models stay visible. This snapshot cannot be loaded or used as a copy source |
 | **◐ downloading 37%**, **◐ copying 37%** | The marker's live job reported this transfer progress at the last scan; a percentage appears only when the total is known |
 | **◐ verifying**, **◐ waiting** | The job is checking files or waiting for its source. Even 100% transferred is not a finished copy. Follow it on the [Jobs tab](help:models-jobs) |
 | **◷ last known** | A folder was seen in an earlier successful scan. It cannot be used as a current copy until the node is scanned again |
@@ -68,6 +69,8 @@ Each node's column shows one of these marks. Move the pointer over a mark to rea
 | **—** | This node answered its last scan and no copy was found |
 
 A folder counts as a model when it holds a `config.json` file and at least one weights file. A download or copy that stopped partway also shows, with **◐ incomplete**, even before it has any weights.
+
+For a snapshot with missing cache files, **Size** counts only files still present. It is not the full download size or the space a deletion would free. Select the row to see the missing-file count for each affected node. Restore the files through the tool that manages that cache, then press **Find models** again. Scanning does not repair links, download missing files or remove anything. Permission failures, unreadable folders and missing files outside cache snapshots still report **Scan failed**.
 
 ### Copy and delete strip
 

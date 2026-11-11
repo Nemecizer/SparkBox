@@ -713,7 +713,7 @@ export interface LibraryEntry {
   format: string;
   sizeBytes: number;
   root: string;
-  copies: Record<string, { path: string; sizeBytes: number; verified: boolean; partial?: "downloading" | "copying" | "stopped"; stale?: boolean; progress?: { step: "downloading" | "copying" | "verifying" | "waiting"; bytesDone: number; bytesTotal: number } | null; check?: "sha256" | "source-sha256" | "sizes" | "" }>;
+  copies: Record<string, { path: string; sizeBytes: number; verified: boolean; partial?: "downloading" | "copying" | "stopped"; stale?: boolean; missingCacheFiles?: number; progress?: { step: "downloading" | "copying" | "verifying" | "waiting"; bytesDone: number; bytesTotal: number } | null; check?: "sha256" | "source-sha256" | "sizes" | "" }>;
 }
 
 export type JobState = "running" | "done" | "failed" | "cancelled";

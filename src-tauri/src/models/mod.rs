@@ -166,6 +166,9 @@ pub struct Copy {
     pub check: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub progress: Option<LibraryProgress>,
+    /// Dangling file links in an HF snapshot. Its reported size counts present bytes only.
+    #[serde(default)]
+    pub missing_cache_files: u64,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]

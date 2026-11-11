@@ -206,6 +206,69 @@ class LibraryReliability(unittest.TestCase):
         with self.assertRaises(FileNotFoundError):
             sj.scan([self.root])
 
+    def cache_snapshot(self):
+        snapshot = os.path.join(self.root, "hub", "models--example--tiny", "snapshots", "a" * 40)
+        blobs = os.path.join(os.path.dirname(os.path.dirname(snapshot)), "blobs")
+        make_model(blobs, {"config": b"{}", "weight": b"12345"})
+        os.makedirs(snapshot)
+        for name, blob in [("config.json", "config"), ("w.safetensors", "weight"), ("missing.safetensors", "absent")]:
+            os.symlink(os.path.relpath(os.path.join(blobs, blob), snapshot), os.path.join(snapshot, name))
+        return snapshot
+
+    def test_missing_cache_blobs_are_incomplete_without_hiding_healthy_models(self):
+        snapshot = self.cache_snapshot()
+        sj.write_manifest(snapshot, "example/tiny", "a" * 40, [], checked="sha256")
+        manifest = os.path.join(snapshot, sj.MANIFEST)
+        with open(manifest, "rb") as f:
+            before = f.read()
+        rows = {row["path"]: row for row in sj.scan([self.root])}
+        self.assertEqual(set(rows), {self.model, snapshot})
+        self.assertIsNone(rows[self.model]["partial"])
+        broken = rows[snapshot]
+        self.assertEqual(broken["partial"], "stopped")
+        self.assertEqual(broken["missingCacheFiles"], 1)
+        self.assertFalse(broken["verified"], "an old manifest cannot certify a missing blob")
+        self.assertEqual(broken["checked"], "")
+        self.assertIsNone(broken["progress"])
+        self.assertEqual(broken["sizeBytes"], 7 + len(before))
+        with open(manifest, "rb") as f:
+            self.assertEqual(f.read(), before)
+        self.assertTrue(os.path.islink(os.path.join(snapshot, "missing.safetensors")))
+
+    def test_cache_permissions_and_disappearing_regular_files_still_fail(self):
+        snapshot = self.cache_snapshot()
+        stat = os.stat
+        for error in (PermissionError("denied"), FileNotFoundError("disappeared")):
+            make_model(snapshot, {"readme.txt": b"keep"})
+            def fail(path, *args, **kwargs):
+                if path == os.path.join(snapshot, "readme.txt"):
+                    raise error
+                return stat(path, *args, **kwargs)
+            with mock.patch.object(sj.os, "stat", side_effect=fail), self.assertRaises(type(error)):
+                sj.scan([self.root])
+
+    def test_a_missing_config_link_is_incomplete_and_a_restored_blob_rescans(self):
+        snapshot = self.cache_snapshot()
+        config = os.path.realpath(os.path.join(snapshot, "config.json"))
+        os.unlink(config)
+        row = next(row for row in sj.scan([self.root]) if row["path"] == snapshot)
+        self.assertEqual(row["missingCacheFiles"], 2)
+        self.assertEqual(row["partial"], "stopped")
+        make_model(os.path.dirname(config), {"config": b"{}", "absent": b"restored"})
+        row = next(row for row in sj.scan([self.root]) if row["path"] == snapshot)
+        self.assertEqual(row["missingCacheFiles"], 0)
+        self.assertIsNone(row["partial"])
+        self.assertFalse(row["verified"], "restoring a blob is not publisher verification")
+
+    def test_missing_cache_files_keep_active_writer_protection(self):
+        snapshot = self.cache_snapshot()
+        sj.mark_partial(snapshot, "cache-writer", "pull")
+        with mock.patch.object(sj, "read_status", return_value={"state": "running", "step": "copying", "startedAt": sj.now()}):
+            row = next(row for row in sj.scan([self.root]) if row["path"] == snapshot)
+        self.assertEqual(row["missingCacheFiles"], 1)
+        self.assertEqual(row["partial"], "copying")
+        self.assertFalse(row["verified"])
+
     def test_progress_is_live_marker_bound_and_never_marks_verification_finished(self):
         sj.mark_partial(self.model, "library-progress", "download")
         status = {"state": "running", "step": "verifying", "bytesDone": 100, "bytesTotal": 100, "startedAt": sj.now()}

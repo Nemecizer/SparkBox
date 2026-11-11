@@ -1,5 +1,9 @@
 # SparkBox — development candidate after v0.1.0
 
+## Live Library cache inspection increment
+
+Missing backing files in a Hugging Face cache snapshot now appear as an incomplete copy with a per-node missing-file count. Other models on that node remain visible. Present-byte totals are labeled, incomplete snapshots cannot be Load/copy sources, and permission failures retain their strict behavior. Scanning repairs or deletes nothing. See [the handoff](HANDOFF.md) for validation and limits.
+
 This local development candidate starts from published v0.1.0, commit `3121d96`. The changes below are not published or notarized. Use only the exact reviewed artifact for any separately authorized testing. See [developer handoff](HANDOFF.md) and [quick start](START_HERE.md).
 
 ## Library reliability (bounded P3.4 round)

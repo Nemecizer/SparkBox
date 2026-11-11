@@ -6,7 +6,7 @@ This is a **prerelease** prepared for public distribution. It targets Apple Sili
 
 ## Start here
 
-- [Current offline development checkpoint](docs/START_HERE.md)
+- [Current development checkpoint](docs/START_HERE.md)
 - [Build from source](docs/BUILDING.md)
 - [Prepare a signed, notarized release](docs/RELEASING.md)
 - [What is tested and what remains](docs/RELEASE-NOTES.md)

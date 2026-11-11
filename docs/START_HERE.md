@@ -1,30 +1,26 @@
 # SparkBox development quick start
 
-This bounded P3.4 round continues the completed download → verify → copy chain at `5f732f84a46814ff65e54a745b16425b25e64ca6`. Library now keeps per-node scan results and explicitly labels last-known and unknown copies. The earlier work is recorded in the [P3.2 chain handoff](P3.2-CHAIN-HANDOFF.md).
+The current round diagnoses a live Library scan failure from missing files behind Hugging Face cache links. It continues `4879869` on `codex/p3-live-download`. Read [the handoff](HANDOFF.md), [building instructions](BUILDING.md) and [security safeguards](../SECURITY.md).
 
-Read [the handoff](HANDOFF.md), [building instructions](BUILDING.md), [security safeguards](../SECURITY.md) and [distribution privacy](DISTRIBUTION-PRIVACY.md). Published v0.1.0, the private repository, settings and older builds remain intact. This candidate is separate and is not launched, notarized or published by this round.
+## Inspect offline
 
-## Offline browser inspection
+From this checkout, run `npm ci`, then `PORT=1533 npm run dev:mock`. Open:
 
-From this source checkout:
+`http://localhost:1533/mock.html?reset=1&still=1&theme=light&open=models%3Atab%3Dlibrary&library=missing-cache`
 
-```sh
-npm ci
-PORT=1533 npm run dev:mock
-```
+1. All four synthetic nodes show **Scanned**. Healthy model rows remain visible beside **example/damaged**.
+2. Select **example/damaged**. Its affected copy reads **incomplete (2 missing)**. The details explain that Size counts files still present and that scanning repairs or deletes nothing.
+3. Verify **Load…** is dimmed. The offline tests also verify that this incomplete-only model cannot dispatch a copy.
+4. Repeat with `theme=dark`. Stop the server afterward. Browser Demo never contacts your nodes.
 
-Open `http://localhost:1533/mock.html?reset=1&still=1&theme=light&open=models%3Atab%3Dlibrary&library=scan-failure`. This browser-only fixture uses synthetic nodes and performs no cluster work.
+The earlier `library=scan-failure` and `library=progress` fixtures remain available. Missing cache links are different from permission failures: unreadable folders must still report **Scan failed**.
 
-1. Read **Library scan results** above the table: cell1 succeeds, cell2 reports a simulated scan error, cell3 has last-known offline copies and the fourth node has no successful scan. Other models remain visible. Hover over **last known** and **unknown**; neither claims a finished copy or an empty disk.
-2. Select a row. Inspect Copy/Delete targets using Demo's simulated Admin unlock if needed. Failed/offline targets cannot be selected. Load uses only a current finished copy; selecting a stale-only row does not enable it. Cancel without starting a copy or deletion.
-3. Reload with `library=progress`. Select **example/library-progress**: cell1 shows **downloading 37%**, cell2 **verifying**, and cell3 **incomplete**. Load is dimmed even though verification reports all bytes transferred.
-4. Remove the `library` query parameter and reload. Normal Demo scans and verified copies return. This is a separate synthetic fixture, not proof of real-node reconnection. Automated fake-node tests cover retaining and replacing the same cached observation after failure.
-5. Repeat both fixtures with `theme=dark`. Resize the Models window and check that scan errors wrap and the table and action controls remain usable.
+## Live acceptance boundary
 
-Stop the local server with Control-C afterward. No native app launch or real Admin unlock is needed. Last-known observations in the native app last only until it quits; no files or settings are created for this cache.
+The owner authorized this round's live inspection. Use the separately signed candidate, preserve the saved inventory and normal authentication, and start read-only. Find models on every connected node, inspect missing-cache counts and healthy copies, and scan again. Do not repair/delete cache data or start a model as part of this inspection. The handoff records the observed outcome and limitations.
 
-## Verification and build
+Read-only capacity comparison is separate from starting a transfer. The next download/verify/copy acceptance requires review of one small public model, its exact files, tool, empty destinations and fabric route through the normal app safeguards.
 
-Follow [BUILDING.md](BUILDING.md) for offline checks. Run one native suite at a time; overlapping fake-node runs can trigger process timing failures. `scripts/build-candidate.sh` requires a clean commit and a new sibling candidate folder. `scripts/public-release.py build` selects Developer ID signing and calls that script without launching or submitting the app. Provenance identifies the exact source and checksum.
+## Build and checks
 
-The bounded round does not implement HF snapshot grouping, disk columns or 60-second scan reuse. Those are remaining P3.4 work. Real node scan/reconnect acceptance requires separate authorization when cluster access returns. Do not push, publish, notarize or operate a real cluster incidentally.
+Use `scripts/check.sh` for the required offline checks. Build from a clean commit with `scripts/public-release.py build` and a Developer ID Application identity; it invokes `scripts/build-candidate.sh`. Keep old candidates, the private repository and the published release intact. Do not publish, push or submit for notarization incidentally.

@@ -78,6 +78,8 @@ struct ScanItem {
     checked: String,
     #[serde(default)]
     progress: Option<LibraryProgress>,
+    #[serde(default)]
+    missing_cache_files: u64,
 }
 
 /// Reject malformed/truncated replies, including duplicate paths, rather than
@@ -88,11 +90,12 @@ fn parse(node: &str, value: Value) -> Result<Vec<LibraryEntry>, String> {
     items.into_iter().map(|s| {
         if !s.path.starts_with('/') || !s.root.starts_with('/') || s.repo.is_empty() || !paths.insert(s.path.clone())
             || !matches!(s.partial.as_deref(), None | Some("stopped" | "downloading" | "copying"))
-            || s.partial.is_some() && s.verified {
+            || s.partial.is_some() && s.verified
+            || s.missing_cache_files > 0 && s.partial.is_none() {
             return Err("The model scan returned inconsistent folder information. Try Find models again.".into());
         }
         let progress = s.progress.filter(|p| s.partial.is_some() && matches!(p.step.as_str(), "downloading" | "copying" | "verifying" | "waiting"));
-        let copy = Copy { path: s.path.clone(), size_bytes: s.size_bytes, verified: s.verified, partial: s.partial, check: s.checked, progress };
+        let copy = Copy { path: s.path.clone(), size_bytes: s.size_bytes, verified: s.verified, partial: s.partial, check: s.checked, progress, missing_cache_files: s.missing_cache_files };
         Ok(LibraryEntry { key: s.path, in_use: None, repo: s.repo, revision: s.revision, format: s.format,
             size_bytes: s.size_bytes, root: s.root, copies: BTreeMap::from([(node.into(), copy)]) })
     }).collect()
@@ -204,6 +207,20 @@ mod tests {
         assert!(parse("cell1", json!([partial])).is_err(), "unfinished cannot be verified");
         assert!(parse("cell1", json!([])).unwrap().is_empty(), "valid empty scan clears old observations");
         assert!(parse("cell1", json!([item()])).unwrap()[0].copies["cell1"].verified);
+    }
+    #[test]
+    fn missing_cache_files_require_an_incomplete_copy_and_cannot_be_sources() {
+        let mut missing = item(); missing["missingCacheFiles"] = json!(3);
+        assert!(parse("cell1", json!([missing.clone()])).is_err());
+        missing["verified"] = json!(false);
+        assert!(parse("cell1", json!([missing.clone()])).is_err());
+        missing["partial"] = json!("stopped");
+        let entry = parse("cell1", json!([missing.clone()])).unwrap().remove(0);
+        assert_eq!(entry.copies["cell1"].missing_cache_files, 3);
+        let ctx = Ctx { live: false, settings: Default::default(), inventory: Inventory::example(), snapshot: None };
+        assert!(super::super::disk::copy_source(&ctx, &entry).is_err());
+        missing["missingCacheFiles"] = json!(-1);
+        assert!(parse("cell1", json!([missing])).is_err());
     }
     #[test]
     fn library_observations_are_bound_to_config_root_and_generation() {
