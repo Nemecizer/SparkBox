@@ -1,5 +1,15 @@
 # SparkBox — development candidate after v0.1.0
 
+## Bounded chain cancellation and application reconnection
+
+An initial eight-file chain completed before cancellation was confirmed; it was kept and does not count as cancellation acceptance. All 86 independent checks passed, including matching all eight payload hashes between the nodes, cleanup and preservation of earlier models and records.
+
+A separate chain was canceled while its source checked the selected download tool and its target waited. Both jobs ended canceled, and all 94 independent checks passed. The waiting target never claimed its model folder. Its missing child record was not treated as proof of cleanup: the inspection used the recorded boot and parent identity, absence of that process group, and the other resource checks. Earlier completed models and job records stayed unchanged. This does not establish cancellation during active file sharing.
+
+Another chain was active when SparkBox quit normally. Reopening the same candidate reconnected all four nodes, relocked Admin, and followed the same chain IDs without replacement work. The existing and new records remained visible, including the task marked picked up again. Both chain rows reported done. All 120 final node checks passed, including eight matching payload hashes, cleanup and preservation of preceding copies, canceled artifacts and records. See [the handoff](HANDOFF.md) for evidence and limits.
+
+This round preserves normal authentication, ownership, exact plans, disk checks and credentials. Network loss, Mac sleep, node reboot, managed tool installation, ordinary Resume and large-transfer acceptance remain separate work.
+
 ## Connection diagnostics and chain recovery records
 
 Failed SSH connection attempts now record elapsed time. Normally ending control connections record their authenticated duration. Error categories, retries and encryption checks are unchanged; diagnostics do not claim to repair the network.
@@ -18,7 +28,7 @@ Library now reports each node's scan independently. A failed or offline node no 
 
 Live transfer markers supply percentages and separate waiting/verification phases. Transferred bytes alone never mark a model finished. Stale observations cannot enable Load, Copy or Delete. Copy and Delete retain fresh strict backend scans; Load retains fresh prerequisite checks. Scan errors and malformed replies fail closed, and delayed refreshes cannot replace newer results.
 
-Offline fixtures cover partial failures, unavailable nodes, recovery, changed configuration, race ordering, progress and action refusal. Bounded live acceptance now covers repeated scans on four nodes, incomplete cache copies, last-known observations during connection loss and automatic recovery. A small two-node chain now also passed waiting/copy progress, verified completion and persistence after an app restart. Large transfers, interrupted-chain recovery and other model actions remain separate acceptance. HF cache revision grouping, destination free-space columns and reuse of scans within 60 seconds remain separate P3.4 follow-ups.
+Offline fixtures cover partial failures, unavailable nodes, recovery, changed configuration, race ordering, progress and action refusal. Bounded live acceptance now covers repeated scans on four nodes, incomplete cache copies, last-known observations during connection loss and automatic recovery. A small two-node chain now also passed waiting/copy progress, verified completion and persistence after an app restart. The later bounded round also covers early chain cancellation and following existing jobs after normal app quit/reopen. Large transfers, network loss, Mac sleep, node-reboot recovery and other model actions remain separate acceptance. HF cache revision grouping, destination free-space columns and reuse of scans within 60 seconds remain separate P3.4 follow-ups.
 
 ## Reviewed download → verify → copy chains (P3.2)
 
@@ -26,7 +36,7 @@ Offline fixtures cover partial failures, unavailable nodes, recovery, changed co
 
 Every destination must be empty. Installed rsync, sufficient disk and a common IPv4 fabric subnet are required. Paths, route, tool and immutable files are rechecked at start. Jobs persist on the nodes, continue after application disconnection and expire within 24 hours. Reopening follows records without dispatching replacement work. Node reboot recovery is explicit; chain rows cannot use ordinary Resume. **Cancel chain…** verifies ownership and the saved participant plan before each cancellation, retaining files and records.
 
-Offline detached-worker, real loopback rsync and failure tests cover this round. A bounded live ARM64 test passed: seven files totaling 6,477,074 bytes downloaded to one node using an already installed image, then copied over the fabric to one empty target. All 53 independent file/plan/cleanup checks passed, and the two completed chain records plus eight older records remained after an app restart and Refresh. This does not establish managed installation, cancellation, node-reboot recovery or large-transfer acceptance. No credentials, saved network state or native defaults are added.
+Offline detached-worker, real loopback rsync and failure tests cover this round. A bounded live ARM64 test passed: seven files totaling 6,477,074 bytes downloaded to one node using an already installed image, then copied over the fabric to one empty target. All 53 independent file/plan/cleanup checks passed, and the two completed chain records plus eight older records remained after an app restart and Refresh. That initial test did not establish cancellation or active-job reconnection; the later bounded results are recorded above. Managed installation, node-reboot recovery and large-transfer acceptance remain separate. No credentials, saved network state or native defaults are added.
 
 ## Capacity-based download-node suggestions (P3.2)
 
@@ -40,7 +50,7 @@ New downloads and destination-disk reviews require the repository, full commit a
 
 The Hugging Face tab adds branch/tag selection, an explicit revision field, the full resolved commit and an expandable file list. Failed inspections discard old details; late responses cannot replace a newer selection. Configuration access, missing-file and parsing errors are visible, and prevent download/AI advice and misleading fit estimates. An unreadable or inconsistent shard index refuses without a fallback manifest.
 
-Admin, Touch ID, Look only, SSH identity, leases, ownership, exact tool consent, disk checks, saved-plan Resume and debug fences are retained. No credentials, saved connections or node defaults are added. All new behavior is tested offline. Live immutable Hub inspection, read-only node capacity review and the bounded ARM64 download/copy described above passed. Larger or interrupted downloads still need their own live acceptance.
+Admin, Touch ID, Look only, SSH identity, leases, ownership, exact tool consent, disk checks, saved-plan Resume and debug fences are retained. No credentials, saved connections or node defaults are added. All new behavior is tested offline. Live immutable Hub inspection, read-only node capacity review and the bounded ARM64 download/copy described above passed. The later early-cancellation and normal app quit/reopen observations are recorded above. Larger downloads, network loss, Mac sleep and node reboot still need their own live acceptance.
 
 ## Included
 
@@ -62,7 +72,7 @@ The old raster Help pictures are omitted. A packaging guard and an isolated nati
 
 This is not general hardware certification or approval for unattended changes. The maintainer previously tested specific GB10 configurations; those results do not cover this public export on another person's Mac or cluster. A full 24-hour monitoring acceptance and several Linux/systemd, serving, recovery and download paths remain outstanding. Platform-specific test skips are reported with the preparation evidence.
 
-Disk-space checks are not reservations. Parallel jobs, quotas, inode limits and separate tool/cache filesystems can still cause a later failure. Inspected download revision/file-list pinning is implemented offline; live acceptance remains pending.
+Disk-space checks are not reservations. Parallel jobs, quotas, inode limits and separate tool/cache filesystems can still cause a later failure. Inspected revision/file-list pinning passed bounded live existing-image chains. That does not establish tool installation, large-transfer throughput or other interruption paths.
 
 Protected update plans match exact historical package versions and prerequisites. They are not a general way to bypass routine kernel/driver protection. Discovery proposes an inventory for review; it does not silently enroll machines or establish cabling from hostnames.
 

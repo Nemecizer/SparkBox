@@ -13,7 +13,7 @@ related: [follow-a-download, copy-a-model-to-other-nodes, find-a-model-that-fits
 
 To put a model on your cluster, download it from Hugging Face to the node you choose.
 
-Small public-model downloads have passed on one node and in a two-node download → verify → copy chain. The chain test used seven files (6.2 MiB), a fixed commit and an already installed image. Tool choice, destination disk checks, file verification, temporary file-server cleanup and reopening finished Jobs passed live. Tool installation, interrupted-chain recovery and large transfers still need live testing.
+Small public-model downloads have passed on one node and in two-node download → verify → copy chains. Those tests used fixed commits and an already installed image. Tool choice, disk checks, file verification and temporary file-server cleanup passed live. A separate chain stopped while its source checked the tool and its target waited; cleanup and earlier records passed inspection. Another active chain kept its job IDs through normal SparkBox quit/reopen, with no replacement jobs. Tool installation, network loss, Mac sleep, node reboot and large transfers still need live testing.
 
 ## Before you start
 
@@ -27,7 +27,7 @@ Small public-model downloads have passed on one node and in a two-node download 
 - **Admin mode may lock while you wait.** That doesn't stop the download.
 
 > [!WARNING]
-> **Keep SparkBox open and this Mac awake until the download ends.** The job runs on the node and is built to keep going by itself, but that has never been proven on your cluster. SparkBox doesn't keep this Mac awake for you. [Keep this Mac awake during long work](help:keep-this-mac-awake) shows how. If SparkBox closes or this Mac sleeps anyway, open SparkBox and look at the **Jobs** tab. See [Follow a download](help:follow-a-download).
+> **Keep SparkBox open until every chain job appears in Jobs, and keep this Mac awake while watching it.** A bounded chain test followed the same jobs after normal quit/reopen. That does not test Mac sleep or a lost network connection. SparkBox does not keep this Mac awake for downloads. [Keep this Mac awake during long work](help:keep-this-mac-awake) shows how. After reopening, wait for the nodes to connect and click **Refresh** in **Jobs**. See [Follow a download](help:follow-a-download).
 
 ## Steps
 

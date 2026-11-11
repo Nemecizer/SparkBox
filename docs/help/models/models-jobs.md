@@ -15,7 +15,7 @@ related: [follow-a-download, tasks-and-jobs]
 
 The **Jobs** tab shows downloads and copies, which run on the nodes themselves. A **job** is long work that SparkBox hands to a small helper on a node. Use this tab to see how a job is going, whether it finished, and why it failed.
 
-Jobs are built to keep going if SparkBox quits or the VPN drops. That hasn't been proven on your cluster, so keep SparkBox open and this Mac awake until a job ends. [Keep this Mac awake during long work](help:keep-this-mac-awake) shows how.
+A bounded two-node chain kept its job IDs through normal SparkBox quit/reopen, without replacement jobs. That does not test VPN loss, Mac sleep or node reboot. Keep SparkBox open until every chain job appears, and keep this Mac awake while watching it. [Keep this Mac awake during long work](help:keep-this-mac-awake) shows how.
 
 ## Where to find it
 
@@ -67,6 +67,8 @@ A chain source moves through **downloading**, **verifying** and **serving**. Its
 Both the download row and its copy rows keep the same chain ID after they finish. The download row also keeps its fixed download plan. Reopening Jobs follows existing records and starts no replacement chain. Chains expire within 24 hours; the file server also stops after 30 minutes without activity. A node reboot does not restart its work. Cancel remaining jobs before recovering an incomplete source with a new reviewed download, then copy unfinished targets from the Library. See [Download, then copy to other nodes](help:download-a-model#download-then-copy-to-other-nodes).
 
 An older chain source may show **Chain details unavailable** if its participant plan was not saved. **Resume download…** stays unavailable. SparkBox does not guess the missing nodes or rewrite the record. Inspect Jobs on the other nodes before recovery. **Cancel**, when available for that older row, stops only the selected owned job; it does not cancel the whole chain.
+
+A bounded live test canceled a chain while its source checked the download tool and its target waited. Both rows read **canceled**, and independent checks found no owned workers or temporary transfer resources left. Earlier models and job records stayed intact. Cancellation during active file sharing still needs a separate live test.
 
 Finished jobs stay on the list, and there's no way to clear them here.
 

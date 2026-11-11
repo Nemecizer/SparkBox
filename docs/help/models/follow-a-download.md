@@ -21,8 +21,8 @@ For a **Then copy to** chain, inspect every node’s row in Jobs. Use **Cancel c
 
 - You've started a download or a copy. See [Download a model](help:download-a-model).
 - Watching needs no Admin mode. It also works in look-only mode.
-- **Cancel** and **Resume download…** need Admin mode, and are unavailable in look-only mode.
-- Keep SparkBox open and this Mac awake until the job ends. [Keep this Mac awake during long work](help:keep-this-mac-awake) shows how. The job is built to keep going by itself, but that has never been proven on your cluster.
+- **Cancel**, **Cancel chain…** and **Resume download…** need Admin mode, and are unavailable in look-only mode.
+- Keep SparkBox open until every chain job appears, and keep this Mac awake while watching it. A bounded chain test followed the same jobs after normal quit/reopen. Mac sleep and network loss still need live tests. [Keep this Mac awake during long work](help:keep-this-mac-awake) shows how.
 
 ## Steps
 
@@ -56,7 +56,9 @@ To follow the same work from anywhere in SparkBox, open [Tasks](open:tasks). The
 2. Click **Cancel** in the toolbar. If Admin mode is locked, the **Unlock Admin mode?** dialog opens. Click **Unlock…**, then confirm with Touch ID or your Mac password.
 3. A dialog asks to confirm. It explains that partial files stay on disk and a saved download plan can be resumed from Jobs. Click **Cancel job** to stop, or **Keep going** to let it run.
 
-Stopping takes several seconds, because SparkBox stops the download's processes and, when used, its owned container. The row reads **canceled**, and the **Library** marks the model **◐ incomplete**. Canceling and picking up again have run only on test systems.
+Stopping takes several seconds, because SparkBox stops the download's processes and, when used, its owned container. The row reads **canceled**, and the **Library** marks the model **◐ incomplete**. Canceling a separate download and using ordinary Resume have run only on test systems.
+
+For a **Then copy to** chain, select its row and click **Cancel chain…**. Review the nodes, then click **Cancel chain**, or **Keep going** to leave it running. Inspect every member's result; files and records stay on the nodes. A live test passed cancellation and cleanup during tool checking, before file sharing began. Cancellation during file sharing still needs a live test.
 
 ## Start again
 
@@ -84,7 +86,7 @@ To start from the beginning instead, delete the folder first. On the **Library**
 
 ## Why it works
 
-SparkBox gives the job to a small helper on the node, and the helper runs apart from SparkBox's connection. It writes its progress to a file on the node, and the **Jobs** tab reads those files from every online node. Progress is the size of the folder on disk, so a resumed job starts from what's already there. If SparkBox closes during a job, it looks for that job the next time it runs with **Live** data. It then follows the job in **Tasks**, with "(picked up again)" after the name, which has run only on test systems.
+SparkBox gives the job to a small helper on the node, and the helper runs apart from SparkBox's connection. It writes its progress to a file on the node, and the **Jobs** tab reads those files from every online node. Progress is the size of the folder on disk, so a resumed job starts from what's already there. If SparkBox closes during a job, it looks for that job the next time it runs with **Live** data. It then follows the job in **Tasks**, with "(picked up again)" after the name; this appeared in the bounded chain quit/reopen test.
 
 ## Limits
 
