@@ -60,7 +60,7 @@ In a narrow window, some columns hide. If a node is offline, its jobs don't appe
 | `Copy … to cell2` | One node's copy over the fabric | **copying**, **verifying** |
 | `Share … from cell1` | The temporary file server for a copy. It has no progress bar | **serving** |
 
-A temporary share closes after its copies report completion. Older shares can end as **canceled** when SparkBox stops them. Do not stop a file server while a copy still needs it.
+A temporary share closes after its copies report completion. A share can end as **canceled** when SparkBox stops it during normal cleanup. That does not mean a target was canceled: read each `Copy … to …` row and its Library result. To stop one target, select that target row and confirm **Cancel job**. Do not stop a file server while another copy still needs it.
 
 A chain source moves through **downloading**, **verifying** and **serving**. Its target rows move through **waiting**, **copying** and **verifying**. The source reports **done** only after every target reports successful verification. Select a chain row to see its fixed commit, deadline and recovery guidance. Read every target result too.
 
@@ -68,7 +68,7 @@ Both the download row and its copy rows keep the same chain ID after they finish
 
 An older chain source may show **Chain details unavailable** if its participant plan was not saved. **Resume download…** stays unavailable. SparkBox does not guess the missing nodes or rewrite the record. Inspect Jobs on the other nodes before recovery. **Cancel**, when available for that older row, stops only the selected owned job; it does not cancel the whole chain.
 
-A bounded live test canceled a chain while its source checked the download tool and its target waited. Both rows read **canceled**, and independent checks found no owned workers or temporary transfer resources left. Earlier models and job records stayed intact. Cancellation during active file sharing still needs a separate live test.
+A bounded live test canceled a chain while its source checked the download tool and its target waited. Both rows read **canceled**, and independent checks found no owned workers or temporary transfer resources left. Earlier models and job records stayed intact. Two later ordinary Library copies finished before cancellation could be confirmed. Active-copy cancellation and chain cancellation during active file sharing still need separate live acceptance.
 
 Finished jobs stay on the list, and there's no way to clear them here.
 

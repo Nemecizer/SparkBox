@@ -1,12 +1,18 @@
 # SparkBox — development candidate after v0.1.0
 
+## Copy source records and bounded live inspection
+
+New ordinary Library copy source records now retain the initiating SparkBox instance, matching their target records. The live inspection found that the earlier source spec omitted this metadata. This change preserves existing records and leaves authentication, controller leases, SSH identity, Look only, process identity checks and debug fences unchanged. It does not add a new cancellation authorization rule.
+
+Two bounded 28.8 GiB ordinary copies completed before cancellation could be confirmed. Their finished copies and records were retained; no target cancellation was dispatched. The first private UI observation caught a transition; the second watcher did not recognize the normal selected-row count wording. Both refused before cancellation, and neither establishes a product cancellation defect. Active-copy cancellation remains unproven. Help now explains how to stop one target and how to distinguish normal source cleanup from a canceled target. See [the current handoff](HANDOFF.md) for verification and limits.
+
 ## Bounded chain cancellation and application reconnection
 
 An initial eight-file chain completed before cancellation was confirmed; it was kept and does not count as cancellation acceptance. All 86 independent checks passed, including matching all eight payload hashes between the nodes, cleanup and preservation of earlier models and records.
 
 A separate chain was canceled while its source checked the selected download tool and its target waited. Both jobs ended canceled, and all 94 independent checks passed. The waiting target never claimed its model folder. Its missing child record was not treated as proof of cleanup: the inspection used the recorded boot and parent identity, absence of that process group, and the other resource checks. Earlier completed models and job records stayed unchanged. This does not establish cancellation during active file sharing.
 
-Another chain was active when SparkBox quit normally. Reopening the same candidate reconnected all four nodes, relocked Admin, and followed the same chain IDs without replacement work. The existing and new records remained visible, including the task marked picked up again. Both chain rows reported done. All 120 final node checks passed, including eight matching payload hashes, cleanup and preservation of preceding copies, canceled artifacts and records. See [the handoff](HANDOFF.md) for evidence and limits.
+Another chain was active when SparkBox quit normally. Reopening the same candidate reconnected all four nodes, relocked Admin, and followed the same chain IDs without replacement work. The existing and new records remained visible, including the task marked picked up again. Both chain rows reported done. All 120 final node checks passed, including eight matching payload hashes, cleanup and preservation of preceding copies, canceled artifacts and records. See [the preserved chain handoff](CHAIN-RECOVERY-HANDOFF.md) for evidence and limits.
 
 This round preserves normal authentication, ownership, exact plans, disk checks and credentials. Network loss, Mac sleep, node reboot, managed tool installation, ordinary Resume and large-transfer acceptance remain separate work.
 

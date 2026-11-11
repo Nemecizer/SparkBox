@@ -46,6 +46,16 @@ Each `Copy` row reads **done**, and the **Library** row reads **✓ verified** u
 
 A live copy of `Qwen/Qwen3-0.6B` from `cell1` to `cell4` passed source and target hash checks after repairing the older temporary server's group-setting error. The temporary server then closed and its private transfer files were removed. A fresh copy to `cell2` then passed on its first attempt in about five seconds with the corrected app, without a repair or extra privileges. All seven files matched their source hashes, and the temporary server, private transfer files and listening port were gone afterward. Copy interruption and recovery still need separate live tests.
 
+## Stop one copy
+
+1. Open **Jobs** and select the target row named `Copy … to …`.
+2. Click **Cancel**, check the target in the confirmation, then click **Cancel job**. Choose **Keep going** to leave it running.
+3. Wait for that target to read **canceled**. Partial files stay on disk, and the Library marks the target **◐ incomplete**. Keep the files and job record for a later reviewed retry.
+
+A copy may finish while you are deciding. If the target reads **done** and the Library shows **✓ verified**, keep the finished copy; that does not prove cancellation worked. The source `Share …` row can read **canceled** during normal cleanup even when every target finished. Read the target outcome before deciding what happened. Leave the source row alone while another target still needs it.
+
+Two bounded live attempts copied a 28.8 GiB model successfully before cancellation could be confirmed. Their finished copies were retained. Active-copy cancellation and reuse of its partial files still need live acceptance.
+
 ## Why it works
 
 SparkBox picks the source: the first node in your list whose copy reads **✓ verified** or **✓ sizes match**, or else a node with any finished copy. On that node it starts a temporary, read-only file server that takes a one-time password and accepts only fabric addresses. Each target pulls the files with `rsync`, a standard tool for copying folders, to the same path, because a load needs the same path on every node. Before sharing, the source hashes its files with SHA-256; each target compares those hashes before writing its own verified record. The Library tip distinguishes a copy verified against its source from a download verified against Hugging Face.
@@ -53,7 +63,7 @@ SparkBox picks the source: the first node in your list whose copy reads **✓ ve
 ## Limits
 
 - You can't choose the source node.
-- All targets are checked again before the source starts. Each target also checks space against the source's fresh file list before taking ownership of its folder. Space is not reserved; another job can fill it later. A later failure may leave a failed job and partial files, which SparkBox keeps. These new checks and the review have passed offline tests only.
+- All targets are checked again before the source starts. Each target also checks space against the source's fresh file list before taking ownership of its folder. Space is not reserved; another job can fill it later. A later failure may leave a failed job and partial files, which SparkBox keeps. The review and admission checks passed offline tests and two bounded live copies. Disk exhaustion during a transfer still needs a separate test.
 - A target checks for rsync, source reachability and free space of at least 1.05 times the copy size plus 20 GiB. It waits for source hashing and tries a failed transfer up to three more times.
 - Hashes establish that the target matches this source snapshot. They do not prove that the source matches its publisher. Root hidden metadata is excluded. Directory symlinks and links outside the supported source folder are refused; use a normal model folder for copying.
 - A model in the Hugging Face cache, whose **Folder** starts `~/.cache/huggingface/hub/models--`, can't be copied yet. That folder holds links to files outside it. On a test system, `rsync` refused them and nothing arrived, so SparkBox doesn't try.

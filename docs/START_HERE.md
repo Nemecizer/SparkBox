@@ -1,25 +1,27 @@
 # SparkBox development quick start
 
-Continue on `codex/p3-chain-recovery`, following reviewed base `5a0062e`. Runtime source is unchanged; this round records bounded live acceptance and updates Help. Read [the handoff](HANDOFF.md), [building instructions](BUILDING.md) and [security safeguards](../SECURITY.md). The previous [connection and small-chain handoff](CONNECTION-CHAIN-HANDOFF.md) is preserved.
+Continue on `codex/p3-active-copy-cancel`, following live-tested base `d8a432b`. Read [the handoff](HANDOFF.md), [building instructions](BUILDING.md) and [security safeguards](../SECURITY.md). The previous [chain cancellation and reconnection handoff](CHAIN-RECOVERY-HANDOFF.md) is preserved.
 
-## What passed live
+## What this round established
 
-An initial eight-file chain finished before cancellation and was preserved. A separate chain passed early cancellation during source tool checking and target waiting. A third chain continued through normal SparkBox quit/reopen, retained the same job IDs and completed with matching hashes. Independent inspections passed 86, 94 and 120 checks respectively. Jobs showed all 16 old and new records; Library showed the completed copies verified and the canceled source incomplete. The app was left Read-only with all four nodes online.
+Two bounded ordinary Library copies of a 28.8 GiB model completed and were preserved. No target cancellation was dispatched. The private observer refused a transition snapshot on the first attempt, then failed to recognize the normal selected-row footer on the second. **Active-copy cancellation remains unproven**; the second attempt did observe copying at 19% before row selection. No third transfer was started.
 
-The original completed copies, canceled marker, prior records, 60 selected saved configuration/history files and seven prior archives were preserved. Normal Admin/Touch ID, exact plans, explicit installed-image consent, disk admission, ownership, leases and debug fences remain intact. No package update, node restart, tool installation, model load, network change or credential change was performed.
+The live inspection found missing instance metadata on ordinary source-share records. The offline fix adds the initiating instance to new source specs, matching targets; historical records remain untouched. It does not add a new cancellation authorization gate. Help explains target cancellation and the difference between completed targets and source shares canceled during cleanup. All existing safeguards and privacy defaults remain.
 
-## Limits and next bounded work
+See the handoff for final file/cleanup checks, preservation scope, offline test results and evidence limits. The delivery candidate is separate, Developer ID signed, and unopened. Do not publish, push or submit for notarization incidentally.
 
-Early cancellation does not test an active file server. Normal quit/reopen does not test network loss, VPN interruption, Mac sleep or node reboot. No pre-quit node PID checkpoint was captured. The handoff explains the narrow waiting-target process-group proof and all other evidence limits. The earlier intermittent connection cause remains unresolved.
+## Next bounded work
 
-The next live acceptance should exercise cancellation during active sharing/copying with a separately reviewed empty destination. Preserve all finished and canceled folders and records. Do not install tools, reset host keys, switch networks or change firewall rules to bypass a refusal. Managed installation, ordinary Resume, larger transfers and node-reboot recovery remain separate acceptance.
+A separately authorized live round should confirm new source metadata and actual cancellation during copying, using a reviewed empty destination and a watcher tested against both Jobs footer formats. Keep this round's completed copies and all history. Do not delete data, install tools, reset host keys or change networks/firewall rules to bypass a refusal.
 
-For offline work, remaining P3.4 tasks include HF cache revision grouping, destination free-space columns and reuse of scans within 60 seconds. Choose one coherent scope; do not restart historical workflows or publish incidentally.
+Active chain cancellation, partial-copy reuse, managed download-tool installation, ordinary Resume, network/VPN loss, Mac sleep and node-reboot recovery remain separate acceptance. The earlier intermittent connection cause remains unresolved.
+
+For offline P3.4 work, choose one coherent scope: HF cache revision grouping is next; destination free-space columns and reuse of scans within 60 seconds follow separately. Do not restart historical workflows.
 
 ## Checks and build
 
-This documentation-only round passed TypeScript, 3,758 UI tests, 2,145 final Help checks, 10 download-chain helper tests and 13 release/audit-tool tests. The previous full native/Python/Go/release-safeguard results apply to unchanged runtime and are not claimed as rerun. Use the installed Homebrew toolchain and local dependencies; do not count an interrupted or failed invocation as a pass.
+The handoff records partitioned native coverage after an interruption, including one retained synthetic shared-memory fixture failure and its successful unchanged isolated retry. Do not describe it as a clean uninterrupted suite or a proven timing cause.
 
-For runtime changes, run the relevant required stages in `scripts/check.sh` and documented Clippy/production checks. Native fixtures use fake nodes and one worker by default. Browser Demo (`PORT=1533 npm run dev:mock`) contacts no nodes.
+Use the installed Homebrew toolchain and local dependencies. Run relevant stages in `scripts/check.sh` and documented Clippy/production checks; fake-node tests use one worker by default. Browser Demo (`PORT=1533 npm run dev:mock`) contacts no nodes. A failed or interrupted invocation is not a pass.
 
-Build from a clean commit with `scripts/public-release.py build` and Developer ID Application signing. It invokes `scripts/build-candidate.sh` and creates a separate candidate without launching it. Keep private source, prior apps, saved settings and published release intact. Do not publish, push or submit for notarization without a separate request. Keep raw live evidence private.
+Build from a clean commit with `scripts/public-release.py build` and Developer ID Application signing. It invokes `scripts/build-candidate.sh`, preserves existing builds and does not launch the output. Verify signed archive provenance and privacy before delivery. Keep raw live evidence private.

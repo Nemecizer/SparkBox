@@ -1610,7 +1610,7 @@ impl Models {
             "serve",
             &serve_id,
             &json!({ "path": key, "address": fabric.ip, "port": port, "password": password, "allow": allow,
-                     "exclude": COPY_EXCLUDE, "ttl": SERVE_TTL_S, "protocol": 2,
+                     "exclude": COPY_EXCLUDE, "ttl": SERVE_TTL_S, "protocol": 2, "instance": crate::identity::instance_name(),
                      "expected": targets.iter().map(|t| format!("share-{group}-{t}")).collect::<Vec<_>>(),
                      "repo": entry.repo, "revision": entry.revision, "label": format!("Share {} from {source}", entry.repo) }),
         )
@@ -4544,6 +4544,35 @@ mod check_and_job_tests {
             }
             tokio::time::sleep(Duration::from_millis(50)).await;
         }
+    }
+
+    /// Both sides of an ordinary Library copy retain the creating app's identity in their
+    /// durable job records, including the temporary source server that its watcher stops.
+    #[tokio::test]
+    async fn an_ordinary_copy_records_the_same_instance_on_its_source_and_target() {
+        let home = temp("share-instance-home");
+        let key = model_home(&home);
+        let (started, done) = (Arc::<std::sync::Mutex<Vec<String>>>::default(), Arc::new(AtomicBool::new(false)));
+        let (src, p1) = fake_node(&home, copy_node(started.clone(), done.clone(), false)).await;
+        let (dst, p2) = fake_node(&temp("share-instance-home2"), copy_node(started.clone(), done.clone(), false)).await;
+        let base = temp("share-instance-app");
+        let (live, inventory) = fake_node::connect(&base, &[("cell1", p1), ("cell2", p2)]).await;
+        let m = models(&base, live.clone());
+        m.set_tasks(crate::tasks::Tasks::new(None));
+        let jobs = m.share(&ctx(&live, &inventory), &key, &["cell2".into()]).await.unwrap();
+        assert_eq!(jobs.len(), 1);
+        for (kind, node, fixture) in [("serve", "cell1", &src), ("pull", "cell2", &dst)] {
+            let sent = fixture.specs.lock().unwrap().clone();
+            assert_eq!(sent.len(), 1, "one {kind} participant started");
+            let spec = &sent[0];
+            assert_eq!(spec["instance"], crate::identity::instance_name(), "{kind} must preserve its creating app's identity");
+            assert_eq!(spec["node"], node);
+        }
+        done.store(true, Ordering::SeqCst);
+        until(|| !src.ran("sparkjob.py cancel").is_empty() && m.serving_nodes().is_empty()).await;
+        assert_eq!(src.ran("sparkjob.py cancel").len(), 1, "normal share cleanup remains unchanged");
+        assert!(m.serving_nodes().is_empty());
+        live.stop();
     }
 
     /// A copy whose only pull can't start (cell2's disk is full) stops the file server it just
