@@ -2,8 +2,13 @@
 //! The node revalidates that plan and the partial marker under its existing folder lock.
 use super::*;
 
+fn chain_job(job: &Value) -> bool {
+    // Older source records lost their participant metadata, but kept the reserved chain ID.
+    job["id"].as_str().is_some_and(|id| id.starts_with("dc-")) || !job["chain"].is_null()
+}
+
 pub(super) fn summary(job: &Value, instance: &str) -> Option<DownloadResume> {
-    if !job["chain"].is_null() || job["kind"] != "download" || !matches!(job["state"].as_str(), Some("failed" | "cancelled")) || job["instance"] != instance {
+    if chain_job(job) || job["kind"] != "download" || !matches!(job["state"].as_str(), Some("failed" | "cancelled")) || job["instance"] != instance {
         return None;
     }
     let plan = &job["downloadPlan"];
@@ -18,6 +23,9 @@ pub(super) fn summary(job: &Value, instance: &str) -> Option<DownloadResume> {
 }
 
 pub(super) fn checked_spec(job: &Value, expected: &DownloadResume, instance: &str) -> Result<Value, String> {
+    if chain_job(job) {
+        return Err("A download-copy chain cannot use ordinary Resume. Review Jobs on its nodes and cancel remaining owned jobs before a separately reviewed recovery; existing files and records are preserved.".into());
+    }
     if summary(job, instance).as_ref() != Some(expected) {
         return Err("This download is no longer resumable with the plan you reviewed. Refresh Jobs; older jobs need a newly reviewed download from Hugging Face.".into());
     }
@@ -38,6 +46,9 @@ impl Models {
     pub async fn resume_download(self: &Arc<Self>, ctx: &Ctx, node: &str, id: &str, expected: &DownloadResume, review: &DownloadToolReview) -> Result<Job, String> {
         if id.is_empty() || id.len() > 64 || !id.chars().all(|c| c.is_ascii_alphanumeric() || c == '-') || !ctx.node_ids().iter().any(|n| n == node) {
             return Err("Choose a saved download on an inventory node.".into());
+        }
+        if id.starts_with("dc-") {
+            return Err("A download-copy chain cannot use ordinary Resume. Review its remaining jobs before a separately reviewed recovery.".into());
         }
         self.check_download_tool(ctx, node, review).await?;
         if !ctx.live {
@@ -79,6 +90,22 @@ mod tests {
         assert!(summary(&row,"mine").is_none());
         let mut ordinary=row;ordinary.as_object_mut().unwrap().remove("chain");
         assert!(summary(&ordinary,"mine").is_some());
+    }
+
+    #[test]
+    fn legacy_chain_id_without_participants_is_not_an_ordinary_resume() {
+        let ordinary = saved();
+        let expected = summary(&ordinary, "mine").unwrap();
+        let mut legacy = ordinary.clone();
+        legacy["id"] = json!("dc-fixture-0");
+        let before = legacy.clone();
+        assert!(summary(&legacy, "mine").is_none());
+        assert!(checked_spec(&legacy, &expected, "mine").unwrap_err().contains("chain"));
+        assert_eq!(legacy, before, "no participant plan is invented or written");
+        legacy["chain"] = Value::Null;
+        assert!(summary(&legacy, "mine").is_none());
+        assert!(summary(&ordinary, "mine").is_some());
+        assert!(checked_spec(&ordinary, &expected, "mine").is_ok());
     }
 
     #[test]

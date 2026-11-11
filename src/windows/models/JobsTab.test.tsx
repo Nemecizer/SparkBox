@@ -196,6 +196,18 @@ describe("download-copy chain records", () => {
     expect(screen.getByText(/Reopening Jobs follows existing records/)).toBeTruthy();
     expect(mockCalls.some((c) => c.cmd === "model_chain_start" || c.cmd === "job_resume_download")).toBe(false);
   });
+  it("refuses ordinary Resume for an older chain ID with missing participants without inventing a plan", async () => {
+    const legacy = { ...chained(), chain: null };
+    await show([legacy]);
+    await act(async () => { fireEvent.mouseDown(screen.getByText("A download")); });
+    const resume = screen.getByRole("button", { name: /^Resume download/ }) as HTMLButtonElement;
+    expect(resume.disabled).toBe(true);
+    await act(async () => { fireEvent.click(resume); });
+    expect(screen.getByText(/This older chain job has no saved participant plan/)).toBeTruthy();
+    expect(screen.queryByRole("button", { name: "Cancel chain…" })).toBeNull();
+    expect(mockCalls.some((c) => ["model_chain_start", "model_chain_cancel", "job_resume_download", "model_download_tools"].includes(c.cmd))).toBe(false);
+    expect(legacy.chain).toBeNull();
+  });
   it("cancels the whole selected chain, reports unreachable members and keeps the rows", async () => {
     vi.spyOn(session, "confirmAction").mockResolvedValue(true);
     const toast = vi.spyOn(toasts, "toast").mockReturnValue("t");

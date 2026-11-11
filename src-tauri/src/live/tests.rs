@@ -1583,6 +1583,10 @@ async fn a_reconnect_marks_the_commands_running_on_it_interrupted() {
         log.contains(" cell1 session_closed conn=control reason=\"the login settings changed\"") && log.contains(" cell1 reconnect reason=\"the login settings changed\"")
     })
     .await;
+    let log = sshlog_of(&live);
+    let duration = regex::Regex::new(r#"(?m) cell1 session_closed conn=control reason="the login settings changed" connected_ms=(\d+)$"#).unwrap();
+    let elapsed_ms: u128 = duration.captures(&log).expect("the ended control connection has its own duration")[1].parse().unwrap();
+    assert!(elapsed_ms > 0, "the connection served a command before reconnecting");
     wait_for(&live, &inv, LinkStatus::Online).await;
     live.stop();
 }
@@ -1646,6 +1650,10 @@ async fn a_node_whose_ssh_doesnt_answer_reads_offline_no_ssh_reply() {
     let n = quiet.snapshot(&inv).nodes[0].clone();
     assert_eq!((n.error.as_deref(), n.error_kind.as_deref()), (Some("No SSH reply in 10 s"), Some("timeout")));
     assert!(sshlog_of(&quiet).contains(&format!(" cell1 connect_fail path=direct addr=127.0.0.1:{port} kind=timeout ")), "{}", sshlog_of(&quiet));
+    let failure_duration = regex::Regex::new(r"(?m) connect_fail .* ms=(\d+) conn=control$").unwrap();
+    let log = sshlog_of(&quiet);
+    let elapsed_ms: u128 = failure_duration.captures(&log).expect("failed attempts include elapsed milliseconds")[1].parse().unwrap();
+    assert!(elapsed_ms >= 10_000, "a full handshake timeout is distinguishable from an immediate refusal: {log}");
     fake.thaw();
     quiet.stop();
 
@@ -1655,6 +1663,7 @@ async fn a_node_whose_ssh_doesnt_answer_reads_offline_no_ssh_reply() {
     refused.start(&[node(closed)]);
     eventually("offline", 5, || refused.snapshot(&inventory(closed)).nodes[0].status == LinkStatus::Offline).await;
     assert_eq!(refused.snapshot(&inventory(closed)).nodes[0].error_kind.as_deref(), Some("refused"));
+    assert!(failure_duration.is_match(&sshlog_of(&refused)), "refused TCP attempts are timed too");
     refused.stop();
     let (wrong, known) = live("wrongpw", Some("nope"));
     let (_f, p) = fake_node(&temp("wrongpw-home"), real_shell()).await;
@@ -1662,6 +1671,9 @@ async fn a_node_whose_ssh_doesnt_answer_reads_offline_no_ssh_reply() {
     wrong.start(&[node(p)]);
     let n = wait_for(&wrong, &inventory(p), LinkStatus::Error).await;
     assert_eq!(n.error_kind.as_deref(), Some("authFailed"));
+    let log = sshlog_of(&wrong);
+    assert!(failure_duration.is_match(&log), "rejected authentication stays a distinct, timed failure");
+    assert!(!log.contains("nope"), "elapsed-time diagnostics must not include the password");
     wrong.stop();
 }
 

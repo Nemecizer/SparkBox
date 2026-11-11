@@ -1,26 +1,23 @@
 # SparkBox development quick start
 
-The live Library round fixed scan failures from missing files behind Hugging Face cache links. The tested app is `e94a02b`, continuing `4879869` on `codex/p3-live-download`; a later documentation commit records the final results. Read [the handoff](HANDOFF.md), [building instructions](BUILDING.md) and [security safeguards](../SECURITY.md).
+Continue the connection-diagnosis and small-chain round from `f7c9fbf` on `codex/p3-connection-chain`. Read [the handoff](HANDOFF.md), [building instructions](BUILDING.md) and [security safeguards](../SECURITY.md). The prior [live Library handoff](LIBRARY-LIVE-HANDOFF.md) remains available.
 
-## Inspect offline
+## Connection review
 
-From this checkout, run `npm ci`, then `PORT=1533 npm run dev:mock`. Open:
+Start Read-only. Compare SparkBox's actual SSH target and path with any independent reachability check. A route error happens before login; a rejected SSH packet belongs to an established or negotiating secure connection. Neither message alone establishes a credential or filter problem. Preserve host keys, credentials, network permissions and encryption checks.
 
-`http://localhost:1533/mock.html?reset=1&still=1&theme=light&open=models%3Atab%3Dlibrary&library=missing-cache`
+The SSH log records failed-attempt `ms` and normally ending control connections' `connected_ms`. These are attempt/authenticated-connection durations, not node uptime. Use timestamps and reasons together. Help: [Connection and login messages](help/reference/errors-connection.md) and [Collect diagnostics](help/ops/collect-diagnostics.md).
 
-1. All four synthetic nodes show **Scanned**. Healthy model rows remain visible beside **example/damaged**.
-2. Select **example/damaged**. Its affected copy reads **incomplete (2 missing)**. The details show the present bytes on the affected node and explain that scanning repairs or deletes nothing. The shared Size column is the largest observed copy.
-3. Verify **Load…** is dimmed. The offline tests also verify that this incomplete-only model cannot dispatch a copy.
-4. Repeat with `theme=dark`. Stop the server afterward. Browser Demo never contacts your nodes.
+## Bounded live chain
 
-The earlier `library=scan-failure` and `library=progress` fixtures remain available. Missing cache links are different from permission failures: unreadable folders must still report **Scan failed**.
+Only proceed with stable connections. In Models → Hugging Face, inspect one small public model at a full fixed commit and review Files to download. Select one Download node and one Then copy to target. Both destinations must be empty; installed rsync, sufficient destination space and a common fabric subnet are required.
 
-## Live acceptance boundary
+Use the normal Admin/Touch ID and tool-consent dialogs. Review exact destinations, disk results, files, tool and temporary source port before Start download and copies. Do not install tools, change firewall rules or switch networks to bypass a refusal. Record every job ID and chain ID.
 
-The owner authorized this round's live inspection. The Developer ID-signed `SparkBox-e94a02b.zip` candidate passed repeated scans on all four nodes, including three incomplete cache copies with 122 missing files and 84.1 KiB still present each. It remains unpublished and unnotarized. To repeat the inspection, open **Models → Library → Find models**, select the affected model and compare each node's explanation with its table badge. Preserve the saved inventory and normal authentication, and stay Read-only. Scanning does not repair/delete cache data or start a model. The handoff records intermittent route failures and automatic recovery; long-duration connectivity is not proven.
+Verify both jobs finish, the source waits for target verification, and the same records remain after reopening. Compare exact files, sizes and hashes, then check that temporary listeners, processes and per-job secrets are gone. Keep finished models and job records. Recovery/cancellation needs the original ownership and participant checks.
 
-Read-only capacity comparison is separate from starting a transfer. The next download/verify/copy acceptance requires review of one small public model, its exact files, tool, empty destinations and fabric route through the normal app safeguards.
+## Offline checks and build
 
-## Build and checks
+Run `scripts/check.sh` from this checkout. It covers TypeScript, UI/Help, native debug/release safeguards, Python helpers and Go. New regressions cover retained source chain metadata and connection timing without changing failure categories or logging passwords. Browser Demo remains available with `PORT=1533 npm run dev:mock`; it contacts no nodes.
 
-Use `scripts/check.sh` for the required offline checks. Build from a clean commit with `scripts/public-release.py build` and a Developer ID Application identity; it invokes `scripts/build-candidate.sh`. Keep old candidates, the private repository and the published release intact. Do not publish, push or submit for notarization incidentally.
+Build from a clean commit with `scripts/public-release.py build` and a Developer ID Application identity. This invokes `scripts/build-candidate.sh` and creates a separate candidate. Keep existing builds, the private repository, published release and saved records intact. Do not publish, push or submit for notarization incidentally. Final live outcomes and candidate provenance belong in the handoff.

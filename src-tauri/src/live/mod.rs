@@ -1927,7 +1927,7 @@ impl Live {
             }
             Err(e) => {
                 let kind = NodeFailure::from(e.clone()).kind.unwrap_or("unknown");
-                self.sshlog.event(&cfg.id, "connect_fail", &[("path", &path), ("addr", &addr), ("kind", &kind), ("msg", &e), ("conn", &conn)]);
+                self.sshlog.event(&cfg.id, "connect_fail", &[("path", &path), ("addr", &addr), ("kind", &kind), ("msg", &e), ("ms", &t.elapsed().as_millis()), ("conn", &conn)]);
                 Err(e)
             }
         }
@@ -2013,15 +2013,18 @@ impl Live {
         // it); those before were answered by the one before.
         let kick = self.nodes.lock().unwrap().get(&cfg.id).filter(|s| s.generation == generation).map(|s| s.kick.subscribe()).ok_or("stopped")?;
         let (session, path) = self.connect_logged(cfg, "control").await?;
+        let connected_at = Instant::now();
         let session = Arc::new(session);
         let ended = self.clone().serve(cfg, generation, &session, path, kick).await;
+        // Duration of this authenticated connection, not node uptime or the close handshake.
+        let connected_ms = connected_at.elapsed().as_millis();
         let why = match &ended {
             Ok(Ended::Closed { why }) | Ok(Ended::Reconnect { why, .. }) => why.clone(),
             Err(e) => e.message.clone(),
         };
         self.interrupt(&cfg.id, &session, &why);
         session.close().await;
-        self.sshlog.event(&cfg.id, "session_closed", &[("conn", &"control"), ("reason", &why)]);
+        self.sshlog.event(&cfg.id, "session_closed", &[("conn", &"control"), ("reason", &why), ("connected_ms", &connected_ms)]);
         self.sshlog.event(&cfg.id, "reconnect", &[("reason", &why)]);
         ended
     }

@@ -68,7 +68,7 @@ Keep SparkBox open until every job appears in **Jobs**. The targets wait on thei
 
 The approved jobs can then continue without the Mac. Each has a deadline of at most 24 hours from setup. The temporary file server closes after all targets report completion, cancellation, expiry or 30 minutes without activity. A failed copy or missing completion report makes the source chain fail too. This sequence stores files; it does not load the model.
 
-Read every member's result in **Jobs**. Select any chain row for its deadline, fixed commit and recovery instructions. **Cancel chain…** stops this SparkBox's remaining jobs and file server; it keeps files and records. An unreachable node needs cancellation after reconnection, or its deadline must expire.
+Read every member's result in **Jobs**. The download and copy rows keep the same chain ID, including after reopening SparkBox. Select any chain row for its deadline, fixed commit and recovery instructions. **Cancel chain…** stops this SparkBox's remaining jobs and file server; it keeps files and records. An unreachable node needs cancellation after reconnection, or its deadline must expire.
 
 If the source fails before sharing, targets keep waiting until canceled or expired. If setup is interrupted, reconnect and inspect every selected node's jobs. Some targets may be waiting even if the source never started. Reopening SparkBox follows records; it never starts replacement work. A rebooted node needs explicit recovery. Cancel remaining chain jobs first. Recover an incomplete source with a separately reviewed download, then use Library → **Copy to nodes…** for unfinished targets. Ordinary **Resume download…** is disabled for chain rows so it cannot discard the approved copy plan.
 

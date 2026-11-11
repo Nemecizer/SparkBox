@@ -64,7 +64,9 @@ A temporary share closes after its copies report completion. Older shares can en
 
 A chain source moves through **downloading**, **verifying** and **serving**. Its target rows move through **waiting**, **copying** and **verifying**. The source reports **done** only after every target reports successful verification. Select a chain row to see its fixed commit, deadline and recovery guidance. Read every target result too.
 
-Reopening Jobs follows existing records and starts no replacement chain. Chains expire within 24 hours; the file server also stops after 30 minutes without activity. A node reboot does not restart its work. Cancel remaining jobs before recovering an incomplete source with a new reviewed download, then copy unfinished targets from the Library. See [Download, then copy to other nodes](help:download-a-model#download-then-copy-to-other-nodes).
+Both the download row and its copy rows keep the same chain ID after they finish. The download row also keeps its fixed download plan. Reopening Jobs follows existing records and starts no replacement chain. Chains expire within 24 hours; the file server also stops after 30 minutes without activity. A node reboot does not restart its work. Cancel remaining jobs before recovering an incomplete source with a new reviewed download, then copy unfinished targets from the Library. See [Download, then copy to other nodes](help:download-a-model#download-then-copy-to-other-nodes).
+
+An older chain source may show **Chain details unavailable** if its participant plan was not saved. **Resume download…** stays unavailable. SparkBox does not guess the missing nodes or rewrite the record. Inspect Jobs on the other nodes before recovery. **Cancel**, when available for that older row, stops only the selected owned job; it does not cancel the whole chain.
 
 Finished jobs stay on the list, and there's no way to clear them here.
 

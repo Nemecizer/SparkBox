@@ -42,6 +42,8 @@ The **Doctor report** asks your nodes what they see. **Export diagnostics** desc
 - A file called `SparkBox-doctor-` with a number. It has one part for each node: its OS, `nvidia-smi`, memory, disks, network, Docker, some SSH settings, apt, `dgx-release` and the last reading SparkBox received.
 - A file called `SparkBox-diagnostics-` with the date and time. It has SparkBox's version, settings, inventory, each node's status, recent tasks and activity, and its own log.
 
+The SSH connection log records connection attempts and drops. In newer entries, `ms` says how long a successful or failed attempt took, in milliseconds. `connected_ms` says how long an authenticated control connection lasted before an observed drop. It is not node uptime. Older entries and other close paths may lack these fields. Compare the event time, reason and network path; a short failure alone does not prove its cause.
+
 SparkBox has no support desk, so these files are for you, or for whoever is helping you.
 
 ## Why it works

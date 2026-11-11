@@ -1624,6 +1624,9 @@ def check_download_resume(spec):
     if not isinstance(previous, str) or not valid_id(previous):
         raise RuntimeError("The saved download ID is invalid. Refresh Jobs.")
     old = read_status(previous)
+    # Older chain sources may lack their participant metadata; their reserved IDs survive.
+    if previous.startswith("dc-") or old.get("chain") is not None:
+        raise RuntimeError("A download-copy chain cannot use ordinary Resume. Review Jobs on its nodes and cancel remaining owned jobs before a separately reviewed recovery; existing files and records are preserved.")
     plan = download_plan(spec)
     saved = old.get("downloadPlan")
     if (not plan or plan != saved or download_plan(saved) != saved
@@ -1653,7 +1656,9 @@ def start(kind, job_id, spec):
         check_download_tool(spec)
         plan = download_plan(spec)
         if plan:
-            recovery = {"downloadPlan": plan, "planHash": plan_hash(plan)}
+            # A chain source also needs its exact participant plan after reconnecting.
+            # Keep it beside the pinned download plan, without persisting credentials.
+            recovery.update(downloadPlan=plan, planHash=plan_hash(plan))
         if spec.get("resumeOf"):
             check_download_resume(spec)
             recovery["resumeOf"] = spec["resumeOf"]

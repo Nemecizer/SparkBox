@@ -1616,7 +1616,7 @@
   },
   "models.jobs.about": {
     "title": "Jobs",
-    "body": "Jobs run on the nodes; chain rows share a source, targets and deadline. Select a row for recovery guidance; Cancel chain\u2026 stops owned members and keeps files and records. Reopening follows existing jobs without starting replacements.",
+    "body": "Jobs run on the nodes; download and copy rows keep their chain ID after finishing or reopening. Select a row for recovery guidance; Cancel chain\u2026 stops owned members and keeps files and records. Reopening starts no replacements.",
     "article": "models-jobs",
     "howto": [
       "follow-a-download",

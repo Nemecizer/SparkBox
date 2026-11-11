@@ -44,9 +44,21 @@ When a message has more to say, it has a **Details** button, which shows the nod
 
 ### "Couldn't reach 192.168.50.98:22: Connection refused"
 
-**What it means.** The node answered, but nothing accepted the SSH connection. The status bar reads **SSH refused the connection**. The last part of this message comes from macOS, so it can differ. It may say that there's no route to the node, or that the node's name wasn't found.
+**What it means.** The node answered, but nothing accepted the SSH connection. The status bar reads **SSH refused the connection**. The last part of this message comes from macOS, so its wording can differ. A route or name-lookup failure is a different problem; it does not show that the node answered.
 
 **What to do.** If the node restarted a moment ago, wait a minute: SSH starts late. If it stays this way, someone at the node can run `sudo systemctl enable --now ssh`.
+
+### "Couldn't reach 192.168.50.98:22: No route to host (os error 65)"
+
+**What it means.** This Mac could not open a connection to the node. SSH login had not started. This message does not mean the password was rejected.
+
+**What to do.** Wait for SparkBox's automatic retry, then check the network and the mode shown in **VPN**. If another app reaches the same address and port, inspect SparkBox's access in **System Settings › Privacy & Security › Local Network**. Network-filter logs may also help explain an app-specific failure. Record the time and [collect diagnostics](help:collect-diagnostics) if it repeats. Keep saved credentials and host keys unless a separate login or identity error calls for review.
+
+### The connection log reports "Bad packet size"
+
+**What it means.** SSH rejected an invalid packet and closed that connection. The number describes rejected connection data, not a model's file size. This message alone does not identify the cause.
+
+**What to do.** Let SparkBox reconnect, then [collect diagnostics](help:collect-diagnostics) if it happens again. Wait for a stable connection before starting new work. Keep packet checks, encryption and host-key checks enabled.
 
 ### "SSH handshake with 192.168.50.98:22 timed out"
 

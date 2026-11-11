@@ -103,6 +103,89 @@ def image_tool():
     return {"kind": "image", "path": "sha256:" + "b" * 64, "fingerprint": "sha256:" + "b" * 64, "label": "vllm:test"}
 
 
+class ChainRecoveryMetadata(unittest.TestCase):
+    def setUp(self):
+        self.root = os.path.realpath(tempfile.mkdtemp(dir=TMP_HOME))
+        self.chain_id = "dc-metadata-" + os.urandom(4).hex()
+        self.source = os.path.join(self.root, "source")
+        self.target = os.path.join(self.root, "target")
+        self.chain = {"id": self.chain_id, "source": "cell1", "repo": "fixture/model",
+                      "revision": "a" * 40, "expiresAt": sj.now() + 3600,
+                      "members": [{"node": "cell1", "id": self.chain_id + "-0", "dest": self.source},
+                                  {"node": "cell2", "id": self.chain_id + "-1", "dest": self.target}]}
+        self.spec = {"chain": self.chain, "node": "cell1", "repo": "fixture/model", "revision": "a" * 40,
+                     "dest": self.source, "instance": "dev", "image": "vllm:test", "tool": image_tool(),
+                     "files": [{"path": "config.json", "size": 2},
+                               {"path": "model.safetensors", "size": 5, "sha256": "b" * 64}],
+                     "password": "f" * 32, "token": "fixture-secret-token", "address": "192.0.2.1",
+                     "allow": "192.0.2.2", "port": 8730, "protocol": 2}
+
+    def tearDown(self):
+        for member in self.chain["members"]:
+            try:
+                os.unlink(sj.status_path(member["id"]))
+            except FileNotFoundError:
+                pass
+        shutil.rmtree(self.root, ignore_errors=True)
+
+    def test_source_and_target_keep_same_chain_after_status_reload_without_secrets(self):
+        target = dict(self.spec, node="cell2", dest=self.target, src="rsync://sparkbox@192.0.2.1:8730/model")
+        for index, (kind, spec) in enumerate((("download", self.spec), ("pull", target))):
+            job_id = self.chain["members"][index]["id"]
+            disk = {"dest": spec["dest"], "fixture": "admitted"}
+            with self.subTest(kind=kind), mock.patch.object(sj.os, "fork", return_value=999999), \
+                 mock.patch.object(sj.shutil, "which", return_value="/fixture/rsync"), \
+                 mock.patch.object(sj, "download_tools", return_value={"options": [image_tool()]}), \
+                 mock.patch.object(sj, "require_destination_disk", return_value=disk) as preflight:
+                result = sj.start(kind, job_id, spec)
+            preflight.assert_called_once_with(spec["dest"], 7, spec["node"])
+            saved = sj.read_status(job_id)
+            self.assertEqual(result["chain"], self.chain)
+            self.assertEqual(saved["chain"], self.chain)
+            self.assertEqual(saved["diskCheck"], disk)
+            self.assertEqual(saved["instance"], "dev")
+            if kind == "download":
+                plan = sj.download_plan(self.spec)
+                self.assertEqual(saved["downloadPlan"], plan)
+                self.assertEqual(saved["planHash"], sj.plan_hash(plan))
+            else:
+                self.assertNotIn("downloadPlan", saved)
+            for secret in (self.spec["password"], self.spec["token"]):
+                self.assertNotIn(secret, json.dumps(saved))
+            self.assertFalse(os.path.exists(spec["dest"]), "parent setup has not claimed or written the destination")
+            sj.finish_job(job_id, state="done", step="done")
+            reopened = next(row for row in sj.list_jobs(look=True) if row["id"] == job_id)
+            self.assertEqual(reopened["chain"], self.chain, "terminal records stay grouped after reopening Jobs")
+            self.assertEqual(reopened.get("downloadPlan"), saved.get("downloadPlan"))
+            self.assertEqual(reopened.get("planHash"), saved.get("planHash"))
+
+    def test_legacy_chain_resume_refuses_before_cleanup_and_preserves_records(self):
+        plan = sj.download_plan(self.spec)
+        job_id = self.chain["members"][0]["id"]
+        os.makedirs(self.source)
+        sj.write_status(job_id, kind="download", state="failed", dest=self.source, instance="dev",
+                        downloadPlan=plan, planHash=sj.plan_hash(plan))
+        sj.mark_partial(self.source, job_id, "download")
+        with open(sj.status_path(job_id), "rb") as f:
+            record = f.read()
+        with open(os.path.join(self.source, sj.PARTIAL), "rb") as f:
+            marker = f.read()
+        resume = dict(self.spec, resumeOf=job_id, resumeHash=sj.plan_hash(plan))
+        resume.pop("chain")
+        with mock.patch.object(sj, "stop_leftover") as stop, self.assertRaisesRegex(RuntimeError, "chain cannot use ordinary Resume"):
+            sj.claim_folder(self.source, "dl-new-attempt", "download", "dev", resume=resume)
+        stop.assert_not_called()
+        with open(sj.status_path(job_id), "rb") as f:
+            self.assertEqual(f.read(), record)
+        with open(os.path.join(self.source, sj.PARTIAL), "rb") as f:
+            self.assertEqual(f.read(), marker)
+        # Explicit chain metadata also refuses even if an older record has a non-chain ID.
+        old = sj.read_status(job_id)
+        with mock.patch.object(sj, "read_status", return_value=dict(old, id="dl-old", chain=self.chain)):
+            with self.assertRaisesRegex(RuntimeError, "chain cannot use ordinary Resume"):
+                sj.check_download_resume(dict(resume, resumeOf="dl-old"))
+
+
 class Inspection(unittest.TestCase):
     def setUp(self):
         self.root = tempfile.mkdtemp(dir=TMP_HOME)

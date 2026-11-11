@@ -1,5 +1,11 @@
 # SparkBox — development candidate after v0.1.0
 
+## Connection diagnostics and chain recovery records
+
+Failed SSH connection attempts now record elapsed time. Normally ending control connections record their authenticated duration. Error categories, retries and encryption checks are unchanged; diagnostics do not claim to repair the network.
+
+Download → verify → copy sources retain their chain metadata beside the pinned download plan. Source and target records stay associated after completion and reopening. Older chain sources with missing participant metadata cannot fall back to ordinary Resume. The UI explains the missing plan; no existing records or model files are rewritten. See [the handoff](HANDOFF.md) for the bounded live outcome and verification.
+
 ## Live Library cache inspection increment
 
 Missing backing files in a Hugging Face cache snapshot now appear as an incomplete copy with a per-node missing-file count. Other models on that node remain visible. Present-byte totals are labeled, incomplete snapshots cannot be Load/copy sources, and permission failures retain their strict behavior. Scanning repairs or deletes nothing. See [the handoff](HANDOFF.md) for validation and limits.
