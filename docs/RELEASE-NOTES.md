@@ -12,7 +12,7 @@ Library now reports each node's scan independently. A failed or offline node no 
 
 Live transfer markers supply percentages and separate waiting/verification phases. Transferred bytes alone never mark a model finished. Stale observations cannot enable Load, Copy or Delete. Copy and Delete retain fresh strict backend scans; Load retains fresh prerequisite checks. Scan errors and malformed replies fail closed, and delayed refreshes cannot replace newer results.
 
-Offline fixtures cover partial failures, unavailable nodes, recovery, changed configuration, race ordering, progress and action refusal. Real cluster acceptance remains pending. HF cache revision grouping, destination free-space columns and reuse of scans within 60 seconds remain separate P3.4 follow-ups.
+Offline fixtures cover partial failures, unavailable nodes, recovery, changed configuration, race ordering, progress and action refusal. Bounded live acceptance now covers repeated scans on four nodes, incomplete cache copies, last-known observations during connection loss and automatic recovery. Live transfer-progress and model-action acceptance remain pending. HF cache revision grouping, destination free-space columns and reuse of scans within 60 seconds remain separate P3.4 follow-ups.
 
 ## Reviewed download → verify → copy chains (P3.2)
 
@@ -26,7 +26,7 @@ Offline detached-worker, real loopback rsync and failure tests cover this round.
 
 In Models → Hugging Face, expand **Suggest a download node**, choose the potential load nodes to compare, and read their destination capacity. SparkBox suggests the qualifying node with the most space after the full inspected transfer plus 5% and 20 GiB; stable node ID breaks ties. **Use** explicitly applies the suggestion. The existing selected target never changes because of a probe or failed connection.
 
-Readings use the pinned inspected manifest, expire after one minute and are discarded on revision, scope or connection changes. Individual disk failures remain visible. Finished and running copies are excluded from the UI comparison. The comparison requires no Admin unlock and starts no jobs. Download still requires tool consent, its own disk review and the existing safeguards. The node-side start repeats admission. Real node acceptance remains pending.
+Readings use the pinned inspected manifest, expire after one minute and are discarded on revision, scope or connection changes. Individual disk failures remain visible. Finished and running copies are excluded from the UI comparison. The comparison requires no Admin unlock and starts no jobs. Download still requires tool consent, its own disk review and the existing safeguards. The node-side start repeats admission. Read-only capacity comparison passed on two live nodes for one small public model; transfer-start admission and chain acceptance remain pending.
 
 ## Inspected downloads (P3.8)
 
@@ -34,7 +34,7 @@ New downloads and destination-disk reviews require the repository, full commit a
 
 The Hugging Face tab adds branch/tag selection, an explicit revision field, the full resolved commit and an expandable file list. Failed inspections discard old details; late responses cannot replace a newer selection. Configuration access, missing-file and parsing errors are visible, and prevent download/AI advice and misleading fit estimates. An unreadable or inconsistent shard index refuses without a fallback manifest.
 
-Admin, Touch ID, Look only, SSH identity, leases, ownership, exact tool consent, disk checks, saved-plan Resume and debug fences are retained. No credentials, saved connections or node defaults are added. All new behavior is tested offline; real Hub and ARM64-node acceptance remain separate.
+Admin, Touch ID, Look only, SSH identity, leases, ownership, exact tool consent, disk checks, saved-plan Resume and debug fences are retained. No credentials, saved connections or node defaults are added. All new behavior is tested offline. A live immutable Hub inspection and read-only node capacity review passed; ARM64-node download acceptance remains separate.
 
 ## Included
 
@@ -60,7 +60,7 @@ Disk-space checks are not reservations. Parallel jobs, quotas, inode limits and 
 
 Protected update plans match exact historical package versions and prerequisites. They are not a general way to bypass routine kernel/driver protection. Discovery proposes an inventory for review; it does not silently enroll machines or establish cabling from hostnames.
 
-Apple Silicon is the current build target. An Intel/universal binary is not provided. Public installation from a fresh downloaded, quarantined, notarized artifact is a separately authorized acceptance step. The preparation does not launch SparkBox or operate a cluster.
+Apple Silicon is the current build target. An Intel/universal binary is not provided. Public installation from a fresh downloaded, quarantined, notarized artifact is a separately authorized acceptance step. The original public-source preparation did not launch SparkBox or operate a cluster. Subsequent bounded live development acceptance is recorded above and in the handoff.
 
 ## Before publication
 

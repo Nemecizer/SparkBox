@@ -1,6 +1,6 @@
 # SparkBox development quick start
 
-The current round diagnoses a live Library scan failure from missing files behind Hugging Face cache links. It continues `4879869` on `codex/p3-live-download`. Read [the handoff](HANDOFF.md), [building instructions](BUILDING.md) and [security safeguards](../SECURITY.md).
+The live Library round fixed scan failures from missing files behind Hugging Face cache links. The tested app is `e94a02b`, continuing `4879869` on `codex/p3-live-download`; a later documentation commit records the final results. Read [the handoff](HANDOFF.md), [building instructions](BUILDING.md) and [security safeguards](../SECURITY.md).
 
 ## Inspect offline
 
@@ -17,7 +17,7 @@ The earlier `library=scan-failure` and `library=progress` fixtures remain availa
 
 ## Live acceptance boundary
 
-The owner authorized this round's live inspection. Use the separately signed candidate, preserve the saved inventory and normal authentication, and start read-only. Find models on every connected node, inspect missing-cache counts and healthy copies, and scan again. Do not repair/delete cache data or start a model as part of this inspection. The handoff records the observed outcome and limitations.
+The owner authorized this round's live inspection. The Developer ID-signed `SparkBox-e94a02b.zip` candidate passed repeated scans on all four nodes, including three incomplete cache copies with 122 missing files and 84.1 KiB still present each. It remains unpublished and unnotarized. To repeat the inspection, open **Models → Library → Find models**, select the affected model and compare each node's explanation with its table badge. Preserve the saved inventory and normal authentication, and stay Read-only. Scanning does not repair/delete cache data or start a model. The handoff records intermittent route failures and automatic recovery; long-duration connectivity is not proven.
 
 Read-only capacity comparison is separate from starting a transfer. The next download/verify/copy acceptance requires review of one small public model, its exact files, tool, empty destinations and fabric route through the normal app safeguards.
 
