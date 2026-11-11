@@ -9,7 +9,7 @@ From this checkout, run `npm ci`, then `PORT=1533 npm run dev:mock`. Open:
 `http://localhost:1533/mock.html?reset=1&still=1&theme=light&open=models%3Atab%3Dlibrary&library=missing-cache`
 
 1. All four synthetic nodes show **Scanned**. Healthy model rows remain visible beside **example/damaged**.
-2. Select **example/damaged**. Its affected copy reads **incomplete (2 missing)**. The details explain that Size counts files still present and that scanning repairs or deletes nothing.
+2. Select **example/damaged**. Its affected copy reads **incomplete (2 missing)**. The details show the present bytes on the affected node and explain that scanning repairs or deletes nothing. The shared Size column is the largest observed copy.
 3. Verify **Load…** is dimmed. The offline tests also verify that this incomplete-only model cannot dispatch a copy.
 4. Repeat with `theme=dark`. Stop the server afterward. Browser Demo never contacts your nodes.
 

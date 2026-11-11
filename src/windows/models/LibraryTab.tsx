@@ -311,7 +311,7 @@ function LibraryDetailPane({ entry, nodes, onShowLoaded }: { entry: LibraryEntry
         </dd>
         {Object.entries(entry.copies).filter(([, c]) => c.missingCacheFiles).map(([id, c]) => <Fragment key={id}>
           <dt>{name(id)}{c.stale ? " (last known)" : ""}</dt>
-          <dd>{c.missingCacheFiles} missing cache {c.missingCacheFiles === 1 ? "file" : "files"}. Size counts only files still present. Find models again after restoring the missing files; SparkBox does not repair or remove them.</dd>
+          <dd>{c.missingCacheFiles} missing cache {c.missingCacheFiles === 1 ? "file" : "files"}. {fmtBytes(c.sizeBytes)} in files still present on this node. Find models again after restoring the missing files; SparkBox does not repair or remove them.</dd>
         </Fragment>)}
         <dt>Format</dt><dd>{entry.format}</dd>
         <dt>Quantization</dt><dd>{quantOf(entry, detail)}</dd>

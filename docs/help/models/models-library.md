@@ -48,7 +48,7 @@ Reconnect the node, resolve the reported problem and press **Find models**. A su
 | Column | What it shows |
 |---|---|
 | **Model** | The Hugging Face name, or the folder's name if SparkBox can't tell. **in use** means it's serving now: click it to go to the **Loaded** tab |
-| **Size** | The folder's size, counting what its links point to |
+| **Size** | The largest observed copy of the folder across nodes, counting what its links point to |
 | **Format** | `safetensors` or `gguf` |
 | **cell1**, **cell2**… | One column for each node, showing that node's copy |
 | **Folder** | Where it lives. The full path is in the tip when you move the pointer over it |
@@ -70,7 +70,7 @@ Each node's column shows one of these marks. Move the pointer over a mark to rea
 
 A folder counts as a model when it holds a `config.json` file and at least one weights file. A download or copy that stopped partway also shows, with **◐ incomplete**, even before it has any weights.
 
-For a snapshot with missing cache files, **Size** counts only files still present. It is not the full download size or the space a deletion would free. Select the row to see the missing-file count for each affected node. Restore the files through the tool that manages that cache, then press **Find models** again. Scanning does not repair links, download missing files or remove anything. Permission failures, unreadable folders and missing files outside cache snapshots still report **Scan failed**.
+For a snapshot with missing cache files, select the row to see each affected node's missing-file count and present-byte total. These bytes do not estimate the full download or the space a deletion would free. The shared **Size** column may come from a healthy copy on another node. Restore the files through the tool that manages that cache, then press **Find models** again. Scanning does not repair links, download missing files or remove anything. Permission failures, unreadable folders and missing files outside cache snapshots still report **Scan failed**.
 
 ### Copy and delete strip
 
